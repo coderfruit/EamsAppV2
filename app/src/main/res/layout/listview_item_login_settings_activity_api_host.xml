@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/mItem"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/selector_list_view_item_common_white">
+
+        <TextView
+            android:id="@+id/mTv_Host"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:text="192.168.1.10"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            />
+
+        <TextView
+            android:id="@+id/mTv_Port"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="50dp"
+            android:text="8080"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            />
+
+        <ImageView
+            android:id="@+id/mIv_Checked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/ic_check_box_blue_selected"
+            />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x1"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white6" />
+
+</LinearLayout>

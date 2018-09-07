@@ -1,0 +1,197 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_login_activity"
+                android:orientation="vertical" >
+
+    <com.grandhyatt.snowbeer.view.ToolBarLayout
+        android:id="@+id/mToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <RelativeLayout
+            android:id="@+id/bodyView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            >
+<!-- logo图片 -->
+            <ImageView
+                android:id="@+id/mIv_Logo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="50dp"
+                android:layout_marginTop="30dp"
+                android:maxHeight="110dp"
+                android:src="@drawable/banner"/>
+<!-- 用户名 -->
+            <LinearLayout
+                android:id="@+id/activity_register_user_name_layout"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_below="@id/mIv_Logo"
+                android:layout_marginBottom="14dp"
+                android:layout_marginLeft="38dp"
+                android:layout_marginRight="38dp"
+                android:background="@drawable/user_name_background"
+                android:orientation="horizontal"
+                android:paddingBottom="11dp"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:paddingTop="11dp">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="26dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/ic_user_phone_background"/>
+
+                <EditText
+                    android:id="@+id/mEdt_Account"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@null"
+                    android:hint="用户帐号"
+                    android:inputType="text"
+                    android:maxLength="11"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="#c4c4c4"
+                    android:textCursorDrawable="@drawable/edit_text_cursor"
+                    android:textSize="14sp"
+                    android:focusableInTouchMode="true"/>
+
+            </LinearLayout>
+<!-- 密码 -->
+            <LinearLayout
+                android:id="@+id/activity_register_password_layout"
+                android:layout_width="match_parent"
+                android:layout_height="47dp"
+                android:layout_below="@id/activity_register_user_name_layout"
+                android:layout_marginBottom="25dp"
+                android:layout_marginLeft="38dp"
+                android:layout_marginRight="38dp"
+                android:background="@drawable/user_name_background"
+                android:orientation="horizontal"
+                android:paddingBottom="11dp"
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp"
+                android:paddingTop="11dp">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="26dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/ic_user_password_background"/>
+
+                <EditText
+                    android:id="@+id/mEdt_Password"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:hint="密码"
+                    android:imeOptions="actionGo"
+                    android:maxLength="18"
+                    android:password="true"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="#c4c4c4"
+                    android:textCursorDrawable="@drawable/edit_text_cursor"
+                    android:textSize="14sp"
+                    android:focusableInTouchMode="true"/>
+
+                <CheckBox
+                    android:id="@+id/mChk_ShowPassword"
+                    android:layout_width="25dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="7dp"
+                    android:button="@drawable/selector_see_password_background"/>
+            </LinearLayout>
+
+<!-- 登录 -->
+            <Button
+                android:id="@+id/mBtn_Login"
+                android:layout_width="120dp"
+                android:layout_height="49dp"
+                android:background="@drawable/selector_login_background"
+                android:enabled="true"
+                android:gravity="center"
+                android:text="登录"
+                android:textColor="@color/white1"
+                android:textSize="14sp"
+                android:layout_below="@+id/activity_register_password_layout"
+                android:layout_alignLeft="@+id/activity_register_password_layout"
+                android:layout_alignStart="@+id/activity_register_password_layout" />
+<!-- 重置 -->
+            <Button
+                android:id="@+id/mBtn_Cancel"
+                android:layout_width="120dp"
+                android:layout_height="49dp"
+                android:background="@drawable/selector_login_background"
+                android:enabled="true"
+                android:gravity="center"
+                android:text="重置"
+                android:textColor="@color/white1"
+                android:textSize="14sp"
+                android:layout_alignBaseline="@+id/mBtn_Login"
+                android:layout_alignBottom="@+id/mBtn_Login"
+                android:layout_toRightOf="@+id/mTv_Version"
+                android:layout_marginRight="14dp"  />
+
+
+            <TextView
+                android:id="@+id/mTv_ResetPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/mBtn_Login"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="6dp"
+                android:text="忘记密码？"
+                android:textColor="#2ad0fb"
+                android:textSize="14sp"
+
+                />
+
+            <TextView
+                android:id="@+id/mTv_Register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mBtn_Login"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="6dp"
+                android:text="注册账号"
+                android:textColor="#2ad0fb"
+                android:textSize="14sp"
+                android:visibility="gone"
+                />
+
+            <TextView
+                android:id="@+id/mTv_Version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="32dp"
+                android:text="@string/app_name"
+                android:textColor="@color/gray5"
+                android:textSize="14sp"
+                />
+        </RelativeLayout>
+
+
+
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="50dp"
+    android:minWidth="120dp"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:id="@+id/mIBtn_Sub"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="0dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_button_sub_gray"
+        android:background="@drawable/selector_image_button"
+        />
+
+    <EditText
+        android:id="@+id/mEdt_Data"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:minWidth="80dp"
+        android:background="#00FFFFFF"
+        android:inputType="phone"
+        android:maxLength="8"
+        android:maxLines="1"
+        android:paddingRight="6dp"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="@color/black"
+        android:textColorHint="#32ffffff"
+        android:textCursorDrawable="@null"
+        android:textSize="16sp"/>
+
+    <ImageButton
+        android:id="@+id/mIBtn_Add"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="0dp"
+        android:src="@drawable/ic_button_add_gray"
+        android:background="@drawable/selector_image_button"
+        />
+
+
+</RelativeLayout>

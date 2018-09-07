@@ -1,0 +1,126 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/main_bg_color2"
+              android:orientation="vertical">
+
+    <com.grandhyatt.snowbeer.view.ToolBarLayout
+        android:id="@+id/mToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/gray4"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#ffffff"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="@string/login_settings_ip_address"
+            android:textColor="@color/black"
+            android:textSize="14sp"/>
+
+
+        <EditText
+            android:id="@+id/mEdt_IPAddress"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="#00ffffff"
+            android:maxLength="18"
+            android:paddingRight="6dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="#32ffffff"
+            android:textCursorDrawable="@null"
+            android:textSize="14sp"
+            android:text="192.168.31.10"
+            />
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:background="@color/gray4"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/gray4"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#ffffff"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="@string/login_settings_port"
+            android:textColor="@color/black"
+            android:textSize="14sp"/>
+
+        <EditText
+            android:id="@+id/mEdt_Port"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:background="#00ffffff"
+            android:inputType="phone"
+            android:maxLength="18"
+            android:maxLines="1"
+            android:paddingRight="6dp"
+            android:text="8080"
+            android:textColor="@color/black"
+            android:textColorHint="#32ffffff"
+            android:textCursorDrawable="@null"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="0dp"
+        android:background="@color/gray4"
+        />
+
+    <Button
+        android:id="@+id/mBtn_OK"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="16dp"
+        android:text="@string/dialog_ok"
+        />
+
+</LinearLayout>

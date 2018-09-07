@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:background="@color/white">
+
+
+    <RelativeLayout
+        android:id="@+id/mItem"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/selector_list_view_item_common_white">
+
+
+        <TextView
+            android:id="@+id/mTv_PackageName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="230dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginLeft="12dp"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:text="纸箱"
+            />
+
+        <TextView
+            android:id="@+id/mTv_CheckCountTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="56dp"
+            android:textColor="@color/gray5"
+            android:textSize="14sp"
+            android:text="验收数量"
+            />
+
+        <TextView
+            android:id="@+id/mTv_CheckCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="12dp"
+            android:layout_marginRight="12dp"
+            android:textColor="@color/gray5"
+            android:textSize="14sp"
+            android:text="0"
+            />
+
+        <TextView
+            android:id="@+id/mTv_ReturnForegiftCountTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/mTv_CheckCount"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="56dp"
+            android:textColor="@color/gray5"
+            android:textSize="14sp"
+            android:text="退押数量"
+            />
+
+        <TextView
+            android:id="@+id/mTv_ReturnForegiftCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/mTv_CheckCount"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="12dp"
+            android:textColor="@color/gray5"
+            android:textSize="14sp"
+            android:text="0"
+            />
+
+
+        <TextView
+            android:id="@+id/mTv_MoneyTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/mTv_ReturnForegiftCount"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="56dp"
+            android:textColor="@color/gray5"
+            android:textSize="14sp"
+            android:text="退押金额"
+            />
+
+        <TextView
+            android:id="@+id/mTv_Money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/mTv_ReturnForegiftCount"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="12dp"
+            android:textColor="@color/gray5"
+            android:textSize="14sp"
+            android:text="0"
+            />
+
+        <TextView
+            android:id="@+id/mTv_ReturnLoanCountTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/mTv_CheckCount"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="166dp"
+            android:textColor="@color/gray5"
+            android:textSize="14sp"
+            android:text="退借数量"
+            />
+
+        <TextView
+            android:id="@+id/mTv_ReturnLoanCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/mTv_CheckCount"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="124dp"
+            android:textColor="@color/gray5"
+            android:textSize="14sp"
+            android:text="0"
+            />
+
+        <TextView
+            android:id="@+id/mTv_DepositCountTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/mTv_ReturnLoanCount"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="166dp"
+            android:textColor="@color/gray5"
+            android:textSize="14sp"
+            android:text="代保管数量"
+            />
+
+        <TextView
+            android:id="@+id/mTv_DepositCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/mTv_ReturnLoanCount"
+            android:layout_marginTop="2dp"
+            android:layout_marginRight="124dp"
+            android:textColor="@color/gray5"
+            android:textSize="14sp"
+            android:text="0"
+            />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white6" />
+
+</LinearLayout>

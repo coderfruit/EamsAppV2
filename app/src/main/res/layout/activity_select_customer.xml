@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.grandhyatt.snowbeer.view.activity.CardReCheckActivity">
+
+    <com.grandhyatt.snowbeer.view.ToolBarLayout
+        android:id="@+id/mToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/mDrawerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent">
+
+        <LinearLayout
+            android:id="@+id/mLL_Content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white1">
+
+                <LinearLayout
+                    android:id="@+id/activity_register_user_name_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="66dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/user_name_background"
+                    android:orientation="horizontal"
+                    android:paddingBottom="12dp"
+                    android:paddingLeft="14dp"
+                    android:paddingRight="14dp"
+                    android:paddingTop="12dp">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/ic_search_02" />
+
+                    <EditText
+                        android:id="@+id/mEdt_Account"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@null"
+                        android:hint="客户编码/名称"
+                        android:imeOptions="actionNext"
+                        android:inputType="phone"
+                        android:maxLength="11"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textColorHint="#c4c4c4"
+                        android:textCursorDrawable="@drawable/edittext_cursor"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+                <!-- 筛选 -->
+                <RelativeLayout
+                    android:id="@+id/mRL_Filter"
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="筛选"
+                        android:textColor="@color/gray5"
+                        android:textSize="16sp" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/mRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="6dp"
+
+                    />
+
+                <cc.solart.wave.WaveSideBarView
+                    android:id="@+id/mSideBarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/mRL_LeftDrawer"
+            android:layout_width="260dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/white_01"
+            android:clickable="true"
+            android:paddingTop="20dp">
+
+            <LinearLayout
+                android:id="@+id/mLL_Area"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="16dp"
+                android:minHeight="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="8dp"
+                    android:text="销售区域"
+                    android:textColor="@color/gray5"
+                    android:textSize="14sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_register_edit_text">
+
+                    <Spinner
+                        android:id="@+id/mSpr_Area"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/mLL_Province"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mLL_Area"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="16dp"
+                android:minHeight="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="8dp"
+                    android:text="所属省份"
+                    android:textColor="@color/gray5"
+                    android:textSize="14sp" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_register_edit_text">
+
+                    <Spinner
+                        android:id="@+id/mSpr_Province"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/mLL_Level"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mLL_Province"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="16dp"
+                android:minHeight="40dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:text="客户级别"
+                    android:textColor="@color/gray5"
+                    android:textSize="14sp" />
+
+                <com.zhy.view.flowlayout.TagFlowLayout
+                    android:id="@+id/mTFL_Level"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_centerInParent="true"
+                    app:max_select="-1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mLL_Level"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                >
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1"
+                    android:text="确定"
+                    />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:text="重置"
+                    />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </android.support.v4.widget.DrawerLayout>
+</LinearLayout>

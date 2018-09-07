@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.grandhyatt.snowbeer">
+
+    <!-- 网络访问权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 读取存储设备权限 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 唤醒解锁 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- 写外部存储 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 网络状态 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- WIFI -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 蓝牙 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <!-- 读取手机状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- 相机权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
+    <provider
+        android:name="android.support.v4.content.FileProvider"
+        android:authorities="com.grandhyatt.snowbeer.fileprovider"
+        android:exported="false"
+        android:grantUriPermissions="true">
+        <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/file_paths" />
+    </provider>
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity
+            android:name=".view.activity.SplashActivity"
+            android:theme="@style/SplashStyle">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--登录-->
+        <activity android:name=".view.activity.LoginActivity" />
+
+        <!--关于-->
+        <activity android:name=".view.activity.AboutActivity" />
+
+        <!--登录设置-->
+        <activity android:name=".view.activity.LoginSettingsActivity" />
+
+        <!--主页面-->
+        <activity android:name=".MainActivity" />
+
+        <!--设置页面-->
+        <activity android:name=".view.activity.SettingsActivity" />
+
+        <!--引导页-->
+        <activity android:name=".view.activity.GuideActivity" />
+
+        <!--注册页-->
+        <activity android:name=".view.activity.RegisterActivity" />
+
+        <!--重置密码-->
+        <activity android:name=".view.activity.ResetPasswordActivity" />
+
+        <!--修改密码-->
+        <activity android:name=".view.activity.EditPasswordActivity" />
+
+        <!--服务器地址设置-->
+        <activity android:name=".view.activity.ServerSettingsActivity" />
+
+        <!-- 故障报修 -->
+        <activity android:name=".view.activity.FaultReportActivity" />
+
+        <!-- 故障报修查询 -->
+        <activity android:name=".view.activity.MyFaultReportActivity" />
+
+        <!-- 图片浏览 -->
+        <activity android:name=".view.activity.ImageViewerActivity" />
+
+        <!-- **************************************  **************************************  ************************************** -->
+        <!-- 复检第一步(有卡复检)-->
+        <activity android:name=".view.activity.CardReCheckActivity" />
+
+        <!--无卡复检-->
+        <activity android:name=".view.activity.NoCardReCheckActivity" />
+
+        <!--复检第二步-->
+        <activity android:name=".view.activity.SelectFirstCheckBillActivity" />
+
+        <!--复检第三步-->
+        <activity android:name=".view.activity.SelectSecondCheckBillActivity" />
+
+        <!--复检第四步-->
+        <activity android:name=".view.activity.ReCheckBillCommitActivity" />
+
+        <!--查看复检单数据-->
+        <activity android:name=".view.activity.ReCheckCompleteActivity" />
+
+        <!--账户结余-->
+        <activity android:name=".view.activity.AccountBalanceActivity"></activity>
+
+        <!--客户选择-->
+        <activity android:name=".view.activity.SelectCustomerActivity"></activity>
+
+        <!--WebView-->
+        <activity android:name=".view.activity.WebViewActivity"></activity>
+
+        <!--输入客户信息-->
+        <activity android:name=".view.activity.InputCustomerInfoActivity"></activity>
+
+        <!--扫码竖屏-->
+        <activity
+            android:name=".view.activity.ScanActivity"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
+        <activity android:name=".view.activity.MyFaultReportActivity" />
+
+
+    </application>
+
+</manifest>

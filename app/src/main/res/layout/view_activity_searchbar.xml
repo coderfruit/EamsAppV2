@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white1">
+
+    <!-- 相机扫码 -->
+    <RelativeLayout
+        android:id="@+id/mRL_OpenCamera"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="8dp">
+
+        <Button
+            android:id="@+id/mIB_OpenCamera"
+            android:background="@drawable/camera_scan"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:scaleType="fitCenter" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/activity_register_user_name_layout"
+        android:layout_width="match_parent"
+        android:layout_height="41dp"
+        android:layout_marginLeft="44dp"
+        android:layout_marginRight="46dp"
+        android:layout_marginTop="3dp"
+        android:background="@drawable/user_name_background"
+        android:orientation="horizontal"
+        android:paddingBottom="12dp"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:paddingTop="12dp">
+
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_search_02" />
+
+        <EditText
+            android:id="@+id/mEdt_Barcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@null"
+            android:hint="设备条码"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:maxLength="11"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="#c4c4c4"
+            android:textCursorDrawable="@drawable/edittext_cursor"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+    <!-- 筛选 -->
+    <RelativeLayout
+        android:id="@+id/mRL_Search"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="2dp"
+        android:layout_marginTop="3dp">
+
+        <Button
+            android:id="@+id/mBT_Search"
+            android:layout_width="40dp"
+            android:layout_height="34dp"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/selector_login_background"
+            android:gravity="center"
+            android:text="检索" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

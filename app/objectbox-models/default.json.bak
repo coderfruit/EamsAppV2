@@ -1,0 +1,105 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "ID": "3:8281589822019447757",
+      "lastPropertyId": "4:3396624971342348985",
+      "name": "LoginUserInfoEntity",
+      "properties": [
+        {
+          "ID": "1:7168562424766583370",
+          "name": "ID"
+        },
+        {
+          "ID": "2:1481534948562077798",
+          "indexId": "3:1332747875776880209",
+          "name": "user_id"
+        },
+        {
+          "ID": "3:8056961910445393208",
+          "name": "user_name"
+        },
+        {
+          "ID": "4:3396624971342348985",
+          "name": "account"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "ID": "4:2411484643023920192",
+      "lastPropertyId": "3:7632323786932557431",
+      "name": "APIHostInfoEntity",
+      "properties": [
+        {
+          "ID": "1:3059047465252329273",
+          "name": "ID"
+        },
+        {
+          "ID": "2:6587407618642904463",
+          "indexId": "4:7240863029868961707",
+          "name": "host_url"
+        },
+        {
+          "ID": "3:7632323786932557431",
+          "name": "port"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "ID": "5:7719830487641465135",
+      "lastPropertyId": "4:3365096553350706676",
+      "name": "OrganizationEntity",
+      "properties": [
+        {
+          "ID": "1:8725789351049964870",
+          "name": "ID"
+        },
+        {
+          "ID": "2:5384184228899301372",
+          "indexId": "5:7506240879971540638",
+          "name": "org_id"
+        },
+        {
+          "ID": "3:5046224725627484887",
+          "name": "org_name"
+        },
+        {
+          "ID": "4:3365096553350706676",
+          "name": "createTime"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "5:7719830487641465135",
+  "lastIndexId": "5:7506240879971540638",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [
+    3280239970329938468,
+    3798929264988664954
+  ],
+  "retiredIndexUids": [
+    6729337933448154167,
+    7792478197929267768
+  ],
+  "retiredPropertyUids": [
+    6998225327489429002,
+    4569522272753147721,
+    4004474764247138906,
+    2064554693179709365,
+    8915888596864688007,
+    5309662442014295259,
+    7969785309456580905,
+    5769075023679782376,
+    5941819233187247256
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}
