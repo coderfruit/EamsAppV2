@@ -34,6 +34,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import crossoverone.statuslib.StatusUtil;
 
+/***
+ * 杨春苗 20180907
+ */
 public class MainActivity extends MainActivityBase implements View.OnClickListener, BottomNavigationBar.OnTabSelectedListener  {
 
     private ArrayList<Fragment> mFragmentList;
