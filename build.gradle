@@ -1,0 +1,38 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+ext {
+    _buildToolsVersion = '26'
+    _compileSdkVersion = 26
+    _targetSdkVersion = 26
+    _minSdkVersion = 15
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'io.objectbox:objectbox-gradle-plugin:1.4.1' //greenrobot-objectbox
+        classpath 'com.novoda:bintray-release:0.3.4' //okhttputils
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        mavenLocal()
+        mavenCentral()
+        maven { url 'https://maven.google.com/'} // Google
+        maven { url 'https://www.jitpack.io'} //JitPack
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/'} //AliYun
+        maven { url "http://objectbox.net/beta-repo/" } //greenrobot-objectbox
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
