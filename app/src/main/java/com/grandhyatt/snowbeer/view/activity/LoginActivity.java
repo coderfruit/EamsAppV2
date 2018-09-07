@@ -96,7 +96,7 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
 
         //禁止滑动退出
         setSwipeBackEnable(false);
-
+       String a="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
         initView();
         bindEvent();
         refreshUI();
