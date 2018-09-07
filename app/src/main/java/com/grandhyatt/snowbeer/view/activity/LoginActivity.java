@@ -47,6 +47,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * 登录窗体
+ */
 public class LoginActivity extends ActivityBase implements IActivityBase,View.OnClickListener, TextView.OnEditorActionListener{
 
     @BindView(R.id.mToolBar)
