@@ -52,7 +52,7 @@ import butterknife.ButterKnife;
  * 杨春苗
  * 20180907
  * 20180916 yangcm111222 1111111
- * aaaaaaaaaaaaaaaaa
+ * aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaa
  */
 public class LoginActivity extends ActivityBase implements IActivityBase,View.OnClickListener, TextView.OnEditorActionListener{
 
