@@ -88,7 +88,8 @@
 
         <!-- 故障报修查询 -->
         <activity android:name=".view.activity.MyFaultReportActivity" />
-
+        <!-- 设备维修 -->
+        <activity android:name=".view.activity.RepairmentReportActivity" />
         <!-- 图片浏览 -->
         <activity android:name=".view.activity.ImageViewerActivity" />
 

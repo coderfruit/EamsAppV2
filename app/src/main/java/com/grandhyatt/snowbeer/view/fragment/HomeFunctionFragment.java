@@ -21,6 +21,7 @@ import com.grandhyatt.snowbeer.view.activity.CardReCheckActivity;
 import com.grandhyatt.snowbeer.view.activity.FaultReportActivity;
 import com.grandhyatt.snowbeer.view.activity.MyFaultReportActivity;
 import com.grandhyatt.snowbeer.view.activity.NoCardReCheckActivity;
+import com.grandhyatt.snowbeer.view.activity.RepairmentReportActivity;
 import com.grandhyatt.snowbeer.view.activity.SelectCustomerActivity;
 
 import java.util.ArrayList;
@@ -131,7 +132,7 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
                         break;
                     case 6://维修
                         if(PowerUtils.isPowerShowToast(getContext(),PowerUtils.MAIN_HOME_FUNCTION_SEVEN)) {
-                            ToastUtils.showToast(getContext(), "正在开发中...");
+                            IntentUtil.newIntent(getActivity(), RepairmentReportActivity.class);
                         }
                         break;
                     case 7:
