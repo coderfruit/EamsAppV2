@@ -1,0 +1,33 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg_color2"
+    android:orientation="vertical">
+
+    <com.grandhyatt.snowbeer.view.ToolBarLayout
+        android:id="@+id/mToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ExpandableListView
+            android:id="@+id/mELV_DataList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_weight="1"
+            android:background="@color/white2"
+            android:cacheColorHint="#00000000"
+            android:divider="#19000000"
+            android:dividerHeight="0dp"
+            android:fadingEdge="none" />
+
+    </LinearLayout>
+
+</LinearLayout>

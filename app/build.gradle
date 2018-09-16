@@ -1,0 +1,101 @@
+apply plugin: 'com.android.application'
+apply plugin: 'io.objectbox'
+
+android {
+    compileSdkVersion _compileSdkVersion
+    buildToolsVersion _buildToolsVersion
+    defaultConfig {
+        applicationId "com.grandhyatt.snowbeer"
+        minSdkVersion _minSdkVersion
+        targetSdkVersion _targetSdkVersion
+        versionCode 1
+        versionName "1.8.7.1"
+        multiDexEnabled false
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    configurations.all {
+        // AndroidStudio2.3.3版本会默认把Expresso框架自动引入，谷歌默认的现在是3.0.5版本，
+        // 而Objectbox中使用的是3.0.2版本，有个版本冲突，所以统一一下版本即可，
+        // 在gradle dependency中添加即可：
+        resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+    }
+
+    compileOptions {
+
+    }
+
+    defaultConfig {
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a','x86'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+    }
+
+//    signingConfigs {
+//        //调试用的KeyStore
+//        debug {
+//            keyAlias 'SnowBeer'
+//            keyPassword 'Windows8.1'
+//            storeFile file('key_store/SnowBeer.jks')
+//            storePassword 'Windows8.1'
+//        }
+//        //发布用的KeyStore
+//        release {
+//            keyAlias 'SnowBeer'
+//            keyPassword 'Windows8.1'
+//            storeFile file('key_store/SnowBeer.jks')
+//            storePassword 'Windows8.1'
+//            v2SigningEnabled true
+//        }
+//    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    //沉浸式状态栏
+    compile project(':commonlib')
+    compile project(':okhttputils')
+    compile files('libs/RFIDScan.jar')
+    compile 'com.android.support:cardview-v7:27.1.1'
+    compile 'com.android.support:design:27.1.1'
+    compile 'com.android.support:support-v4:27.1.1'
+    compile 'com.android.support:appcompat-v7:27.1.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.jakewharton:butterknife:8.8.1'
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-7'
+    compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-7'
+    compile 'com.youth.banner:banner:1.4.10'
+    compile 'io.objectbox:objectbox-android:1.4.1'
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'io.reactivex:rxjava:1.1.0'
+    compile 'com.github.crossoverone:StatusBarUtil:1.3.3'
+    compile 'com.ashokvarma.android:bottom-navigation-bar:2.0.4'
+    compile 'cc.solart:turbo-recyclerview-helper:1.0.3-beta'
+    //流布局库
+    compile 'com.hyman:flowlayout-lib:1.1.2'
+    testCompile 'junit:junit:4.12'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile project(':wavesidebarlib')
+    compile files('libs/ksoap2-android-assembly-2.6.5-jar-with-dependencies.jar')
+    compile files('libs/org.apache.http.legacy.jar')
+    compile 'com.android.support:recyclerview-v7:27.0.1'
+    compile project(':zz-image-box')
+    compile 'com.journeyapps:zxing-android-embedded:3.5.0'
+    compile 'com.google.zxing:core:3.3.0'
+    compile 'com.github.codbking:PickTime:v1.0.1'
+    //日期选择控件
+    compile files('libs/sun.misc.BASE64Decoder.jar')
+}

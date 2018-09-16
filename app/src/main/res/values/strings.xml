@@ -1,0 +1,108 @@
+<resources>
+    <string name="app_name">资产与设备管理系统</string>
+
+    <string name="login_activity_settings">设置</string>
+    <string name="login_activity_version">版本号:%s</string>
+
+    <string name="common_toast_exit">再按一次退出</string>
+
+    <string name="login_success">登录成功</string>
+    <string name="login">登录</string>
+    <string name="Username">用户账号</string>
+    <string name="Password">用户密码</string>
+    <string name="forgot_your_password">忘记密码 ?</string>
+    <string name="repeat_password">再次输入密码</string>
+    <string name="next">下一个</string>
+    <string name="register">注册</string>
+
+    <string name="login_settings_ip_address">IP 地址</string>
+    <string name="login_settings_port">端口</string>
+    <string name="dialog_ok">确定</string>
+    <string name="dialog_cancel">取消</string>
+
+    <string name="title_activity_card_re_check">有卡复检</string>
+    <string name="title_activity_no_card_re_check">无卡复检</string>
+
+    <string name="activity_reset_password_succssed">密码找回成功</string>
+    <string name="activity_reset_password_fail_param">密码找回失败,%s</string>
+    <string name="activity_reset_password_fail">密码找回失败</string>
+
+
+    <string name="activity_register_title">注册</string>
+    <string name="activity_register_cancel">取消</string>
+    <string name="activity_register_button">确认注册</string>
+    <string name="activity_register_toast_input_mobile">请输入手机号</string>
+    <string name="activity_register_toast_input_right_mobile">请输入正确手机号</string>
+    <string name="activity_register_toast_register_succssed">注册成功</string>
+    <string name="activity_register_toast_register_fail_param">注册失败,%s</string>
+    <string name="activity_register_toast_register_fail">注册失败</string>
+    <string name="activity_register_toast_register_fail_hint">您取消了注册</string>
+    <string name="activity_register_toast_register_fail_net">网络堵车，请重试</string>
+    <string name="activity_register_toast_register_fail_already">该账号已注册，请重新输入</string>
+    <string name="activity_edit_mobile_toast_already_bind_phone">该手机号已被绑定</string>
+
+    <string name="common_text_hint_phone_number">点击输入手机号</string>
+    <string name="common_text_hint_sms_code">点击输入验证码</string>
+    <string name="common_text_hint_sms_code_hint">请输入正确的验证码</string>
+    <string name="common_text_hint_invitercode">请输入正确的邀请码</string>
+    <string name="common_text_toast_input_password">请设置密码</string>
+    <string name="common_text_toast_input_nickname">请设置昵称</string>
+    <string name="common_text_toast_input_password_hint">请设置6-18位的密码</string>
+    <string name="common_text_get_sms_code">获取验证码</string>
+    <string name="common_text_toast_sms_code_succssed">获取验证码成功!</string>
+    <string name="common_text_toast_sms_code_fail">获取验证码失败,%s</string>
+    <string name="common_text_toast_net_break">网络异常,请稍后再试</string>
+    <string name="common_text_get_sms_code_time">%s秒</string>
+
+    <string name="activity_update_password_succssed">密码修改成功</string>
+    <string name="activity_update_password_fail_param">密码修改失败,%s</string>
+    <string name="activity_update_password_fail">密码修改失败</string>
+    <string name="activity_update_old_password_empty">请输入原密码!</string>
+    <string name="activity_update_new_password_empty">请输入新密码!</string>
+    <string name="activity_update_confirm_password_empty">请输入确认密码!</string>
+    <string name="activity_update_new_confirm_password">两此输入的新密码不同!</string>
+
+
+    <string name="activity_login_toast_please_input_not_empty">用户名或密码不能为空!</string>
+    <string name="activity_login_toast_login_fail">登录失败!</string>
+    <string name="activity_login_toast_login_fail_error">登录异常,%s</string>
+
+    <string name="open">开</string>
+    <string name="close">关</string>
+
+    <string name="download_text">正在下载,请稍后...</string>
+    <string name="download_progress">已完成:</string>
+    <string name="download_progress_percent">已完成:</string>
+    <string name="download_dialog_title">应用下载</string>
+    <string name="download_dialog_confirm">下载</string>
+    <string name="download_dialog_toast">是否下载应用?</string>
+
+    <string name="update_level_normal">检测到最新版本v%s,请更新!</string>
+    <string name="update_level_recommend">检测到最新版本v%s,建议您尽快更新!</string>
+    <string name="update_level_force">检测到最新版本v%s,需要强制更新!</string>
+    <string name="update_toast">您当前已经是最新版!</string>
+    <string name="update_confirm">更新</string>
+    <string name="update_update">更新</string>
+    <string name="update_ignore">忽略此版本</string>
+    <string name="update_cancel">取消</string>
+    <string name="update_sure">确定</string>
+    <string name="update_error">获取最新版本失败</string>
+    <string name="update_error_msg">获取最新版本异常,%s</string>
+
+    <string name="alert_dialog_ok">确定</string>
+    <string name="alert_dialog_cancel">取消</string>
+
+    <string name="activity_fault_report_barcode_empty">条码不可以为空</string>
+    <string name="activity_fault_report_barcode_formate">条码格式不正确</string>
+    <string name="activity_fault_report_submit_ok">报修信息提交成功</string>
+    <string name="activity_fault_report_submit_err">报修信息提交异常,%s</string>
+    <string name="activity_fault_report_submit_fail">报修信息提交失败,%s</string>
+
+    <string name="submit_soap_result_err1">服务请求提交失败</string>
+    <string name="submit_soap_result_err2">服务连接失败</string>
+    <string name="submit_soap_result_err3">服务请求返回信息异常</string>
+    <string name="submit_soap_result_err4">服务请求处理失败,%s</string>
+    <string name="submit_soap_result_err5">服务请求处理异常,%s</string>
+
+
+</resources>

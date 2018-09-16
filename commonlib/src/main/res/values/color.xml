@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="main_gray">#9A9A9A</color>
+
+    <color name="blue1">#0000ff</color>
+    <color name="blue2">#2bcdea</color>
+    <color name="blue3">#83cde6</color>
+
+    <color name="white_01">#FFFFFE</color>
+    <color name="white_03">#EEEEEE</color>
+
+    <color name="gray_03">#999999</color>
+    <color name="gray_06">#333333</color>
+    <color name="gray_07">#555555</color>
+    <color name="gray_08">#E3E3D3</color>
+    <color name="gray_09">#F2F2F2</color>
+
+    <color name="dialog_blue">#0083FF</color>
+    <color name="dialog_orange">#FF6600</color>
+</resources>

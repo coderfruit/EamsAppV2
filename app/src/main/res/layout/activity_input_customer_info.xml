@@ -1,0 +1,104 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_bg_color2"
+    android:orientation="vertical">
+
+    <com.grandhyatt.snowbeer.view.ToolBarLayout
+        android:id="@+id/mToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/white3">
+
+                <TextView
+                    android:id="@+id/mTv_CarPlateTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:text="车牌号:"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:id="@+id/mEdt_CarPlate"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="50dp"
+                    android:layout_toRightOf="@+id/mTv_CarPlateTitle"
+                    android:background="#00ffffff"
+                    android:inputType="phone"
+                    android:maxLength="7"
+                    android:maxLines="1"
+                    android:paddingRight="6dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="#32ffffff"
+                    android:textCursorDrawable="@null"
+                    android:textSize="14sp" />
+                android:text=""
+
+                <RelativeLayout
+                    android:id="@+id/mRL_Clear"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/free_calling_cancel" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <!--<com.zhy.view.flowlayout.TagFlowLayout-->
+            <!--android:id="@+id/mTFL_Province"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_marginLeft="0dp"-->
+            <!--android:layout_marginRight="0dp"-->
+            <!--app:max_select="-1" />-->
+
+            <com.grandhyatt.snowbeer.view.MyGridView
+                android:id="@+id/mGridView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="2dp"
+                android:layout_weight="1"
+                android:horizontalSpacing="0.0dp"
+                android:listSelector="@null"
+                android:numColumns="7"
+                android:scrollbars="none"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="0.0dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/white5" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

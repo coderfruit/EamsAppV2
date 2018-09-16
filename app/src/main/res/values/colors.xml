@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="common_green">#009949</color>
+    <color name="common_gray">#979799</color>
+
+    <color name="main_bg_color">#FFFFFF</color>
+    <color name="main_bg_color2">#EFEFEF</color>
+
+    <color name="transparent_guide_background">#50000000</color>
+
+    <color name="transparent">#ff000000</color>
+    <color name="transparent_gray1">#eeeeeeee</color>
+    <color name="transparent_gray2">#eecccccc</color>
+    <color name="transparent_gray3">#66000000</color>
+    <color name="transparent_gray4">#88000000</color>
+
+
+    <color name="black">#000000</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="white1">#FFFFFE</color>
+    <color name="white2">#F0F0F0</color>
+    <color name="white3">#EEEEEE</color>
+    <color name="white5">#DFDFDF</color>
+    <color name="white6">#C0C0C0</color>
+
+    <color name="red">#FF0000</color>
+    <color name="red1">#e80000</color>
+    <color name="red2">#ff6f75</color>
+    <color name="red3">#ce575c</color>
+
+    <color name="gray3">#999999</color>
+    <color name="gray4">#E0E0E0</color>
+    <color name="gray5">#666666</color>
+    <color name="gray23">#555555</color>
+    <color name="gray39">#626262</color>
+
+    <color name="blue_title_bar">#4183D7</color>
+    <color name="green_01">#be69be91</color>
+</resources>

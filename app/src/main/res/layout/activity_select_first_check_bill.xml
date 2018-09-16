@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.grandhyatt.snowbeer.view.activity.CardReCheckActivity">
+
+    <com.grandhyatt.snowbeer.view.ToolBarLayout
+        android:id="@+id/mToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/mRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        app:srlHeaderMaxDragRate="2.5"
+        app:srlPrimaryColor="@color/blue_title_bar"
+        app:srlAccentColor="@android:color/white"
+        app:srlEnableLoadMore="false">
+
+        <com.scwang.smartrefresh.header.WaterDropHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            >
+
+            <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:background="@color/white6"-->
+            <!--&gt;-->
+
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginLeft="16dp"-->
+            <!--android:textColor="@color/blue1"-->
+            <!--android:textSize="18sp"-->
+            <!--android:text="第2步,选择初检单"-->
+            <!--/>-->
+            <!--</RelativeLayout>-->
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:background="@color/white3"
+                >
+
+                <TextView
+                    android:id="@+id/mTv_Customer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="80dp"
+                    android:ellipsize="end"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    />
+
+                <TextView
+                    android:id="@+id/mTv_StoreHouse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="12dp"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/white6"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:background="@color/white5"
+                >
+
+                <TextView
+                    android:id="@+id/mTv_Amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="16dp"
+                    android:text="初检单信息(共:20条)"
+                    android:textColor="@color/gray5"
+                    android:textSize="13sp"
+                    />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/white6"
+                />
+
+            <ListView
+                android:id="@+id/mLv_DataList"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                />
+        </LinearLayout>
+
+        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srlClassicsSpinnerStyle="Translate"/>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+</LinearLayout>

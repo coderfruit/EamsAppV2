@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.grandhyatt.snowbeer.view.activity.CardReCheckActivity">
+
+    <com.grandhyatt.snowbeer.view.ToolBarLayout
+        android:id="@+id/mToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:background="@color/white3"
+                >
+
+                <TextView
+                    android:id="@+id/mTv_Customer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="80dp"
+                    android:ellipsize="end"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    />
+
+                <TextView
+                    android:id="@+id/mTv_StoreHouse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="12dp"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/white6"/>
+
+            <ListView
+                android:id="@+id/mLv_DataList"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.2"
+                android:divider="@null"
+                android:dividerHeight="0dp"/>
+
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0.5dp"-->
+                <!--android:background="@color/white6"/>-->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:background="@color/white3">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="12dp"
+                    android:text="确认复检数量"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"/>
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/white6"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:text="验收数量"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"/>
+
+                    <com.grandhyatt.snowbeer.view.NumberEditText
+                        android:id="@+id/mNEdt_Check"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_marginTop="4dp"/>
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="16dp"
+                    android:background="@color/white6"/>
+
+                <RelativeLayout
+                    android:id="@+id/mRL_DefectRate"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/selector_linear_layout_item_white"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:text="缺损比率(%)"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"/>
+
+                    <com.grandhyatt.snowbeer.view.NumberEditText
+                        android:id="@+id/mNEdt_DefectRate"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_marginTop="4dp"/>
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="16dp"
+                    android:background="@color/white6"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:text="缺损瓶数"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"/>
+
+                    <com.grandhyatt.snowbeer.view.NumberEditText
+                        android:id="@+id/mNEdt_Defect"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_marginTop="4dp"/>
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="16dp"
+                    android:background="@color/white6"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:text="可修复箱"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"/>
+
+                    <com.grandhyatt.snowbeer.view.NumberEditText
+                        android:id="@+id/mNEdt_Repairable"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_marginTop="4dp"/>
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="16dp"
+                    android:background="@color/white6"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="12dp"
+                        android:text="不可修复箱"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"/>
+
+                    <com.grandhyatt.snowbeer.view.NumberEditText
+                        android:id="@+id/mNEdt_NotRepairable"
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_marginTop="4dp"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/white6"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <Button
+                    android:id="@+id/mBtn_Next"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_weight="1"
+                    android:text="下一步"
+                    />
+
+                <Button
+                    android:id="@+id/mBtn_Reset"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="32dp"
+                    android:layout_weight="1"
+                    android:text="重置"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
