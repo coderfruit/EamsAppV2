@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <!-- 标题 -->
+    <com.grandhyatt.snowbeer.view.ToolBarLayout
+        android:id="@+id/mToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <!-- 条码搜索 -->
+    <com.grandhyatt.snowbeer.view.SearchBarLayout
+        android:id="@+id/mSearchBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+
+
+            <!-- 设备信息、设备图片 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/white6" />
+
+            <LinearLayout
+                android:id="@+id/mRL_DefectRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/selector_linear_layout_item_white"
+                android:orientation="horizontal">
+
+                <!-- 设备信息 -->
+                <LinearLayout
+                    android:id="@+id/mLly_EquipInfo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="5"
+                    android:orientation="vertical">
+                    <!-- 设备名称 编码 -->
+                    <TextView
+                        android:id="@+id/mTv_EquipName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="设备名称"
+                        android:textColor="@color/gray5"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/mTv_EquipCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="设备编码"
+                        android:textColor="@color/gray5"
+                        android:textSize="14sp" />
+                    <!-- 归属工厂 部门 责任人-->
+                    <TextView
+                        android:id="@+id/mTv_EquipCorp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="型号"
+                        android:textColor="@color/gray5"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/mTv_EquipDept"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="所属部门"
+                        android:textColor="@color/gray5"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/mTv_EquipLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="安装位置"
+                        android:textColor="@color/gray5"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/mTv_EquipKeeper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="责任人"
+                        android:textColor="@color/gray5"
+                        android:textSize="14sp" />
+                </LinearLayout>
+                <!-- 设备图片 -->
+                <LinearLayout
+                    android:id="@+id/mLly_EquipImg"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="5"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/mIv_EquipImg"
+                        android:layout_width="match_parent"
+                        android:layout_height="110dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="5dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <!-- 报修信息标题 -->
+
+
+            <!-- 选择故障日期  选择故障级别-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/white6" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@drawable/selector_linear_layout_item_white">
+                <TextView
+                    android:id="@+id/mTv_FaultLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="10dp"
+                    android:hint="维修级别"
+                    android:textColor="@color/gray5"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/mIv_FaultDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/mTv_FaultLevel"
+                    android:layout_toRightOf="@+id/mTv_FaultLevel"
+                    android:src="@drawable/item_signature_iv_menu_defaul" />
+
+                <TextView
+                    android:id="@+id/mTv_jh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/mTv_FaultLevel"
+                    android:layout_alignBottom="@+id/mTv_FaultLevel"
+
+                    android:layout_alignLeft="@id/mTv_FaultLevel"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="200dp"
+                    android:hint="选择维修计划"
+                    android:singleLine="true"
+                    android:textColor="@color/gray5"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/mTv_jh"
+                    android:src="@drawable/add_16px" />
+
+
+
+            </RelativeLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="212dp"
+                        android:layout_height="match_parent"
+
+                        android:background="@android:color/holo_blue_bright">
+
+                        <TextView
+                            android:id="@+id/mTv_FaultDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="10dp"
+                            android:hint="开始日期"
+                            android:textColor="@color/gray5"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:id="@+id/mIv_FaultDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+
+
+                            android:layout_toRightOf="@id/mTv_FaultDate"
+                            android:src="@drawable/item_signature_iv_menu_defaul" />
+
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:layout_width="200dp"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/holo_blue_bright">
+
+                        <TextView
+                            android:id="@+id/mTv_FaultDate1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+
+                            android:hint="结束日期"
+                            android:textColor="@color/gray5"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:id="@+id/mIv_FaultDate1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+
+                            android:layout_toRightOf="@id/mTv_FaultDate1"
+                            android:src="@drawable/item_signature_iv_menu_defaul" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/selector_linear_layout_item_white">
+
+                <TextView
+                    android:id="@+id/mTv_FaultDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+
+                    android:hint="故障类别"
+                    android:textColor="@color/gray5"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/mTv_FaultDesc"
+                    android:src="@drawable/item_signature_iv_menu_defaul" />
+                <TextView
+                    android:id="@+id/mTv_t4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="268dp"
+
+                    android:hint="分钟"
+                    android:textColor="@color/gray5"
+                    android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/mEt_times"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="29dp"
+                    android:layout_marginRight="29dp"
+                    android:layout_marginLeft="5dp"
+                    android:hint="0"
+                    android:singleLine="true"
+                    android:textColor="@color/gray5"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+
+
+            <!-- 故障描述 -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:background="@drawable/selector_linear_layout_item_white">
+
+
+                <TextView
+                    android:id="@+id/mTv_RepairmentDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:hint="添加故障描述"
+                    android:textColor="@color/gray5"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/mIv_RepairmentDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/mTv_RepairmentDesc"
+                    android:layout_toRightOf="@+id/mTv_RepairmentDesc"
+                    android:src="@drawable/item_signature_iv_menu_defaul" />
+
+            </RelativeLayout>
+            <!-- 故障联系人 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+
+
+                android:background="@drawable/selector_linear_layout_item_white">
+
+
+                <TextView
+                    android:id="@+id/mTv_t1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+
+                    android:hint="维修人员"
+                    android:textColor="@color/gray5"
+                    android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/mEt_User"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="4"
+                    android:hint="维修人员"
+                    android:singleLine="true"
+                    android:textColor="@color/gray5"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/mTv_t2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+
+                    android:hint="费用"
+                    android:textColor="@color/gray5"
+                    android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/mEt_Phone"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+
+
+                    android:hint="0"
+                    android:inputType="phone"
+                    android:singleLine="true"
+                    android:textColor="@color/gray5"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/mTv_t3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+
+                    android:hint="(元)"
+                    android:textColor="@color/gray5"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:background="@color/white6" />
+
+            <ListView
+                android:id="@+id/mLv_Show_Imgs"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                android:visibility="gone" />
+
+
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:background="@color/white6" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="23dp"
+                android:background="@drawable/selector_linear_layout_item_gray"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@color/colorPrimary" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="20dp"
+                    android:text="备件信息"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/mIB_marAdd"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="140sp"
+                    android:background="@drawable/ic_button_add_gray"
+                    android:scaleType="fitCenter"
+                    android:textAlignment="center" />
+
+                <Button
+                    android:id="@+id/mIB_marDel"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="14sp"
+                    android:background="@drawable/ic_button_sub_gray"
+                    android:scaleType="fitCenter" />
+
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:background="@color/white6" />
+
+            <ListView
+                android:id="@+id/mLv_DataList_Plan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:divider="@null"
+                android:dividerHeight="0dp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:background="@color/white6" />
+            <!-- 提交重置按钮 -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:gravity="right">
+
+
+
+                <Button
+                    android:id="@+id/mBtn_Submit"
+                    android:layout_width="110sp"
+                    android:layout_height="40dp"
+
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/ic_login_button_true"
+                    android:text="提交维修信息" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>
