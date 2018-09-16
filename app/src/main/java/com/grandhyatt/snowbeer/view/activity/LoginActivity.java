@@ -56,6 +56,7 @@ import butterknife.ButterKnife;
  *
  *
  * yangcm bbbbbbbbbbbbb
+ * tzq ccccccccccccccccccccc
  */
 public class LoginActivity extends ActivityBase implements IActivityBase,View.OnClickListener, TextView.OnEditorActionListener{
 
