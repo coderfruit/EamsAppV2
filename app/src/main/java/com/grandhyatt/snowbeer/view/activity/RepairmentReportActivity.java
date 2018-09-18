@@ -125,17 +125,11 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
     @BindView(R.id.mBtn_Submit)
     Button mBtn_Submit;
-//    @BindView(R.id.mTv_EquipInfo)
-//    TextView mTv_ReportNO;
 
-    /**
-     * 使用照相机拍照获取图片
-     */
-    public static final int SELECT_PIC_BY_TACK_PHOTO = 1;
-    /**
-     * 使用相册中的图片
-     */
-    public static final int SELECT_PIC_BY_PICK_PHOTO = 2;
+    public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
+    ArrayList<String> _CheckPlanIDList;//用户选中的维护计划ID
+    ArrayList<String> _CheckSpareIDList;//用户选中的备件与设备关系ID
+
     /**
      * 获取到的图片路径
      */
@@ -545,16 +539,17 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 //                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请首先确定要维修的设备！");
 //                    return;
 //                }
-                String faultLevel = mTv_FaultLevel.getText().toString();
+                String _ReapirLevel = mTv_FaultLevel.getText().toString();
 //                if (faultLevel == null || faultLevel.length() == 0) {
 //                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择维修级别！");
 //                    return;
 //                }
 
-                Intent intent = new Intent(RepairmentReportActivity.this, RepairmentPlanCheck.class);
-                intent.putExtra("mTv_EquipmentID", _EquipmentData.getID());
-                intent.putExtra("mTv_ReapirLevel", faultLevel);
-                startActivity(intent);
+                Intent intent = new Intent(RepairmentReportActivity.this, RepairmentPlanCheckActivity.class);
+                intent.putExtra("_EquipmentID",_EquipmentData.getID());
+                intent.putExtra("_ReapirLevel", _ReapirLevel);
+                startActivityForResult(intent,CHECK_PLAN_OK);
+
             }
         });
 
@@ -712,63 +707,10 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         }
     }
 
-    /**
-     * 显示操作菜单
-     */
-    private void showMenu() {
 
-        List<String> menuList = new ArrayList<String>();
-        menuList.add("拍照");
-        menuList.add("从相册选择");
 
-        showSelectDialog(new SelectDialog.SelectDialogListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                switch (position) {
-                    case 0:
-                        takePhoto();
-                        break;
-                    case 1:
-                        pickPhoto();
-                        break;
-                    default:
-                        break;
-                }
 
-            }
-        }, menuList);
-    }
-
-    /**
-     * 从相册中查找图片
-     */
-    private void pickPhoto() {
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, SELECT_PIC_BY_PICK_PHOTO);
-    }
-
-    /**
-     * 调用相机拍照
-     */
-    private void takePhoto() {
-        String state = Environment.getExternalStorageState();
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            SimpleDateFormat timeStampFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-            String filename = timeStampFormat.format(new Date());
-            ContentValues values = new ContentValues(); //使用本地相册保存拍摄照片
-            values.put(MediaStore.Images.Media.TITLE, filename);
-            takePhotoUrl = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, takePhotoUrl);
-            startActivityForResult(intent, SELECT_PIC_BY_TACK_PHOTO);
-        } else {
-            Toast.makeText(getApplicationContext(), "内存卡不存在,无法拍照",
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -777,40 +719,23 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             return;
         }
         switch (requestCode) {
-            case SELECT_PIC_BY_PICK_PHOTO://从相册查找
-                Uri uri = data.getData();
-                if (!TextUtils.isEmpty(uri.getAuthority())) {
-                    //查询选择图片
-                    Cursor cursor = getContentResolver().query(
-                            uri,
-                            new String[]{MediaStore.Images.Media.DATA},
-                            null,
-                            null,
-                            null);
-                    //返回 没找到选择图片
-                    if (null == cursor) {
-                        return;
-                    }
-                    cursor.moveToFirst();//光标移动至开头 获取图片路径
-                    _PicPath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
 
-                }
-                break;
-            case SELECT_PIC_BY_TACK_PHOTO://拍照
-                Cursor cursor = null;
-                if (takePhotoUrl != null) {
-                    String[] proj = {MediaStore.Images.Media.DATA};
-                    cursor = managedQuery(takePhotoUrl, proj, null, null, null);
-                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    cursor.moveToFirst();
-                    _PicPath = cursor.getString(column_index);
+            case CHECK_PLAN_OK: //yangcm 0917 获取用户选择计划id
 
-                    //在android 4.0及其以上的版本中，Cursor会自动关闭，不需要自己关闭。
-                    if (cursor != null && !cursor.isClosed() && Build.VERSION.SDK_INT < 14) {
-                        cursor.close();
-                    }
+                if(mTv_FaultLevel.getText().toString().equals("大修"))   //大修
+                {
+                    _CheckPlanIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
+                    ToastUtils.showLongToast(RepairmentReportActivity.this,"共获取到" + _CheckPlanIDList.size() + "条维护计划");
                 }
+                else//定修、日常维修
+                {
+                    _CheckSpareIDList = data.getExtras().getStringArrayList("_CheckSpareIDList");//得到新Activity 关闭后返回的数据
+                    ToastUtils.showLongToast(RepairmentReportActivity.this,"共获取到" + _CheckSpareIDList.size() + "条备件记录");
+                }
+
+
                 break;
+
             case CAMERA_BARCODE_SCAN://相机扫码
 
                 IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);

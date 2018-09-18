@@ -111,8 +111,9 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
                         }
                         List<RepairmentPlanEntity> data = result.getData();
                         //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
-                        if (data == null) {
+                        if (data == null || data.size()==0) {
                             ToastUtils.showToast(RepairmentPlanCheckActivity.this,"该设备没有维护计划");
+                            return;
                         }
                         else
                         {
