@@ -92,6 +92,8 @@
         <activity android:name=".view.activity.RepairmentReportActivity" />
         <!-- 图片浏览 -->
         <activity android:name=".view.activity.ImageViewerActivity" />
+        <!-- 设备维护计划选择 -->
+        <activity android:name=".view.activity.RepairmentPlanCheckActivity" />
 
         <!-- **************************************  **************************************  ************************************** -->
         <!-- 复检第一步(有卡复检)-->

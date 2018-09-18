@@ -41,6 +41,7 @@
                 android:textSize="12sp" />
 
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
@@ -59,38 +60,38 @@
                 android:id="@+id/mTv_EquipName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="设备名称"
                 android:textColor="@color/gray5"
-                android:textSize="14sp"
-                android:layout_weight="1"
-                android:gravity="center"/>
+                android:textSize="14sp" />
 
 
             <TextView
                 android:id="@+id/mTv_EquipCode"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="设备编码"
                 android:textColor="@color/gray5"
-                android:textSize="14sp"
-                android:layout_weight="1"
-                android:gravity="center"/>
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/mTv_RepairmentLevel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="维修级别"
                 android:textColor="@color/gray5"
-                android:textSize="14sp"
-                android:layout_weight="1"
-                android:gravity="center"/>
+                android:textSize="14sp" />
         </LinearLayout>
 
         <!-- 设备维护计划/设备备件信息 begin-->
@@ -118,34 +119,53 @@
                 android:textSize="12sp" />
 
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginLeft="1dp"
             android:background="@color/white6" />
-        <!-- 设备维护计划/设备备件信息 end -->
 
+        <!-- 设备维护计划/设备备件信息 end -->
         <ListView
             android:id="@+id/mLv_DataList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
+            android:background="@drawable/selector_listview_item"
+            android:choiceMode="multipleChoice"
             android:divider="@null"
             android:dividerHeight="0dp" />
+        <!-- selector_list_view_item_common_white -->
 
 
-        <Button
-            android:id="@+id/mBtn_Complete"
-            android:layout_width="240dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/ic_login_button_true"
-            android:text="确定"
-            android:textSize="16sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/selector_linear_layout_item_gray">
+
+            <TextView
+                android:id="@+id/mTv_CheckCnt"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:text="共选中0条"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/red3"/>
+
+            <Button
+                android:id="@+id/mBtn_OK"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_login_button_true"
+                android:text="确定"
+                android:textSize="16sp"
+                android:layout_weight="1"/>
+        </LinearLayout>
 
 
     </LinearLayout>

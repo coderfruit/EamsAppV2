@@ -456,4 +456,42 @@ public class SoapUtils {
 		SoapUtils.getInstance(context).call(methodName,params,callback);
 	}
 
+	/**
+	 * 获取设备维护计划
+	 * @param context
+	 * @param equipID 设备ID
+	 * @param repairmentLevel 维修级别
+	 * @param callback
+	 */
+	public static void getEquipmentPlanAsync(final Context context, String equipID,String repairmentLevel, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetEquipmentPlan";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+		params.put("repairmentLevel",repairmentLevel);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
+
+	/**
+	 * 获取设备备件信息
+	 * @param context
+	 * @param equipID 设备ID
+	 * @param callback
+	 */
+	public static void getEquipmentSparesAsync(final Context context, String equipID, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetEquipmentSpares";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
+
 }
