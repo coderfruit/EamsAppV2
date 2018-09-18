@@ -228,7 +228,7 @@
                 android:orientation="horizontal">
 
                 <RelativeLayout
-                    android:layout_width="212dp"
+                    android:layout_width="172dp"
                     android:layout_height="match_parent"
 
                     android:background="@drawable/selector_linear_layout_item_white">
@@ -463,7 +463,7 @@
                     android:textSize="12sp" />
 
                 <Button
-                    android:id="@+id/mIB_marAdd"
+                    android:id="@+id/mBtn_marAdd"
                     android:layout_width="23dp"
                     android:layout_height="23dp"
                     android:layout_centerInParent="true"
@@ -473,7 +473,7 @@
                     android:textAlignment="center" />
 
                 <Button
-                    android:id="@+id/mIB_marDel"
+                    android:id="@+id/mBtn_marDel"
                     android:layout_width="23dp"
                     android:layout_height="23dp"
                     android:layout_centerInParent="true"

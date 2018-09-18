@@ -125,7 +125,10 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
     @BindView(R.id.mBtn_Submit)
     Button mBtn_Submit;
-
+    @BindView(R.id.mBtn_marAdd)
+    Button mBtn_marAdd;
+    @BindView(R.id.mBtn_marDel)
+    Button mBtn_marDel;
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
     ArrayList<String> _CheckPlanIDList;//用户选中的维护计划ID
     ArrayList<String> _CheckSpareIDList;//用户选中的备件与设备关系ID
@@ -492,7 +495,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 }, list);
             }
         });
-        //故障描述
+
         mTv_FaultDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -514,11 +517,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String str = list.get(position).toString();
-//                        if (str.equals("其他")) {
-//                            ShowInputDialogForTextView(RepairmentReportActivity.this, "请输入故障描述", mTv_FaultDesc);
-//                        } else {
                             mTv_FaultDesc.setText(str);
-//                        }
                     }
                 }, list);
 
@@ -535,15 +534,15 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             @Override
             public void onClick(View v) {
 
-//                if (_EquipmentData == null) {
-//                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请首先确定要维修的设备！");
-//                    return;
-//                }
+                if (_EquipmentData == null) {
+                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请首先确定要维修的设备！");
+                    return;
+                }
                 String _ReapirLevel = mTv_FaultLevel.getText().toString();
-//                if (faultLevel == null || faultLevel.length() == 0) {
-//                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择维修级别！");
-//                    return;
-//                }
+                if (_ReapirLevel == null || _ReapirLevel.length() == 0) {
+                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择维修级别！");
+                    return;
+                }
 
                 Intent intent = new Intent(RepairmentReportActivity.this, RepairmentPlanCheckActivity.class);
                 intent.putExtra("_EquipmentID",_EquipmentData.getID());
@@ -553,6 +552,15 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             }
         });
 
+        mBtn_marAdd.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+//                Intent intent = new Intent(RepairmentReportActivity.this, RepairmentPlanCheckActivity.class);
+//                intent.putExtra("_EquipmentID",_EquipmentData.getID());
+//                intent.putExtra("_ReapirLevel", _ReapirLevel);
+//                startActivityForResult(intent,CHECK_PLAN_OK);
+            }
+        });
         //提交报修
         mBtn_Submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -591,10 +599,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                     ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择故障类型！");
                     return;
                 }
-//                if (RepairmentDesc == null || RepairmentDesc.length() == 0) {
-//                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择故障描述！");
-//                    return;
-//                }
+
                 if (user == null || user.length() == 0) {
                     ToastUtils.showLongToast(RepairmentReportActivity.this, "请填写联系人！");
                     return;
@@ -603,16 +608,6 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                     ToastUtils.showLongToast(RepairmentReportActivity.this, "请填写联系人电话！");
                     return;
                 }
-//                if (imgSize == 0) {
-//                    boolean diagValue = ShowDialog(FaultReportActivity.this, "系统提示", "没有添加故障图片是否继续？");
-//                    if (diagValue) {
-//                        return;
-//                    }
-//                }
-
-
-
-
 
                 //提交数据
                 FailureReportingRequest request = new FailureReportingRequest();
@@ -622,8 +617,6 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 request.setFailureDesc(faultDesc);
                 request.setLinkUser(user);
                 request.setLinkMobile(phone);
-
-
 
                 //提交数据
                 SoapUtils.submitFaultReportAsync(RepairmentReportActivity.this, request, new SoapListener() {
@@ -755,12 +748,6 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         super.onActivityResult(requestCode, resultCode, data);
 
     }
-
-    /**
-     * 开始录音
-     *
-     * @param mFileName
-     */
 
 
 
