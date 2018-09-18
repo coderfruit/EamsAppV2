@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.entity.FailureReportingAttachmentEntity;
 import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
+import com.grandhyatt.snowbeer.entity.RepairmentReportingEntity;
 
 import java.util.List;
 
@@ -19,12 +20,12 @@ import java.util.List;
  */
 
 public class RepairmentBillEntityDataListAdapter extends BaseAdapter {
-    private List<FailureReportingEntity> mDataList;
+    private List<RepairmentReportingEntity> mDataList;
     private Context mContext;
 
     private ViewHolder mViewHolder;
 
-    public RepairmentBillEntityDataListAdapter(Context context, List<FailureReportingEntity> dataList) {
+    public RepairmentBillEntityDataListAdapter(Context context, List<RepairmentReportingEntity> dataList) {
         mContext = context;
         mDataList = dataList;
 
@@ -70,7 +71,7 @@ public class RepairmentBillEntityDataListAdapter extends BaseAdapter {
             mViewHolder = (ViewHolder) convertView.getTag();
         }
 
-        FailureReportingEntity dataModel = mDataList.get(position);
+        RepairmentReportingEntity dataModel = mDataList.get(position);
         if (dataModel != null) {
             mViewHolder.mTv_ReportID.setText(String.valueOf(dataModel.getID()));
             mViewHolder.mTv_EquipID.setText(String.valueOf(dataModel.getEquipmentID()));
@@ -105,7 +106,7 @@ public class RepairmentBillEntityDataListAdapter extends BaseAdapter {
 
     }
 
-    public void loadMore(List<FailureReportingEntity> data)
+    public void loadMore(List<RepairmentReportingEntity> data)
     {
         mDataList.addAll(data);
         notifyDataSetChanged();

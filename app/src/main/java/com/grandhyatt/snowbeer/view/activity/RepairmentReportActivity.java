@@ -65,6 +65,7 @@ import org.ksoap2.serialization.SoapObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -107,14 +108,20 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
     @BindView(R.id.mTv_FaultDate)
     TextView mTv_FaultDate;
+    @BindView(R.id.mTv_FaultDate1)
+    TextView mTv_FaultDate1;
     @BindView(R.id.mTv_FaultLevel)
     TextView mTv_FaultLevel;
     @BindView(R.id.mTv_FaultDesc)
     TextView mTv_FaultDesc;
+    @BindView(R.id.mTv_RepairmentDesc)
+    TextView mTv_RepairmentDesc;
+    @BindView(R.id.mTv_jh)
+    TextView mTv_jh;
     @BindView(R.id.mEt_User)
     EditText mEt_User;
-    @BindView(R.id.mEt_Phone)
-    EditText mEt_Phone;
+    @BindView(R.id.mEt_money)
+    EditText mEt_money;
 
     @BindView(R.id.mBtn_Submit)
     Button mBtn_Submit;
@@ -190,7 +197,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             mBtn_Submit.setVisibility(View.GONE);
             //禁用联系人、电话输入
             mEt_User.setEnabled(false);
-            mEt_Phone.setEnabled(false);
+            mEt_money.setEnabled(false);
 
 
 
@@ -252,9 +259,9 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
         //初始化用户及手机号
         mEt_User.setText(SPUtils.getLastLoginUserName(RepairmentReportActivity.this));
-        mEt_Phone.setText(SPUtils.getLastLoginUserPhone(RepairmentReportActivity.this));
+        mEt_money.setText(SPUtils.getLastLoginUserPhone(RepairmentReportActivity.this));
 
-        //故障描述
+
         SoapListener callbackFailureReportingDesc = new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
@@ -298,7 +305,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 ToastUtils.showLongToast(RepairmentReportActivity.this, "0获取故障描述数据失败：" + fault.toString());
             }
         };
-        SoapUtils.getTextDictoryAsync(RepairmentReportActivity.this, Consts.EnumTextDictonay.FailureReportingDesc, callbackFailureReportingDesc);
+        SoapUtils.getTextDictoryAsync(RepairmentReportActivity.this, Consts.EnumTextDictonay.FaultClass, callbackFailureReportingDesc);
         //故障级别
         SoapListener callbackFailureReportingLevel = new SoapListener() {
             @Override
@@ -343,7 +350,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 ToastUtils.showLongToast(RepairmentReportActivity.this, "0获取故障级别数据失败：" + fault.toString());
             }
         };
-        SoapUtils.getTextDictoryAsync(RepairmentReportActivity.this, Consts.EnumTextDictonay.FailureReportingLevel, callbackFailureReportingLevel);
+        SoapUtils.getTextDictoryAsync(RepairmentReportActivity.this, Consts.EnumTextDictonay.RepairmentLevel, callbackFailureReportingLevel);
     }
 
     @Override
@@ -411,7 +418,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         });
 
 
-        //故障日期
+        //日期
         mTv_FaultDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -439,7 +446,36 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 dialog.show();
             }
         });
-        //故障级别
+
+        mTv_FaultDate1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                DatePickDialog dialog = new DatePickDialog(v.getContext());
+                //设置上下年分限制
+                dialog.setYearLimt(5);
+                //设置标题
+                dialog.setTitle("选择时间");
+                //设置类型
+                dialog.setType(DateType.TYPE_YMDHM);
+                //设置消息体的显示格式，日期格式
+                dialog.setMessageFormat("yyyy-MM-dd HH:mm");
+                //设置选择回调
+                dialog.setOnChangeLisener(null);
+                //设置点击确定按钮回调
+                dialog.setOnSureLisener(new OnSureLisener() {
+                    @Override
+                    public void onSure(Date date) {
+
+                        String strDate = CommonUtils.getStringDate(date);
+                        mTv_FaultDate1.setText(strDate);
+                    }
+                });
+                dialog.show();
+            }
+        });
+
+
         mTv_FaultLevel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -449,8 +485,9 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                         list.add(item);
                     }
                 } else {
-                    list.add("一般");
-                    list.add("严重");
+                    list.add("大修");
+                    list.add("定修");
+                    list.add("日常维修");
                 }
 
                 showSelectDialog(new SelectDialog.SelectDialogListener() {
@@ -471,27 +508,55 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                         list.add(item);
                     }
                 } else {
-                    list.add("无法正常启动");
-                    list.add("设备异响");
-                    list.add("运行异常");
+                    list.add("机械故障");
+                    list.add("电气故障");
+                    list.add("传动故障");
+                    list.add("润滑故障");
+                    list.add("散热故障");
                 }
-                list.add("其他");
+
 
                 showSelectDialog(new SelectDialog.SelectDialogListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String str = list.get(position).toString();
-                        if (str.equals("其他")) {
-                            ShowInputDialogForTextView(RepairmentReportActivity.this, "请输入故障描述", mTv_FaultDesc);
-                        } else {
+//                        if (str.equals("其他")) {
+//                            ShowInputDialogForTextView(RepairmentReportActivity.this, "请输入故障描述", mTv_FaultDesc);
+//                        } else {
                             mTv_FaultDesc.setText(str);
-                        }
+//                        }
                     }
                 }, list);
 
             }
         });
+       //添加备注
+        mTv_RepairmentDesc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                            ShowInputDialogForTextView(RepairmentReportActivity.this, "请输入设备维修描述", mTv_RepairmentDesc);
+            }
+        });
+        mTv_jh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+//                if (_EquipmentData == null) {
+//                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请首先确定要维修的设备！");
+//                    return;
+//                }
+                String faultLevel = mTv_FaultLevel.getText().toString();
+//                if (faultLevel == null || faultLevel.length() == 0) {
+//                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择维修级别！");
+//                    return;
+//                }
+
+                Intent intent = new Intent(RepairmentReportActivity.this, RepairmentPlanCheck.class);
+                intent.putExtra("mTv_EquipmentID", _EquipmentData.getID());
+                intent.putExtra("mTv_ReapirLevel", faultLevel);
+                startActivity(intent);
+            }
+        });
 
         //提交报修
         mBtn_Submit.setOnClickListener(new View.OnClickListener() {
@@ -501,30 +566,40 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 showLogingDialog();
 
                 String faultDate = mTv_FaultDate.getText().toString();
+                String faultDate1 = mTv_FaultDate1.getText().toString();
                 String faultLevel = mTv_FaultLevel.getText().toString();
                 String faultDesc = mTv_FaultDesc.getText().toString();
+                String RepairmentDesc = mTv_RepairmentDesc.getText().toString();
                 String user = mEt_User.getText().toString();
-                String phone = mEt_Phone.getText().toString();
+                String phone = mEt_money.getText().toString();
 
 
 
                 //验证提交数据
                 if (_EquipmentData == null) {
-                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请首先确定要报修的设备！");
+                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请首先确定要维修的设备！");
                     return;
                 }
                 if (faultDate == null || faultDate.length() == 0) {
-                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择报修日期！");
+                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择开始维修日期！");
+                    return;
+                }
+                if (faultDate1 == null || faultDate1.length() == 0) {
+                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择结束维修日期！");
                     return;
                 }
                 if (faultLevel == null || faultLevel.length() == 0) {
-                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择故障级别！");
+                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择维修级别！");
                     return;
                 }
                 if (faultDesc == null || faultDesc.length() == 0) {
-                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择故障描述！");
+                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择故障类型！");
                     return;
                 }
+//                if (RepairmentDesc == null || RepairmentDesc.length() == 0) {
+//                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择故障描述！");
+//                    return;
+//                }
                 if (user == null || user.length() == 0) {
                     ToastUtils.showLongToast(RepairmentReportActivity.this, "请填写联系人！");
                     return;
@@ -587,7 +662,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 //                            mTv_ReportNO.setText(data.getReportNO());
                             mBtn_Submit.setEnabled(false);
 
-                            ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_fault_report_submit_ok));
+                            ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_repairment_submit_ok));
                             finish();
                         }
                     }
@@ -595,14 +670,14 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                     @Override
                     public void onFailure(int statusCode, String content, Throwable error) {
                         dismissLoadingDialog();
-                        ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_fault_report_submit_err, error.getMessage()));
+                        ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_repairment_submit_err, error.getMessage()));
                         mBtn_Submit.setEnabled(true);
                     }
 
                     @Override
                     public void onFailure(int statusCode, SoapFault fault) {
                         dismissLoadingDialog();
-                        ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_fault_report_submit_fail, fault));
+                        ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_repairment_submit_fail, fault));
                         mBtn_Submit.setEnabled(true);
                     }
                 });
@@ -953,10 +1028,11 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                        formatter = new SimpleDateFormat ("yyyy-MM-dd KK:mm:ss a");
                         String ctime = formatter.format(_ReportEntity.getReportDate());
                     mTv_FaultDate.setText(ctime.substring(0,10));
+
                     mTv_FaultLevel.setText(_ReportEntity.getFailureLevel());
                     mTv_FaultDesc.setText(_ReportEntity.getFailureDesc());
                     mEt_User.setText(_ReportEntity.getLinkUser());
-                    mEt_Phone.setText(_ReportEntity.getLinkMobile());
+                    mEt_money.setText(_ReportEntity.getLinkMobile());
 //                    mTv_ReportNO.setVisibility(View.VISIBLE);
 //                    mTv_ReportNO.setText(_ReportEntity.getReportNO());
 
