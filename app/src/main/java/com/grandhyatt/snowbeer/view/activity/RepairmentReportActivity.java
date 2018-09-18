@@ -555,13 +555,18 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         mBtn_marAdd.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(RepairmentReportActivity.this, RepairmentPlanCheckActivity.class);
-//                intent.putExtra("_EquipmentID",_EquipmentData.getID());
-//                intent.putExtra("_ReapirLevel", _ReapirLevel);
-//                startActivityForResult(intent,CHECK_PLAN_OK);
+
             }
         });
-        //提交报修
+
+        mBtn_marDel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        //提交
         mBtn_Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
