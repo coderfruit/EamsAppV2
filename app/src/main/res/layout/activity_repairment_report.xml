@@ -26,14 +26,12 @@
             android:orientation="vertical">
 
 
-
-
             <!-- 设备信息、设备图片 -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="1dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="1dp"
                 android:background="@color/white6" />
 
             <LinearLayout
@@ -127,27 +125,59 @@
 
 
             <!-- 报修信息标题 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white6" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="23dp"
+                android:background="@drawable/selector_linear_layout_item_gray"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@color/colorPrimary" />
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="20dp"
+                    android:text="维修信息"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12sp" />
 
 
+
+
+            </LinearLayout>
             <!-- 选择故障日期  选择故障级别-->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="1dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="1dp"
                 android:background="@color/white6" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:background="@drawable/selector_linear_layout_item_white">
+
                 <TextView
                     android:id="@+id/mTv_FaultLevel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"
                     android:layout_marginLeft="10dp"
                     android:hint="维修级别"
                     android:textColor="@color/gray5"
@@ -185,77 +215,76 @@
                     android:src="@drawable/add_16px" />
 
 
-
             </RelativeLayout>
 
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
 
-                    android:orientation="horizontal">
+                android:orientation="horizontal">
 
-                    <RelativeLayout
-                        android:layout_width="212dp"
-                        android:layout_height="match_parent"
+                <RelativeLayout
+                    android:layout_width="212dp"
+                    android:layout_height="match_parent"
 
-                        android:background="@android:color/holo_blue_bright">
+                    android:background="@drawable/selector_linear_layout_item_white">
 
-                        <TextView
-                            android:id="@+id/mTv_FaultDate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="10dp"
-                            android:hint="开始日期"
-                            android:textColor="@color/gray5"
-                            android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/mTv_FaultDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:hint="开始日期"
+                        android:textColor="@color/gray5"
+                        android:textSize="14sp" />
 
-                        <ImageView
-                            android:id="@+id/mIv_FaultDate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
+                    <ImageView
+                        android:id="@+id/mIv_FaultDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
 
 
-                            android:layout_toRightOf="@id/mTv_FaultDate"
-                            android:src="@drawable/item_signature_iv_menu_defaul" />
+                        android:layout_toRightOf="@id/mTv_FaultDate"
+                        android:src="@drawable/item_signature_iv_menu_defaul" />
 
-                    </RelativeLayout>
-                    <RelativeLayout
-                        android:layout_width="200dp"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/holo_blue_bright">
+                </RelativeLayout>
 
-                        <TextView
-                            android:id="@+id/mTv_FaultDate1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentLeft="true"
+                <RelativeLayout
+                    android:layout_width="200dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_linear_layout_item_white">
 
-                            android:hint="结束日期"
-                            android:textColor="@color/gray5"
-                            android:textSize="14sp" />
+                    <TextView
+                        android:id="@+id/mTv_FaultDate1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
 
-                        <ImageView
-                            android:id="@+id/mIv_FaultDate1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
+                        android:hint="结束日期"
+                        android:textColor="@color/gray5"
+                        android:textSize="14sp" />
 
-                            android:layout_toRightOf="@id/mTv_FaultDate1"
-                            android:src="@drawable/item_signature_iv_menu_defaul" />
+                    <ImageView
+                        android:id="@+id/mIv_FaultDate1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
 
-                    </RelativeLayout>
+                        android:layout_toRightOf="@id/mTv_FaultDate1"
+                        android:src="@drawable/item_signature_iv_menu_defaul" />
 
-                </LinearLayout>
+                </RelativeLayout>
 
+            </LinearLayout>
 
 
             <RelativeLayout
@@ -284,31 +313,6 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/mTv_FaultDesc"
                     android:src="@drawable/item_signature_iv_menu_defaul" />
-                <TextView
-                    android:id="@+id/mTv_t4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="268dp"
-
-                    android:hint="分钟"
-                    android:textColor="@color/gray5"
-                    android:textSize="14sp" />
-                <EditText
-                    android:id="@+id/mEt_times"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginEnd="29dp"
-                    android:layout_marginRight="29dp"
-                    android:layout_marginLeft="5dp"
-                    android:hint="0"
-                    android:singleLine="true"
-                    android:textColor="@color/gray5"
-                    android:textSize="12sp" />
 
             </RelativeLayout>
 
@@ -361,6 +365,7 @@
                     android:hint="维修人员"
                     android:textColor="@color/gray5"
                     android:textSize="14sp" />
+
                 <EditText
                     android:id="@+id/mEt_User"
                     android:layout_width="80dp"
@@ -372,6 +377,7 @@
                     android:singleLine="true"
                     android:textColor="@color/gray5"
                     android:textSize="14sp" />
+
                 <TextView
                     android:id="@+id/mTv_t2"
                     android:layout_width="wrap_content"
@@ -383,8 +389,9 @@
                     android:hint="费用"
                     android:textColor="@color/gray5"
                     android:textSize="14sp" />
+
                 <EditText
-                    android:id="@+id/mEt_Phone"
+                    android:id="@+id/mEt_money"
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
@@ -395,13 +402,14 @@
                     android:singleLine="true"
                     android:textColor="@color/gray5"
                     android:textSize="14sp" />
+
                 <TextView
                     android:id="@+id/mTv_t3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
 
                     android:hint="(元)"
                     android:textColor="@color/gray5"
@@ -424,14 +432,13 @@
                 android:visibility="gone" />
 
 
-
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
                 android:background="@color/white6" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="23dp"
@@ -476,6 +483,7 @@
 
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
@@ -491,6 +499,7 @@
                 android:background="@color/white"
                 android:divider="@null"
                 android:dividerHeight="0dp" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
@@ -504,7 +513,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="15dp"
                 android:gravity="right">
-
 
 
                 <Button

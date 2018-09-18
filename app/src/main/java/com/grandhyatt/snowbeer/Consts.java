@@ -77,6 +77,7 @@ public class Consts {
         FailureReportingLevel,	//报修级别
         FailureReportingResult,	//报修处理状态
         FailureReportingDesc,	//报修描述
+
     }
 
 
