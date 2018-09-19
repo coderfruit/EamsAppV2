@@ -295,6 +295,10 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
                 }
                 else {        //选中
                     if (adapter_Plan != null) {//维护计划
+                        if(_CheckCnt == 1) {
+                            ToastUtils.showLongToast(RepairmentPlanCheckActivity.this,"维护计划只允许选择1条");
+                            return;
+                        }
                         _CheckCnt++;
                         if(!_CheckIDList.contains(checkedID)) {
                             _CheckIDList.add(checkedID);
