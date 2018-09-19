@@ -1,11 +1,13 @@
 package com.grandhyatt.snowbeer.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,7 +16,9 @@ import com.grandhyatt.snowbeer.entity.FailureReportingAttachmentEntity;
 import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ycm on 2018/8/28.
@@ -29,6 +33,7 @@ public class RepairmentPlanCheckDataListAdapter extends BaseAdapter {
     public RepairmentPlanCheckDataListAdapter(Context context, List<RepairmentPlanEntity> dataList) {
         mContext = context;
         mDataList = dataList;
+
     }
 
     @Override
@@ -47,7 +52,7 @@ public class RepairmentPlanCheckDataListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
 
             mViewHolder = new ViewHolder();
@@ -79,6 +84,8 @@ public class RepairmentPlanCheckDataListAdapter extends BaseAdapter {
             //mViewHolder.mTv_PlanDescTitle.setText("");
             mViewHolder.mTv_PlanDesc.setText(dataModel.getDescription());
             mViewHolder.mTv_ID.setText(dataModel.getID());
+            mViewHolder.mCkb_ID.setChecked(dataModel.getIsCheck());
+
         }
         return convertView;
     }

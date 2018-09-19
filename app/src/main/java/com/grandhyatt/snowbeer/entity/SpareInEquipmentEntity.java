@@ -1,10 +1,14 @@
 package com.grandhyatt.snowbeer.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by ycm on 2018/9/17.
  */
 
-public class SpareInEquipmentEntity {
+public class SpareInEquipmentEntity implements Serializable {
+
+    private  boolean IsCheck;
 
     private String ID;
 
@@ -51,6 +55,18 @@ public class SpareInEquipmentEntity {
     private String CurrentCount;
 
     public SpareInEquipmentEntity() {
+    }
+
+    public boolean getIsCheck() {
+        return IsCheck;
+    }
+
+    public void setIsCheck(boolean check) {
+        IsCheck = check;
+    }
+
+    public void setRepairmentLevel(String repairmentLevel) {
+        RepairmentLevel = repairmentLevel;
     }
 
     public String getStatus() {

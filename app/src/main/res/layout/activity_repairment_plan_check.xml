@@ -147,13 +147,23 @@
             android:background="@drawable/selector_linear_layout_item_gray">
 
             <TextView
+                android:id="@+id/mTv_AllCnt"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:text="共0条/"
+                android:textStyle="bold"
+                android:layout_weight="0.5"
+                android:gravity="right"
+                android:textColor="@color/red3"/>
+
+            <TextView
                 android:id="@+id/mTv_CheckCnt"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:text="共选中0条"
+                android:text="选中0条"
                 android:textStyle="bold"
-                android:layout_weight="1"
-                android:gravity="center"
+                android:layout_weight="0.5"
+                android:gravity="left"
                 android:textColor="@color/red3"/>
 
             <Button

@@ -1,10 +1,14 @@
 package com.grandhyatt.snowbeer.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by ycm on 2018/9/17.
  */
 
-public class RepairmentPlanEntity {
+public class RepairmentPlanEntity implements Serializable {
+
+    private  boolean IsCheck;
 
     private String Status;
 
@@ -42,6 +46,14 @@ public class RepairmentPlanEntity {
 
     public RepairmentPlanEntity() {
 
+    }
+
+    public boolean getIsCheck() {
+        return IsCheck;
+    }
+
+    public void setIsCheck(boolean check) {
+        IsCheck = check;
     }
 
     public String getStatus() {
