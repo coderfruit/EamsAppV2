@@ -45,11 +45,14 @@ import com.grandhyatt.snowbeer.adapter.ShowImagesAdapter;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
 import com.grandhyatt.snowbeer.entity.FailureReportingAttachmentEntity;
 import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
+import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
+import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
 import com.grandhyatt.snowbeer.entity.TextDictionaryEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.request.FailureReportingRequest;
 import com.grandhyatt.snowbeer.network.result.EquipmentResult;
 import com.grandhyatt.snowbeer.network.result.FailureReportingResult;
+import com.grandhyatt.snowbeer.network.result.SpareInEquipmentResult;
 import com.grandhyatt.snowbeer.network.result.StringResult;
 import com.grandhyatt.snowbeer.network.result.TextDictoryResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
@@ -134,8 +137,10 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     ListView mLv_DataList_Spare;
 
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
-    ArrayList<String> _CheckPlanIDList;//用户选中的维护计划ID
+    ArrayList<String> _CheckPlanIDList; //用户选中的维护计划ID
     ArrayList<String> _CheckSpareIDList;//用户选中的备件与设备关系ID
+    List<RepairmentPlanEntity> _CheckPlanEntityList = new ArrayList<>();//用户选择的数据行对象
+    List<SpareInEquipmentEntity> _CheckSpareEntityList = new ArrayList<>();//用户选择的数据行对象
 
     /**
      * 获取到的图片路径
@@ -731,11 +736,13 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 if(mTv_FaultLevel.getText().toString().equals("大修"))   //大修
                 {
                     _CheckPlanIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
+                    _CheckPlanEntityList = (List<RepairmentPlanEntity>)data.getSerializableExtra("_CheckEntityList");
                     ToastUtils.showLongToast(RepairmentReportActivity.this,"共获取到" + _CheckPlanIDList.size() + "条维护计划");
                 }
                 else//定修、日常维修
                 {
-                    _CheckSpareIDList = data.getExtras().getStringArrayList("_CheckSpareIDList");//得到新Activity 关闭后返回的数据
+                    _CheckSpareIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
+                    _CheckSpareEntityList = (List<SpareInEquipmentEntity>)data.getSerializableExtra("_CheckEntityList");
                     ToastUtils.showLongToast(RepairmentReportActivity.this,"共获取到" + _CheckSpareIDList.size() + "条备件记录");
                 }
 
