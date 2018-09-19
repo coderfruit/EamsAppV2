@@ -2,6 +2,7 @@ package com.grandhyatt.snowbeer.network.result;
 
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
+import com.grandhyatt.snowbeer.entity.RepairmentBillEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
 
@@ -15,6 +16,26 @@ public class RepairmentEquipmentResult extends Result {
     private EquipmentEntity data;
     private List<RepairmentPlanEntity> planData;
     private List<SpareInEquipmentEntity> SpareInEquipmentdata;
+    private RepairmentBillEntity rbdata;
+
+    /**
+     * 获取 data
+     *
+     * @return com.bose.rose.model.LoginUserInfo
+     */
+    public RepairmentBillEntity getRepairmentBillData() {
+        return rbdata;
+    }
+
+    /**
+     * 设置 data
+     *
+     * @param data
+     * @return void
+     */
+    public void setRepairmentBillData(List<RepairmentBillEntity> data) {
+        this.rbdata = rbdata;
+    }
     public EquipmentEntity getData() {
         return data;
     }
