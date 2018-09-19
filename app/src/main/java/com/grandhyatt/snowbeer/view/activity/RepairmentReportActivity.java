@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -129,6 +130,9 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     Button mBtn_marAdd;
     @BindView(R.id.mBtn_marDel)
     Button mBtn_marDel;
+    @BindView(R.id.mLv_DataList_Spare)
+    ListView mLv_DataList_Spare;
+
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
     ArrayList<String> _CheckPlanIDList;//用户选中的维护计划ID
     ArrayList<String> _CheckSpareIDList;//用户选中的备件与设备关系ID
@@ -611,6 +615,10 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 }
                 if (phone == null || phone.length() == 0) {
                     ToastUtils.showLongToast(RepairmentReportActivity.this, "请填写联系人电话！");
+                    return;
+                }
+                if(_CheckSpareIDList==null || _CheckSpareIDList.size()==0){
+                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请添加备品备件信息！");
                     return;
                 }
 
