@@ -8,15 +8,15 @@ public class EquipmentEntity {
 
     private String ID;
 
-    private long CorporationID;
+    private String CorporationID;
 
     private String CorporationName;
 
-    private long DepartmentID;
+    private String DepartmentID;
 
     private String DepartmentName;
 
-    private long EquipmentTypeID;
+    private String EquipmentTypeID;
 
     private String EquipmentTypeName;
 
@@ -60,36 +60,6 @@ public class EquipmentEntity {
 
     private String EquipImg;
 
-    public EquipmentEntity(String ID, long corporationID, String corporationName, long departmentID, String departmentName, long equipmentTypeID, String equipmentTypeName, String assetCode, String equipmentCode, String equipmentName, String equipmentClass, String equipmentStatus, String installLoaction, String standard, String manufacturer, String startDate, String getMode, String keeperName, String originalValue, int depreciationYears, String depreciationMethod, String netResidualRate, String makeUser, boolean ISACTIVED, String REMARK, String assetTypeID, String equipImg) {
-        this.ID = ID;
-        CorporationID = corporationID;
-        CorporationName = corporationName;
-        DepartmentID = departmentID;
-        DepartmentName = departmentName;
-        EquipmentTypeID = equipmentTypeID;
-        EquipmentTypeName = equipmentTypeName;
-        AssetCode = assetCode;
-        EquipmentCode = equipmentCode;
-        EquipmentName = equipmentName;
-        EquipmentClass = equipmentClass;
-        EquipmentStatus = equipmentStatus;
-        InstallLoaction = installLoaction;
-        Standard = standard;
-        Manufacturer = manufacturer;
-        StartDate = startDate;
-        GetMode = getMode;
-        KeeperName = keeperName;
-        OriginalValue = originalValue;
-        DepreciationYears = depreciationYears;
-        DepreciationMethod = depreciationMethod;
-        NetResidualRate = netResidualRate;
-        MakeUser = makeUser;
-        this.ISACTIVED = ISACTIVED;
-        this.REMARK = REMARK;
-        AssetTypeID = assetTypeID;
-        EquipImg = equipImg;
-    }
-
     public EquipmentEntity() {
     }
 
@@ -101,11 +71,11 @@ public class EquipmentEntity {
         this.ID = ID;
     }
 
-    public long getCorporationID() {
+    public String getCorporationID() {
         return CorporationID;
     }
 
-    public void setCorporationID(long corporationID) {
+    public void setCorporationID(String corporationID) {
         CorporationID = corporationID;
     }
 
@@ -117,11 +87,11 @@ public class EquipmentEntity {
         CorporationName = corporationName;
     }
 
-    public long getDepartmentID() {
+    public String getDepartmentID() {
         return DepartmentID;
     }
 
-    public void setDepartmentID(long departmentID) {
+    public void setDepartmentID(String departmentID) {
         DepartmentID = departmentID;
     }
 
@@ -133,11 +103,11 @@ public class EquipmentEntity {
         DepartmentName = departmentName;
     }
 
-    public long getEquipmentTypeID() {
+    public String getEquipmentTypeID() {
         return EquipmentTypeID;
     }
 
-    public void setEquipmentTypeID(long equipmentTypeID) {
+    public void setEquipmentTypeID(String equipmentTypeID) {
         EquipmentTypeID = equipmentTypeID;
     }
 
