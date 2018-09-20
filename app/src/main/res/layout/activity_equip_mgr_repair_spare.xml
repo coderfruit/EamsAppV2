@@ -57,13 +57,30 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/mTv_RepairmentLevel"
+                android:id="@+id/mTv_EquipDeptID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/mTv_EquipID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+            <TextView
+                android:id="@+id/mTv_EquipCorpID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/mTv_EquipDept"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:gravity="left"
                 android:text="设备所属部门"
                 android:textColor="@color/gray5"
                 android:textSize="14sp" />
@@ -97,7 +114,7 @@
 
         </LinearLayout>
 
-        <!-- 设备维护计划/设备备件信息 begin-->
+        <!-- 设备维护计划/设备备件信息 标题 begin-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="23dp"
@@ -117,7 +134,7 @@
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="20dp"
                 android:layout_weight="1"
-                android:text="设备维护计划/备件信息"
+                android:text="已领用的备品备件信息"
                 android:textColor="@color/colorPrimary"
                 android:textSize="12sp" />
 
@@ -130,6 +147,61 @@
             android:background="@color/white6" />
 
         <!-- 设备维护计划/设备备件信息 end -->
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@drawable/selector_linear_layout_item_white">
+
+            <TextView
+                android:id="@+id/mTv_SpareDeptID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/mTv_SpareDept"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:text="备件领用部门"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/mTv_SpareDept"
+                android:src="@drawable/item_signature_iv_menu_defaul" />
+
+            <ImageView
+                android:id="@+id/mIv_SpareCond"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/item_signature_iv_menu_defaul" />
+
+            <TextView
+                android:id="@+id/mTv_SpareCond"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@id/mIv_SpareCond"
+                android:text="备件名称/编码"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+
         <ListView
             android:id="@+id/mLv_DataList"
             android:layout_width="match_parent"
@@ -139,20 +211,21 @@
             android:choiceMode="multipleChoice"
             android:divider="@null"
             android:dividerHeight="0dp" />
-        <!-- selector_list_view_item_common_white -->
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/selector_linear_layout_item_gray">
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/selector_linear_layout_item_gray"
+            android:gravity="center_vertical">
 
             <TextView
                 android:id="@+id/mTv_AllCnt"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:text="共0条/"
                 android:textStyle="bold"
                 android:layout_weight="0.5"
@@ -162,7 +235,7 @@
             <TextView
                 android:id="@+id/mTv_CheckCnt"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:text="选中0条"
                 android:textStyle="bold"
                 android:layout_weight="0.5"

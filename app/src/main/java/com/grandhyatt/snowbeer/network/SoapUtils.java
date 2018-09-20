@@ -494,4 +494,44 @@ public class SoapUtils {
 		SoapUtils.getInstance(context).call(methodName,params,callback);
 	}
 
+	/**
+	 * 获取设备维修可用备件库存信息
+	 * @param context
+	 * @param equipID
+	 * @param deptID
+	 * @param spareContent
+	 * @param callback
+	 */
+	public static void getEquipmentSparesStoreInfo(final Context context, String equipID, String deptID,String spareContent, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetEquipmentSparesStoreInfo";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+		params.put("deptID",deptID);
+		params.put("spareContent",spareContent);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
+
+	/**
+	 * 获取组织机构下的部门信息
+	 * @param context
+	 * @param corporationID
+	 * @param callback
+	 */
+	public static void getDepartment(final Context context, String corporationID, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetDepartment";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("corporationID",corporationID);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
+
 }
