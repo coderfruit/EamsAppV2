@@ -55,6 +55,19 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/mTv_RepairmentLevel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="设备所属部门"
+                android:textColor="@color/gray5"
+                android:textSize="14sp" />
+
             <!-- 设备名称 编码 -->
             <TextView
                 android:id="@+id/mTv_EquipName"
@@ -81,17 +94,7 @@
                 android:textColor="@color/gray5"
                 android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/mTv_RepairmentLevel"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="维修级别"
-                android:textColor="@color/gray5"
-                android:textSize="14sp" />
+
         </LinearLayout>
 
         <!-- 设备维护计划/设备备件信息 begin-->
