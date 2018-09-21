@@ -144,6 +144,8 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     ListView mLv_Show_plan;
 
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
+    public static final int CHECK_SPARE_OK = 112;//选择维修用备件
+
     ArrayList<String> _CheckPlanIDList; //用户选中的维护计划ID
     ArrayList<String> _CheckSpareIDList;//用户选中的备件与设备关系ID
     List<RepairmentPlanEntity> _CheckPlanEntityList = new ArrayList<>();//用户选择的数据行对象
@@ -572,7 +574,9 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         mBtn_marAdd.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(RepairmentReportActivity.this, EquipMgrRepairSpareActivity.class);
+                intent.putExtra("_EquipmentID",_EquipmentData.getID());
+                startActivityForResult(intent,CHECK_SPARE_OK);
             }
         });
 

@@ -8,21 +8,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <CheckBox
-                android:id="@+id/mCkb_ID"
-                android:layout_marginLeft="4dp"
+                android:id="@+id/mCkb_IsCheck"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
                 android:checked="false"
-                android:focusable="false"/>
+                android:focusable="false" />
+
             <TextView
                 android:id="@+id/mTv_ID"
                 android:layout_width="wrap_content"
@@ -44,40 +45,36 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/mTv_PlanID"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="RptID"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/mTv_SpareName"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
-                    android:text="  状    态  ："
+                    android:text="备件名称"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:layout_weight="6"
+                    android:gravity="left"/>
+
+                <TextView
+                    android:id="@+id/mTv_SpareCode"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:text="备件编码"
                     android:textColor="@color/gray5"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:layout_weight="4"
+                    android:gravity="left"/>
 
                 <TextView
                     android:id="@+id/mTv_Status"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_weight="7"
-                    android:text="已超期9天"
-                    android:textColor="@android:color/black"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/mTv_RepairmentLevel"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="12dp"
-                    android:layout_weight="3"
                     android:gravity="right"
-                    android:text="大修"
+                    android:text="正常"
                     android:textColor="@color/blue1"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -88,22 +85,72 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="执行周期："
-                    android:textColor="@color/gray5"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/mTv_PlanInterval"
+                    android:id="@+id/mTv_Stander"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
-                    android:layout_weight="8"
-                    android:text="每12个月执行一次"
+                    android:text="规格型号"
                     android:textColor="@android:color/black"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:layout_weight="6"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="2">
+
+                    <TextView
+                        android:id="@+id/mTv_Qty"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:text="数量"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp"
+                        android:layout_weight="1"
+                        android:gravity="right"/>
+
+                    <TextView
+                        android:id="@+id/mTv_Unit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:text="单位"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp"
+                        android:layout_weight="1"
+                        android:gravity="left"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="2">
+
+                    <TextView
+                        android:id="@+id/mTv_Price"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:text="单价"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp"
+                        android:layout_weight="1"
+                        android:gravity="right"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:text="(元)"
+                        android:textColor="@android:color/black"
+                        android:textSize="12sp"
+                        android:layout_weight="1"
+                        android:gravity="left"/>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -117,12 +164,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
-                    android:text="上次日期："
+                    android:text="日期："
                     android:textColor="@color/gray5"
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/mTv_LastRunningDate"
+                    android:id="@+id/mTv_MakeDate"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
@@ -135,18 +182,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
-                    android:text="下次日期："
+                    android:text="部门："
                     android:textColor="@color/gray5"
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/mTv_NextRunningDate"
+                    android:id="@+id/mTv_DeptName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="2019-12-01"
+                    android:gravity="left"
+                    android:text="酿造部"
                     android:textColor="@android:color/black"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -157,23 +204,6 @@
                 android:layout_marginTop="6dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/mTv_PlanDescTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:text="故障描述："
-                    android:textColor="@color/gray5"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/mTv_PlanDesc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="6dp"
-                    android:layout_marginLeft="4dp"
-                    android:text="十字万向节轴承更换"
-                    android:textSize="12sp" />
             </LinearLayout>
 
         </LinearLayout>
