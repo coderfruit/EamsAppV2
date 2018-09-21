@@ -341,6 +341,28 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
             public void onClick(View v) {
                 //数据是使用Intent返回
                 Intent intent = new Intent();
+                if(_ReapirLevel.equals("大修")) {
+                    View vw=null;
+                    for (int i = 0; i < mLv_DataList.getChildCount(); i++) {
+                        vw = mLv_DataList.getChildAt(i);
+                        CheckBox  checkb= (CheckBox) vw.findViewById(R.id.mCkb_ID);
+                        if(checkb.isChecked()){
+                            RepairmentPlanEntity rpEntity=    (RepairmentPlanEntity)mLv_DataList.getAdapter().getItem(i);
+                            _CheckEntityList.add(rpEntity);
+                        }
+                    }
+                }
+                else {
+                    View vw=null;
+                    for (int i = 0; i < mLv_DataList.getChildCount(); i++) {
+                        vw = mLv_DataList.getChildAt(i);
+                        CheckBox  checkb= (CheckBox) vw.findViewById(R.id.mCkb_ID);
+                        if(checkb.isChecked()){
+                            RepairmentPlanEntity rpEntity=    (RepairmentPlanEntity)mLv_DataList.getAdapter().getItem(i);
+                            _CheckEntityList.add(rpEntity);
+                        }
+                    }
+                }
 
                 //把返回数据存入Intent
                 intent.putStringArrayListExtra("_CheckPlanIDList", _CheckIDList);

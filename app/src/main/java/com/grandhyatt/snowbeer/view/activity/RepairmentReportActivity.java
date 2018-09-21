@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,11 @@ import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
+import com.grandhyatt.snowbeer.adapter.RepairmentPlanCheckDataListAdapter;
+import com.grandhyatt.snowbeer.adapter.RepairmentPlanViewDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.ShowImagesAdapter;
+import com.grandhyatt.snowbeer.adapter.SpareInEquipmentDataListAdapter;
+import com.grandhyatt.snowbeer.adapter.SpareInEquipmentViewDataListAdapter;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
 import com.grandhyatt.snowbeer.entity.FailureReportingAttachmentEntity;
 import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
@@ -135,6 +140,8 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     Button mBtn_marDel;
     @BindView(R.id.mLv_DataList_Spare)
     ListView mLv_DataList_Spare;
+    @BindView(R.id.mLv_Show_plan)
+    ListView mLv_Show_plan;
 
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
     ArrayList<String> _CheckPlanIDList; //用户选中的维护计划ID
@@ -167,7 +174,8 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
     FailureReportingEntity _ReportEntity;
     List<FailureReportingAttachmentEntity> _ReportFileEntitys;
-
+    RepairmentPlanViewDataListAdapter adapter_Plan = null;//维护计划适配器
+    SpareInEquipmentViewDataListAdapter adapter_Spare = null;  //备件适配器
     MediaPlayer player;
 
 
@@ -262,7 +270,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         mToolBar.setTitle("设备维修");
         mToolBar.hideMenuButton();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
+        mLv_Show_plan.setVisibility(View.GONE);
         //初始化用户及手机号
         mEt_User.setText(SPUtils.getLastLoginUserName(RepairmentReportActivity.this));
         mEt_money.setText(SPUtils.getLastLoginUserPhone(RepairmentReportActivity.this));
@@ -626,7 +634,11 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                     ToastUtils.showLongToast(RepairmentReportActivity.this, "请添加备品备件信息！");
                     return;
                 }
+                View vw=null;
+                for (int i = 0; i < mLv_DataList_Spare.getChildCount(); i++) {
+                   vw = mLv_DataList_Spare.getChildAt(i);
 
+                }
                 //提交数据
                 FailureReportingRequest request = new FailureReportingRequest();
                 request.setReportDate(faultDate);
@@ -688,12 +700,8 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                     }
                 });
 
-
             }
         });
-
-
-
     }
 
 
@@ -737,13 +745,29 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 {
                     _CheckPlanIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
                     _CheckPlanEntityList = (List<RepairmentPlanEntity>)data.getSerializableExtra("_CheckEntityList");
-                    ToastUtils.showLongToast(RepairmentReportActivity.this,"共获取到" + _CheckPlanIDList.size() + "条维护计划");
+                      if(_CheckPlanEntityList.size()==0){
+                          mLv_Show_plan.setVisibility(View.GONE);
+                      }else {
+                          adapter_Plan= new RepairmentPlanViewDataListAdapter(this, _CheckPlanEntityList);
+                          mLv_Show_plan.setAdapter(adapter_Plan);
+                          mLv_Show_plan.setVisibility(View.VISIBLE);
+                      }
+
+                    ToastUtils.showLongToast(RepairmentReportActivity.this,"共获取到" + _CheckPlanEntityList.size() + "条维护计划");
                 }
                 else//定修、日常维修
                 {
                     _CheckSpareIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
-                    _CheckSpareEntityList = (List<SpareInEquipmentEntity>)data.getSerializableExtra("_CheckEntityList");
-                    ToastUtils.showLongToast(RepairmentReportActivity.this,"共获取到" + _CheckSpareIDList.size() + "条备件记录");
+                    _CheckSpareEntityList = (List<SpareInEquipmentEntity>) data.getSerializableExtra("_CheckEntityList");
+                    if (_CheckPlanEntityList.size() == 0) {
+                        mLv_Show_plan.setVisibility(View.GONE);
+                    } else {
+                        adapter_Spare = new SpareInEquipmentViewDataListAdapter(this, _CheckSpareEntityList);
+                        mLv_Show_plan.setAdapter(adapter_Spare);
+                        mLv_Show_plan.setVisibility(View.VISIBLE);
+                    }
+
+                    ToastUtils.showLongToast(RepairmentReportActivity.this, "共获取到" + _CheckSpareIDList.size() + "条备件记录");
                 }
 
 

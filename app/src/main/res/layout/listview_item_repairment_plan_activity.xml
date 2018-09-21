@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:background="@color/white">
+
+
+    <RelativeLayout
+        android:id="@+id/mItem"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@drawable/selector_list_view_item_common_white">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/mTFL_Flag"
+            android:text="维修计划："
+            android:textColor="@color/gray5"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/mTv_wxjh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/textView"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_toEndOf="@+id/textView"
+            android:layout_toRightOf="@+id/textView"
+            android:text="维修计划"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
+
+
+        <TextView
+            android:id="@+id/mTFL_Flag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="12dp"
+            android:textColor="@color/blue1"
+            android:textSize="12sp"
+            android:text="状态"
+            />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/mTv_zxzq"
+            android:text="维修计划："
+            android:textColor="@color/gray5"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/mTv_zxzq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/mTv_wxjh"
+            android:layout_alignStart="@+id/mTv_wxjh"
+            android:layout_centerVertical="true"
+            android:text="执行周期"
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignBottom="@+id/mTv_LastRunningDate"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="上次日期："
+            android:textColor="@color/gray5"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/mTv_LastRunningDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/mTv_NextRunningDate"
+            android:layout_alignBottom="@+id/mTv_NextRunningDate"
+            android:layout_alignLeft="@+id/mTv_zxzq"
+            android:layout_alignStart="@+id/mTv_zxzq"
+            android:text="2018-07-08 1:56"
+            android:textColor="@color/gray5"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignBottom="@+id/mTv_NextRunningDate"
+            android:layout_marginEnd="14dp"
+            android:layout_marginRight="14dp"
+            android:layout_toLeftOf="@+id/mTv_NextRunningDate"
+            android:layout_toStartOf="@+id/mTv_NextRunningDate"
+            android:text="下次日期："
+            android:textColor="@color/gray5"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/mTv_NextRunningDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="12dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/gray5"
+            android:textSize="12sp"
+            android:text="2018-07-08 1:56"
+            />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="16dp"
+        android:background="@color/white6" />
+
+</LinearLayout>
