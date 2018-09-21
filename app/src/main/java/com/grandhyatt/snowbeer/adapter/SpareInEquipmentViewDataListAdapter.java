@@ -68,7 +68,7 @@ public class SpareInEquipmentViewDataListAdapter extends BaseAdapter {
             mViewHolder.mTv_LastRunningDate.setText(dataModel.getLastReplaceDate());
 
 
-
+            mViewHolder.mTFL_Flag.setText(dataModel.getStatus());
             mViewHolder.mTv_zxzq.setText("每" + dataModel.getReplaceCycles() + "天执行一次");
             mViewHolder.mTv_wxjh.setText("(" + dataModel.getSpareCode() + ")" + dataModel.getSpareName());
 

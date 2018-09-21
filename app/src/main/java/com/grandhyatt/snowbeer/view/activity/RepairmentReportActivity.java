@@ -20,11 +20,13 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -42,12 +44,14 @@ import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
+import com.grandhyatt.snowbeer.adapter.EquipRepairSpareViewDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.RepairmentPlanCheckDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.RepairmentPlanViewDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.ShowImagesAdapter;
 import com.grandhyatt.snowbeer.adapter.SpareInEquipmentDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.SpareInEquipmentViewDataListAdapter;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
+import com.grandhyatt.snowbeer.entity.EquipmentUseSpareEntity;
 import com.grandhyatt.snowbeer.entity.FailureReportingAttachmentEntity;
 import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
@@ -150,6 +154,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     ArrayList<String> _CheckSpareIDList;//用户选中的备件与设备关系ID
     List<RepairmentPlanEntity> _CheckPlanEntityList = new ArrayList<>();//用户选择的数据行对象
     List<SpareInEquipmentEntity> _CheckSpareEntityList = new ArrayList<>();//用户选择的数据行对象
+    List<EquipmentUseSpareEntity> _CheckSpareUseList=new ArrayList<>();// 页面选择备品配件返回数据
 
     /**
      * 获取到的图片路径
@@ -178,7 +183,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     List<FailureReportingAttachmentEntity> _ReportFileEntitys;
     RepairmentPlanViewDataListAdapter adapter_Plan = null;//维护计划适配器
     SpareInEquipmentViewDataListAdapter adapter_Spare = null;  //备件适配器
-    MediaPlayer player;
+    EquipRepairSpareViewDataListAdapter adapter_SpareView=null;
 
 
     @Override
@@ -577,6 +582,8 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 Intent intent = new Intent(RepairmentReportActivity.this, EquipMgrRepairSpareActivity.class);
                 intent.putExtra("_EquipmentID",_EquipmentData.getID());
                 startActivityForResult(intent,CHECK_SPARE_OK);
+
+
             }
         });
 
@@ -753,8 +760,12 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                           mLv_Show_plan.setVisibility(View.GONE);
                       }else {
                           adapter_Plan= new RepairmentPlanViewDataListAdapter(this, _CheckPlanEntityList);
+                          mLv_Show_plan.setSelection(adapter_Plan.getCount());
+
+
                           mLv_Show_plan.setAdapter(adapter_Plan);
                           mLv_Show_plan.setVisibility(View.VISIBLE);
+                          setListViewHeightBasedOnChildren(mLv_Show_plan);
                       }
 
                     ToastUtils.showLongToast(RepairmentReportActivity.this,"共获取到" + _CheckPlanEntityList.size() + "条维护计划");
@@ -792,6 +803,16 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 }
 
                 break;
+            case CHECK_SPARE_OK:
+                EquipmentUseSpareEntity a=new EquipmentUseSpareEntity();
+                a.setSpareStander("bbbbbbbbb");
+                a.setSpareName("ccccc");
+                a.setCount("1000");
+                a.setSpareUnit("箱");
+                _CheckSpareUseList.add(a);
+                adapter_SpareView=new EquipRepairSpareViewDataListAdapter(this,_CheckSpareUseList);
+//                mLv_DataList_Spare.getAdapter(adapter_SpareView);
+
         }
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -799,6 +820,28 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
 
 
+    public void setListViewHeightBasedOnChildren(ListView listView) {
+        // 获取ListView对应的Adapter
+        ListAdapter listAdapter = listView.getAdapter();
+        if (listAdapter == null) {
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0, len = listAdapter.getCount(); i < len; i++) {
+            // listAdapter.getCount()返回数据项的数目
+            View listItem = listAdapter.getView(i, null, listView);
+            // 计算子项View 的宽高
+            listItem.measure(0, 0);
+            // 统计所有子项的总高度
+            totalHeight += listItem.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        // listView.getDividerHeight()获取子项间分隔符占用的高度
+        // params.height最后得到整个ListView完整显示需要的高度
+        listView.setLayoutParams(params);
+    }
 
     /**
      * 根据设备条码获取设备信息
