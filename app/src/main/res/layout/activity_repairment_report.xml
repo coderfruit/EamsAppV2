@@ -224,20 +224,28 @@
                 android:layout_marginRight="1dp"
                 android:background="@color/white6" />
 
-            <ListView
-                android:id="@+id/mLv_Show_plan"
+
+
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/selector_linear_layout_item_white">
 
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-                android:background="@color/white6" />
+                <ListView
+                    android:id="@+id/mLv_Show_plan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/selector_listview_item"
+                    android:divider="@null"
+                    android:stackFromBottom="true"
+                    android:transcriptMode="alwaysScroll"
+                    android:dividerHeight="0dp" />
 
+            </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
@@ -447,6 +455,13 @@
                 android:layout_marginRight="1dp"
                 android:background="@color/white6" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:background="@color/white6" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="23dp"
@@ -470,34 +485,32 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
 
+
                 <Button
                     android:id="@+id/mBtn_marAdd"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
                     android:layout_centerInParent="true"
-                    android:layout_marginLeft="140sp"
-                    android:background="@drawable/ic_button_add_gray"
-                    android:scaleType="fitCenter"
-                    android:textAlignment="center" />
+                    android:layout_marginLeft="92sp"
+                    android:background="@drawable/ic_login_button_true"
+                    android:text="添加"
+                    android:textAlignment="center"
+                    android:textSize="12dp" />
 
                 <Button
                     android:id="@+id/mBtn_marDel"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+
+                    android:text="删除"
+                    android:textSize="12dp"
                     android:layout_centerInParent="true"
-                    android:layout_marginLeft="14sp"
-                    android:background="@drawable/ic_button_sub_gray"
+                    android:layout_marginLeft="1sp"
+                    android:background="@drawable/ic_login_button_true"
                     android:scaleType="fitCenter" />
 
 
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-                android:background="@color/white6" />
 
             <ListView
                 android:id="@+id/mLv_DataList_Spare"

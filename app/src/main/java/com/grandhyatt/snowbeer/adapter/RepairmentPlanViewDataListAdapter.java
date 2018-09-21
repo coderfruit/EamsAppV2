@@ -67,13 +67,11 @@ public class RepairmentPlanViewDataListAdapter extends BaseAdapter {
         if (dataModel != null) {
             mViewHolder.mTv_NextRunningDate.setText(dataModel.getNextRunningDate());
             mViewHolder.mTv_LastRunningDate.setText(dataModel.getLastRunningDate());
-            if (dataModel.getStatus().equals("0")) {
-                mViewHolder.mTFL_Flag.setText("周转");
-            } else {
-                mViewHolder.mTFL_Flag.setText("回收");
-            }
+
+                mViewHolder.mTFL_Flag.setText(dataModel.getStatus());
+
             mViewHolder.mTv_zxzq.setText("每" + dataModel.getInterval() + dataModel.getIntervalUnit() + "执行一次");
-            mViewHolder.mTv_wxjh.setText(dataModel.getDescription());
+            mViewHolder.mTv_wxjh.setText(dataModel.getInterval()+"  "+dataModel.getIntervalUnit());
 
         }
         return convertView;
