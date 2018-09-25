@@ -815,6 +815,14 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
                 break;
             case CHECK_SPARE_OK:
+                _CheckSpareIDList = data.getExtras().getStringArrayList("_CheckIDList");//得到新Activity 关闭后返回的数据
+                _CheckSpareUseList = (List<EquipmentUseSpareEntity>)data.getSerializableExtra("_CheckEntityList");
+                if(_CheckSpareUseList != null && _CheckSpareUseList.size() > 0){
+                    adapter_SpareView = new EquipRepairSpareViewDataListAdapter(RepairmentReportActivity.this, _CheckSpareUseList);
+                    mLv_DataList_Spare.setAdapter(adapter_SpareView);
+                }
+
+
 //                EquipmentUseSpareEntity a=new EquipmentUseSpareEntity();
 //                a.setSpareStander("bbbbbbbbb");
 //                a.setSpareName("ccccc");
