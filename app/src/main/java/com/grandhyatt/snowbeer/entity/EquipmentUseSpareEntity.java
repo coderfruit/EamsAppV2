@@ -1,11 +1,13 @@
 package com.grandhyatt.snowbeer.entity;
 
+import java.io.Serializable;
+
 /**
  * 设备维修可用的备件库存信息
  * Created by ycm on 2018/9/20.
  */
 
-public class EquipmentUseSpareEntity {
+public class EquipmentUseSpareEntity  implements Serializable {
     private  boolean IsCheck;
     private String BillCode;
     private String DeptID;
@@ -19,9 +21,18 @@ public class EquipmentUseSpareEntity {
     private String SpareUnit;
     private String SparePrice;
     private String SpareStatus;
-    private String Count;
+    private String Count;           //备件库存
+    private String UserInputCount;//用户录入数量
 
     public EquipmentUseSpareEntity() {
+    }
+
+    public String getUserInputCount() {
+        return UserInputCount;
+    }
+
+    public void setUserInputCount(String userInputCount) {
+        UserInputCount = userInputCount;
     }
 
     public boolean getIsCheck() {

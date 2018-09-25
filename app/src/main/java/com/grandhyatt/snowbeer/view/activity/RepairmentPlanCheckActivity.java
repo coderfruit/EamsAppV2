@@ -40,7 +40,7 @@ import butterknife.ButterKnife;
  * Created by ycm on 2018/9/17.
  */
 
-public class RepairmentPlanCheckActivity extends ActivityBase implements IActivityBase, View.OnClickListener{
+public class RepairmentPlanCheckActivity extends ActivityBase implements IActivityBase, View.OnClickListener {
 
     @BindView(R.id.mToolBar)
     ToolBarLayout mToolBar;
@@ -61,7 +61,7 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
     TextView mTv_AllCnt;
 
 
-    int _CheckCnt= 0;//用户选中的行数
+    int _CheckCnt = 0;//用户选中的行数
     ArrayList<String> _CheckIDList = new ArrayList<>();//用户选择的数据行ID
     ArrayList<Object> _CheckEntityList = new ArrayList<>();//用户选择的数据行对象
     String _ReapirLevel = "";
@@ -85,9 +85,9 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
         bindEvent();
 
         //设备、维修级别不为空
-        if ( StringUtils.isNotEmpty(_EquipmentID) && StringUtils.isNotEmpty(_ReapirLevel) ) {
+        if (StringUtils.isNotEmpty(_EquipmentID) && StringUtils.isNotEmpty(_ReapirLevel)) {
 
-            if(_ReapirLevel.equals("大修")) {
+            if (_ReapirLevel.equals("大修")) {
                 //获取设备维护计划
                 SoapUtils.getEquipmentPlanAsync(RepairmentPlanCheckActivity.this, _EquipmentID, _ReapirLevel, new SoapListener() {
                     @Override
@@ -117,18 +117,16 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
                         }
                         List<RepairmentPlanEntity> data = result.getData();
                         //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
-                        if (data == null || data.size()==0) {
-                            ToastUtils.showToast(RepairmentPlanCheckActivity.this,"该设备没有维护计划");
+                        if (data == null || data.size() == 0) {
+                            ToastUtils.showToast(RepairmentPlanCheckActivity.this, "该设备没有维护计划");
                             return;
-                        }
-                        else
-                        {
+                        } else {
                             mTv_AllCnt.setText("共" + data.size() + "条/");
-                            adapter_Plan = new RepairmentPlanCheckDataListAdapter(RepairmentPlanCheckActivity.this,data);
+                            adapter_Plan = new RepairmentPlanCheckDataListAdapter(RepairmentPlanCheckActivity.this, data);
                             mLv_DataList.setAdapter(adapter_Plan);
 
                             RepairmentPlanEntity entity = data.get(0);
-                            if(entity != null) {
+                            if (entity != null) {
                                 String equipmentCode = entity.getEquipmentCode();
                                 String equipmentName = entity.getEquipmentName();
 
@@ -151,8 +149,7 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
                         ToastUtils.showToast(RepairmentPlanCheckActivity.this, getString(R.string.submit_soap_result_err4, fault));
                     }
                 });
-            }
-            else//定修、日常维修
+            } else//定修、日常维修
             {
                 //获取设备关联备件信息
                 SoapUtils.getEquipmentSparesAsync(RepairmentPlanCheckActivity.this, _EquipmentID, new SoapListener() {
@@ -183,16 +180,14 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
                         List<SpareInEquipmentEntity> data = result.getData();
                         //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
                         if (data == null || data.size() == 0) {
-                            ToastUtils.showToast(RepairmentPlanCheckActivity.this,"该设备没有备件信息");
-                        }
-                        else
-                        {
+                            ToastUtils.showToast(RepairmentPlanCheckActivity.this, "该设备没有备件信息");
+                        } else {
                             mTv_AllCnt.setText("共" + data.size() + "条/");
-                            adapter_Spare= new SpareInEquipmentDataListAdapter(RepairmentPlanCheckActivity.this,data);
+                            adapter_Spare = new SpareInEquipmentDataListAdapter(RepairmentPlanCheckActivity.this, data);
                             mLv_DataList.setAdapter(adapter_Spare);
 
                             SpareInEquipmentEntity entity = data.get(0);
-                            if(entity != null) {
+                            if (entity != null) {
                                 String equipmentCode = entity.getEquipmentCode();
                                 String equipmentName = entity.getEquipmentName();
 
@@ -216,10 +211,9 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
                     }
                 });
             }
-        }
-        else{
+        } else {
             dismissLoadingDialog();
-            ToastUtils.showLongToast(RepairmentPlanCheckActivity.this,"设备ID、维修级别不能为空！");
+            ToastUtils.showLongToast(RepairmentPlanCheckActivity.this, "设备ID、维修级别不能为空！");
         }
 
 
@@ -250,10 +244,10 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
                 String checkedID = mTv_ID.getText().toString();
 
                 boolean ckbValue = ckb.isChecked();
-                if(ckbValue) {//取消选中
+                if (ckbValue) {//取消选中
                     if (adapter_Plan != null) {//维护计划
 
-                        if(_CheckCnt > 0) {
+                        if (_CheckCnt > 0) {
                             _CheckCnt--;
                             if (_CheckIDList.contains(checkedID)) {
                                 _CheckIDList.remove(checkedID);
@@ -264,16 +258,15 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
                             planEty.setIsCheck(false);
                             adapter_Plan.notifyDataSetChanged();
 
-                            if(planEty != null) {
+                            if (planEty != null) {
                                 if (_CheckEntityList.contains(planEty)) {
                                     _CheckEntityList.remove(planEty);
                                 }
                             }
 
                         }
-                    }
-                    else if (adapter_Spare != null){//备件列表
-                        if(_CheckCnt > 0) {
+                    } else if (adapter_Spare != null) {//备件列表
+                        if (_CheckCnt > 0) {
                             _CheckCnt--;
                             if (_CheckIDList.contains(checkedID)) {
                                 _CheckIDList.remove(checkedID);
@@ -284,7 +277,7 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
                             spareEty.setIsCheck(false);
                             adapter_Spare.notifyDataSetChanged();
 
-                            if(spareEty != null) {
+                            if (spareEty != null) {
                                 if (_CheckEntityList.contains(spareEty)) {
                                     _CheckEntityList.remove(spareEty);
                                 }
@@ -292,32 +285,30 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
 
                         }
                     }
-                }
-                else {        //选中
+                } else {        //选中
                     if (adapter_Plan != null) {//维护计划
-                        if(_CheckCnt == 1) {
-                            ToastUtils.showLongToast(RepairmentPlanCheckActivity.this,"维护计划只允许选择1条");
+                        if (_CheckCnt == 1) {
+                            ToastUtils.showLongToast(RepairmentPlanCheckActivity.this, "维护计划只允许选择1条");
                             return;
                         }
                         _CheckCnt++;
-                        if(!_CheckIDList.contains(checkedID)) {
+                        if (!_CheckIDList.contains(checkedID)) {
                             _CheckIDList.add(checkedID);
                         }
                         mTv_CheckCnt.setText("选中" + _CheckCnt + "条");
 
-                        planEty = (RepairmentPlanEntity)adapter_Plan.getItem(position);
+                        planEty = (RepairmentPlanEntity) adapter_Plan.getItem(position);
                         planEty.setIsCheck(true);
                         adapter_Plan.notifyDataSetChanged();
-                        if(planEty != null) {
+                        if (planEty != null) {
                             if (!_CheckEntityList.contains(planEty)) {
                                 _CheckEntityList.add(planEty);
                             }
                         }
 
-                    }
-                    else if(adapter_Spare != null){//备件
+                    } else if (adapter_Spare != null) {//备件
                         _CheckCnt++;
-                        if(!_CheckIDList.contains(checkedID)) {
+                        if (!_CheckIDList.contains(checkedID)) {
                             _CheckIDList.add(checkedID);
                         }
                         mTv_CheckCnt.setText("选中" + _CheckCnt + "条");
@@ -325,7 +316,7 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
                         spareEty = (SpareInEquipmentEntity) adapter_Spare.getItem(position);
                         spareEty.setIsCheck(true);
                         adapter_Spare.notifyDataSetChanged();
-                        if(spareEty != null) {
+                        if (spareEty != null) {
                             if (!_CheckEntityList.contains(spareEty)) {
                                 _CheckEntityList.add(spareEty);
                             }
@@ -341,24 +332,23 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
             public void onClick(View v) {
                 //数据是使用Intent返回
                 Intent intent = new Intent();
-                if(_ReapirLevel.equals("大修")) {
-                    View vw=null;
+                if (_ReapirLevel.equals("大修")) {
+                    View vw = null;
                     for (int i = 0; i < mLv_DataList.getChildCount(); i++) {
                         vw = mLv_DataList.getChildAt(i);
-                        CheckBox  checkb= (CheckBox) vw.findViewById(R.id.mCkb_ID);
-                        if(checkb.isChecked()){
-                            RepairmentPlanEntity rpEntity=    (RepairmentPlanEntity)mLv_DataList.getAdapter().getItem(i);
+                        CheckBox checkb = (CheckBox) vw.findViewById(R.id.mCkb_ID);
+                        if (checkb.isChecked()) {
+                            RepairmentPlanEntity rpEntity = (RepairmentPlanEntity) mLv_DataList.getAdapter().getItem(i);
                             _CheckEntityList.add(rpEntity);
                         }
                     }
-                }
-                else {
-                    View vw=null;
+                } else {
+                    View vw = null;
                     for (int i = 0; i < mLv_DataList.getChildCount(); i++) {
                         vw = mLv_DataList.getChildAt(i);
-                        CheckBox  checkb= (CheckBox) vw.findViewById(R.id.mCkb_ID);
-                        if(checkb.isChecked()){
-                            RepairmentPlanEntity rpEntity=    (RepairmentPlanEntity)mLv_DataList.getAdapter().getItem(i);
+                        CheckBox checkb = (CheckBox) vw.findViewById(R.id.mCkb_ID);
+                        if (checkb.isChecked()) {
+                            RepairmentPlanEntity rpEntity = (RepairmentPlanEntity) mLv_DataList.getAdapter().getItem(i);
                             _CheckEntityList.add(rpEntity);
                         }
                     }

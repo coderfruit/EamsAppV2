@@ -60,24 +60,26 @@
                 android:id="@+id/mTv_EquipDeptID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:visibility="gone" />
+
             <TextView
                 android:id="@+id/mTv_EquipID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:visibility="gone" />
+
             <TextView
                 android:id="@+id/mTv_EquipCorpID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/mTv_EquipDept"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
                 android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="1"
                 android:gravity="left"
@@ -158,7 +160,7 @@
                 android:id="@+id/mTv_SpareDeptID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/mTv_SpareDept"
@@ -216,41 +218,41 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/selector_linear_layout_item_gray"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/mTv_AllCnt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="共0条/"
-                android:textStyle="bold"
                 android:layout_weight="0.5"
                 android:gravity="right"
-                android:textColor="@color/red3"/>
+                android:text="共0条/"
+                android:textColor="@color/red3"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/mTv_CheckCnt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="选中0条"
-                android:textStyle="bold"
                 android:layout_weight="0.5"
                 android:gravity="left"
-                android:textColor="@color/red3"/>
+                android:text="选中0条"
+                android:textColor="@color/red3"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/mBtn_OK"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
+                android:layout_weight="1"
                 android:background="@drawable/ic_login_button_true"
                 android:text="确定"
-                android:textSize="16sp"
-                android:layout_weight="1"/>
+                android:textSize="16sp" />
         </LinearLayout>
 
 

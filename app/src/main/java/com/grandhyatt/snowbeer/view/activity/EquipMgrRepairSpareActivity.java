@@ -3,7 +3,9 @@ package com.grandhyatt.snowbeer.view.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -13,6 +15,7 @@ import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.EquipMgrRepairSpareDataListAdapter;
+import com.grandhyatt.snowbeer.adapter.EquipRepairSpareViewDataListAdapter;
 import com.grandhyatt.snowbeer.entity.DepartmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentUseSpareEntity;
@@ -27,6 +30,7 @@ import com.grandhyatt.snowbeer.view.ToolBarLayout;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -72,6 +76,11 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
     List<DepartmentEntity> _DepartmentList;
     //设备ID
     String _EquipID;
+    EquipMgrRepairSpareDataListAdapter adapter_Spare = null;//备件列表适配器
+    int _CheckCnt= 0;//用户选中的行数
+    ArrayList<String> _CheckIDList = new ArrayList<>();//用户选择的数据行ID
+    ArrayList<EquipmentUseSpareEntity> _CheckEntityList = new ArrayList<>();//用户选择的数据行对象
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +93,8 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
         _EquipID = intent.getStringExtra("_EquipmentID");
 
         initView();
+
+        bindEvent();
     }
 
     @Override
@@ -99,6 +110,91 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
     @Override
     public void bindEvent() {
 
+        mLv_DataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                EquipmentUseSpareEntity spareEntity = null;
+
+                CheckBox ckb = view.findViewById(R.id.mCkb_IsCheck);
+                TextView mTv_ID = view.findViewById(R.id.mTv_ID);
+                String checkedID = mTv_ID.getText().toString();
+
+                boolean ckbValue = ckb.isChecked();
+                if(ckbValue) {  //取消选中
+                    if (adapter_Spare != null) {//适配器有值
+                        if (_CheckCnt > 0) {
+                            _CheckCnt--;
+                            if (_CheckIDList.contains(checkedID)) {
+                                _CheckIDList.remove(checkedID);
+                            }
+                            mTv_CheckCnt.setText("选中" + _CheckCnt + "条");
+
+                            spareEntity = (EquipmentUseSpareEntity) adapter_Spare.getItem(position);
+                            spareEntity.setIsCheck(false);
+                            adapter_Spare.notifyDataSetChanged();
+
+                            if (spareEntity != null) {
+                                if (_CheckEntityList.contains(spareEntity)) {
+                                    _CheckEntityList.remove(spareEntity);
+                                }
+                            }
+                        }
+                    }
+                }
+                else {        //选中
+                    if (adapter_Spare != null) {//适配器有值
+
+                        _CheckCnt++;
+                        if (!_CheckIDList.contains(checkedID)) {
+                            _CheckIDList.add(checkedID);
+                        }
+                        mTv_CheckCnt.setText("选中" + _CheckCnt + "条");
+
+                        spareEntity = (EquipmentUseSpareEntity) adapter_Spare.getItem(position);
+                        spareEntity.setIsCheck(true);
+                        adapter_Spare.notifyDataSetChanged();
+                        if (spareEntity != null) {
+                            if (!_CheckEntityList.contains(spareEntity)) {
+                                _CheckEntityList.add(spareEntity);
+                            }
+                        }
+                    }
+                }
+
+
+            }
+        });
+
+
+        mBtn_OK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //数据是使用Intent返回
+                Intent intent = new Intent();
+
+//                    View vw = null;
+//                    for (int i = 0; i < mLv_DataList.getChildCount(); i++) {
+//                        vw = mLv_DataList.getChildAt(i);
+//                        CheckBox checkb = (CheckBox) vw.findViewById(R.id.mCkb_ID);
+//                        if (checkb.isChecked()) {
+//                            EquipmentUseSpareEntity rpEntity = (EquipmentUseSpareEntity) mLv_DataList.getAdapter().getItem(i);
+//                            _CheckEntityList.add(rpEntity);
+//                        }
+//                    }
+
+
+                //把返回数据存入Intent
+                intent.putStringArrayListExtra("_CheckIDList", _CheckIDList);
+                intent.putExtra("_CheckEntityList", _CheckEntityList);
+
+
+                //设置返回数据
+                EquipMgrRepairSpareActivity.this.setResult(RESULT_OK, intent);
+                //关闭Activity
+                EquipMgrRepairSpareActivity.this.finish();
+
+            }
+        });
 
     }
 
@@ -272,10 +368,10 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
                 else {
 
                     int cnt = data.size();
-                    mTv_AllCnt.setText(String.valueOf(cnt));
+                    mTv_AllCnt.setText( "共" + String.valueOf(cnt) + "条/");
 
-                    EquipMgrRepairSpareDataListAdapter adapter = new EquipMgrRepairSpareDataListAdapter(EquipMgrRepairSpareActivity.this ,data);
-                    mLv_DataList.setAdapter(adapter);
+                    adapter_Spare = new EquipMgrRepairSpareDataListAdapter(EquipMgrRepairSpareActivity.this ,data);
+                    mLv_DataList.setAdapter(adapter_Spare);
 
                 }
             }
