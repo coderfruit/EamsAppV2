@@ -48,7 +48,7 @@ public class EquipRepairSpareViewDataListAdapter extends BaseAdapter {
         if (convertView == null) {
 
             mViewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_item_equipmgr_repair_spare_activity, null);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_item_repairment_spare_check_activity, null);
 
 
             mViewHolder.mTv_SpareName = convertView.findViewById(R.id.mTv_SpareName);

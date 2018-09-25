@@ -54,6 +54,7 @@ import com.grandhyatt.snowbeer.entity.EquipmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentUseSpareEntity;
 import com.grandhyatt.snowbeer.entity.FailureReportingAttachmentEntity;
 import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
+import com.grandhyatt.snowbeer.entity.RepairmentBillEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
 import com.grandhyatt.snowbeer.entity.TextDictionaryEntity;
@@ -61,6 +62,7 @@ import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.request.FailureReportingRequest;
 import com.grandhyatt.snowbeer.network.result.EquipmentResult;
 import com.grandhyatt.snowbeer.network.result.FailureReportingResult;
+import com.grandhyatt.snowbeer.network.result.RepairmentEquipmentResult;
 import com.grandhyatt.snowbeer.network.result.SpareInEquipmentResult;
 import com.grandhyatt.snowbeer.network.result.StringResult;
 import com.grandhyatt.snowbeer.network.result.TextDictoryResult;
@@ -598,7 +600,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         mBtn_Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBtn_Submit.setEnabled(false);
+
                 showLogingDialog();
 
                 String faultDate = mTv_FaultDate.getText().toString();
@@ -650,66 +652,75 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                    vw = mLv_DataList_Spare.getChildAt(i);
 
                 }
+
+                mBtn_Submit.setEnabled(false);
                 //提交数据
-                FailureReportingRequest request = new FailureReportingRequest();
-                request.setReportDate(faultDate);
-                request.setEquipmentID(_EquipmentData.getID());
-                request.setFailureLevel(faultLevel);
-                request.setFailureDesc(faultDesc);
-                request.setLinkUser(user);
-                request.setLinkMobile(phone);
+                RepairmentEquipmentResult request = new RepairmentEquipmentResult();
+                request.setData(_EquipmentData);
+                if(faultLevel=="大修"){
+                    request.setPlanData(_CheckPlanEntityList);
+                }
+               else {
+                    request.setSpareInEquipmentData(_CheckSpareEntityList);
+                }
+                RepairmentBillEntity rpen=new RepairmentBillEntity();
+                rpen.setCorporationID(_EquipmentData.getCorporationID());
+                rpen.setCorporationName(_EquipmentData.getCorporationName());
+
+                request.setRepairmentBillData(rpen);
+
 
                 //提交数据
-                SoapUtils.submitFaultReportAsync(RepairmentReportActivity.this, request, new SoapListener() {
-                    @Override
-                    public void onSuccess(int statusCode, SoapObject object) {
-
-                        dismissLoadingDialog();
-                        if (object == null) {
-                            ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err1));
-                            return;
-                        }
-                        //判断接口连接是否成功
-                        if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
-                            ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err2));
-                            return;
-                        }
-                        //接口返回信息正常
-                        String strData = object.getPropertyAsString(0);
-                        FailureReportingResult result = new Gson().fromJson(strData, FailureReportingResult.class);
-                        //校验接口返回代码
-                        if (result == null) {
-                            ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err3));
-                            return;
-                        } else if (result.code != Result.RESULT_CODE_SUCCSED) {
-                            ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
-                            return;
-                        }
-                        FailureReportingEntity data = result.getData();
-                        if (data.getReportNO().length() > 0) {
-//                            mTv_ReportNO.setVisibility(View.VISIBLE);
-//                            mTv_ReportNO.setText(data.getReportNO());
-                            mBtn_Submit.setEnabled(false);
-
-                            ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_repairment_submit_ok));
-                            finish();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, String content, Throwable error) {
-                        dismissLoadingDialog();
-                        ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_repairment_submit_err, error.getMessage()));
-                        mBtn_Submit.setEnabled(true);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, SoapFault fault) {
-                        dismissLoadingDialog();
-                        ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_repairment_submit_fail, fault));
-                        mBtn_Submit.setEnabled(true);
-                    }
-                });
+//                SoapUtils.submitFaultReportAsync(RepairmentReportActivity.this, request, new SoapListener() {
+//                    @Override
+//                    public void onSuccess(int statusCode, SoapObject object) {
+//
+//                        dismissLoadingDialog();
+//                        if (object == null) {
+//                            ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err1));
+//                            return;
+//                        }
+//                        //判断接口连接是否成功
+//                        if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+//                            ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err2));
+//                            return;
+//                        }
+//                        //接口返回信息正常
+//                        String strData = object.getPropertyAsString(0);
+//                        FailureReportingResult result = new Gson().fromJson(strData, FailureReportingResult.class);
+//                        //校验接口返回代码
+//                        if (result == null) {
+//                            ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err3));
+//                            return;
+//                        } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+//                            ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
+//                            return;
+//                        }
+//                        FailureReportingEntity data = result.getData();
+//                        if (data.getReportNO().length() > 0) {
+////                            mTv_ReportNO.setVisibility(View.VISIBLE);
+////                            mTv_ReportNO.setText(data.getReportNO());
+//                            mBtn_Submit.setEnabled(false);
+//
+//                            ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_repairment_submit_ok));
+//                            finish();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(int statusCode, String content, Throwable error) {
+//                        dismissLoadingDialog();
+//                        ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_repairment_submit_err, error.getMessage()));
+//                        mBtn_Submit.setEnabled(true);
+//                    }
+//
+//                    @Override
+//                    public void onFailure(int statusCode, SoapFault fault) {
+//                        dismissLoadingDialog();
+//                        ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_repairment_submit_fail, fault));
+//                        mBtn_Submit.setEnabled(true);
+//                    }
+//                });
 
             }
         });
@@ -804,14 +815,14 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
                 break;
             case CHECK_SPARE_OK:
-                EquipmentUseSpareEntity a=new EquipmentUseSpareEntity();
-                a.setSpareStander("bbbbbbbbb");
-                a.setSpareName("ccccc");
-                a.setCount("1000");
-                a.setSpareUnit("箱");
-                _CheckSpareUseList.add(a);
-                adapter_SpareView=new EquipRepairSpareViewDataListAdapter(this,_CheckSpareUseList);
-//                mLv_DataList_Spare.getAdapter(adapter_SpareView);
+//                EquipmentUseSpareEntity a=new EquipmentUseSpareEntity();
+//                a.setSpareStander("bbbbbbbbb");
+//                a.setSpareName("ccccc");
+//                a.setCount("1000");
+//                a.setSpareUnit("箱");
+//                _CheckSpareUseList.add(a);
+//                adapter_SpareView=new EquipRepairSpareViewDataListAdapter(this,_CheckSpareUseList);
+//             mLv_DataList_Spare.getAdapter(adapter_SpareView);
 
         }
         super.onActivityResult(requestCode, resultCode, data);

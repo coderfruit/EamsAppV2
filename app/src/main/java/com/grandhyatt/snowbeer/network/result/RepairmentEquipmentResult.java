@@ -33,7 +33,7 @@ public class RepairmentEquipmentResult extends Result {
      * @param data
      * @return void
      */
-    public void setRepairmentBillData(List<RepairmentBillEntity> data) {
+    public void setRepairmentBillData(RepairmentBillEntity data) {
         this.rbdata = rbdata;
     }
     public EquipmentEntity getData() {
