@@ -14,6 +14,8 @@ public class EquipmentEntity {
 
     private String DepartmentID;
 
+    private String DepartmentCode;
+
     private String DepartmentName;
 
     private String EquipmentTypeID;
@@ -61,6 +63,14 @@ public class EquipmentEntity {
     private String EquipImg;
 
     public EquipmentEntity() {
+    }
+
+    public String getDepartmentCode() {
+        return DepartmentCode;
+    }
+
+    public void setDepartmentCode(String departmentCode) {
+        DepartmentCode = departmentCode;
     }
 
     public String getID() {

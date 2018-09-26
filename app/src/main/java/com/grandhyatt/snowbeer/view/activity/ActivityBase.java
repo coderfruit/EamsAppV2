@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -137,7 +138,7 @@ public class ActivityBase extends com.grandhyatt.commonlib.view.activity.Activit
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title)
-                .setIcon(R.drawable.logo)
+                .setIcon(R.drawable.logo32)
                 .setView(inputContrl)
                 .setNegativeButton("取消", null);
         builder.setPositiveButton("确定",
@@ -148,6 +149,8 @@ public class ActivityBase extends com.grandhyatt.commonlib.view.activity.Activit
                 });
         builder.show();
     }
+
+
 
     public boolean ShowDialog(Context context, String title,String showText) {
 

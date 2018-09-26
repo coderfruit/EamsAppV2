@@ -1,17 +1,21 @@
 package com.grandhyatt.snowbeer.view.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.ToastUtils;
+import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.EquipMgrRepairSpareDataListAdapter;
@@ -31,7 +35,10 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,9 +67,11 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
     @BindView(R.id.mTv_SpareDeptID)
     TextView mTv_SpareDeptID;
     @BindView(R.id.mTv_SpareDept)
-    TextView mTv_SpareDept;
-    @BindView(R.id.mTv_SpareCond)
-    TextView mTv_SpareCond;
+    TextView mTv_SpareDept;//用户选择的部门
+
+    @BindView(R.id.mEt_SpareCond)
+    EditText mEt_SpareCond;//用户录入的备件条件
+
     @BindView(R.id.mLv_DataList)
     ListView mLv_DataList;
     @BindView(R.id.mTv_AllCnt)
@@ -71,15 +80,28 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
     TextView mTv_CheckCnt;
     @BindView(R.id.mBtn_OK)
     Button mBtn_OK;
+    @BindView(R.id.mBt_Search)
+    Button mBt_Search;          //搜索
 
     //设备对应的部门信息
     List<DepartmentEntity> _DepartmentList;
+    //部门名称列表
+    List<String> _DeptNamelist = new ArrayList<>();
+    //选中的部门对象
+    DepartmentEntity _SelectedDept = null;
+    //选中的备件信息
+    String _SpareCond = null;
+
     //设备ID
     String _EquipID;
+    //用户扫码获取的设备
+    EquipmentEntity _Equipment;
+
     EquipMgrRepairSpareDataListAdapter adapter_Spare = null;//备件列表适配器
-    int _CheckCnt= 0;//用户选中的行数
+    int _CheckCnt = 0;//用户选中的行数
     ArrayList<String> _CheckIDList = new ArrayList<>();//用户选择的数据行ID
     ArrayList<EquipmentUseSpareEntity> _CheckEntityList = new ArrayList<>();//用户选择的数据行对象
+
 
 
     @Override
@@ -110,6 +132,39 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
     @Override
     public void bindEvent() {
 
+        mBt_Search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLogingDialog();
+
+                _SpareCond = mEt_SpareCond.getText().toString();
+
+                getSparesInfo(_EquipID, _SelectedDept, _SpareCond);
+            }
+        });
+
+        mTv_SpareDept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSelectDialog(new SelectDialog.SelectDialogListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String name = _DeptNamelist.get(position);
+                        _SelectedDept = _DepartmentList.get(position);
+                        mTv_SpareDept.setText(name);
+
+                        showLogingDialog();
+
+                        _SpareCond = mEt_SpareCond.getText().toString();
+
+                        getSparesInfo(_EquipID, _SelectedDept, _SpareCond);
+
+                    }
+                }, _DeptNamelist);
+            }
+        });
+
+
         mLv_DataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -120,7 +175,7 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
                 String checkedID = mTv_ID.getText().toString();
 
                 boolean ckbValue = ckb.isChecked();
-                if(ckbValue) {  //取消选中
+                if (ckbValue) {  //取消选中
                     if (adapter_Spare != null) {//适配器有值
                         if (_CheckCnt > 0) {
                             _CheckCnt--;
@@ -140,8 +195,7 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
                             }
                         }
                     }
-                }
-                else {        //选中
+                } else {        //选中
                     if (adapter_Spare != null) {//适配器有值
 
                         _CheckCnt++;
@@ -169,19 +223,32 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
         mBtn_OK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(_CheckIDList == null || _CheckIDList.size() == 0)
+                {
+                    ToastUtils.showLongToast(EquipMgrRepairSpareActivity.this,"请选择使用的备件（单选或多选）");
+                    return;
+                }
+
+                boolean isChk = false;
+                // 部门校验
+                for (EquipmentUseSpareEntity item : _CheckEntityList) {
+                    String spareDeptCode = item.getDeptCode().substring(0,4);
+                    String equipDeptCode = _Equipment.getDepartmentCode().substring(0,4);
+
+                    if (!spareDeptCode.equals(equipDeptCode))
+                    {
+                        isChk = true;
+                    }
+                }
+                if (isChk)
+                {
+                    ToastUtils.showLongToast(EquipMgrRepairSpareActivity.this,"不允许备件与设备跨大部门使用!");
+                    return;
+                }
+
                 //数据是使用Intent返回
                 Intent intent = new Intent();
-
-//                    View vw = null;
-//                    for (int i = 0; i < mLv_DataList.getChildCount(); i++) {
-//                        vw = mLv_DataList.getChildAt(i);
-//                        CheckBox checkb = (CheckBox) vw.findViewById(R.id.mCkb_ID);
-//                        if (checkb.isChecked()) {
-//                            EquipmentUseSpareEntity rpEntity = (EquipmentUseSpareEntity) mLv_DataList.getAdapter().getItem(i);
-//                            _CheckEntityList.add(rpEntity);
-//                        }
-//                    }
-
 
                 //把返回数据存入Intent
                 intent.putStringArrayListExtra("_CheckIDList", _CheckIDList);
@@ -198,10 +265,19 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
 
     }
 
+    @Override
+    public void refreshUI() {
 
+    }
+
+    @Override
+    public void requestNetworkData() {
+
+    }
 
     /**
      * 根据设备ID 获取设备信息
+     *
      * @param equipmentID
      */
     private void getEquipmentInfo(String equipmentID) {
@@ -235,10 +311,11 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
                 EquipmentEntity data = result.getData();
                 //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
                 if (data == null) {
-                    ToastUtils.showToast(EquipMgrRepairSpareActivity.this,"没有获取到该设备信息");
+                    ToastUtils.showToast(EquipMgrRepairSpareActivity.this, "没有获取到该设备信息");
                     return;
-                }
-                else {
+                } else {
+                    _Equipment = data;
+
                     mTv_EquipDeptID.setText(data.getDepartmentID());
                     mTv_EquipID.setText(data.getID());
                     mTv_EquipCorpID.setText(data.getCorporationID());
@@ -253,8 +330,13 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
                     //获取设备对应部门信息
                     getDepartmentInfo(String.valueOf(data.getCorporationID()));
 
+                    showLogingDialog();
+
+                    _SelectedDept = new DepartmentEntity();
+                    _SelectedDept.setID( data.getDepartmentID());
+
                     //获取设备可用的备件库存信息
-                    getSparesInfo(data.getID(),String.valueOf(data.getDepartmentID()),"");
+                    getSparesInfo(data.getID(), _SelectedDept, "");
                 }
             }
 
@@ -274,10 +356,10 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
 
     /**
      * 获取组织机构下的部门信息
+     *
      * @param corporationID
      */
-    private  void getDepartmentInfo(String corporationID)
-    {
+    private void getDepartmentInfo(String corporationID) {
         SoapUtils.getDepartment(EquipMgrRepairSpareActivity.this, corporationID, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
@@ -305,11 +387,12 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
                 List<DepartmentEntity> data = result.getData();
                 //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
                 if (data == null || data.size() == 0) {
-                    ToastUtils.showToast(EquipMgrRepairSpareActivity.this,"没有获取到部门信息");
+                    ToastUtils.showToast(EquipMgrRepairSpareActivity.this, "没有获取到部门信息");
                     return;
-                }
-                else {
+                } else {
                     _DepartmentList = data;
+
+                    bindDepart(_DepartmentList);
                 }
             }
 
@@ -330,11 +413,21 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
 
     /**
      * 根据设备、部门、备件信息获取可用备件库存信息
+     *
      * @param equipID
-     * @param deptID
      * @param spareContent
      */
-    private void getSparesInfo(String equipID, String deptID, String spareContent) {
+    private void getSparesInfo(String equipID, DepartmentEntity dept, String spareContent) {
+        String deptID = "";
+        if(dept != null)
+        {
+            deptID = dept.getID();
+        }
+        if(spareContent == null)
+        {
+            spareContent = "";
+        }
+
         SoapUtils.getEquipmentSparesStoreInfo(EquipMgrRepairSpareActivity.this, equipID, deptID, spareContent, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
@@ -361,16 +454,16 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
                 }
                 List<EquipmentUseSpareEntity> data = result.getData();
                 //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
-                if (data == null && data.size() == 0) {
-                    ToastUtils.showToast(EquipMgrRepairSpareActivity.this,"没有获取到该设备可用的备件信息");
+                if (data == null || data.size() == 0) {
+                    ToastUtils.showToast(EquipMgrRepairSpareActivity.this, "没有获取到该设备可用的备件信息");
+                    mLv_DataList.setAdapter(null);
                     return;
-                }
-                else {
+                } else {
 
                     int cnt = data.size();
-                    mTv_AllCnt.setText( "共" + String.valueOf(cnt) + "条/");
+                    mTv_AllCnt.setText("共" + String.valueOf(cnt) + "条/");
 
-                    adapter_Spare = new EquipMgrRepairSpareDataListAdapter(EquipMgrRepairSpareActivity.this ,data);
+                    adapter_Spare = new EquipMgrRepairSpareDataListAdapter(EquipMgrRepairSpareActivity.this, data);
                     mLv_DataList.setAdapter(adapter_Spare);
 
                 }
@@ -390,15 +483,17 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
         });
     }
 
+    /**
+     * 部门下拉列表数据源赋值
+     * @param dptList
+     */
+    private void bindDepart(List<DepartmentEntity> dptList) {
 
-    @Override
-    public void refreshUI() {
-
+        for (DepartmentEntity item : dptList) {
+            String value = item.getDepartmentName();// + "-" + item.getDepartmentCode();
+            _DeptNamelist.add(value);
+        }
     }
 
-    @Override
-    public void requestNetworkData() {
-
-    }
 
 }

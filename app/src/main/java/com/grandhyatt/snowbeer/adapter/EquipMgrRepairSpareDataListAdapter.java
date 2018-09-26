@@ -78,7 +78,13 @@ public class EquipMgrRepairSpareDataListAdapter extends BaseAdapter {
             mViewHolder.mTv_Status.setText(dataModel.getSpareStatus());
             mViewHolder.mTv_SpareName.setText(dataModel.getSpareName());
             mViewHolder.mTv_SpareCode.setText(dataModel.getSpareCode());
-            mViewHolder.mTv_Stander.setText(dataModel.getSpareStander());
+
+            String stander = dataModel.getSpareStander();
+            if(stander == null || stander.trim().length() == 0)
+            {
+                stander = "无";
+            }
+            mViewHolder.mTv_Stander.setText(stander);
             mViewHolder.mTv_Qty.setText(dataModel.getCount());
             mViewHolder.mTv_Unit.setText(dataModel.getSpareUnit());
             mViewHolder.mTv_Price.setText(dataModel.getSparePrice());
