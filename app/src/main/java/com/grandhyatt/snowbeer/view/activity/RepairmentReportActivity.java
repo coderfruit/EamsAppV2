@@ -581,6 +581,10 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         mBtn_marAdd.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                if (_EquipmentData == null) {
+                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请首先确定要维修的设备！");
+                    return;
+                }
                 Intent intent = new Intent(RepairmentReportActivity.this, EquipMgrRepairSpareActivity.class);
                 intent.putExtra("_EquipmentID",_EquipmentData.getID());
                 startActivityForResult(intent,CHECK_SPARE_OK);
@@ -650,6 +654,11 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 View vw=null;
                 for (int i = 0; i < mLv_DataList_Spare.getChildCount(); i++) {
                    vw = mLv_DataList_Spare.getChildAt(i);
+                   TextView tvid= (TextView) vw.findViewById(R.id.mTv_SpareID);
+//                    TextView tvid= (TextView) vw.findViewById(R.id.mTv_SpareID);
+//                    TextView tvid= (TextView) vw.findViewById(R.id.mTv_SpareID);
+//                    TextView tvid= (TextView) vw.findViewById(R.id.mTv_SpareID);
+//                    TextView tvid= (TextView) vw.findViewById(R.id.mTv_SpareID);
 
                 }
 
