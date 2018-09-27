@@ -379,12 +379,15 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
 
                 // 用户归属工厂
                 CorporationEntity userCorp;
+                List<CorporationEntity> corpList;
                 if (data.getCorporations().size() == 0) {
                     ToastUtils.showLongToast(LoginActivity.this, getString(R.string.activity_login_toast_login_fail_error, "没有为用户设置归属工厂，请联系管理员！"));
                     return;
                 }
                 else {
                     userCorp = data.getCorporations().get(0);
+
+                    corpList = data.getCorporations();
                 }
                 //用户权限校验
                 String powers = "";
@@ -408,6 +411,8 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
                 SPUtils.setLastLoginUserPower(LoginActivity.this,powers);           //权限
                 SPUtils.setLastLoginUserPhone(LoginActivity.this,data.getPhone());  //电话
                 SPUtils.setToken(LoginActivity.this,result.getToken());
+
+                SPUtils.setLastLoginUserCorporations(LoginActivity.this, corpList);  //用户组织机构
 
                 IntentUtil.newIntent(LoginActivity.this, MainActivity.class);
                 finish();

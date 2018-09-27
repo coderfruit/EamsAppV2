@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,9 +25,11 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.grandhyatt.commonlib.utils.IntentUtil;
 import com.grandhyatt.commonlib.view.Dialog;
+import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.fragment.IFragmentBase;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.db.ObjectBoxHelper;
+import com.grandhyatt.snowbeer.entity.CorporationEntity;
 import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.utils.UpdateUtils;
 import com.grandhyatt.snowbeer.utils.transform.GlideCircleTransform;
@@ -34,8 +37,12 @@ import com.grandhyatt.snowbeer.view.ActivityCollector;
 import com.grandhyatt.snowbeer.view.activity.AboutActivity;
 import com.grandhyatt.snowbeer.view.activity.EditPasswordActivity;
 import com.grandhyatt.snowbeer.view.activity.LoginActivity;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
 import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,6 +79,12 @@ public class MyFragment extends FragmentBase implements IFragmentBase, View.OnCl
 
     @BindView(R.id.mTv_Version)
     TextView mTv_Version;
+
+    @BindView(R.id.mRL_UserCorp)
+    RelativeLayout mRL_UserCorp;
+
+    @BindView(R.id.mTv_UserCorp)
+    TextView mTv_UserCorp;
 
 
 
@@ -139,6 +152,9 @@ public class MyFragment extends FragmentBase implements IFragmentBase, View.OnCl
             case R.id.mBtn_Logout://注销
                 logout();
                 break;
+            case R.id.mRL_UserCorp:
+                showUserCorp();
+                break;
             default:
                 break;
         }
@@ -147,6 +163,12 @@ public class MyFragment extends FragmentBase implements IFragmentBase, View.OnCl
     @Override
     public void initView() {
         mTv_Version.setText(UpdateUtils.getVersionName(this.getContext()));
+
+        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(this.getContext());
+        if(corp != null)
+        {
+            mTv_UserCorp.setText("归属工厂:" + corp.getCorporationName());
+        }
     }
 
     @Override
@@ -155,7 +177,7 @@ public class MyFragment extends FragmentBase implements IFragmentBase, View.OnCl
         mBtn_Logout.setOnClickListener(this);
         mRL_Update.setOnClickListener(this);
         mRL_About.setOnClickListener(this);
-
+        mRL_UserCorp.setOnClickListener(this);
     }
 
     @Override
@@ -213,5 +235,37 @@ public class MyFragment extends FragmentBase implements IFragmentBase, View.OnCl
                 });
 
         builder.create().show();
+    }
+
+    private void showUserCorp()
+    {
+        List<String> corpName = new ArrayList<>();
+        final List<CorporationEntity> corpList = SPUtils.getLastLoginUserCorporations(this.getContext());
+        if(corpList != null && corpList.size() > 1){
+
+            for (CorporationEntity item : corpList) {
+                corpName.add(item.getCorporationName());
+            }
+
+            showSelectDialog(new SelectDialog.SelectDialogListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    CorporationEntity corp = corpList.get(position);
+
+                    mTv_UserCorp.setText("归属工厂:" + corp.getCorporationName());
+                    SPUtils.setLastLoginUserCorporation(getContext(), corp);
+                }
+            },corpName);
+        }
+
+    }
+
+    /**
+     * 显示选择对话框菜单
+     */
+    protected SelectDialog showSelectDialog(SelectDialog.SelectDialogListener listener, List<String> lists) {
+        SelectDialog dialog = new SelectDialog(this.getActivity(), R.style.transparentFrameWindowStyle, listener, lists);
+        dialog.show();
+        return dialog;
     }
 }
