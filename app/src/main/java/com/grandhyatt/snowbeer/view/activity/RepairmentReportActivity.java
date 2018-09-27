@@ -585,7 +585,6 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                     ToastUtils.showLongToast(RepairmentReportActivity.this, "请首先确定要维修的设备！");
                     return;
                 }
-
                 Intent intent = new Intent(RepairmentReportActivity.this, EquipMgrRepairSpareActivity.class);
                 intent.putExtra("_EquipmentID",_EquipmentData.getID());
                 startActivityForResult(intent,CHECK_SPARE_OK);
@@ -655,6 +654,11 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 View vw=null;
                 for (int i = 0; i < mLv_DataList_Spare.getChildCount(); i++) {
                    vw = mLv_DataList_Spare.getChildAt(i);
+                   TextView tvid= (TextView) vw.findViewById(R.id.mTv_SpareID);
+//                    TextView tvid= (TextView) vw.findViewById(R.id.mTv_SpareID);
+//                    TextView tvid= (TextView) vw.findViewById(R.id.mTv_SpareID);
+//                    TextView tvid= (TextView) vw.findViewById(R.id.mTv_SpareID);
+//                    TextView tvid= (TextView) vw.findViewById(R.id.mTv_SpareID);
 
                 }
 
@@ -774,7 +778,9 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                     _CheckPlanEntityList = (List<RepairmentPlanEntity>)data.getSerializableExtra("_CheckEntityList");
                       if(_CheckPlanEntityList.size()==0){
                           mLv_Show_plan.setVisibility(View.GONE);
+                          mLv_Show_plan.setAdapter(null);
                       }else {
+                          mLv_Show_plan.setAdapter(null);
                           adapter_Plan= new RepairmentPlanViewDataListAdapter(this, _CheckPlanEntityList);
                           mLv_Show_plan.setSelection(adapter_Plan.getCount());
 
@@ -792,10 +798,13 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                     _CheckSpareEntityList = (List<SpareInEquipmentEntity>) data.getSerializableExtra("_CheckEntityList");
                     if (_CheckPlanEntityList.size() == 0) {
                         mLv_Show_plan.setVisibility(View.GONE);
+                        mLv_Show_plan.setAdapter(null);
                     } else {
+                        mLv_Show_plan.setAdapter(null);
                         adapter_Spare = new SpareInEquipmentViewDataListAdapter(this, _CheckSpareEntityList);
                         mLv_Show_plan.setAdapter(adapter_Spare);
                         mLv_Show_plan.setVisibility(View.VISIBLE);
+                        setListViewHeightBasedOnChildren(mLv_Show_plan);
                     }
 
                     ToastUtils.showLongToast(RepairmentReportActivity.this, "共获取到" + _CheckSpareIDList.size() + "条备件记录");
@@ -825,16 +834,9 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 if(_CheckSpareUseList != null && _CheckSpareUseList.size() > 0){
                     adapter_SpareView = new EquipRepairSpareViewDataListAdapter(RepairmentReportActivity.this, _CheckSpareUseList);
                     mLv_DataList_Spare.setAdapter(adapter_SpareView);
+                    setListViewHeightBasedOnChildren(mLv_DataList_Spare);
                 }
 
-//                EquipmentUseSpareEntity a=new EquipmentUseSpareEntity();
-//                a.setSpareStander("bbbbbbbbb");
-//                a.setSpareName("ccccc");
-//                a.setCount("1000");
-//                a.setSpareUnit("箱");
-//                _CheckSpareUseList.add(a);
-//                adapter_SpareView=new EquipRepairSpareViewDataListAdapter(this,_CheckSpareUseList);
-//             mLv_DataList_Spare.getAdapter(adapter_SpareView);
 
         }
         super.onActivityResult(requestCode, resultCode, data);
