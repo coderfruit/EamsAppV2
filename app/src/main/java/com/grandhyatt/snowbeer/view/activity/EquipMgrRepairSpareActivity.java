@@ -126,6 +126,7 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
 
     @Override
     public void initView() {
+        mToolBar.setTitle("设备维修用备件选择");
         getEquipmentInfo(_EquipID);
     }
 
