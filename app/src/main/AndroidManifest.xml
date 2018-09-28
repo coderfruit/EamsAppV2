@@ -97,6 +97,18 @@
         <!-- 设备维修备件库存显示 add by yangcm 0920 -->
         <activity android:name=".view.activity.EquipMgrRepairSpareActivity" />
 
+        <!-- 显示设备相关预警信息  add by yangcm 0928-->
+        <activity android:name=".view.activity.WarningInfo_EquipActivity" />
+        <!-- 显示设备维修预警信息  add by yangcm 0927-->
+        <activity android:name=".view.activity.WarningInfo_EquipRepairActivity" />
+        <!-- 显示设备保养预警信息  add by yangcm 0928-->
+        <activity android:name=".view.activity.WarningInfo_EquipMaintenActivity" />
+        <!-- 显示设备检验预警信息  add by yangcm 0928-->
+        <activity android:name=".view.activity.WarningInfo_EquipInspectionActivity" />
+        <!-- 显示备件更换预警信息  add by yangcm 0928-->
+        <activity android:name=".view.activity.WarningInfo_EquipSpareReplaceActivity" />
+        <!-- 显示设备外委预警信息  add by yangcm 0928-->
+        <activity android:name=".view.activity.WarningInfo_EquipRepairExActivity" />
 
         <!-- **************************************  **************************************  ************************************** -->
         <!-- 复检第一步(有卡复检)-->

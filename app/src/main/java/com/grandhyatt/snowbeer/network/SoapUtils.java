@@ -534,4 +534,43 @@ public class SoapUtils {
 		SoapUtils.getInstance(context).call(methodName,params,callback);
 	}
 
+	/**
+	 * 获取预警消息条数
+	 * @param context
+	 * @param corpID
+	 * @param isGetEpRep
+	 * @param isGetEpMan
+	 * @param isGetEpIns
+	 * @param isGetSpRep
+	 * @param isGetRepEx
+	 * @param isGetBdRep
+	 * @param isGetAsyByTm
+	 * @param isGetAsyByCy
+	 * @param isGetAsyRep
+	 * @param callback
+	 */
+	public static void getWarningInfoCount(final Context context, String corpID,
+          boolean isGetEpRep,boolean isGetEpMan,boolean isGetEpIns,boolean isGetSpRep,boolean isGetRepEx,
+		  boolean isGetBdRep,boolean isGetAsyByTm,boolean isGetAsyByCy,boolean isGetAsyRep,
+		  final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetWarningInfoCount";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("corpID",corpID);
+		params.put("isGetEpRep",String.valueOf(isGetEpRep));
+		params.put("isGetEpMan",String.valueOf(isGetEpMan));
+		params.put("isGetEpIns",String.valueOf(isGetEpIns));
+		params.put("isGetSpRep",String.valueOf(isGetSpRep));
+		params.put("isGetRepEx",String.valueOf(isGetRepEx));
+		params.put("isGetBdRep",String.valueOf(isGetBdRep));
+		params.put("isGetAsyByTm",String.valueOf(isGetAsyByTm));
+		params.put("isGetAsyByCy",String.valueOf(isGetAsyByCy));
+		params.put("isGetAsyRep",String.valueOf(isGetAsyRep));
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+
+	}
 }
