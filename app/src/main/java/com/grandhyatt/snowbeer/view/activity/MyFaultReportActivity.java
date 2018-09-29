@@ -126,7 +126,7 @@ public class MyFaultReportActivity extends ActivityBase implements IActivityBase
                 requestNetworkData();
             }
         });
-//单个报修选中查看
+        //单个报修选中查看
         mLv_DataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
