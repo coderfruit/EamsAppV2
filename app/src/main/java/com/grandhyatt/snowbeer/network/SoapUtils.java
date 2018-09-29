@@ -546,7 +546,8 @@ public class SoapUtils {
 	 * @param request
 	 * @param callback
 	 */
-	public static void submitNewEquipReparimentRepairAsync(final Context context, RepairmentEquipmentResult request, ArrayList<String> _CheckPlanIDList, final SoapListener callback) {
+	public static void submitNewEquipReparimentRepairAsync(final Context context, RepairmentEquipmentResult request, ArrayList<String> _CheckPlanIDList, final SoapListener callback)
+	{
         final String url = getHostUrl();
         String methodName = "NewEquipReparimentRepair";
 
