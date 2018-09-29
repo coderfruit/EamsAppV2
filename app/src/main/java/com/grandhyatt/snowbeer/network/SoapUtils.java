@@ -729,5 +729,5 @@ public class SoapUtils {
 		SoapUtils.getInstance(context).call(methodName,params,callback);
 	}
 
-	}
+
 }
