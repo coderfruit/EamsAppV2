@@ -546,32 +546,31 @@ public class SoapUtils {
 	 * @param request
 	 * @param callback
 	 */
-	public static void submitNewEquipReparimentRepairAsync(final Context context, RepairmentEquipmentResult request, ArrayList<String> _CheckPlanIDList, final SoapListener callback)
-	{
-		final String url = getHostUrl();
-		String methodName = "NewEquipReparimentRepair";
+	public static void submitNewEquipReparimentRepairAsync(final Context context, RepairmentEquipmentResult request, ArrayList<String> _CheckPlanIDList, final SoapListener callback) {
+        final String url = getHostUrl();
+        String methodName = "NewEquipReparimentRepair";
 
-		//String userID = SPUtils.getLastLoginUserID(context);
-		String userName = SPUtils.getLastLoginUserName(context);
+        //String userID = SPUtils.getLastLoginUserID(context);
+        String userName = SPUtils.getLastLoginUserName(context);
 
-		//获取http请求身份验证参数
-		 SoapParams params  = getAuthHttpRequestHeader(context);
+        //获取http请求身份验证参数
+        SoapParams params = getAuthHttpRequestHeader(context);
 
-		params.put("userName",userName);
-	     RepairmentBillEntity rparbill= request.getRepairmentBillData();
-		Gson gson1 = new Gson();
+        params.put("userName", userName);
+        RepairmentBillEntity rparbill = request.getRepairmentBillData();
+        Gson gson1 = new Gson();
 
-		String jsonrepa = gson1.toJson(rparbill, RepairmentBillEntity.class);
-		 params.put("repariment",jsonrepa);
-		 if(_CheckPlanIDList!=null) {
-			 String jsonPlan = gson1.toJson(_CheckPlanIDList);
-			 params.put("listPlanID", jsonPlan);
-		 }
-		List<EquipmentUseSpareEntity> listeuse=	request.getSpareInEquipmentData();
-		 String jsonEquiSpare= gson1.toJson(listeuse);
-		params.put("ListSpareEqer", jsonEquiSpare);
+        String jsonrepa = gson1.toJson(rparbill, RepairmentBillEntity.class);
+        params.put("repariment", jsonrepa);
+        if (_CheckPlanIDList != null) {
+            String jsonPlan = gson1.toJson(_CheckPlanIDList);
+            params.put("listPlanID", jsonPlan);
+        }
+        List<EquipmentUseSpareEntity> listeuse = request.getSpareInEquipmentData();
+        String jsonEquiSpare = gson1.toJson(listeuse);
+        params.put("ListSpareEqer", jsonEquiSpare);
 //		String[] arrString = (String[])list.toArray(new String[list.size()]) ;
-		//params.put("listPlanID",(String [] )_CheckPlanIDList.toArray(new String[_CheckPlanIDList.size()]));
+        //params.put("listPlanID",(String [] )_CheckPlanIDList.toArray(new String[_CheckPlanIDList.size()]));
 
 //		params.put("reportDate",request.getReportDate());
 //		params.put("failureLevel",request.getFailureLevel());
@@ -583,7 +582,8 @@ public class SoapUtils {
 //		params.put("failureImgs",imgs);
 //		params.put("failureVoice",request.getBase64Voice());
 
-		SoapUtils.getInstance(context).call(methodName,params,callback);
+        SoapUtils.getInstance(context).call(methodName, params, callback);
+    }
 
 	/**
 	 * 获取预警消息条数
