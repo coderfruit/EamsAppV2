@@ -6,8 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,7 +26,6 @@ import com.grandhyatt.snowbeer.adapter.FailureReportingEntityDataListAdapter;
 import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.request.FailureReportingRequest;
-import com.grandhyatt.snowbeer.network.result.FailureReportingResult;
 import com.grandhyatt.snowbeer.network.result.FailureReportingsResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
@@ -41,8 +44,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static java.security.AccessController.getContext;
 
 /**
  * Created by ycm on 2018/8/28.
@@ -70,6 +71,7 @@ public class MyFaultReportActivity extends ActivityBase implements IActivityBase
 
     public static final int RESULT_REPORT_COMPLETE_ACTIVITY = 10001;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +95,7 @@ public class MyFaultReportActivity extends ActivityBase implements IActivityBase
         mToolBar.setTitle("我的报修");
         mToolBar.showMenuButton();
         mToolBar.setMenuText("我要报修");
+
     }
 
     @Override

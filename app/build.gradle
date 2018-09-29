@@ -98,5 +98,6 @@ dependencies {
     compile 'com.github.codbking:PickTime:v1.0.1'
     //日期选择控件
     compile files('libs/sun.misc.BASE64Decoder.jar')
-    compile 'q.rorbin:badgeview:1.1.2'
+    compile 'q.rorbin:badgeview:1.1.2'//消息条数
+
 }

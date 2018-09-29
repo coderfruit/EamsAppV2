@@ -170,12 +170,12 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
         mDataList = new ArrayList<>();
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ic_card_check_turnover);
+        mHomeFunctionEntity.setImage(R.drawable.baoxiu128);
         mHomeFunctionEntity.setName("我要报修");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ic_card_check_turnover);
+        mHomeFunctionEntity.setImage(R.drawable.chulibaoxiu128);
         mHomeFunctionEntity.setName("报修处理");
         mDataList.add(mHomeFunctionEntity);
 
@@ -185,7 +185,7 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ic_card_recheck);
+        mHomeFunctionEntity.setImage(R.drawable.yujingtixing72);
         mHomeFunctionEntity.setName("设备预警提醒");
         mDataList.add(mHomeFunctionEntity);
 
@@ -205,7 +205,7 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ssdk_oks_skyblue_logo_facebookmessenger_checked);
+        mHomeFunctionEntity.setImage(R.drawable.weixiu72);
         mHomeFunctionEntity.setName("维修");
         mDataList.add(mHomeFunctionEntity);
 
