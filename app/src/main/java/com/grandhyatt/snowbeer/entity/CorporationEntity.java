@@ -7,21 +7,21 @@ import java.io.Serializable;
  */
 
 public class CorporationEntity  implements Serializable {
-    private long ID;
+    private String ID;
     private String CorporationName;
     private String LevelCode;
 
-    public CorporationEntity(long ID,String CorporationName,String LevelCode) {
+    public CorporationEntity(String ID,String CorporationName,String LevelCode) {
         this.ID = ID;
         this.CorporationName = CorporationName;
         this.LevelCode = LevelCode;
     }
 
-    public long getID() {
+    public String getID() {
         return ID;
     }
 
-    public void setID(int ID) {
+    public void setID(String ID) {
         this.ID = ID;
     }
 

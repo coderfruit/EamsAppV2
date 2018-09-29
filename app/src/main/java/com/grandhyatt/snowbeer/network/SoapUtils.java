@@ -34,7 +34,6 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -584,6 +583,149 @@ public class SoapUtils {
 //		params.put("failureVoice",request.getBase64Voice());
 
 		SoapUtils.getInstance(context).call(methodName,params,callback);
+
+	/**
+	 * 获取预警消息条数
+	 * @param context
+	 * @param corpID
+	 * @param isGetEpRep
+	 * @param isGetEpMan
+	 * @param isGetEpIns
+	 * @param isGetSpRep
+	 * @param isGetRepEx
+	 * @param isGetBdRep
+	 * @param isGetAsyByTm
+	 * @param isGetAsyByCy
+	 * @param isGetAsyRep
+	 * @param callback
+	 */
+	public static void getWarningInfoCount(final Context context, String corpID,
+          boolean isGetEpRep,boolean isGetEpMan,boolean isGetEpIns,boolean isGetSpRep,boolean isGetRepEx,
+		  boolean isGetBdRep,boolean isGetAsyByTm,boolean isGetAsyByCy,boolean isGetAsyRep,
+		  final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetWarningInfoCount";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("corpID",corpID);
+		params.put("isGetEpRep",String.valueOf(isGetEpRep));
+		params.put("isGetEpMan",String.valueOf(isGetEpMan));
+		params.put("isGetEpIns",String.valueOf(isGetEpIns));
+		params.put("isGetSpRep",String.valueOf(isGetSpRep));
+		params.put("isGetRepEx",String.valueOf(isGetRepEx));
+		params.put("isGetBdRep",String.valueOf(isGetBdRep));
+		params.put("isGetAsyByTm",String.valueOf(isGetAsyByTm));
+		params.put("isGetAsyByCy",String.valueOf(isGetAsyByCy));
+		params.put("isGetAsyRep",String.valueOf(isGetAsyRep));
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+
+	}
+
+	//---------------------------------
+	//获取维修保养检验提醒
+	//---------------------------------
+	/**
+	 * 获取设备维护计划
+	 * @param context
+	 * @param corpID 组织机构ID
+	 * @param currentLastIdx 当前行序号
+	 * @param callback
+	 */
+	public static void getRepairmentPlan(final Context context, String corpID, String currentLastIdx, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetRepairmentPlan";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("corpID",corpID);
+		params.put("currentLastIdx",currentLastIdx);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
+
+	/**
+	 * 获取设备维护计划
+	 * @param context
+	 * @param corpID 组织机构ID
+	 * @param currentLastIdx 当前行序号
+	 * @param callback
+	 */
+	public static void getMaintenancePlan(final Context context, String corpID, String currentLastIdx, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetMaintenancePlan";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("corpID",corpID);
+		params.put("currentLastIdx",currentLastIdx);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
+
+	/**
+	 * 获取设备维护计划
+	 * @param context
+	 * @param corpID 组织机构ID
+	 * @param currentLastIdx 当前行序号
+	 * @param callback
+	 */
+	public static void getInspectionPlan(final Context context, String corpID, String currentLastIdx, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetInspectionPlan";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("corpID",corpID);
+		params.put("currentLastIdx",currentLastIdx);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
+
+	/**
+	 * 获取设备维护计划
+	 * @param context
+	 * @param corpID 组织机构ID
+	 * @param currentLastIdx 当前行序号
+	 * @param callback
+	 */
+	public static void getSpareReplaceInfo(final Context context, String corpID, String currentLastIdx, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetSpareReplaceInfo";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("corpID",corpID);
+		params.put("currentLastIdx",currentLastIdx);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
+
+	/**
+	 * 获取设备维护计划
+	 * @param context
+	 * @param corpID 组织机构ID
+	 * @param currentLastIdx 当前行序号
+	 * @param callback
+	 */
+	public static void getRepairmentPlanEx(final Context context, String corpID, String currentLastIdx, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetRepairmentPlanEx";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("corpID",corpID);
+		params.put("currentLastIdx",currentLastIdx);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
 
 	}
 }

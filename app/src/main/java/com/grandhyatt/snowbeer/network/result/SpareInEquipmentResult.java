@@ -6,6 +6,7 @@ import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
 import java.util.List;
 
 /**
+ * 备件与设备关系
  * Created by ycm on 2018/9/17.
  */
 
