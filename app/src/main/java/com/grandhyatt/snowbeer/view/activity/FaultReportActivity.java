@@ -620,6 +620,7 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                     ToastUtils.showLongToast(FaultReportActivity.this, "请填写联系人！");
                     return;
                 }
+
                 if (phone == null || phone.length() == 0) {
                     ToastUtils.showLongToast(FaultReportActivity.this, "请填写联系人电话！");
                     return;

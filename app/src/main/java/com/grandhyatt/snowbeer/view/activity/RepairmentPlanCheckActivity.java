@@ -332,6 +332,8 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
             public void onClick(View v) {
                 //数据是使用Intent返回
                 Intent intent = new Intent();
+                _CheckEntityList.clear();
+                _CheckIDList.clear();
                 if (_ReapirLevel.equals("大修")) {
                     View vw = null;
                     for (int i = 0; i < mLv_DataList.getChildCount(); i++) {
@@ -340,6 +342,7 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
                         if (checkb.isChecked()) {
                             RepairmentPlanEntity rpEntity = (RepairmentPlanEntity) mLv_DataList.getAdapter().getItem(i);
                             _CheckEntityList.add(rpEntity);
+                            _CheckIDList.add(rpEntity.getID());
                         }
                     }
                 } else {
@@ -350,6 +353,7 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
                         if (checkb.isChecked()) {
                             RepairmentPlanEntity rpEntity = (RepairmentPlanEntity) mLv_DataList.getAdapter().getItem(i);
                             _CheckEntityList.add(rpEntity);
+                            _CheckIDList.add(rpEntity.getID());
                         }
                     }
                 }

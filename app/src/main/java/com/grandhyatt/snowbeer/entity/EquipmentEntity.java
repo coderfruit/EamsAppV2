@@ -297,6 +297,7 @@ public class EquipmentEntity {
                 ", CorporationName='" + CorporationName + '\'' +
                 ", DepartmentID=" + DepartmentID +
                 ", DepartmentName='" + DepartmentName + '\'' +
+                ", DepartmentCode='" + DepartmentCode + '\'' +
                 ", EquipmentTypeID=" + EquipmentTypeID +
                 ", EquipmentTypeName='" + EquipmentTypeName + '\'' +
                 ", AssetCode='" + AssetCode + '\'' +

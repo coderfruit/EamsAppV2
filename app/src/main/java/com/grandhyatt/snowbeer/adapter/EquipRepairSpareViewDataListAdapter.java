@@ -56,7 +56,7 @@ public class EquipRepairSpareViewDataListAdapter extends BaseAdapter {
 
             mViewHolder.mTv_Unit = convertView.findViewById(R.id.mTv_Unit);
             mViewHolder.mNEdt_Check = convertView.findViewById(R.id.mNEdt_Check);
-            mViewHolder.mTv_SumCount= convertView.findViewById(R.id.mTv_SumCount);
+            mViewHolder.mTv_SumCountx= convertView.findViewById(R.id.mTv_SumCountx);
             mViewHolder.mTv_SpareID=convertView.findViewById(R.id.mTv_SpareID);
             convertView.setTag(mViewHolder);
 
@@ -72,7 +72,7 @@ public class EquipRepairSpareViewDataListAdapter extends BaseAdapter {
 
             int inputCnt = Integer.parseInt(dataModel.getCount());
             mViewHolder.mNEdt_Check.setData(inputCnt);
-            mViewHolder.mTv_SumCount.setText(dataModel.getCount());
+            mViewHolder.mTv_SumCountx.setText(dataModel.getCount());
             mViewHolder.mTv_SpareID.setText(dataModel.getSpareID());
         }
         return convertView;
@@ -83,7 +83,7 @@ public class EquipRepairSpareViewDataListAdapter extends BaseAdapter {
         private TextView mTv_SpareName;
         private NumberEditText mNEdt_Check;
         private TextView mTv_Unit;
-        private TextView mTv_SumCount;
+        private TextView mTv_SumCountx;
         private  TextView mTv_SpareID;
 
 

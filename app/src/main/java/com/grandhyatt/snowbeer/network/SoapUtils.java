@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.StringUtils;
 import com.grandhyatt.commonlib.utils.ToastUtils;
@@ -11,6 +12,8 @@ import com.grandhyatt.snowbeer.App;
 import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.entity.APIHostInfoEntity;
+import com.grandhyatt.snowbeer.entity.EquipmentUseSpareEntity;
+import com.grandhyatt.snowbeer.entity.RepairmentBillEntity;
 import com.grandhyatt.snowbeer.entity.TextDictionaryEntity;
 import com.grandhyatt.snowbeer.network.callback.CommonCallback;
 import com.grandhyatt.snowbeer.network.callback.LoginCallback;
@@ -18,6 +21,7 @@ import com.grandhyatt.snowbeer.network.request.CheckUpdateRequest;
 import com.grandhyatt.snowbeer.network.request.EditPasswordRequest;
 import com.grandhyatt.snowbeer.network.request.FailureReportingRequest;
 import com.grandhyatt.snowbeer.network.request.LoginRequest;
+import com.grandhyatt.snowbeer.network.result.RepairmentEquipmentResult;
 import com.grandhyatt.snowbeer.network.result.TextDictoryResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapClient;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
@@ -30,6 +34,7 @@ import com.zhy.http.okhttp.OkHttpUtils;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -534,4 +539,51 @@ public class SoapUtils {
 		SoapUtils.getInstance(context).call(methodName,params,callback);
 	}
 
+
+	/**
+	 * 提交维修信息
+	 * @param context
+	 * @param request
+	 * @param callback
+	 */
+	public static void submitNewEquipReparimentRepairAsync(final Context context, RepairmentEquipmentResult request, ArrayList<String> _CheckPlanIDList, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "NewEquipReparimentRepair";
+
+		//String userID = SPUtils.getLastLoginUserID(context);
+		String userName = SPUtils.getLastLoginUserName(context);
+
+		//获取http请求身份验证参数
+		 SoapParams params  = getAuthHttpRequestHeader(context);
+
+		params.put("userName",userName);
+	     RepairmentBillEntity rparbill= request.getRepairmentBillData();
+		Gson gson1 = new Gson();
+
+		String jsonrepa = gson1.toJson(rparbill, RepairmentBillEntity.class);
+		 params.put("repariment",jsonrepa);
+		 if(_CheckPlanIDList!=null) {
+			 String jsonPlan = gson1.toJson(_CheckPlanIDList);
+			 params.put("listPlanID", jsonPlan);
+		 }
+		List<EquipmentUseSpareEntity> listeuse=	request.getSpareInEquipmentData();
+		 String jsonEquiSpare= gson1.toJson(listeuse);
+		params.put("ListSpareEqer", jsonEquiSpare);
+//		String[] arrString = (String[])list.toArray(new String[list.size()]) ;
+		//params.put("listPlanID",(String [] )_CheckPlanIDList.toArray(new String[_CheckPlanIDList.size()]));
+
+//		params.put("reportDate",request.getReportDate());
+//		params.put("failureLevel",request.getFailureLevel());
+//		params.put("failureDesc",request.getFailureDesc());
+//		params.put("linkUser",request.getLinkUser());
+//		params.put("linkMobile",request.getLinkMobile());
+//
+//		String imgs = listToString(request.getBase64Imgs());
+//		params.put("failureImgs",imgs);
+//		params.put("failureVoice",request.getBase64Voice());
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+
+	}
 }

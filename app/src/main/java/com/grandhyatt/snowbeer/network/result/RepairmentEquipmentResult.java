@@ -2,6 +2,7 @@ package com.grandhyatt.snowbeer.network.result;
 
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
+import com.grandhyatt.snowbeer.entity.EquipmentUseSpareEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentBillEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
@@ -13,9 +14,9 @@ import java.util.List;
  */
 
 public class RepairmentEquipmentResult extends Result {
-    private EquipmentEntity data;
+    private EquipmentEntity Equipmentdata;
     private List<RepairmentPlanEntity> planData;
-    private List<SpareInEquipmentEntity> SpareInEquipmentdata;
+    private List<EquipmentUseSpareEntity> SpareInEquipmentdata;
     private RepairmentBillEntity rbdata;
 
     /**
@@ -34,14 +35,14 @@ public class RepairmentEquipmentResult extends Result {
      * @return void
      */
     public void setRepairmentBillData(RepairmentBillEntity data) {
-        this.rbdata = rbdata;
+        this.rbdata = data;
     }
     public EquipmentEntity getData() {
-        return data;
+        return Equipmentdata;
     }
 
     public void setData(EquipmentEntity data) {
-        this.data = data;
+        this.Equipmentdata = data;
     }
 
 
@@ -62,7 +63,7 @@ public class RepairmentEquipmentResult extends Result {
      * @return void
      */
     public void setPlanData(List<RepairmentPlanEntity> data) {
-        this.planData = planData;
+        this.planData = data;
     }
 
 
@@ -72,7 +73,7 @@ public class RepairmentEquipmentResult extends Result {
      *
      * @return com.bose.rose.model.LoginUserInfo
      */
-    public List<SpareInEquipmentEntity> getSpareInEquipmentData() {
+    public List<EquipmentUseSpareEntity> getSpareInEquipmentData() {
         return SpareInEquipmentdata;
     }
 
@@ -82,7 +83,7 @@ public class RepairmentEquipmentResult extends Result {
      * @param data
      * @return void
      */
-    public void setSpareInEquipmentData(List<SpareInEquipmentEntity> data) {
-        this.SpareInEquipmentdata = SpareInEquipmentdata;
+    public void setSpareInEquipmentData(List<EquipmentUseSpareEntity> data) {
+        this.SpareInEquipmentdata = data;
     }
 }

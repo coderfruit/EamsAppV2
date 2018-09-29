@@ -45,7 +45,7 @@
             android:textColor="@color/gray5"
             android:textSize="14sp" />
         <TextView
-            android:id="@+id/mTv_SumCount"
+            android:id="@+id/mTv_SumCountx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"

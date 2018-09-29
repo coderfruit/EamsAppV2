@@ -5,21 +5,29 @@ package com.grandhyatt.snowbeer.entity;
  */
 
 public class RepairmentBillEntity {
-    private String Status;
 
     private String ID;
 
     private String CorporationID;
 
-    private String CorporationName;
 
     private String EquipmentID;
 
-    private String EquipmentCode;
-
-    private String EquipmentName;
-
+    private String  RepairmentBillNO;
+    private String Description;
+    private String RepairUser;
     private String RepairmentLevel;
+    private String FaultClass;
+
+    private String StartTime;
+    private String FinishTime;
+    private String ShutDownMinutes;
+
+    private String TotalMoney;
+    private String MakeUser;
+
+    private String MakeDate;
+
 
     private String Interval;
 
@@ -31,11 +39,9 @@ public class RepairmentBillEntity {
 
     private String WarningDays;
 
-    private String Description;
 
-    private String MakeUser;
 
-    private String MakeDate;
+
 
     private String REMARK;
 
@@ -43,13 +49,7 @@ public class RepairmentBillEntity {
 
     }
 
-    public String getStatus() {
-        return Status;
-    }
 
-    public void setStatus(String status) {
-        Status = status;
-    }
 
     public String getID() {
         return ID;
@@ -57,6 +57,56 @@ public class RepairmentBillEntity {
 
     public void setID(String ID) {
         this.ID = ID;
+    }
+
+    public String getTotalMoney() {
+        return TotalMoney;
+    }
+
+    public void setTotalMoney(String totalMoney) {
+        TotalMoney = totalMoney;
+    }
+    public String getShutDownMinutes() {
+        return ShutDownMinutes;
+    }
+
+    public void setShutDownMinutes(String shutDownMinutes) {
+        ShutDownMinutes = shutDownMinutes;
+    }
+    public String getFinishTime() {
+        return FinishTime;
+    }
+
+    public void setFinishTime(String finishTime) {
+        FinishTime = finishTime;
+    }
+    public String getStartTime() {
+        return StartTime;
+    }
+
+    public void setStartTime(String startTime) {
+        StartTime = startTime;
+    }
+    public String getFaultLevel() {
+        return FaultClass;
+    }
+
+    public void setFaultLevel(String faultLevel) {
+        FaultClass = faultLevel;
+    }
+    public String getRepairUser() {
+        return RepairUser;
+    }
+
+    public void setRepairUser(String sepairUser) {
+        RepairUser = sepairUser;
+    }
+    public String getRepairmentBillNO() {
+        return RepairmentBillNO;
+    }
+
+    public void setRepairmentBillNO(String repairmentBillNO) {
+        RepairmentBillNO = repairmentBillNO;
     }
 
     public String getCorporationID() {
@@ -67,14 +117,6 @@ public class RepairmentBillEntity {
         CorporationID = corporationID;
     }
 
-    public String getCorporationName() {
-        return CorporationName;
-    }
-
-    public void setCorporationName(String corporationName) {
-        CorporationName = corporationName;
-    }
-
     public String getEquipmentID() {
         return EquipmentID;
     }
@@ -83,21 +125,6 @@ public class RepairmentBillEntity {
         EquipmentID = equipmentID;
     }
 
-    public String getEquipmentCode() {
-        return EquipmentCode;
-    }
-
-    public void setEquipmentCode(String equipmentCode) {
-        EquipmentCode = equipmentCode;
-    }
-
-    public String getEquipmentName() {
-        return EquipmentName;
-    }
-
-    public void setEquipmentName(String equipmentName) {
-        EquipmentName = equipmentName;
-    }
 
     public String getRepairmentLevel() {
         return RepairmentLevel;
