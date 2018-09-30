@@ -78,6 +78,11 @@ public class EquipRepairSpareViewDataListAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public  void  removeItem(int position){
+       // mDataList.remove(position);
+        notifyDataSetChanged();
+    }
+
     public static class ViewHolder {
 
         private TextView mTv_SpareName;

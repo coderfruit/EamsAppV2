@@ -15,7 +15,7 @@ import java.util.List;
 
 public class RepairmentEquipmentResult extends Result {
     private EquipmentEntity Equipmentdata;
-    private List<RepairmentPlanEntity> planData;
+
     private List<EquipmentUseSpareEntity> SpareInEquipmentdata;
     private RepairmentBillEntity rbdata;
 
@@ -45,26 +45,6 @@ public class RepairmentEquipmentResult extends Result {
         this.Equipmentdata = data;
     }
 
-
-
-    /**
-     * 获取 data
-     *
-     * @return com.bose.rose.model.LoginUserInfo
-     */
-    public List<RepairmentPlanEntity> getPlanData() {
-        return planData;
-    }
-
-    /**
-     * 设置 data
-     *
-     * @param data
-     * @return void
-     */
-    public void setPlanData(List<RepairmentPlanEntity> data) {
-        this.planData = data;
-    }
 
 
 

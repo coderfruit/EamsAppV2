@@ -496,6 +496,7 @@ public class SoapUtils {
 		final SoapParams params  = getAuthHttpRequestHeader(context);
 		params.put("equipID",equipID);
 
+
 		SoapUtils.getInstance(context).call(methodName,params,callback);
 	}
 
@@ -563,7 +564,7 @@ public class SoapUtils {
 
         String jsonrepa = gson1.toJson(rparbill, RepairmentBillEntity.class);
         params.put("repariment", jsonrepa);
-        if (_CheckPlanIDList != null) {
+        if (_CheckPlanIDList != null && _CheckPlanIDList.size()>0 ) {
             String jsonPlan = gson1.toJson(_CheckPlanIDList);
             params.put("listPlanID", jsonPlan);
         }
@@ -608,7 +609,6 @@ public class SoapUtils {
 	{
 		final String url = getHostUrl();
 		String methodName = "GetWarningInfoCount";
-
 		//获取http请求身份验证参数
 		final SoapParams params  = getAuthHttpRequestHeader(context);
 		params.put("corpID",corpID);
@@ -728,6 +728,5 @@ public class SoapUtils {
 
 		SoapUtils.getInstance(context).call(methodName,params,callback);
 	}
-
 
 }

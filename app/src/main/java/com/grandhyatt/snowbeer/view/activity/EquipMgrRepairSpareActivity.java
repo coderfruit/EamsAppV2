@@ -117,6 +117,7 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
         initView();
 
         bindEvent();
+        mEt_SpareCond.setClickable(false);
     }
 
     @Override
