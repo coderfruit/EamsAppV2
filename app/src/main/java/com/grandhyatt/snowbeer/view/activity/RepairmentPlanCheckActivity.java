@@ -351,7 +351,7 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
                         vw = mLv_DataList.getChildAt(i);
                         CheckBox checkb = (CheckBox) vw.findViewById(R.id.mCkb_ID);
                         if (checkb.isChecked()) {
-                            RepairmentPlanEntity rpEntity = (RepairmentPlanEntity) mLv_DataList.getAdapter().getItem(i);
+                            SpareInEquipmentEntity rpEntity = (SpareInEquipmentEntity) mLv_DataList.getAdapter().getItem(i);
                             _CheckEntityList.add(rpEntity);
                             _CheckIDList.add(rpEntity.getID());
                         }

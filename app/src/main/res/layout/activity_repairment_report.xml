@@ -491,36 +491,25 @@
                     android:layout_width="60dp"
                     android:layout_height="40dp"
                     android:layout_centerInParent="true"
-                    android:layout_marginLeft="92sp"
+                    android:layout_marginLeft="120sp"
                     android:background="@drawable/ic_login_button_true"
                     android:text="添加"
                     android:textAlignment="center"
                     android:textSize="12dp" />
 
-                <Button
-                    android:id="@+id/mBtn_marDel"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-
-                    android:text="删除"
-                    android:textSize="12dp"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="1sp"
-                    android:background="@drawable/ic_login_button_true"
-                    android:scaleType="fitCenter" />
-
 
             </LinearLayout>
+
 
             <ListView
                 android:id="@+id/mLv_DataList_Spare"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/white"
+                android:background="@drawable/selector_listview_item"
                 android:divider="@null"
-                android:dividerHeight="0dp" />
 
+                android:transcriptMode="alwaysScroll"
+                android:dividerHeight="0dp" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"

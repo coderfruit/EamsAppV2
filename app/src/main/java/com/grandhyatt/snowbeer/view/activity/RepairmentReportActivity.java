@@ -144,8 +144,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     Button mBtn_Submit;
     @BindView(R.id.mBtn_marAdd)
     Button mBtn_marAdd;
-    @BindView(R.id.mBtn_marDel)
-    Button mBtn_marDel;
+
     @BindView(R.id.mLv_DataList_Spare)
     ListView mLv_DataList_Spare;
     @BindView(R.id.mLv_Show_plan)
@@ -519,6 +518,23 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         mTv_FaultLevel.setText(list.get(position).toString());
+                        if(list.get(position).toString().equals("大修")){
+                            if(_CheckSpareEntityList!=null && _CheckSpareEntityList.size()>0){
+                                _CheckSpareEntityList.clear();
+                                mLv_Show_plan.setVisibility(View.GONE);
+                                mLv_Show_plan.setAdapter(null);
+                            }
+
+                        }
+                        else {
+
+                            if(_CheckPlanEntityList!=null && _CheckPlanEntityList.size()>0){
+                                _CheckPlanEntityList.clear();
+                                _CheckPlanIDList.clear();
+                                mLv_Show_plan.setVisibility(View.GONE);
+                                mLv_Show_plan.setAdapter(null);
+                            }
+                        }
                     }
                 }, list);
             }
@@ -595,13 +611,19 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             }
         });
 
-        mBtn_marDel.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
 
+        //长按显示删除
+        mLv_DataList_Spare.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                _CheckSpareUseList.remove(position);
+//                adapter_SpareView.notifyDataSetChanged();
+                TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_SpareID);
+                deleteRow(mTv_ReportID.getText().toString(),position);
+                setListViewHeightBasedOnChildren(mLv_DataList_Spare);
+               return false;
             }
         });
-
         //提交
         mBtn_Submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -652,7 +674,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 else{
 
                 }
-                if(_CheckSpareIDList==null || _CheckSpareIDList.size()==0){
+                if(_CheckSpareUseList==null || _CheckSpareUseList.size()==0){
                     ToastUtils.showLongToast(RepairmentReportActivity.this, "请添加备品备件信息！");
                     return;
                 }
@@ -667,11 +689,16 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
               //  request.setData(_EquipmentData);
 
                 if(faultLevel.equals("大修")){
-                    request.setPlanData(_CheckPlanEntityList);
+                    if(_CheckPlanIDList==null || _CheckPlanIDList.size()==0){
+                        ToastUtils.showLongToast(RepairmentReportActivity.this, "未找到【大修】的维修计划，请选择！");
+                        return;
+                    }
+
                 }
-               else {
-                   request.setPlanData(null);
+                else {
+                    _CheckPlanIDList.clear();
                 }
+
                 RepairmentBillEntity rpen=new RepairmentBillEntity();
                 rpen.setEquipmentID(_EquipmentData.getID());
                 rpen.setCorporationID(_EquipmentData.getCorporationID());
@@ -810,6 +837,8 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
                 if(mTv_FaultLevel.getText().toString().equals("大修"))   //大修
                 {
+
+                    _CheckSpareEntityList.clear();
                     _CheckPlanIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
                     _CheckPlanEntityList = (List<RepairmentPlanEntity>)data.getSerializableExtra("_CheckEntityList");
                       if(_CheckPlanEntityList.size()==0){
@@ -830,9 +859,9 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 }
                 else//定修、日常维修
                 {
-                    _CheckSpareIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
+                    _CheckPlanEntityList.clear();
                     _CheckSpareEntityList = (List<SpareInEquipmentEntity>) data.getSerializableExtra("_CheckEntityList");
-                    if (_CheckPlanEntityList.size() == 0) {
+                    if (_CheckSpareEntityList.size() == 0) {
                         mLv_Show_plan.setVisibility(View.GONE);
                         mLv_Show_plan.setAdapter(null);
                     } else {
@@ -843,7 +872,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                         setListViewHeightBasedOnChildren(mLv_Show_plan);
                     }
 
-                    ToastUtils.showLongToast(RepairmentReportActivity.this, "共获取到" + _CheckSpareIDList.size() + "条备件记录");
+                    ToastUtils.showLongToast(RepairmentReportActivity.this, "共获取到" + _CheckSpareEntityList.size() + "条备件记录");
                 }
 
 
@@ -865,12 +894,13 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
                 break;
             case CHECK_SPARE_OK:
-                _CheckSpareIDList = data.getExtras().getStringArrayList("_CheckIDList");//得到新Activity 关闭后返回的数据
+                _CheckSpareUseList.clear();
                 _CheckSpareUseList = (List<EquipmentUseSpareEntity>)data.getSerializableExtra("_CheckEntityList");
                 if(_CheckSpareUseList != null && _CheckSpareUseList.size() > 0){
                     adapter_SpareView = new EquipRepairSpareViewDataListAdapter(RepairmentReportActivity.this, _CheckSpareUseList);
                     mLv_DataList_Spare.setAdapter(adapter_SpareView);
                     setListViewHeightBasedOnChildren(mLv_DataList_Spare);
+
                 }
 
 
@@ -1227,4 +1257,26 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         return publicDir + "/" + rptNO + "/" + file.getFileGuid() + "." + file.getFileType();
     }
 
+    private void deleteRow(final String RptID,final  int pron) {
+        List<String> menuList = new ArrayList<String>();
+        menuList.add("删除");
+        showSelectDialog(new SelectDialog.SelectDialogListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                switch (position) {
+                    case 0:
+                        //删除
+                        EquipmentUseSpareEntity eus=(EquipmentUseSpareEntity)adapter_SpareView.getItem(pron);
+                               _CheckSpareUseList.remove(eus);
+                                adapter_SpareView.removeItem(pron);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        }, menuList);
+
+    }
 }
