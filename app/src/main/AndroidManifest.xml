@@ -109,6 +109,8 @@
         <activity android:name=".view.activity.WarningInfo_EquipSpareReplaceActivity" />
         <!-- 显示设备外委预警信息  add by yangcm 0928-->
         <activity android:name=".view.activity.WarningInfo_EquipRepairExActivity" />
+        <!--设备巡检  add by yangcm 1001-->
+        <activity android:name=".view.activity.EquipRoutingInspectionActivity" />
 
         <!-- **************************************  **************************************  ************************************** -->
         <!-- 复检第一步(有卡复检)-->
