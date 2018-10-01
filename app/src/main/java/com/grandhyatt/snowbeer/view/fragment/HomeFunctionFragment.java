@@ -17,6 +17,7 @@ import com.grandhyatt.snowbeer.entity.HomeFunctionEntity;
 import com.grandhyatt.snowbeer.utils.PowerUtils;
 import com.grandhyatt.snowbeer.view.MyGridView;
 import com.grandhyatt.snowbeer.view.activity.CardReCheckActivity;
+import com.grandhyatt.snowbeer.view.activity.EquipRoutingInspectionActivity;
 import com.grandhyatt.snowbeer.view.activity.MyFaultReportActivity;
 import com.grandhyatt.snowbeer.view.activity.NoCardReCheckActivity;
 import com.grandhyatt.snowbeer.view.activity.RepairmentReportActivity;
@@ -110,7 +111,7 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
                         break;
                     case 2://设备巡检
                         if(PowerUtils.isPowerShowToast(getContext(),PowerUtils.AppMenu设备巡检)) {
-                            ToastUtils.showToast(getContext(), "正在开发中...");
+                            IntentUtil.newIntent(getActivity(), EquipRoutingInspectionActivity.class);
                         }
                         break;
                     case 3://预警提醒
