@@ -17,8 +17,10 @@ import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
+import com.grandhyatt.snowbeer.entity.WarningInfoCountEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.result.EquipmentResult;
+import com.grandhyatt.snowbeer.network.result.WarningInfoCountResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.utils.CommonUtils;
@@ -31,6 +33,8 @@ import org.ksoap2.serialization.SoapObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import q.rorbin.badgeview.Badge;
+import q.rorbin.badgeview.QBadgeView;
 
 /**
  * 设备巡检
@@ -78,6 +82,9 @@ public class EquipRoutingInspectionActivity  extends com.grandhyatt.snowbeer.vie
     @BindView(R.id.mIv_EquipImg)
     ImageView mIv_EquipImg;
 
+    Badge bDg_WarningInfo;
+    Badge bDg_faultRptInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +108,9 @@ public class EquipRoutingInspectionActivity  extends com.grandhyatt.snowbeer.vie
 
         mReceiver = mSearchBar.getBroadcastReceiver();
         mFilter = mSearchBar.getFilter();
+
+        bDg_WarningInfo = new QBadgeView(this).bindTarget(mBt_WarningInfo);
+        bDg_faultRptInfo = new QBadgeView(this).bindTarget(mBt_faultRptInfo);
 
     }
 
@@ -235,6 +245,9 @@ public class EquipRoutingInspectionActivity  extends com.grandhyatt.snowbeer.vie
                     }
                 }
             }
+
+            getEquipWarinigInfo(data.getID());//获取设备预警、报修条数
+
         } else {//没有获取到设备信息
             mTv_EquipCode.setText("");
             mTv_EquipName.setText("");
@@ -243,6 +256,78 @@ public class EquipRoutingInspectionActivity  extends com.grandhyatt.snowbeer.vie
             mTv_EquipKeeper.setText("");
             mTv_EquipLocation.setText("");
             mIv_EquipImg.setImageBitmap(null);
+
+            initWarningInfoCount(null);//没有获取到设备信息，重置设备预警、报修条数
         }
     }
+
+    private void getEquipWarinigInfo(String equipID)
+    {
+        SoapUtils.getWarningInfo_Equip(EquipRoutingInspectionActivity.this, equipID, new SoapListener() {
+            @Override
+            public void onSuccess(int statusCode, SoapObject object) {
+                dismissLoadingDialog();
+                if (object == null) {
+                    ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "1获取设备信息数据失败" + statusCode);
+                    return;
+                }
+                //判断接口连接是否成功
+                if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                    ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "2获取设备信息数据失败" + statusCode);
+                    return;
+                }
+                //接口返回信息正常
+                String strData = object.getPropertyAsString(0);
+                WarningInfoCountResult result = new Gson().fromJson(strData, WarningInfoCountResult.class);
+
+                //校验接口返回代码
+                if (result == null) {
+                    ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "3获取设备信息数据失败" + statusCode);
+                    return;
+                } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                    ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "4获取设备信息数据失败" + statusCode + result.msg);
+                    return;
+                }
+                WarningInfoCountEntity data = result.getData();
+                if(data != null) {
+                    initWarningInfoCount(data);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, String content, Throwable error) {
+                dismissLoadingDialog();
+                ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "获取预警信息异常:" + error.getMessage());
+            }
+
+            @Override
+            public void onFailure(int statusCode, SoapFault fault) {
+                dismissLoadingDialog();
+                ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "获取预警信息失败:" + fault);
+            }
+        });
+
+    }
+
+    /**
+     * 初始化预警消息消息条数
+     */
+    private void initWarningInfoCount(WarningInfoCountEntity data) {
+        if(data != null) {
+            int iRpCnt = data.getEquipRepairPlanCount();
+            int iMtnCnt = data.getEquipMaintenPlanCount();
+            int iIspCnt = data.getEquipInspectPlanCount();
+            int iSpRpCnt = data.getEquipSpareReplacePlanCount();
+            int iRpExCnt = data.getEquipRepairExPlanCount();
+
+            int iWarnAllCnt = iRpCnt + iMtnCnt + iIspCnt + iSpRpCnt + iRpExCnt;
+
+            bDg_WarningInfo.setBadgeNumber(iWarnAllCnt);
+            bDg_faultRptInfo.setBadgeNumber(data.getReportFaultCount());
+        }else{
+            bDg_WarningInfo.setBadgeNumber(0);
+            bDg_faultRptInfo.setBadgeNumber(0);
+        }
+    }
+
 }
