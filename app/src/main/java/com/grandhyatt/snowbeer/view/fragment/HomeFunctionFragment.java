@@ -16,6 +16,8 @@ import com.grandhyatt.snowbeer.adapter.HomeFunctionFragmentDataAdapter;
 import com.grandhyatt.snowbeer.entity.HomeFunctionEntity;
 import com.grandhyatt.snowbeer.utils.PowerUtils;
 import com.grandhyatt.snowbeer.view.MyGridView;
+import com.grandhyatt.snowbeer.view.activity.AssayQueryActivity;
+import com.grandhyatt.snowbeer.view.activity.AssayUseActivity;
 import com.grandhyatt.snowbeer.view.activity.EquipRoutingInspectionActivity;
 import com.grandhyatt.snowbeer.view.activity.FaultReport_Mgr_Activity;
 import com.grandhyatt.snowbeer.view.activity.FaultReport_MyActivity;
@@ -121,7 +123,7 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
                         break;
                     case 4://化验仪器使用
                         if(PowerUtils.isPowerShowToast(getContext(),PowerUtils.AppMenu化验仪器使用)) {
-                            ToastUtils.showToast(getContext(), "正在开发中...");
+                            IntentUtil.newIntent(getContext(), AssayUseActivity.class);
                         }
                         break;
                     case 5://生产设备查询
@@ -131,7 +133,7 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
                         break;
                     case 6://化验仪器查询
                         if(PowerUtils.isPowerShowToast(getContext(),PowerUtils.AppMenu化验设备查询)) {
-                            IntentUtil.newIntent(getActivity(), NoCardReCheckActivity.class);
+                            IntentUtil.newIntent(getContext(), AssayQueryActivity.class);
                         }
                         break;
                     case 7://维修
