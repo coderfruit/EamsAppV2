@@ -87,7 +87,7 @@
         <activity android:name=".view.activity.FaultReportActivity" />
 
         <!-- 故障报修查询 -->
-        <activity android:name=".view.activity.MyFaultReportActivity" />
+        <activity android:name=".view.activity.FaultReport_MyActivity" />
         <!-- 设备维修 -->
         <activity android:name=".view.activity.RepairmentReportActivity" />
         <!-- 图片浏览 -->
@@ -150,7 +150,7 @@
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity android:name=".view.activity.MyFaultReportActivity" />
+        <activity android:name=".view.activity.FaultReport_MyActivity" />
 
 
     </application>

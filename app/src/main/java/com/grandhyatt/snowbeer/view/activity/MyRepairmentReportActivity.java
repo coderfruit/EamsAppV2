@@ -138,7 +138,7 @@ public class MyRepairmentReportActivity extends ActivityBase implements IActivit
                 intent.putExtra("mTv_EquipID", mTv_EquipID.getText().toString());
                 startActivity(intent);
 
-//                IntentUtil.newIntent(MyFaultReportActivity.this, FailureReportingEntity.class, maps);
+//                IntentUtil.newIntent(FaultReport_MyActivity.this, FailureReportingEntity.class, maps);
             }
         });
 

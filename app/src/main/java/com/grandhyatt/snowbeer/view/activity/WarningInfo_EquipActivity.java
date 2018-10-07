@@ -2,12 +2,16 @@ package com.grandhyatt.snowbeer.view.activity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.IntentUtil;
 import com.grandhyatt.commonlib.utils.ToastUtils;
+import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.entity.CorporationEntity;
@@ -23,9 +27,14 @@ import com.grandhyatt.snowbeer.view.ToolBarLayout;
 
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import q.rorbin.badgeview.Badge;
 import q.rorbin.badgeview.QBadgeView;
 
 /**
@@ -46,6 +55,16 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
     Button mBt_EquipSpareReplace;
     @BindView(R.id.mBt_EquipRepairEx)
     Button mBt_EquipRepairEx;
+    @BindView(R.id.mTv_UserCorp)
+    TextView mTv_UserCorp;
+    @BindView(R.id.mRL_UserCorp)
+    RelativeLayout mRL_UserCorp;
+
+    Badge qBv_mBt_EquipRepair;
+    Badge qBv_mBt_EquipMaintenance;
+    Badge qBv_mBt_EquipInspection;
+    Badge qBv_mBt_EquipSpareReplace;
+    Badge qBv_mBt_EquipRepairEx;
 
 
     @Override
@@ -68,6 +87,18 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
     @Override
     public void initView() {
         mToolBar.setTitle("设备预警信息");
+
+        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(this);
+        if(corp != null)
+        {
+            mTv_UserCorp.setText(corp.getCorporationName());
+        }
+
+        qBv_mBt_EquipRepair = new QBadgeView(this).bindTarget(mBt_EquipRepair);
+        qBv_mBt_EquipMaintenance = new QBadgeView(this).bindTarget(mBt_EquipMaintenance);
+        qBv_mBt_EquipInspection = new QBadgeView(this).bindTarget(mBt_EquipInspection);
+        qBv_mBt_EquipSpareReplace = new QBadgeView(this).bindTarget(mBt_EquipSpareReplace);
+        qBv_mBt_EquipRepairEx = new QBadgeView(this).bindTarget(mBt_EquipRepairEx);
     }
 
     @Override
@@ -100,6 +131,20 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
             @Override
             public void onClick(View v) {
                 IntentUtil.newIntent(WarningInfo_EquipActivity.this, WarningInfo_EquipRepairExActivity.class);
+            }
+        });
+
+        mTv_UserCorp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showUserCorp();
+            }
+        });
+
+        mRL_UserCorp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showUserCorp();
             }
         });
     }
@@ -166,19 +211,46 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
      */
     private void initWarningInfoCount(WarningInfoCountEntity data) {
         if(data != null) {
-            new QBadgeView(this).bindTarget(mBt_EquipRepair).setBadgeNumber(data.getEquipRepairPlanCount());
-            new QBadgeView(this).bindTarget(mBt_EquipMaintenance).setBadgeNumber(data.getEquipMaintenPlanCount());
-            new QBadgeView(this).bindTarget(mBt_EquipInspection).setBadgeNumber(data.getEquipInspectPlanCount());
-            new QBadgeView(this).bindTarget(mBt_EquipSpareReplace).setBadgeNumber(data.getEquipSpareReplacePlanCount());
-            new QBadgeView(this).bindTarget(mBt_EquipRepairEx).setBadgeNumber(data.getEquipRepairExPlanCount());
+            qBv_mBt_EquipRepair.setBadgeNumber(data.getEquipRepairPlanCount());
+            qBv_mBt_EquipMaintenance.setBadgeNumber(data.getEquipMaintenPlanCount());
+            qBv_mBt_EquipInspection.setBadgeNumber(data.getEquipInspectPlanCount());
+            qBv_mBt_EquipSpareReplace.setBadgeNumber(data.getEquipSpareReplacePlanCount());
+            qBv_mBt_EquipRepairEx.setBadgeNumber(data.getEquipRepairExPlanCount());
         }else{
-            new QBadgeView(this).bindTarget(mBt_EquipRepair).setBadgeNumber(0);
-            new QBadgeView(this).bindTarget(mBt_EquipMaintenance).setBadgeNumber(0);
-            new QBadgeView(this).bindTarget(mBt_EquipInspection).setBadgeNumber(0);
-            new QBadgeView(this).bindTarget(mBt_EquipSpareReplace).setBadgeNumber(0);
-            new QBadgeView(this).bindTarget(mBt_EquipRepairEx).setBadgeNumber(0);
+            qBv_mBt_EquipRepair.setBadgeNumber(0);
+            qBv_mBt_EquipMaintenance.setBadgeNumber(0);
+            qBv_mBt_EquipInspection.setBadgeNumber(0);
+            qBv_mBt_EquipSpareReplace.setBadgeNumber(0);
+            qBv_mBt_EquipRepairEx.setBadgeNumber(0);
         }
     }
 
+    /**
+     * 显示用户归属组织机构
+     */
+    private void showUserCorp()
+    {
+        List<String> corpName = new ArrayList<>();
+        final List<CorporationEntity> corpList = SPUtils.getLastLoginUserCorporations(this);
+        if(corpList != null && corpList.size() > 1){
+
+            for (CorporationEntity item : corpList) {
+                corpName.add(item.getCorporationName());
+            }
+
+            showSelectDialog(new SelectDialog.SelectDialogListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    CorporationEntity corp = corpList.get(position);
+
+                    mTv_UserCorp.setText(corp.getCorporationName());
+                    SPUtils.setLastLoginUserCorporation(WarningInfo_EquipActivity.this, corp);
+
+                    requestNetworkData();
+                }
+            },corpName);
+        }
+
+    }
 
 }
