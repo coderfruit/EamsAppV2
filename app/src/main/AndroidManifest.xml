@@ -96,7 +96,6 @@
         <activity android:name=".view.activity.RepairmentPlanCheckActivity" />
         <!-- 设备维修备件库存显示 add by yangcm 0920 -->
         <activity android:name=".view.activity.EquipMgrRepairSpareActivity" />
-
         <!-- 显示设备相关预警信息  add by yangcm 0928-->
         <activity android:name=".view.activity.WarningInfo_EquipActivity" />
         <!-- 显示设备维修预警信息  add by yangcm 0927-->
@@ -111,38 +110,29 @@
         <activity android:name=".view.activity.WarningInfo_EquipRepairExActivity" />
         <!--设备巡检  add by yangcm 1001-->
         <activity android:name=".view.activity.EquipRoutingInspectionActivity" />
-
+        <!--处理报修  add by yangcm 1007-->
+        <activity android:name=".view.activity.FaultReport_Mgr_Activity" />
         <!-- **************************************  **************************************  ************************************** -->
         <!-- 复检第一步(有卡复检)-->
         <activity android:name=".view.activity.CardReCheckActivity" />
-
         <!--无卡复检-->
         <activity android:name=".view.activity.NoCardReCheckActivity" />
-
         <!--复检第二步-->
         <activity android:name=".view.activity.SelectFirstCheckBillActivity" />
-
         <!--复检第三步-->
         <activity android:name=".view.activity.SelectSecondCheckBillActivity" />
-
         <!--复检第四步-->
         <activity android:name=".view.activity.ReCheckBillCommitActivity" />
-
         <!--查看复检单数据-->
         <activity android:name=".view.activity.ReCheckCompleteActivity" />
-
         <!--账户结余-->
         <activity android:name=".view.activity.AccountBalanceActivity"></activity>
-
         <!--客户选择-->
         <activity android:name=".view.activity.SelectCustomerActivity"></activity>
-
         <!--WebView-->
         <activity android:name=".view.activity.WebViewActivity"></activity>
-
         <!--输入客户信息-->
         <activity android:name=".view.activity.InputCustomerInfoActivity"></activity>
-
         <!--扫码竖屏-->
         <activity
             android:name=".view.activity.ScanActivity"

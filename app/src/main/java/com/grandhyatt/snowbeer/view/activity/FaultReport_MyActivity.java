@@ -25,6 +25,7 @@ import com.grandhyatt.snowbeer.network.result.FailureReportingsResult;
 import com.grandhyatt.snowbeer.network.result.TextDictoryResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
+import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -42,6 +43,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
+ * 我的报修
  * Created by ycm on 2018/8/28.
  */
 
@@ -162,11 +164,6 @@ public class FaultReport_MyActivity extends ActivityBase implements IActivityBas
                 TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_ReportID);
                 TextView mTv_EquipID = (TextView) view.findViewById(R.id.mTv_EquipID);
 
-                HashMap<String, Object> maps = new HashMap<String, Object>();
-                maps.put("mTv_ReportID", mTv_ReportID.getText().toString());
-                maps.put("mTv_EquipID", mTv_EquipID.getText().toString());
-
-
                 Intent intent = new Intent(FaultReport_MyActivity.this, FaultReportActivity.class);
                 intent.putExtra("mTv_ReportID", mTv_ReportID.getText().toString());
                 intent.putExtra("mTv_EquipID", mTv_EquipID.getText().toString());
@@ -206,7 +203,8 @@ public class FaultReport_MyActivity extends ActivityBase implements IActivityBas
         }else {
             request.setStatus(mTv_Status.getText().toString());
         }
-
+        String userName = SPUtils.getLastLoginUserName(this);
+        request.setReportUser(userName);
         request.setCurrentLastIdx(String.valueOf(mPageIndex * mPageSize));
 
         SoapUtils.getFailureReportsAsync(FaultReport_MyActivity.this, request, new SoapListener() {
@@ -345,7 +343,7 @@ public class FaultReport_MyActivity extends ActivityBase implements IActivityBas
                                 if(object != null)
                                 {
                                     ToastUtils.showLongToast(FaultReport_MyActivity.this,"删除成功");
-
+                                    requestNetworkData();
                                 }
                             }
 
