@@ -1274,7 +1274,6 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                     default:
                         break;
                 }
-
             }
         }, menuList);
 
