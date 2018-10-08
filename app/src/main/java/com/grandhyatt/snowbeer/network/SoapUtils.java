@@ -789,4 +789,21 @@ public class SoapUtils {
 
 		SoapUtils.getInstance(context).call(methodName, params, callback);
 	}
+
+	/**
+	 * 获取化学仪器使用事由列表
+	 * @param context
+	 * @param equipID
+	 * @param callback
+	 */
+	public static void getAssayEquipUseReason(final Context context,String equipID ,final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetAssayEquipUseReason";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+
+		SoapUtils.getInstance(context).call(methodName, params, callback);
+	}
 }

@@ -1,13 +1,16 @@
 package com.grandhyatt.snowbeer.view.activity;
 
 import android.content.BroadcastReceiver;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -16,19 +19,27 @@ import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
+import com.grandhyatt.snowbeer.entity.EquipmentUseReasonEntity;
 import com.grandhyatt.snowbeer.entity.WarningInfoCountEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.result.EquipmentResult;
+import com.grandhyatt.snowbeer.network.result.EquipmentUseReasonResult;
 import com.grandhyatt.snowbeer.network.result.WarningInfoCountResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.utils.CommonUtils;
 import com.grandhyatt.snowbeer.utils.ImageUtils;
+import com.grandhyatt.snowbeer.Ctrls.MyGridView;
 import com.grandhyatt.snowbeer.view.SearchBarLayout;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
 
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,11 +75,14 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
     TextView mTv_EquipLocation;
     @BindView(R.id.mIv_EquipImg)
     ImageView mIv_EquipImg;
+    @BindView(R.id.mGv_Datas)
+    MyGridView mGv_Datas;
 
     /**
      * 设备信息
      */
     EquipmentEntity _EquipmentData;
+    List<EquipmentUseReasonEntity> _EquipUseReasonList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +132,27 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
                 String barcode = mSearchBar.getBarcode();
                 SearchBarcode(barcode);
 
+                return false;
+            }
+        });
+        //设备图片点击事件
+        mIv_EquipImg.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                mIv_EquipImg.setDrawingCacheEnabled(true);
+                Bitmap bitmap = Bitmap.createBitmap(mIv_EquipImg.getDrawingCache());
+                mIv_EquipImg.setDrawingCacheEnabled(false);
+                String equipName = mTv_EquipName.getText().toString();
+
+                if (bitmap != null && equipName != null) {
+                    Intent intent = new Intent(AssayUseActivity.this, ImageViewerActivity.class);
+                    intent.putExtra("bitmap", bitmap);
+                    intent.putExtra("title", equipName);
+                    startActivity(intent);
+                } else {
+                    ToastUtils.showToast(AssayUseActivity.this, "无图片需显示");
+                }
                 return false;
             }
         });
@@ -231,7 +266,8 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
                     }
                 }
             }
-
+            //获取设备使用事由
+            getAssayEquipUseReason(data.getID());
 
         } else {//没有获取到设备信息
             mTv_EquipCode.setText("");
@@ -243,6 +279,85 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
             mIv_EquipImg.setImageBitmap(null);
 
         }
+    }
+
+    /**
+     * 获取化学仪器事由事由
+     *
+     * @param equipID
+     */
+    private void getAssayEquipUseReason(String equipID) {
+        SoapUtils.getAssayEquipUseReason(AssayUseActivity.this, equipID, new SoapListener() {
+            @Override
+            public void onSuccess(int statusCode, SoapObject object) {
+                dismissLoadingDialog();
+                if (object == null) {
+                    ToastUtils.showLongToast(AssayUseActivity.this, "1获取事由信息数据失败" + statusCode);
+                    return;
+                }
+                //判断接口连接是否成功
+                if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+
+                    ToastUtils.showLongToast(AssayUseActivity.this, "2获取事由信息数据失败" + statusCode);
+                    return;
+                }
+                //接口返回信息正常
+                String strData = object.getPropertyAsString(0);
+                EquipmentUseReasonResult result = new Gson().fromJson(strData, EquipmentUseReasonResult.class);
+
+                //校验接口返回代码
+                if (result == null) {
+                    ToastUtils.showLongToast(AssayUseActivity.this, "3获取事由信息数据失败" + statusCode);
+                    return;
+                } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                    ToastUtils.showLongToast(AssayUseActivity.this, "4获取事由信息数据失败" + statusCode + result.msg);
+                    return;
+                }
+                _EquipUseReasonList = result.getData();
+                //获取到的事由填充至页面
+                fillEquipUseReasion(_EquipUseReasonList);
+            }
+
+            @Override
+            public void onFailure(int statusCode, String content, Throwable error) {
+                dismissLoadingDialog();
+                ToastUtils.showLongToast(AssayUseActivity.this, "获取事由信息异常:" + error.getMessage());
+            }
+
+            @Override
+            public void onFailure(int statusCode, SoapFault fault) {
+                dismissLoadingDialog();
+                ToastUtils.showLongToast(AssayUseActivity.this, "获取事由信息失败:" + fault);
+            }
+        });
+    }
+
+    /**
+     * 设备使用事由填充至界面
+     *
+     * @param equipUseReasonList
+     */
+    private void fillEquipUseReasion(List<EquipmentUseReasonEntity> equipUseReasonList) {
+        List<Map<String, Object>> data_list = getData(equipUseReasonList);
+        //创建适配器
+        String[] from = {"mTv_ID", "mTv_Desc"};
+        int[] to = {R.id.mTv_ID, R.id.mTv_Desc};//grid_view_item_equip_use_reason布局中的两个控件id
+
+        SimpleAdapter simple_adapter = new SimpleAdapter(this, data_list, R.layout.grid_view_item_equip_use_reason, from, to);
+        mGv_Datas.setAdapter(simple_adapter);
+
+    }
+
+    public List<Map<String, Object>> getData(List<EquipmentUseReasonEntity> equipUseReasonList) {
+        List<Map<String, Object>> data_list = new ArrayList<Map<String, Object>>();
+
+        for(EquipmentUseReasonEntity item : equipUseReasonList) {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("mTv_ID",item.getID());
+            map.put("mTv_Desc", item.getReasonDesc());
+            data_list.add(map);
+        }
+        return data_list;
     }
 
 }
