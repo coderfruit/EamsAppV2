@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -129,6 +130,7 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
     public void initView() {
         mToolBar.setTitle("设备维修用备件选择");
         getEquipmentInfo(_EquipID);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override

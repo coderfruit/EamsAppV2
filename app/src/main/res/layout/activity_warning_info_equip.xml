@@ -1,72 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <com.grandhyatt.snowbeer.view.ToolBarLayout
         android:id="@+id/mToolBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+
+    <RelativeLayout
+        android:id="@+id/mRL_UserCorp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/selector_linear_layout_item_white">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_check_box_blue_selected" />
+
+        <TextView
+            android:id="@+id/mTv_UserCorp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="60dp"
+            android:text="用户组织机构"
+            android:textColor="@color/gray3"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/item_signature_iv_menu_defaul" />
+    </RelativeLayout>
+
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/mBt_EquipRepair"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:text="设备维修提醒"
-        android:textSize="16sp"
-        android:background="@drawable/selector_login_background"/>
+        <Button
+            android:id="@+id/mBt_EquipRepair"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/selector_login_background"
+            android:text="设备维修提醒"
+            android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/mBt_EquipMaintenance"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:text="设备保养提醒"
-        android:textSize="16sp"
-        android:background="@drawable/selector_login_background"/>
-    <Button
-        android:id="@+id/mBt_EquipInspection"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:text="设备检验提醒"
-        android:textSize="16sp"
-        android:background="@drawable/selector_login_background"/>
-    <Button
-        android:id="@+id/mBt_EquipSpareReplace"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:text="备件更换提醒"
-        android:textSize="16sp"
-        android:background="@drawable/selector_login_background"/>
+        <Button
+            android:id="@+id/mBt_EquipMaintenance"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/selector_login_background"
+            android:text="设备保养提醒"
+            android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/mBt_EquipRepairEx"
-        android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:text="外委维修提醒"
-        android:textSize="16sp"
-        android:background="@drawable/selector_login_background"/>
+        <Button
+            android:id="@+id/mBt_EquipInspection"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/selector_login_background"
+            android:text="设备检验提醒"
+            android:textSize="16sp" />
 
-        </LinearLayout>
+        <Button
+            android:id="@+id/mBt_EquipSpareReplace"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/selector_login_background"
+            android:text="备件更换提醒"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/mBt_EquipRepairEx"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/selector_login_background"
+            android:text="外委维修提醒"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
 </LinearLayout>

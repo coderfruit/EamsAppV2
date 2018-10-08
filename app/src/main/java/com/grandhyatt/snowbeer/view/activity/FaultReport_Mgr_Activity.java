@@ -10,10 +10,9 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.grandhyatt.commonlib.Result;
-import com.grandhyatt.commonlib.utils.IntentUtil;
 import com.grandhyatt.commonlib.utils.ToastUtils;
-import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
+import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.FailureReportingEntityDataListAdapter;
 import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
@@ -31,7 +30,6 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,14 +37,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by ycm on 2018/8/28.
+ * 处理报修
+ * Created by ycm on 2018/10/7.
  */
 
-public class MyRepairmentReportActivity extends ActivityBase implements IActivityBase, View.OnClickListener {
+public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityBase, View.OnClickListener {
 
     @BindView(R.id.mToolBar)
     ToolBarLayout mToolBar;
-
     @BindView(R.id.mLv_DataList)
     ListView mLv_DataList;
 
@@ -64,17 +62,17 @@ public class MyRepairmentReportActivity extends ActivityBase implements IActivit
 
     public static final int RESULT_REPORT_COMPLETE_ACTIVITY = 10001;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_fault_report);
+        setContentView(R.layout.activity_fault_report_mgr);
 
         ButterKnife.bind(this);
 
         initView();
-        refreshUI();
         bindEvent();
-
+        requestNetworkData();
     }
 
     @Override
@@ -84,23 +82,11 @@ public class MyRepairmentReportActivity extends ActivityBase implements IActivit
 
     @Override
     public void initView() {
-
-        mToolBar.setTitle("我的报修");
-        mToolBar.showMenuButton();
-        mToolBar.setMenuText("我要报修");
+        mToolBar.setTitle("处理报修");
     }
 
     @Override
     public void bindEvent() {
-
-        //我要报修
-        mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                IntentUtil.newIntentForResult(MyRepairmentReportActivity.this, FaultReportActivity.class, RESULT_REPORT_COMPLETE_ACTIVITY);
-            }
-        });
-
         //下拉刷新
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -121,43 +107,26 @@ public class MyRepairmentReportActivity extends ActivityBase implements IActivit
                 requestNetworkData();
             }
         });
-//单个报修选中查看
+        //单个报修选中查看
         mLv_DataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_ReportID);
                 TextView mTv_EquipID = (TextView) view.findViewById(R.id.mTv_EquipID);
 
-                HashMap<String, Object> maps = new HashMap<String, Object>();
-                maps.put("mTv_ReportID", mTv_ReportID.getText().toString());
-                maps.put("mTv_EquipID", mTv_EquipID.getText().toString());
-
-
-                Intent intent = new Intent(MyRepairmentReportActivity.this, FaultReportActivity.class);
+                Intent intent = new Intent(FaultReport_Mgr_Activity.this, FaultReportActivity.class);
                 intent.putExtra("mTv_ReportID", mTv_ReportID.getText().toString());
                 intent.putExtra("mTv_EquipID", mTv_EquipID.getText().toString());
-                startActivity(intent);
+                intent.putExtra("isMgr", "true");
 
-//                IntentUtil.newIntent(FaultReport_MyActivity.this, FailureReportingEntity.class, maps);
-            }
-        });
-
-        //长按显示删除
-        mLv_DataList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_ReportID);
-                deleteRow(mTv_ReportID.getText().toString());
-
-                return false;
+                startActivityForResult(intent,RESULT_REPORT_COMPLETE_ACTIVITY);
             }
         });
     }
 
     @Override
     public void refreshUI() {
-        requestNetworkData();
+
     }
 
     @Override
@@ -166,18 +135,19 @@ public class MyRepairmentReportActivity extends ActivityBase implements IActivit
 
         FailureReportingRequest request = new FailureReportingRequest();
         request.setCurrentLastIdx(String.valueOf(mPageIndex * mPageSize));
+        request.setStatus("待处理");
 
-        SoapUtils.getFailureReportsAsync(MyRepairmentReportActivity.this, request, new SoapListener() {
+        SoapUtils.getFailureReportsAsync(FaultReport_Mgr_Activity.this, request, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
                 dismissLoadingDialog();
                 if (object == null) {
-                    ToastUtils.showLongToast(MyRepairmentReportActivity.this, getString(R.string.submit_soap_result_err1));
+                    ToastUtils.showLongToast(FaultReport_Mgr_Activity.this, getString(R.string.submit_soap_result_err1));
                     return;
                 }
                 //判断接口连接是否成功
                 if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
-                    ToastUtils.showLongToast(MyRepairmentReportActivity.this, getString(R.string.submit_soap_result_err2));
+                    ToastUtils.showLongToast(FaultReport_Mgr_Activity.this, getString(R.string.submit_soap_result_err2));
                     return;
                 }
                 //接口返回信息正常
@@ -185,10 +155,10 @@ public class MyRepairmentReportActivity extends ActivityBase implements IActivit
                 FailureReportingsResult result = new Gson().fromJson(strData, FailureReportingsResult.class);
                 //校验接口返回代码
                 if (result == null) {
-                    ToastUtils.showLongToast(MyRepairmentReportActivity.this, getString(R.string.submit_soap_result_err3));
+                    ToastUtils.showLongToast(FaultReport_Mgr_Activity.this, getString(R.string.submit_soap_result_err3));
                     return;
                 } else if (result.code != Result.RESULT_CODE_SUCCSED) {
-                    ToastUtils.showLongToast(MyRepairmentReportActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
+                    ToastUtils.showLongToast(FaultReport_Mgr_Activity.this, getString(R.string.submit_soap_result_err4, result.msg));
                     return;
                 }
                 List<FailureReportingEntity> data = result.getData();
@@ -203,7 +173,7 @@ public class MyRepairmentReportActivity extends ActivityBase implements IActivit
                     mRefreshLayout.finishLoadMore(true);//设置SmartRefreshLayout加载更多的完成标志
                 } else if (data != null) {
                     //设置数据
-                    mAdapter = new FailureReportingEntityDataListAdapter(MyRepairmentReportActivity.this, data);
+                    mAdapter = new FailureReportingEntityDataListAdapter(FaultReport_Mgr_Activity.this, data);
                     mLv_DataList.setAdapter(mAdapter);
                     mRefreshLayout.finishRefresh(true); //设置SmartRefreshLayout刷新完成标志
                 }
@@ -216,7 +186,7 @@ public class MyRepairmentReportActivity extends ActivityBase implements IActivit
                 dismissLoadingDialog();
                 mRefreshLayout.finishRefresh(false);
                 mRefreshLayout.finishLoadMore(false);
-                ToastUtils.showToast(MyRepairmentReportActivity.this, getString(R.string.submit_soap_result_err5, error));
+                ToastUtils.showToast(FaultReport_Mgr_Activity.this, getString(R.string.submit_soap_result_err5, error));
             }
 
             @Override
@@ -224,62 +194,16 @@ public class MyRepairmentReportActivity extends ActivityBase implements IActivit
                 dismissLoadingDialog();
                 mRefreshLayout.finishRefresh(false);
                 mRefreshLayout.finishLoadMore(false);
-                ToastUtils.showToast(MyRepairmentReportActivity.this, getString(R.string.submit_soap_result_err4, fault));
+                ToastUtils.showToast(FaultReport_Mgr_Activity.this, getString(R.string.submit_soap_result_err4, fault));
             }
         });
     }
 
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (resultCode != Activity.RESULT_OK) {
-//            Log.e("TAG", "ActivityResult resultCode error");
-//            return;
-//        }
-        mPageIndex = 0;
-        mIsLoadMore = false;
-        mRefreshLayout.setNoMoreData(false);
-        requestNetworkData();
-    }
 
-    private void deleteRow(final String RptID) {
-        List<String> menuList = new ArrayList<String>();
-        menuList.add("删除");
-        showSelectDialog(new SelectDialog.SelectDialogListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                switch (position) {
-                    case 0:
-                        //删除
-                        SoapUtils.removeFailureReportingAsync(MyRepairmentReportActivity.this, RptID, new SoapListener() {
-                            @Override
-                            public void onSuccess(int statusCode, SoapObject object) {
-                                if(object != null)
-                                {
-                                    ToastUtils.showLongToast(MyRepairmentReportActivity.this,"删除成功");
-
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, String content, Throwable error) {
-
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, SoapFault fault) {
-
-                            }
-                        });
-
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-        }, menuList);
+        if(requestCode == RESULT_REPORT_COMPLETE_ACTIVITY){
+            requestNetworkData();
+        }
 
     }
-
 }

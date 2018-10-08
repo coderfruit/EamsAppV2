@@ -16,8 +16,11 @@ import com.grandhyatt.snowbeer.adapter.HomeFunctionFragmentDataAdapter;
 import com.grandhyatt.snowbeer.entity.HomeFunctionEntity;
 import com.grandhyatt.snowbeer.utils.PowerUtils;
 import com.grandhyatt.snowbeer.view.MyGridView;
-import com.grandhyatt.snowbeer.view.activity.CardReCheckActivity;
-import com.grandhyatt.snowbeer.view.activity.MyFaultReportActivity;
+import com.grandhyatt.snowbeer.view.activity.AssayQueryActivity;
+import com.grandhyatt.snowbeer.view.activity.AssayUseActivity;
+import com.grandhyatt.snowbeer.view.activity.EquipRoutingInspectionActivity;
+import com.grandhyatt.snowbeer.view.activity.FaultReport_Mgr_Activity;
+import com.grandhyatt.snowbeer.view.activity.FaultReport_MyActivity;
 import com.grandhyatt.snowbeer.view.activity.NoCardReCheckActivity;
 import com.grandhyatt.snowbeer.view.activity.RepairmentReportActivity;
 import com.grandhyatt.snowbeer.view.activity.WarningInfo_EquipActivity;
@@ -100,17 +103,17 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
                 switch (position) {
                     case 0://故障报修
                         if(PowerUtils.isPowerShowToast(getContext(),PowerUtils.AppMenu故障报修)) {
-                            IntentUtil.newIntent(getActivity(), MyFaultReportActivity.class);
+                            IntentUtil.newIntent(getActivity(), FaultReport_MyActivity.class);
                         }
                         break;
                     case 1://报修处理
                         if(PowerUtils.isPowerShowToast(getContext(),PowerUtils.AppMenu报修处理)) {
-                            ToastUtils.showToast(getContext(), "正在开发中...");
+                            IntentUtil.newIntent(getActivity(), FaultReport_Mgr_Activity.class);
                         }
                         break;
                     case 2://设备巡检
                         if(PowerUtils.isPowerShowToast(getContext(),PowerUtils.AppMenu设备巡检)) {
-                            ToastUtils.showToast(getContext(), "正在开发中...");
+                            IntentUtil.newIntent(getActivity(), EquipRoutingInspectionActivity.class);
                         }
                         break;
                     case 3://预警提醒
@@ -120,7 +123,7 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
                         break;
                     case 4://化验仪器使用
                         if(PowerUtils.isPowerShowToast(getContext(),PowerUtils.AppMenu化验仪器使用)) {
-                            ToastUtils.showToast(getContext(), "正在开发中...");
+                            IntentUtil.newIntent(getContext(), AssayUseActivity.class);
                         }
                         break;
                     case 5://生产设备查询
@@ -130,7 +133,7 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
                         break;
                     case 6://化验仪器查询
                         if(PowerUtils.isPowerShowToast(getContext(),PowerUtils.AppMenu化验设备查询)) {
-                            IntentUtil.newIntent(getActivity(), NoCardReCheckActivity.class);
+                            IntentUtil.newIntent(getContext(), AssayQueryActivity.class);
                         }
                         break;
                     case 7://维修

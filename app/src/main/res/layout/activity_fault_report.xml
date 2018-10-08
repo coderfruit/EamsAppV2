@@ -166,22 +166,22 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="20dp"
+                    android:layout_weight="1"
                     android:text="报修信息"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="12sp"
-                    android:layout_weight="1"/>
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/mTv_EquipInfo"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="BX123456"
-                    android:textSize="14sp"
-                    android:textColor="@color/red2"
+                    android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:layout_marginRight="5dp"
-                    android:visibility="gone"/>
+                    android:text="BX123456"
+                    android:textColor="@color/red2"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
             </LinearLayout>
 
@@ -348,11 +348,11 @@
                 app:zib_right_margin="2dp" />
 
             <!--<ListView-->
-                <!--android:id="@+id/mLv_Show_Imgs"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="800dp"-->
-                <!--android:background="@color/white"-->
-                <!--android:visibility="gone" />-->
+            <!--android:id="@+id/mLv_Show_Imgs"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="800dp"-->
+            <!--android:background="@color/white"-->
+            <!--android:visibility="gone" />-->
 
             <com.grandhyatt.snowbeer.Ctrls.MyGridView
                 android:id="@+id/mGv_Show_Imgs"
@@ -367,7 +367,7 @@
                 android:numColumns="4"
                 android:stretchMode="columnWidth"
                 android:verticalSpacing="2dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <!-- 语音播放按钮 -->
             <ImageButton
@@ -381,13 +381,13 @@
                 android:src="@drawable/voice3"
                 android:visibility="gone" />
 
-            <!-- 提交重置按钮 -->
-
+            <!-- 提交、录音按钮 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:gravity="right">
+
                 <Button
                     android:id="@+id/mBtn_Voice"
                     android:layout_width="0dp"
@@ -407,12 +407,73 @@
                     android:text="提交报修" />
             </LinearLayout>
 
+            <!-- 维修、保养、检验、外委维修-->
+            <LinearLayout
+                android:id="@+id/mLl_Mgr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+                <!-- 维修、保养-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
 
+                    <Button
+                        android:id="@+id/mBtn_Repair"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/ic_login_button_true"
+                        android:text="维修" />
+
+                    <Button
+                        android:id="@+id/mBtn_Mainten"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/ic_login_button_true"
+                        android:text="保养" />
+                </LinearLayout>
+                <!--  检验、外委维修-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/mBtn_Inspect"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/ic_login_button_true"
+                        android:text="检验" />
+
+                    <Button
+                        android:id="@+id/mBtn_RepairEx"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/ic_login_button_true"
+                        android:text="外委维修" />
+                </LinearLayout>
+            </LinearLayout>
 
         </LinearLayout>
 
     </ScrollView>
-
 
 
 </LinearLayout>

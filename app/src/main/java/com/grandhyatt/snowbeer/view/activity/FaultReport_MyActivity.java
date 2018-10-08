@@ -1,17 +1,10 @@
 package com.grandhyatt.snowbeer.view.activity;
 
-import android.app.Activity;
-import android.arch.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,14 +14,18 @@ import com.grandhyatt.commonlib.utils.IntentUtil;
 import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
+import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.FailureReportingEntityDataListAdapter;
 import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
+import com.grandhyatt.snowbeer.entity.TextDictionaryEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.request.FailureReportingRequest;
 import com.grandhyatt.snowbeer.network.result.FailureReportingsResult;
+import com.grandhyatt.snowbeer.network.result.TextDictoryResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
+import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -46,10 +43,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
+ * 我的报修
  * Created by ycm on 2018/8/28.
  */
 
-public class MyFaultReportActivity extends ActivityBase implements IActivityBase, View.OnClickListener {
+public class FaultReport_MyActivity extends ActivityBase implements IActivityBase, View.OnClickListener {
 
     @BindView(R.id.mToolBar)
     ToolBarLayout mToolBar;
@@ -59,6 +57,9 @@ public class MyFaultReportActivity extends ActivityBase implements IActivityBase
 
     @BindView(R.id.mRefreshLayout)
     SmartRefreshLayout mRefreshLayout;
+
+    @BindView(R.id.mTv_Status)
+    TextView mTv_Status;
 
     //当前页码
     private int mPageIndex = 0;
@@ -71,6 +72,10 @@ public class MyFaultReportActivity extends ActivityBase implements IActivityBase
 
     public static final int RESULT_REPORT_COMPLETE_ACTIVITY = 10001;
 
+    /**
+     * 故障处理状态
+     */
+    String[] _FaultStatusArr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +92,30 @@ public class MyFaultReportActivity extends ActivityBase implements IActivityBase
 
     @Override
     public void onClick(View v) {
+        if(v.getId() == R.id.mTv_Status){
+            final List<String> list = new ArrayList<String>();
+            if (_FaultStatusArr != null && _FaultStatusArr.length > 0) {
+                for (String item : _FaultStatusArr) {
+                    list.add(item);
+                }
+            } else {
+                list.add("待审核");
+                list.add("待处理");
+                list.add("已处理");
+                list.add("已关闭");
+            }
+            list.add(0,"全部");
 
+
+            showSelectDialog(new SelectDialog.SelectDialogListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    mTv_Status.setText(list.get(position).toString());
+
+                    requestNetworkData();
+                }
+            }, list);
+        }
     }
 
     @Override
@@ -105,7 +133,7 @@ public class MyFaultReportActivity extends ActivityBase implements IActivityBase
         mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentUtil.newIntentForResult(MyFaultReportActivity.this, FaultReportActivity.class, RESULT_REPORT_COMPLETE_ACTIVITY);
+                IntentUtil.newIntentForResult(FaultReport_MyActivity.this, FaultReportActivity.class, RESULT_REPORT_COMPLETE_ACTIVITY);
             }
         });
 
@@ -136,17 +164,12 @@ public class MyFaultReportActivity extends ActivityBase implements IActivityBase
                 TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_ReportID);
                 TextView mTv_EquipID = (TextView) view.findViewById(R.id.mTv_EquipID);
 
-                HashMap<String, Object> maps = new HashMap<String, Object>();
-                maps.put("mTv_ReportID", mTv_ReportID.getText().toString());
-                maps.put("mTv_EquipID", mTv_EquipID.getText().toString());
-
-
-                Intent intent = new Intent(MyFaultReportActivity.this, FaultReportActivity.class);
+                Intent intent = new Intent(FaultReport_MyActivity.this, FaultReportActivity.class);
                 intent.putExtra("mTv_ReportID", mTv_ReportID.getText().toString());
                 intent.putExtra("mTv_EquipID", mTv_EquipID.getText().toString());
                 startActivity(intent);
 
-//                IntentUtil.newIntent(MyFaultReportActivity.this, FailureReportingEntity.class, maps);
+//                IntentUtil.newIntent(FaultReport_MyActivity.this, FailureReportingEntity.class, maps);
             }
         });
 
@@ -161,6 +184,8 @@ public class MyFaultReportActivity extends ActivityBase implements IActivityBase
                 return false;
             }
         });
+
+        mTv_Status.setOnClickListener(this);
     }
 
     @Override
@@ -173,19 +198,26 @@ public class MyFaultReportActivity extends ActivityBase implements IActivityBase
         showLogingDialog();
 
         FailureReportingRequest request = new FailureReportingRequest();
+        if(mTv_Status.getText().toString().equals("状态") || mTv_Status.getText().toString().equals("全部")){
+            request.setStatus("");
+        }else {
+            request.setStatus(mTv_Status.getText().toString());
+        }
+        String userName = SPUtils.getLastLoginUserName(this);
+        request.setReportUser(userName);
         request.setCurrentLastIdx(String.valueOf(mPageIndex * mPageSize));
 
-        SoapUtils.getFailureReportsAsync(MyFaultReportActivity.this, request, new SoapListener() {
+        SoapUtils.getFailureReportsAsync(FaultReport_MyActivity.this, request, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
                 dismissLoadingDialog();
                 if (object == null) {
-                    ToastUtils.showLongToast(MyFaultReportActivity.this, getString(R.string.submit_soap_result_err1));
+                    ToastUtils.showLongToast(FaultReport_MyActivity.this, getString(R.string.submit_soap_result_err1));
                     return;
                 }
                 //判断接口连接是否成功
                 if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
-                    ToastUtils.showLongToast(MyFaultReportActivity.this, getString(R.string.submit_soap_result_err2));
+                    ToastUtils.showLongToast(FaultReport_MyActivity.this, getString(R.string.submit_soap_result_err2));
                     return;
                 }
                 //接口返回信息正常
@@ -193,10 +225,10 @@ public class MyFaultReportActivity extends ActivityBase implements IActivityBase
                 FailureReportingsResult result = new Gson().fromJson(strData, FailureReportingsResult.class);
                 //校验接口返回代码
                 if (result == null) {
-                    ToastUtils.showLongToast(MyFaultReportActivity.this, getString(R.string.submit_soap_result_err3));
+                    ToastUtils.showLongToast(FaultReport_MyActivity.this, getString(R.string.submit_soap_result_err3));
                     return;
                 } else if (result.code != Result.RESULT_CODE_SUCCSED) {
-                    ToastUtils.showLongToast(MyFaultReportActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
+                    ToastUtils.showLongToast(FaultReport_MyActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
                     return;
                 }
                 List<FailureReportingEntity> data = result.getData();
@@ -211,7 +243,7 @@ public class MyFaultReportActivity extends ActivityBase implements IActivityBase
                     mRefreshLayout.finishLoadMore(true);//设置SmartRefreshLayout加载更多的完成标志
                 } else if (data != null) {
                     //设置数据
-                    mAdapter = new FailureReportingEntityDataListAdapter(MyFaultReportActivity.this, data);
+                    mAdapter = new FailureReportingEntityDataListAdapter(FaultReport_MyActivity.this, data);
                     mLv_DataList.setAdapter(mAdapter);
                     mRefreshLayout.finishRefresh(true); //设置SmartRefreshLayout刷新完成标志
                 }
@@ -224,7 +256,7 @@ public class MyFaultReportActivity extends ActivityBase implements IActivityBase
                 dismissLoadingDialog();
                 mRefreshLayout.finishRefresh(false);
                 mRefreshLayout.finishLoadMore(false);
-                ToastUtils.showToast(MyFaultReportActivity.this, getString(R.string.submit_soap_result_err5, error));
+                ToastUtils.showToast(FaultReport_MyActivity.this, getString(R.string.submit_soap_result_err5, error));
             }
 
             @Override
@@ -232,9 +264,55 @@ public class MyFaultReportActivity extends ActivityBase implements IActivityBase
                 dismissLoadingDialog();
                 mRefreshLayout.finishRefresh(false);
                 mRefreshLayout.finishLoadMore(false);
-                ToastUtils.showToast(MyFaultReportActivity.this, getString(R.string.submit_soap_result_err4, fault));
+                ToastUtils.showToast(FaultReport_MyActivity.this, getString(R.string.submit_soap_result_err4, fault));
             }
         });
+
+        //获取故障状态
+        SoapListener callbackFailureReportingStatus = new SoapListener() {
+            @Override
+            public void onSuccess(int statusCode, SoapObject object) {
+                if (object == null) {
+                    ToastUtils.showLongToast(FaultReport_MyActivity.this, "1获取故障状态数据失败" + statusCode);
+                    return;
+                }
+                //判断接口连接是否成功
+                if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                    ToastUtils.showLongToast(FaultReport_MyActivity.this, "2获取故状态述数据失败" + statusCode);
+                    return;
+                }
+                //接口返回信息正常
+                String strData = object.getPropertyAsString(0);
+                TextDictoryResult result = new Gson().fromJson(strData, TextDictoryResult.class);
+
+                //校验接口返回代码
+                if (result == null) {
+                    ToastUtils.showLongToast(FaultReport_MyActivity.this, "3获取故障状态数据失败" + statusCode);
+                    return;
+                } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                    ToastUtils.showLongToast(FaultReport_MyActivity.this, "4获取故障状态数据失败" + statusCode + result.msg);
+                    return;
+                }
+                TextDictionaryEntity data = result.getData();
+                if (data != null) {
+                    String value = data.getValue();
+                    if (value != null && value.length() > 0) {
+                        _FaultStatusArr = value.split("\\|");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, String content, Throwable error) {
+                ToastUtils.showLongToast(FaultReport_MyActivity.this, "0获取故障状态数据失败：" + error.getMessage());
+            }
+
+            @Override
+            public void onFailure(int statusCode, SoapFault fault) {
+                ToastUtils.showLongToast(FaultReport_MyActivity.this, "0获取故障状态数据失败：" + fault.toString());
+            }
+        };
+        SoapUtils.getTextDictoryAsync(FaultReport_MyActivity.this, Consts.EnumTextDictonay.FailureReportingStatus, callbackFailureReportingStatus);
     }
 
     @Override
@@ -259,13 +337,13 @@ public class MyFaultReportActivity extends ActivityBase implements IActivityBase
                 switch (position) {
                     case 0:
                         //删除
-                        SoapUtils.removeFailureReportingAsync(MyFaultReportActivity.this, RptID, new SoapListener() {
+                        SoapUtils.removeFailureReportingAsync(FaultReport_MyActivity.this, RptID, new SoapListener() {
                             @Override
                             public void onSuccess(int statusCode, SoapObject object) {
                                 if(object != null)
                                 {
-                                    ToastUtils.showLongToast(MyFaultReportActivity.this,"删除成功");
-
+                                    ToastUtils.showLongToast(FaultReport_MyActivity.this,"删除成功");
+                                    requestNetworkData();
                                 }
                             }
 

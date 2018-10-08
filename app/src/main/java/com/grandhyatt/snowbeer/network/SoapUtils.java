@@ -729,4 +729,22 @@ public class SoapUtils {
 		SoapUtils.getInstance(context).call(methodName,params,callback);
 	}
 
+	/**
+	 * 获取设备预警消息条数
+	 * @param context
+	 * @param equipID
+	 * @param callback
+	 */
+	public static void getWarningInfo_Equip(final Context context, String equipID, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetWarningInfo_Equip";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+
+	}
+
 }

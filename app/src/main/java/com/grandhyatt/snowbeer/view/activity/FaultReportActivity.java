@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -134,6 +135,17 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
     @BindView(R.id.mTv_EquipInfo)
     TextView mTv_ReportNO;
 
+    @BindView(R.id.mLl_Mgr)
+    LinearLayout mLl_Mgr;
+    @BindView(R.id.mBtn_Repair)
+    Button mBtn_Repair;
+    @BindView(R.id.mBtn_Mainten)
+    Button mBtn_Mainten;
+    @BindView(R.id.mBtn_Inspect)
+    Button mBtn_Inspect;
+    @BindView(R.id.mBtn_RepairEx)
+    Button mBtn_RepairEx;
+
     /**
      * 使用照相机拍照获取图片
      */
@@ -190,6 +202,7 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         Intent intent = getIntent();
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
+        String isMgr = intent.getStringExtra("isMgr");//是否处理报修
 
         if (mTv_ReportID != null && mTv_EquipID != null) {  //查看报修
             mToolBar.setTitle("查看报修信息");
@@ -209,6 +222,10 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
             zz_image_box_add_mode.setVisibility(View.GONE);
             mGv_Show_Imgs.setVisibility(View.VISIBLE);
 
+            if(isMgr != null && isMgr.length() > 0){
+                mLl_Mgr.setVisibility(View.VISIBLE);
+                mToolBar.setTitle("处理报修");
+            }
 
         } else {              //添加报修
             mToolBar.setTitle("我要报修");
@@ -249,10 +266,24 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-//            case R.id.mBtn_Login:
-//
-//                break;
+        int id = v.getId();
+        switch (id) {
+            case R.id.mBtn_Repair://维修
+                ToastUtils.showLongToast(FaultReportActivity.this,"维修");
+                //todo
+                break;
+            case R.id.mBtn_Mainten://保养
+                ToastUtils.showLongToast(FaultReportActivity.this,"保养");
+                //todo
+                break;
+            case R.id.mBtn_Inspect://检验
+                ToastUtils.showLongToast(FaultReportActivity.this,"检验");
+                //todo
+                break;
+            case R.id.mBtn_RepairEx://外委维修
+                ToastUtils.showLongToast(FaultReportActivity.this,"外委维修");
+                //todo
+                break;
             default:
                 break;
         }
@@ -424,6 +455,10 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
             }
         });
 
+        mBtn_Repair.setOnClickListener(this);
+        mBtn_Mainten.setOnClickListener(this);
+        mBtn_Inspect.setOnClickListener(this);
+        mBtn_RepairEx.setOnClickListener(this);
 
     }
 

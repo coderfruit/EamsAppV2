@@ -43,8 +43,20 @@ public class WarningInfoCountEntity {
     /// 化学仪器维修计划提醒
     /// </summary>
     private int AssayRepairPlanCount;
+    //设备报修信息
+    private int ReportFaultCount;
+
 
     public WarningInfoCountEntity() {
+    }
+
+
+    public int getReportFaultCount() {
+        return ReportFaultCount;
+    }
+
+    public void setReportFaultCount(int reportFaultCount) {
+        ReportFaultCount = reportFaultCount;
     }
 
     public int getEquipRepairPlanCount() {
