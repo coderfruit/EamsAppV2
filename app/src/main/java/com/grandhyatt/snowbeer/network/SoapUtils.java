@@ -19,6 +19,7 @@ import com.grandhyatt.snowbeer.network.callback.CommonCallback;
 import com.grandhyatt.snowbeer.network.callback.LoginCallback;
 import com.grandhyatt.snowbeer.network.request.CheckUpdateRequest;
 import com.grandhyatt.snowbeer.network.request.EditPasswordRequest;
+import com.grandhyatt.snowbeer.network.request.EquipmentRequest;
 import com.grandhyatt.snowbeer.network.request.FailureReportingRequest;
 import com.grandhyatt.snowbeer.network.request.LoginRequest;
 import com.grandhyatt.snowbeer.network.result.RepairmentEquipmentResult;
@@ -747,4 +748,45 @@ public class SoapUtils {
 
 	}
 
+	/**
+	 * 获取设备信息
+	 * @param context
+	 * @param request
+	 * @param callback
+	 */
+	public static void getEquipments(final Context context, EquipmentRequest request ,final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetEquipments";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("corpID",request.getCorpID());
+		params.put("deptID",request.getDeptID());
+		params.put("useState",request.getUseState());
+		params.put("equipTypeID",request.getEquipTypeID());
+		params.put("assetTypeID",request.getAssetTypeID());
+		params.put("currentLastIdx",request.getCurrentLastIdx());
+
+		params.put("equipinfo",request.getEquipInfo());
+		params.put("location",request.getLocation());
+		params.put("keeper",request.getKeeper());
+		params.put("manu",request.getManu());
+
+		SoapUtils.getInstance(context).call(methodName, params, callback);
+	}
+
+	/**
+	 * 获取设备类型
+	 * @param context
+	 * @param callback
+	 */
+	public static void getEquipmentType(final Context context,final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetEquipmentType";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+
+		SoapUtils.getInstance(context).call(methodName, params, callback);
+	}
 }
