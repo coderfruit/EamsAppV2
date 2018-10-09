@@ -16,12 +16,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/gray3">
 
             <!-- 设备信息标题 -->
             <LinearLayout
@@ -166,9 +167,24 @@
                     android:text="使用事由"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
+
+
+
             </LinearLayout>
 
-
+            <com.grandhyatt.snowbeer.Ctrls.MyGridView
+                android:id="@+id/mGv_Datas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/transparent_gray1"
+                android:columnWidth="120dp"
+                android:gravity="center"
+                android:horizontalSpacing="2dp"
+                android:listSelector="@drawable/selector_gridview_item"
+                android:numColumns="3"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="2dp" />
 
 
 
