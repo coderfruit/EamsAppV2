@@ -117,6 +117,8 @@
         <activity android:name=".view.activity.AssayUseActivity" />
         <!--化学仪器查询  add by yangcm 1007-->
         <activity android:name=".view.activity.AssayQueryActivity" />
+        <!--设备保养  add by tongzhiqiang-->
+        <activity android:name=".view.activity.MaintenReportActivity" />
         <!-- **************************************  **************************************  ************************************** -->
         <!-- 复检第一步(有卡复检)-->
         <activity android:name=".view.activity.CardReCheckActivity" />

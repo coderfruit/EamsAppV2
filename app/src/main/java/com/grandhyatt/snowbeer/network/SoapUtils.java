@@ -22,6 +22,7 @@ import com.grandhyatt.snowbeer.network.request.EditPasswordRequest;
 import com.grandhyatt.snowbeer.network.request.EquipmentRequest;
 import com.grandhyatt.snowbeer.network.request.FailureReportingRequest;
 import com.grandhyatt.snowbeer.network.request.LoginRequest;
+import com.grandhyatt.snowbeer.network.request.MaintenReportingRequest;
 import com.grandhyatt.snowbeer.network.result.RepairmentEquipmentResult;
 import com.grandhyatt.snowbeer.network.result.TextDictoryResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapClient;
@@ -30,6 +31,7 @@ import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.soapNetWork.SoapParams;
 import com.grandhyatt.snowbeer.utils.JUnitUtils;
 import com.grandhyatt.snowbeer.utils.SPUtils;
+import com.grandhyatt.snowbeer.view.activity.MaintenReportActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import org.ksoap2.SoapFault;
@@ -416,6 +418,20 @@ public class SoapUtils {
 	{
 		final String url = getHostUrl();
 		String methodName = "GetFailureReport";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("failureReportID",request.getID());
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+
+	}
+
+	/*获取保养记录 */
+	public static void getMaintenReportAsync(final Context context, MaintenReportingRequest request, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetMaintenReport";
 
 		//获取http请求身份验证参数
 		final SoapParams params  = getAuthHttpRequestHeader(context);
