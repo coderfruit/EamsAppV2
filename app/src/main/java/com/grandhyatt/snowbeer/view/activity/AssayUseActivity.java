@@ -94,6 +94,17 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
 
         initView();
         bindEvent();
+
+        Intent intent = getIntent();
+        String mTv_ID = intent.getStringExtra("mTv_ID");//设备ID
+        if (mTv_ID != null && mTv_ID != null){
+
+            mSearchBar.setVisibility(View.GONE);
+
+            getEquipmentInfoByID(mTv_ID);
+
+
+        }
     }
 
     @Override
@@ -332,6 +343,11 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
                 _EquipUseReasonList = result.getData();
                 //获取到的事由填充至页面
                 fillEquipUseReasion(_EquipUseReasonList);
+
+                if(_EquipUseReasonList == null || _EquipUseReasonList.size() == 0){
+                    ToastUtils.showLongToast(AssayUseActivity.this, "请联系设备管理员在【化学仪器档案】中维护“设备使用事由”！");
+                }
+
             }
 
             @Override
@@ -436,6 +452,62 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
             }
         });
 
+    }
+
+    /**
+     * 根据设备ID获取设备信息
+     *
+     * @param equipID
+     */
+    private void getEquipmentInfoByID(String equipID) {
+        showLogingDialog();
+
+        SoapUtils.getEquipmentByIDAsync(AssayUseActivity.this, equipID, new SoapListener() {
+            @Override
+            public void onSuccess(int statusCode, SoapObject object) {
+                dismissLoadingDialog();
+                if (object == null) {
+                    fillEquipInfo(null);
+                    ToastUtils.showLongToast(AssayUseActivity.this, "1获取设备信息数据失败" + statusCode);
+                    return;
+                }
+                //判断接口连接是否成功
+                if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                    fillEquipInfo(null);
+                    ToastUtils.showLongToast(AssayUseActivity.this, "2获取设备信息数据失败" + statusCode);
+                    return;
+                }
+                //接口返回信息正常
+                String strData = object.getPropertyAsString(0);
+                EquipmentResult result = new Gson().fromJson(strData, EquipmentResult.class);
+
+                //校验接口返回代码
+                if (result == null) {
+                    fillEquipInfo(null);
+                    ToastUtils.showLongToast(AssayUseActivity.this, "3获取设备信息数据失败" + statusCode);
+                    return;
+                } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                    fillEquipInfo(null);
+                    ToastUtils.showLongToast(AssayUseActivity.this, "4获取设备信息数据失败" + statusCode + result.msg);
+                    return;
+                }
+                EquipmentEntity data = result.getData();
+                fillEquipInfo(data);
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, String content, Throwable error) {
+                dismissLoadingDialog();
+                ToastUtils.showLongToast(AssayUseActivity.this, "获取设备信息异常:" + error.getMessage());
+            }
+
+            @Override
+            public void onFailure(int statusCode, SoapFault fault) {
+                dismissLoadingDialog();
+                ToastUtils.showLongToast(AssayUseActivity.this, "获取设备信息失败:" + fault);
+            }
+        });
     }
 
 }

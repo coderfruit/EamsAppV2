@@ -1,5 +1,6 @@
 package com.grandhyatt.snowbeer.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -120,7 +121,7 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
 
         ButterKnife.bind(this);
 
-        dropDownMenu = (DropDownMenuView)findViewById(R.id.dropDownMenu);
+        dropDownMenu = (DropDownMenuView) findViewById(R.id.dropDownMenu);
 
         initView();
         bindEvent();
@@ -141,9 +142,9 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
                 break;
             case R.id.mBt_Clear://取消
 
-                if(!dropDownMenu.isOpen()){
+                if (!dropDownMenu.isOpen()) {
                     dropDownMenu.open();
-                }else{
+                } else {
                     dropDownMenu.close();
                 }
 //                _SelectedEquipmentType = null;
@@ -169,7 +170,16 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
 
                 break;
             case R.id.mTv_Dept://部门
-
+                if (_DepartmentList == null || _DepartmentList.size() == 0) {
+                    if (_SelectedCorp != null) {
+                        getDepartmentInfo(_SelectedCorp.getID());
+                    } else {
+                        CorporationEntity corpEntity = SPUtils.getLastLoginUserCorporation(this);
+                        if (corpEntity != null) {
+                            getDepartmentInfo(corpEntity.getID());
+                        }
+                    }
+                }
                 showSelectDialog(new SelectDialog.SelectDialogListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -293,9 +303,9 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
         mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
                                                   @Override
                                                   public void onClick(View v) {
-                                                      if(!dropDownMenu.isOpen()){
+                                                      if (!dropDownMenu.isOpen()) {
                                                           dropDownMenu.open();
-                                                      }else{
+                                                      } else {
                                                           dropDownMenu.close();
                                                       }
                                                   }
@@ -324,6 +334,18 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
                 requestNetworkData();
             }
         });
+
+        mLv_DataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView mTv_ID = (TextView) view.findViewById(R.id.mTv_ID);
+
+                Intent intent = new Intent(AssayQueryActivity.this, AssayUseActivity.class);
+                intent.putExtra("mTv_ID", mTv_ID.getText().toString());
+                startActivityForResult(intent,RESULT_REPORT_COMPLETE_ACTIVITY);
+            }
+        });
+
     }
 
     @Override
@@ -347,28 +369,28 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
             request.setCorpID(_SelectedCorp.getID());
         }
 
-        if(_SelectedDept != null){
+        if (_SelectedDept != null) {
             request.setDeptID(_SelectedDept.getID());
         }
 
-        if(_SelectedEquipmentType != null){
+        if (_SelectedEquipmentType != null) {
             request.setEquipTypeID(_SelectedEquipmentType.getID());
         }
 
-        if(!mTv_UseState.getText().toString().equals("使用状况")){
+        if (!mTv_UseState.getText().toString().equals("使用状况")) {
             request.setUseState(mTv_UseState.getText().toString());
         }
 
-        if(mEt_EquipInfo.getText().toString().length() > 0){
+        if (mEt_EquipInfo.getText().toString().length() > 0) {
             request.setEquipInfo(mEt_EquipInfo.getText().toString());
         }
-        if(mEt_Location.getText().toString().length() > 0){
+        if (mEt_Location.getText().toString().length() > 0) {
             request.setLocation(mEt_Location.getText().toString());
         }
-        if(mEt_Keeper.getText().toString().length() > 0){
+        if (mEt_Keeper.getText().toString().length() > 0) {
             request.setKeeper(mEt_Keeper.getText().toString());
         }
-        if(mEt_Manu.getText().toString().length() > 0){
+        if (mEt_Manu.getText().toString().length() > 0) {
             request.setManu(mEt_Manu.getText().toString());
         }
 
@@ -400,7 +422,7 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
                 //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
                 if (data == null) {
                     mRefreshLayout.finishLoadMoreWithNoMoreData();
-                    ToastUtils.showLongToast(AssayQueryActivity.this,"没有更多数据了！");
+                    ToastUtils.showLongToast(AssayQueryActivity.this, "没有更多数据了！");
                 }
                 //判断是否是加载更多
                 if (data != null && mIsLoadMore) {
@@ -437,11 +459,18 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+
+    }
+
     /**
      * 获取组织机构下的部门信息
      *
      * @param corporationID
      */
+
     private void getDepartmentInfo(String corporationID) {
         SoapUtils.getDepartment(AssayQueryActivity.this, corporationID, new SoapListener() {
             @Override
