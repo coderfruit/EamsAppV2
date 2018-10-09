@@ -1,9 +1,12 @@
 package com.grandhyatt.snowbeer.view.activity;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -41,25 +44,34 @@ import q.rorbin.badgeview.QBadgeView;
  * Created by ycm on 2018/9/30.
  */
 
-public class EquipRoutingInspectionActivity  extends com.grandhyatt.snowbeer.view.activity.ActivityBase implements IActivityBase {
+public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view.activity.ActivityBase implements IActivityBase {
     @BindView(R.id.mToolBar)
     ToolBarLayout mToolBar;
 
     @BindView(R.id.mSearchBar)
     SearchBarLayout mSearchBar;
 
-    @BindView(R.id.mBt_WarningInfo)
-    Button mBt_WarningInfo;
+    @BindView(R.id.mBt_WarningInfo_Repair)
+    Button mBt_WarningInfo_Repair;//维修预警
+    @BindView(R.id.mBt_WarningInfo_Mainten)
+    Button mBt_WarningInfo_Mainten;//保养预警
+    @BindView(R.id.mBt_WarningInfo_Inspect)
+    Button mBt_WarningInfo_Inspect;//检验预警
+    @BindView(R.id.mBt_WarningInfo_Replace)
+    Button mBt_WarningInfo_Replace;//备件更换预警
+    @BindView(R.id.mBt_WarningInfo_RepairEx)
+    Button mBt_WarningInfo_RepairEx;//外委维修预警
     @BindView(R.id.mBt_faultRptInfo)
-    Button mBt_faultRptInfo;
+    Button mBt_faultRptInfo;//报修预警
+
     @BindView(R.id.mBt_Repair)
-    Button mBt_Repair;
+    Button mBt_Repair;      //去维修
     @BindView(R.id.mBt_Mainten)
-    Button mBt_Mainten;
+    Button mBt_Mainten; //去保养
     @BindView(R.id.mBt_Inspect)
-    Button mBt_Inspect;
+    Button mBt_Inspect; //去检验
     @BindView(R.id.mBt_RepairEx)
-    Button mBt_RepairEx;
+    Button mBt_RepairEx; //去外委维修
 
     BroadcastReceiver mReceiver;
     IntentFilter mFilter;
@@ -67,6 +79,7 @@ public class EquipRoutingInspectionActivity  extends com.grandhyatt.snowbeer.vie
      * 设备信息
      */
     EquipmentEntity _EquipmentData;
+
     @BindView(R.id.mTv_EquipName)
     TextView mTv_EquipName;
     @BindView(R.id.mTv_EquipCorp)
@@ -82,8 +95,21 @@ public class EquipRoutingInspectionActivity  extends com.grandhyatt.snowbeer.vie
     @BindView(R.id.mIv_EquipImg)
     ImageView mIv_EquipImg;
 
-    Badge bDg_WarningInfo;
+    Badge bDg_WarningInfo_Repair;
+    Badge bDg_WarningInfo_Mainten;
+    Badge bDg_WarningInfo_Inspect;
+    Badge bDg_WarningInfo_Replace;
+    Badge bDg_WarningInfo_RepairEx;
     Badge bDg_faultRptInfo;
+
+
+    public static final int REPAIAR_OPERATE_AFTER = 10001;//维修操作之后
+    public static final int MAINTEN_OPERATE_AFTER = 10002;//保养操作之后
+    public static final int INSPECT_OPERATE_AFTER = 10003;//检验操作之后
+    public static final int REPLACE_OPERATE_AFTER = 10004;//备件更换操作之后
+    public static final int REPAIR_EX_OPERATE_AFTER = 10005;//外委维修之后
+    public static final int FAULT_REPORT_OPERATE_AFTER = 10006;//报修查看操作之后
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +135,11 @@ public class EquipRoutingInspectionActivity  extends com.grandhyatt.snowbeer.vie
         mReceiver = mSearchBar.getBroadcastReceiver();
         mFilter = mSearchBar.getFilter();
 
-        bDg_WarningInfo = new QBadgeView(this).bindTarget(mBt_WarningInfo);
+        bDg_WarningInfo_Repair = new QBadgeView(this).bindTarget(mBt_WarningInfo_Repair);
+        bDg_WarningInfo_Mainten = new QBadgeView(this).bindTarget(mBt_WarningInfo_Mainten);
+        bDg_WarningInfo_Inspect = new QBadgeView(this).bindTarget(mBt_WarningInfo_Inspect);
+        bDg_WarningInfo_Replace = new QBadgeView(this).bindTarget(mBt_WarningInfo_Replace);
+        bDg_WarningInfo_RepairEx = new QBadgeView(this).bindTarget(mBt_WarningInfo_RepairEx);
         bDg_faultRptInfo = new QBadgeView(this).bindTarget(mBt_faultRptInfo);
 
     }
@@ -133,6 +163,84 @@ public class EquipRoutingInspectionActivity  extends com.grandhyatt.snowbeer.vie
                 SearchBarcode(barcode);
 
                 return false;
+            }
+        });
+        //维修预警
+        mBt_WarningInfo_Repair.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (_EquipmentData != null) {
+                    Intent intent = new Intent(EquipRoutingInspectionActivity.this, WarningInfo_EquipRepairActivity.class);
+                    intent.putExtra("equipID", _EquipmentData.getID());
+                    startActivityForResult(intent,REPAIAR_OPERATE_AFTER);
+                } else {
+                    ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
+                }
+            }
+        });
+        //保养预警
+        mBt_WarningInfo_Mainten.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (_EquipmentData != null) {
+                    Intent intent = new Intent(EquipRoutingInspectionActivity.this, WarningInfo_EquipMaintenActivity.class);
+                    intent.putExtra("equipID", _EquipmentData.getID());
+                    startActivityForResult(intent,MAINTEN_OPERATE_AFTER);
+                } else {
+                    ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
+                }
+            }
+        });
+        //检验预警
+        mBt_WarningInfo_Inspect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (_EquipmentData != null) {
+                    Intent intent = new Intent(EquipRoutingInspectionActivity.this, WarningInfo_EquipInspectionActivity.class);
+                    intent.putExtra("equipID", _EquipmentData.getID());
+                    startActivityForResult(intent,INSPECT_OPERATE_AFTER);
+                } else {
+                    ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
+                }
+            }
+        });
+        //备件更换预警
+        mBt_WarningInfo_Replace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (_EquipmentData != null) {
+                    Intent intent = new Intent(EquipRoutingInspectionActivity.this, WarningInfo_EquipSpareReplaceActivity.class);
+                    intent.putExtra("equipID", _EquipmentData.getID());
+                    startActivityForResult(intent,REPLACE_OPERATE_AFTER);
+                } else {
+                    ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
+                }
+            }
+        });
+        //外委维修
+        mBt_WarningInfo_RepairEx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (_EquipmentData != null) {
+                    Intent intent = new Intent(EquipRoutingInspectionActivity.this, WarningInfo_EquipRepairExActivity.class);
+                    intent.putExtra("equipID", _EquipmentData.getID());
+                    startActivityForResult(intent,REPAIR_EX_OPERATE_AFTER);
+                } else {
+                    ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
+                }
+            }
+        });
+        //报修预警
+        mBt_faultRptInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (_EquipmentData != null) {
+                    Intent intent = new Intent(EquipRoutingInspectionActivity.this, FaultReport_Mgr_Activity.class);
+                    intent.putExtra("equipID", _EquipmentData.getID());
+                    startActivityForResult(intent,FAULT_REPORT_OPERATE_AFTER);
+                } else {
+                    ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
+                }
             }
         });
     }
@@ -261,8 +369,12 @@ public class EquipRoutingInspectionActivity  extends com.grandhyatt.snowbeer.vie
         }
     }
 
-    private void getEquipWarinigInfo(String equipID)
-    {
+    /**
+     * 获取设备预警信息
+     *
+     * @param equipID
+     */
+    private void getEquipWarinigInfo(String equipID) {
         SoapUtils.getWarningInfo_Equip(EquipRoutingInspectionActivity.this, equipID, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
@@ -289,7 +401,7 @@ public class EquipRoutingInspectionActivity  extends com.grandhyatt.snowbeer.vie
                     return;
                 }
                 WarningInfoCountEntity data = result.getData();
-                if(data != null) {
+                if (data != null) {
                     initWarningInfoCount(data);
                 }
             }
@@ -313,21 +425,56 @@ public class EquipRoutingInspectionActivity  extends com.grandhyatt.snowbeer.vie
      * 初始化预警消息消息条数
      */
     private void initWarningInfoCount(WarningInfoCountEntity data) {
-        if(data != null) {
+        if (data != null) {
             int iRpCnt = data.getEquipRepairPlanCount();
             int iMtnCnt = data.getEquipMaintenPlanCount();
             int iIspCnt = data.getEquipInspectPlanCount();
             int iSpRpCnt = data.getEquipSpareReplacePlanCount();
             int iRpExCnt = data.getEquipRepairExPlanCount();
 
-            int iWarnAllCnt = iRpCnt + iMtnCnt + iIspCnt + iSpRpCnt + iRpExCnt;
+            bDg_WarningInfo_Repair.setBadgeNumber(iRpCnt);
+            bDg_WarningInfo_Mainten.setBadgeNumber(iMtnCnt);
+            bDg_WarningInfo_Inspect.setBadgeNumber(iIspCnt);
+            bDg_WarningInfo_Replace.setBadgeNumber(iSpRpCnt);
+            bDg_WarningInfo_RepairEx.setBadgeNumber(iRpExCnt);
 
-            bDg_WarningInfo.setBadgeNumber(iWarnAllCnt);
             bDg_faultRptInfo.setBadgeNumber(data.getReportFaultCount());
-        }else{
-            bDg_WarningInfo.setBadgeNumber(0);
+        } else {
+            bDg_WarningInfo_Repair.setBadgeNumber(0);
+            bDg_WarningInfo_Mainten.setBadgeNumber(0);
+            bDg_WarningInfo_Inspect.setBadgeNumber(0);
+            bDg_WarningInfo_Replace.setBadgeNumber(0);
+            bDg_WarningInfo_RepairEx.setBadgeNumber(0);
             bDg_faultRptInfo.setBadgeNumber(0);
         }
     }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(_EquipmentData == null)
+            return;
+
+        switch (requestCode) {
+            case REPAIAR_OPERATE_AFTER://维修之后
+                getEquipWarinigInfo(_EquipmentData.getID());
+                break;
+            case MAINTEN_OPERATE_AFTER://保养之后
+                getEquipWarinigInfo(_EquipmentData.getID());
+                break;
+            case INSPECT_OPERATE_AFTER://检验之后
+                getEquipWarinigInfo(_EquipmentData.getID());
+                break;
+            case REPLACE_OPERATE_AFTER://更换之后
+                getEquipWarinigInfo(_EquipmentData.getID());
+                break;
+            case REPAIR_EX_OPERATE_AFTER://外委维修之后
+                getEquipWarinigInfo(_EquipmentData.getID());
+                break;
+            case FAULT_REPORT_OPERATE_AFTER://报修查看之后
+                getEquipWarinigInfo(_EquipmentData.getID());
+                break;
+            default:
+                break;
+        }
+    }
 }

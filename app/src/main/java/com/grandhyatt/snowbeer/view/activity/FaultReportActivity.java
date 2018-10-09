@@ -1,8 +1,10 @@
 package com.grandhyatt.snowbeer.view.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
@@ -145,6 +147,8 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
     Button mBtn_Inspect;
     @BindView(R.id.mBtn_RepairEx)
     Button mBtn_RepairEx;
+    @BindView(R.id.mBtn_Close)
+    Button mBtn_Close;
 
     /**
      * 使用照相机拍照获取图片
@@ -222,7 +226,7 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
             zz_image_box_add_mode.setVisibility(View.GONE);
             mGv_Show_Imgs.setVisibility(View.VISIBLE);
 
-            if(isMgr != null && isMgr.length() > 0){
+            if (isMgr != null && isMgr.length() > 0) {
                 mLl_Mgr.setVisibility(View.VISIBLE);
                 mToolBar.setTitle("处理报修");
             }
@@ -237,7 +241,6 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 
         }
     }
-
 
 
     @Override
@@ -269,20 +272,59 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         int id = v.getId();
         switch (id) {
             case R.id.mBtn_Repair://维修
-                ToastUtils.showLongToast(FaultReportActivity.this,"维修");
+                ToastUtils.showLongToast(FaultReportActivity.this, "维修");
                 //todo
                 break;
             case R.id.mBtn_Mainten://保养
-                ToastUtils.showLongToast(FaultReportActivity.this,"保养");
+                ToastUtils.showLongToast(FaultReportActivity.this, "保养");
                 //todo
                 break;
             case R.id.mBtn_Inspect://检验
-                ToastUtils.showLongToast(FaultReportActivity.this,"检验");
+                ToastUtils.showLongToast(FaultReportActivity.this, "检验");
                 //todo
                 break;
             case R.id.mBtn_RepairEx://外委维修
-                ToastUtils.showLongToast(FaultReportActivity.this,"外委维修");
+                ToastUtils.showLongToast(FaultReportActivity.this, "外委维修");
                 //todo
+                break;
+            case R.id.mBtn_Close://关闭报修
+                if (_ReportEntity == null) {
+                    return;
+                }
+
+                final EditText inputContrl = new EditText(FaultReportActivity.this);
+                inputContrl.setFocusable(true);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(FaultReportActivity.this);
+                builder.setTitle("请输入关闭理由")
+                        .setIcon(R.drawable.logo32)
+                        .setView(inputContrl)
+                        .setNegativeButton("取消", null);
+                builder.setPositiveButton("确定",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                final String strComment  = inputContrl.getText().toString();
+                                if(strComment == null || strComment.trim().length() == 0){
+                                    ToastUtils.showLongToast(FaultReportActivity.this,"请输入关闭理由");
+                                    return;
+                                }
+                                String failureReportID = String.valueOf(_ReportEntity.getID());
+                                String status =  Consts.EnumFailureStatus.已关闭.toString();//处理状态
+                                String OperateResult = Consts.EnumFailureResult.已关闭.toString();//处理结果
+                                String OperateID = null;//操作单据ID
+                                String OperateDesc = "报修被关闭";//操作描述
+                                String remark = "[关闭理由：" + strComment + "]";//备注
+
+                                ModifyFaultReport(failureReportID, status, OperateResult, OperateID, OperateDesc, remark);
+
+                            }
+                        });
+                builder.show();
+
+
+
+
                 break;
             default:
                 break;
@@ -440,14 +482,14 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         mGv_Show_Imgs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                  //通过自定义图片显示控件显示图片
+                //通过自定义图片显示控件显示图片
 //                Intent intent = new Intent(FaultReportActivity.this, ImageViewerActivity.class);
 //                intent.putExtra("imgPath", filePath);
 //                intent.putExtra("title", "报修图片" + position);
 //                startActivity(intent);
 
                 //调用系统图片浏览器显示
-                Uri mUri = (Uri)mGv_Show_Imgs.getAdapter().getItem(position);
+                Uri mUri = (Uri) mGv_Show_Imgs.getAdapter().getItem(position);
 
                 Intent it = new Intent(Intent.ACTION_VIEW);
                 it.setDataAndType(mUri, "image/*");
@@ -459,7 +501,7 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         mBtn_Mainten.setOnClickListener(this);
         mBtn_Inspect.setOnClickListener(this);
         mBtn_RepairEx.setOnClickListener(this);
-
+        mBtn_Close.setOnClickListener(this);
     }
 
     @Override
@@ -751,7 +793,6 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 
             }
         });
-
 
 
     }
@@ -1148,8 +1189,8 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 
                     _ReportFileEntitys = _ReportEntity.getFailureReportingAttachmentModelList();
 
-                    for(FailureReportingAttachmentEntity file : _ReportFileEntitys){
-                        String filePath = getFilePath(_ReportEntity ,file);
+                    for (FailureReportingAttachmentEntity file : _ReportFileEntitys) {
+                        String filePath = getFilePath(_ReportEntity, file);
                         zz_image_box_add_mode.addImage(filePath);
 
                     }
@@ -1176,6 +1217,7 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 
     /**
      * 获取附件数据信息
+     *
      * @param files
      */
     private void getReportFiles(final List<FailureReportingAttachmentEntity> files) {
@@ -1183,85 +1225,83 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         final List<Uri> bpPathlist = new ArrayList<>();
 
         final int[] idx = {0};
-        for (final FailureReportingAttachmentEntity file : files)
-        {
-              //获取附件数据
-              SoapUtils.getFileDataAsync(FaultReportActivity.this, file.getFileGuid(), new SoapListener() {
-                  @Override
-                  public void onSuccess(int statusCode, SoapObject object) {
+        for (final FailureReportingAttachmentEntity file : files) {
+            //获取附件数据
+            SoapUtils.getFileDataAsync(FaultReportActivity.this, file.getFileGuid(), new SoapListener() {
+                @Override
+                public void onSuccess(int statusCode, SoapObject object) {
 
-                      dismissLoadingDialog();
-                      if (object == null) {
-                          ToastUtils.showLongToast(FaultReportActivity.this, "1获取附件信息数据失败" + statusCode);
-                          return;
-                      }
-                      //判断接口连接是否成功
-                      if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
-                          ToastUtils.showLongToast(FaultReportActivity.this, "2获取附件信息数据失败" + statusCode);
-                          return;
-                      }
-                      //接口返回信息正常
-                      String strData = object.getPropertyAsString(0);
-                      StringResult result = new Gson().fromJson(strData, StringResult.class);
+                    dismissLoadingDialog();
+                    if (object == null) {
+                        ToastUtils.showLongToast(FaultReportActivity.this, "1获取附件信息数据失败" + statusCode);
+                        return;
+                    }
+                    //判断接口连接是否成功
+                    if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                        ToastUtils.showLongToast(FaultReportActivity.this, "2获取附件信息数据失败" + statusCode);
+                        return;
+                    }
+                    //接口返回信息正常
+                    String strData = object.getPropertyAsString(0);
+                    StringResult result = new Gson().fromJson(strData, StringResult.class);
 
-                      String filePath = getFilePath(_ReportEntity ,file);
-                      String base64Str = result.data;
+                    String filePath = getFilePath(_ReportEntity, file);
+                    String base64Str = result.data;
 
-                      byte[] btFile = CommonUtils.base64ToByte(base64Str);
+                    byte[] btFile = CommonUtils.base64ToByte(base64Str);
 
-                      if(file.getAttachmentType().equals("图片")) {
-                          try {
-                              CommonUtils.encodeBase64ToFile(btFile,filePath);
-                              Uri mUri = CommonUtils.getPathUri(filePath);
-                              bpPathlist.add(mUri);
+                    if (file.getAttachmentType().equals("图片")) {
+                        try {
+                            CommonUtils.encodeBase64ToFile(btFile, filePath);
+                            Uri mUri = CommonUtils.getPathUri(filePath);
+                            bpPathlist.add(mUri);
 
-                          } catch (Exception e) {
-                              e.printStackTrace();
-                          }
-                      }
-                      else
-                      {
-                          try {
-                              CommonUtils.encodeBase64ToFile(btFile,filePath);
-                              _mVoiceFilePath = filePath;
-                              mIbtn_Voice.setVisibility(View.VISIBLE);
-                          } catch (Exception e) {
-                              e.printStackTrace();
-                          }
-                      }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        try {
+                            CommonUtils.encodeBase64ToFile(btFile, filePath);
+                            _mVoiceFilePath = filePath;
+                            mIbtn_Voice.setVisibility(View.VISIBLE);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
 
-                      idx[0]++;
-                      if(idx[0] == files.size()) {
-                          final ShowImagesAdapter mlvAdapter = new ShowImagesAdapter(FaultReportActivity.this, bpPathlist);
-                          mGv_Show_Imgs.setAdapter(mlvAdapter);
-                      }
+                    idx[0]++;
+                    if (idx[0] == files.size()) {
+                        final ShowImagesAdapter mlvAdapter = new ShowImagesAdapter(FaultReportActivity.this, bpPathlist);
+                        mGv_Show_Imgs.setAdapter(mlvAdapter);
+                    }
 
-                  }
+                }
 
-                  @Override
-                  public void onFailure(int statusCode, String content, Throwable error) {
-                      idx[0]++;
-                      if(idx[0] == files.size()) {
-                          final ShowImagesAdapter mlvAdapter = new ShowImagesAdapter(FaultReportActivity.this, bpPathlist);
-                          mGv_Show_Imgs.setAdapter(mlvAdapter);
-                      }
-                  }
+                @Override
+                public void onFailure(int statusCode, String content, Throwable error) {
+                    idx[0]++;
+                    if (idx[0] == files.size()) {
+                        final ShowImagesAdapter mlvAdapter = new ShowImagesAdapter(FaultReportActivity.this, bpPathlist);
+                        mGv_Show_Imgs.setAdapter(mlvAdapter);
+                    }
+                }
 
-                  @Override
-                  public void onFailure(int statusCode, SoapFault fault) {
-                      idx[0]++;
-                      if(idx[0] == files.size()) {
-                          final ShowImagesAdapter mlvAdapter = new ShowImagesAdapter(FaultReportActivity.this, bpPathlist);
-                          mGv_Show_Imgs.setAdapter(mlvAdapter);
-                      }
-                  }
-              });
+                @Override
+                public void onFailure(int statusCode, SoapFault fault) {
+                    idx[0]++;
+                    if (idx[0] == files.size()) {
+                        final ShowImagesAdapter mlvAdapter = new ShowImagesAdapter(FaultReportActivity.this, bpPathlist);
+                        mGv_Show_Imgs.setAdapter(mlvAdapter);
+                    }
+                }
+            });
         }
 
     }
 
     /**
      * 获取文件路径
+     *
      * @param entity
      * @param file
      * @return
@@ -1271,6 +1311,65 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         String publicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
         String rptNO = entity.getReportNO();
         return publicDir + "/" + rptNO + "/" + file.getFileGuid() + "." + file.getFileType();
+    }
+
+    /**
+     * 修改报修信息
+     * @param failureReportID 故障ID
+     * @param status 处理状态(待审核，待处理，已处理)
+     * @param operateResult 处理结果(已关闭、已维修、已保养、已检验)
+     * @param operateID 操作单据ID可为空(维修主表ID、保养主表ID、检验主表ID)
+     * @param operateDesc 操作描述，或记录处理的单号（维修主表BillNO、保养主表BillNO、检验主表BillNO）
+     * @param remark 记录关闭理由或其他
+     */
+    private void ModifyFaultReport(String failureReportID, String status, String operateResult, String operateID, String operateDesc, String remark) {
+        SoapUtils.modifyFailureReportingAsync(FaultReportActivity.this, failureReportID, status, operateResult, operateID, operateDesc, remark, new SoapListener() {
+            @Override
+            public void onSuccess(int statusCode, SoapObject object) {
+                dismissLoadingDialog();
+
+                if (null == object) {
+                    ToastUtils.showLongToast(FaultReportActivity.this, "接口连接失败");
+                    return;
+                }
+                //------------------------------
+                //判断接口连接是否成功
+                if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                    ToastUtils.showLongToast(FaultReportActivity.this, "接口连接失败！");
+                    return;
+                }
+                //接口返回信息正常
+                String strData = object.getPropertyAsString(0);
+                Result result = new Gson().fromJson(strData, Result.class);
+                //校验接口返回代码
+                if (result == null) {
+                    ToastUtils.showLongToast(FaultReportActivity.this, "接口返回信息异常");
+                    return;
+                } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                    ToastUtils.showLongToast(FaultReportActivity.this, result.msg);
+                    return;
+                }
+                CommonUtils.playMusic(FaultReportActivity.this);
+                ToastUtils.showToast(FaultReportActivity.this, "报修关闭成功！");
+                finish();
+            }
+
+            @Override
+            public void onFailure(int statusCode, String content, Throwable error) {
+                dismissLoadingDialog();
+                ToastUtils.showLongToast(FaultReportActivity.this, "接口访问异常，请重试");
+            }
+
+            @Override
+            public void onFailure(int statusCode, SoapFault fault) {
+                dismissLoadingDialog();
+                if (fault != null) {
+                    ToastUtils.showLongToast(FaultReportActivity.this, fault.toString());
+                } else {
+                    ToastUtils.showLongToast(FaultReportActivity.this, "接口访问失败，请重试");
+                }
+            }
+        });
     }
 
 }

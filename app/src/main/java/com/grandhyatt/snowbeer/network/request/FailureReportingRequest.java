@@ -22,8 +22,17 @@ public class FailureReportingRequest {
     private String Status;
     private String OperateResult;
     private String ReportUser;
+    private String CorpID;      //报修信息所属工厂
 
     public FailureReportingRequest() {
+    }
+
+    public String getCorpID() {
+        return CorpID;
+    }
+
+    public void setCorpID(String corpID) {
+        this.CorpID = corpID;
     }
 
     public String getID() {

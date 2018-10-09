@@ -404,6 +404,7 @@ public class SoapUtils {
 		params.put("rptUser",request.getReportUser());
 		params.put("linkUser",request.getLinkUser());
 		params.put("currentLastIdx",request.getCurrentLastIdx());
+		params.put("corpID",request.getCorpID());
 
 		SoapUtils.getInstance(context).call(methodName,params,callback);
 	}
@@ -842,4 +843,131 @@ public class SoapUtils {
 
 		SoapUtils.getInstance(context).call(methodName,params,callback);
 	}
+
+	/**
+	 * 修改报修状态
+	 * @param context
+	 * @param failureReportID
+	 * @param status 处理状态(待审核，待处理，已处理)
+	 * @param OperateResult 处理结果(已关闭、已维修、已保养、已检验)
+	 * @param OperateID 操作ID可为空(维修主表ID、保养主表ID、检验主表ID)
+	 * @param OperateDesc 操作描述，或记录处理的单号（维修主表BillNO、保养主表BillNO、检验主表BillNO）
+	 * @param callback
+	 */
+	public static void modifyFailureReportingAsync(final Context context, String failureReportID, String status, String OperateResult, String OperateID, String OperateDesc,  String remark, final SoapListener callback){
+
+		final String url = getHostUrl();
+		String methodName = "ModifyFailureReporting";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("failureReportID",failureReportID);
+		params.put("status",status);
+		params.put("OperateResult",OperateResult);
+		params.put("OperateID",OperateID);
+		params.put("OperateDesc",OperateDesc);
+		params.put("remark",remark);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+
+	}
+
+	/**
+	 * 获取设备维修预警消息条数
+	 * @param context
+	 * @param equipID
+	 * @param callback
+	 */
+	public static void getRepairmentPlan_Equip(final Context context, String equipID, String currentLastIdx,  final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetRepairmentPlan_Equip";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+		params.put("currentLastIdx",currentLastIdx);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
+
+	/**
+	 * 获取设备保养预警消息条数
+	 * @param context
+	 * @param equipID
+	 * @param callback
+	 */
+	public static void getMaintenancePlan_Equip(final Context context, String equipID, String currentLastIdx,  final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetMaintenancePlan_Equip";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+		params.put("currentLastIdx",currentLastIdx);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
+
+	/**
+	 * 获取设备检验预警消息条数
+	 * @param context
+	 * @param equipID
+	 * @param callback
+	 */
+	public static void getInspectionPlan_Equip(final Context context, String equipID, String currentLastIdx,  final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetInspectionPlan_Equip";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+		params.put("currentLastIdx",currentLastIdx);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
+
+	/**
+	 * 获取设备备件更换预警消息条数
+	 * @param context
+	 * @param equipID
+	 * @param callback
+	 */
+	public static void getSpareReplaceInfo_Equip(final Context context, String equipID, String currentLastIdx,  final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetSpareReplaceInfo_Equip";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+		params.put("currentLastIdx",currentLastIdx);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
+
+	/**
+	 * 获取设备外委维修预警消息条数
+	 * @param context
+	 * @param equipID
+	 * @param callback
+	 */
+	public static void getRepairmentPlanEx_Equip(final Context context, String equipID, String currentLastIdx,  final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetRepairmentPlanEx_Equip";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+		params.put("currentLastIdx",currentLastIdx);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
+
+
+
+
+
+
+
+
+
 }

@@ -406,13 +406,13 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
                 dismissLoadingDialog();
 
                 if(null == object){
-                    ToastUtils.showLongToast(AssayUseActivity.this,getString(R.string.activity_update_password_fail));
+                    ToastUtils.showLongToast(AssayUseActivity.this,"接口连接失败");
                     return;
                 }
                 //------------------------------
                 //判断接口连接是否成功
                 if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
-                    ToastUtils.showLongToast(AssayUseActivity.this, getString(R.string.activity_update_password_fail_param, "接口连接失败！"));
+                    ToastUtils.showLongToast(AssayUseActivity.this, "接口连接失败！");
                     return;
                 }
                 //接口返回信息正常
@@ -421,11 +421,11 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
                 //校验接口返回代码
                 if(result == null)
                 {
-                    ToastUtils.showLongToast(AssayUseActivity.this, getString(R.string.activity_update_password_fail_param, "接口返回信息异常"));
+                    ToastUtils.showLongToast(AssayUseActivity.this, "接口返回信息异常");
                     return;
                 }
                 else if(result.code != Result.RESULT_CODE_SUCCSED){
-                    ToastUtils.showLongToast(AssayUseActivity.this, getString(R.string.activity_update_password_fail_param, result.msg));
+                    ToastUtils.showLongToast(AssayUseActivity.this, result.msg);
                     return;
                 }
                 CommonUtils.playMusic(AssayUseActivity.this);
@@ -436,18 +436,18 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
             @Override
             public void onFailure(int statusCode, String content, Throwable error) {
                 dismissLoadingDialog();
-                ToastUtils.showLongToast(AssayUseActivity.this,getString(R.string.activity_update_password_fail));
+                ToastUtils.showLongToast(AssayUseActivity.this,"接口访问异常，请重试");
             }
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
                 dismissLoadingDialog();
                 if(fault != null) {
-                    ToastUtils.showLongToast(AssayUseActivity.this, getString(R.string.activity_update_password_fail) + fault.toString());
+                    ToastUtils.showLongToast(AssayUseActivity.this,  fault.toString());
                 }
                 else
                 {
-                    ToastUtils.showLongToast(AssayUseActivity.this, getString(R.string.activity_update_password_fail));
+                    ToastUtils.showLongToast(AssayUseActivity.this, "接口访问失败，请重试");
                 }
             }
         });

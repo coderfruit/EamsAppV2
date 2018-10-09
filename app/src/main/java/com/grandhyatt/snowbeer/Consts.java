@@ -59,6 +59,8 @@ public class Consts {
      */
     public static final int CAMERA_BARCODE_SCAN = 49374;
 
+    //----------------------------------------------------------------
+    //资产类别
     /**
      * 1	生产设备类
      */
@@ -87,7 +89,28 @@ public class Consts {
      * 8	化学仪器类
      */
     public static final String AssetType_Chemical = "8";
+    //------------------------------------------------------------------
 
+    /**
+     * 故障报修状态
+      */
+    public enum EnumFailureStatus
+    {
+        待审核,
+        待处理,
+        已处理,
+        已关闭
+    }
+    /**
+     * 故障报修结果
+     */
+    public enum EnumFailureResult {
+        已关闭,
+        已维修,
+        已保养,
+        已检验,
+        已外委维修
+    }
 
     /**
      * 数据字典

@@ -413,8 +413,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
                 <!-- 维修、保养-->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -425,20 +424,20 @@
                     <Button
                         android:id="@+id/mBtn_Repair"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
+                        android:layout_weight="1"
                         android:background="@drawable/ic_login_button_true"
                         android:text="维修" />
 
                     <Button
                         android:id="@+id/mBtn_Mainten"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
+                        android:layout_weight="1"
                         android:background="@drawable/ic_login_button_true"
                         android:text="保养" />
                 </LinearLayout>
@@ -452,23 +451,41 @@
                     <Button
                         android:id="@+id/mBtn_Inspect"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
+                        android:layout_weight="1"
                         android:background="@drawable/ic_login_button_true"
                         android:text="检验" />
 
                     <Button
                         android:id="@+id/mBtn_RepairEx"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
+                        android:layout_weight="1"
                         android:background="@drawable/ic_login_button_true"
                         android:text="外委维修" />
                 </LinearLayout>
+                <!--关闭报修-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/mBtn_Close"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/ic_login_button_true"
+                        android:text="关闭报修" />
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
