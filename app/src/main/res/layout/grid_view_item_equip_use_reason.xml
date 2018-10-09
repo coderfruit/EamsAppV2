@@ -15,12 +15,13 @@
     <TextView
         android:id="@+id/mTv_Desc"
         android:layout_width="wrap_content"
-        android:layout_height="90dp"
+        android:layout_height="60dp"
         android:layout_gravity="center"
         android:layout_marginTop="3dp"
         android:gravity="center"
         android:text="Name"
+        android:background="@drawable/ic_login_true"
         android:textColor="@android:color/black"
-        android:textSize="20sp" />
+        android:textSize="15sp" />
 
 </LinearLayout>

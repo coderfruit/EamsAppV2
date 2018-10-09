@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -154,6 +155,21 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
                     ToastUtils.showToast(AssayUseActivity.this, "无图片需显示");
                 }
                 return false;
+            }
+        });
+
+        //事由点击事件
+        mGv_Datas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                HashMap<String,String> map=(HashMap<String,String>)mGv_Datas.getItemAtPosition(position);
+
+                if(_EquipmentData != null && map != null){
+                    String useReason = map.get("mTv_Desc");
+                    addAssayEquipUseRecord(_EquipmentData.getID(), useReason);
+                }
+
             }
         });
     }
@@ -358,6 +374,68 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
             data_list.add(map);
         }
         return data_list;
+    }
+
+    /**
+     * 添加化学仪器使用记录
+     * @param equipID
+     * @param useReason
+     */
+    private void addAssayEquipUseRecord(String equipID, final String useReason)
+    {
+        showLogingDialog();
+        SoapUtils.addAssayEquipUseRecordAsync(AssayUseActivity.this, equipID, useReason, new SoapListener() {
+            @Override
+            public void onSuccess(int statusCode, SoapObject object) {
+                dismissLoadingDialog();
+
+                if(null == object){
+                    ToastUtils.showLongToast(AssayUseActivity.this,getString(R.string.activity_update_password_fail));
+                    return;
+                }
+                //------------------------------
+                //判断接口连接是否成功
+                if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                    ToastUtils.showLongToast(AssayUseActivity.this, getString(R.string.activity_update_password_fail_param, "接口连接失败！"));
+                    return;
+                }
+                //接口返回信息正常
+                String strData = object.getPropertyAsString(0);
+                Result result = new Gson().fromJson(strData, Result.class);
+                //校验接口返回代码
+                if(result == null)
+                {
+                    ToastUtils.showLongToast(AssayUseActivity.this, getString(R.string.activity_update_password_fail_param, "接口返回信息异常"));
+                    return;
+                }
+                else if(result.code != Result.RESULT_CODE_SUCCSED){
+                    ToastUtils.showLongToast(AssayUseActivity.this, getString(R.string.activity_update_password_fail_param, result.msg));
+                    return;
+                }
+                CommonUtils.playMusic(AssayUseActivity.this);
+                ToastUtils.showToast(AssayUseActivity.this, useReason + " 使用记录提交成功！");
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, String content, Throwable error) {
+                dismissLoadingDialog();
+                ToastUtils.showLongToast(AssayUseActivity.this,getString(R.string.activity_update_password_fail));
+            }
+
+            @Override
+            public void onFailure(int statusCode, SoapFault fault) {
+                dismissLoadingDialog();
+                if(fault != null) {
+                    ToastUtils.showLongToast(AssayUseActivity.this, getString(R.string.activity_update_password_fail) + fault.toString());
+                }
+                else
+                {
+                    ToastUtils.showLongToast(AssayUseActivity.this, getString(R.string.activity_update_password_fail));
+                }
+            }
+        });
+
     }
 
 }

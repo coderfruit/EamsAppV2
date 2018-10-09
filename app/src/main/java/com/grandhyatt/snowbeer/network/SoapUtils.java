@@ -806,4 +806,24 @@ public class SoapUtils {
 
 		SoapUtils.getInstance(context).call(methodName, params, callback);
 	}
+
+	/**
+	 * 添加化学仪器使用记录
+	 * @param context
+	 * @param equipID
+	 * @param useReason
+	 * @param callback
+	 */
+	public static void addAssayEquipUseRecordAsync(final Context context, String equipID, String useReason, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "AddAssayEquipUseRecord";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+		params.put("useReason",useReason);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
 }

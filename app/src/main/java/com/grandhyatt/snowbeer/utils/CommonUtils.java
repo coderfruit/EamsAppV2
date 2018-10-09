@@ -1,6 +1,9 @@
 package com.grandhyatt.snowbeer.utils;
 
+import android.content.Context;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
@@ -39,6 +42,7 @@ public class CommonUtils {
         byte[] bytes = Base64.decode(base64Data, Base64.DEFAULT);
         return bytes;
     }
+
     /**
      * 将文件转成base64 字符串
      *
@@ -77,17 +81,35 @@ public class CommonUtils {
 
     /**
      * 获取文件Uri
+     *
      * @param filePath
      * @return
      */
-    public static Uri getPathUri(String filePath)
-    {
+    public static Uri getPathUri(String filePath) {
         File file = new File(filePath);
         Uri mUri = Uri.parse("file://" + file.getPath());
         return mUri;
     }
 
+    /**
+     * 播放系统提示音
+     * @param context
+     */
+    public static void playMusic(Context context) {
+        try {
+            //获取系统当前提示音打 Uri:
+            Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
+            //通过Uri 来获取提示音的实例对象:
+            Ringtone mRingtone = RingtoneManager.getRingtone(context, uri);
+
+            //播放
+            mRingtone.play();
+        } catch (Exception ex) {
+
+        }
+
+    }
 
 
 }
