@@ -181,24 +181,87 @@
                 android:background="@color/white6" />
 
             <!-- 预警按钮 -->
+            <!--维修提醒、保养提醒-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/selector_linear_layout_item_white"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/mBt_WarningInfo"
+                    android:id="@+id/mBt_WarningInfo_Repair"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/ic_login_button_true"
-                    android:text="预警信息" />
+                    android:text="维修提醒" />
+
+                <Button
+                    android:id="@+id/mBt_WarningInfo_Mainten"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_login_button_true"
+                    android:text="保养提醒" />
+
+            </LinearLayout>
+            <!--检验提醒、更换提醒-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/selector_linear_layout_item_white"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/mBt_WarningInfo_Inspect"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_login_button_true"
+                    android:text="检验提醒" />
+
+                <Button
+                    android:id="@+id/mBt_WarningInfo_Replace"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_login_button_true"
+                    android:text="更换提醒" />
+
+            </LinearLayout>
+            <!--外委维修提醒,报修提醒-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/selector_linear_layout_item_white"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/mBt_WarningInfo_RepairEx"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ic_login_button_true"
+                    android:text="外委维修提醒" />
 
                 <Button
                     android:id="@+id/mBt_faultRptInfo"
@@ -208,7 +271,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
                     android:background="@drawable/ic_login_button_true"
-                    android:text="报修信息" />
+                    android:text="报修提醒" />
 
             </LinearLayout>
 
