@@ -90,9 +90,7 @@ import io.objectbox.annotation.Convert;
 
 import static com.grandhyatt.snowbeer.Consts.CAMERA_BARCODE_SCAN;
 
-/**
- * Created by ycm on 2018/8/14.
- */
+
 
 public class RepairmentReportActivity extends ActivityBase implements IActivityBase, View.OnClickListener {
 
@@ -210,8 +208,8 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
 
         if (mTv_ReportID != null && mTv_EquipID != null) {
-            mToolBar.setTitle("查看报修信息");
-            getReport(mTv_ReportID);
+            mToolBar.setTitle("查看维修信息");
+//            getReport(mTv_ReportID);
             getEquipmentInfoByID(mTv_EquipID);
             bindEventPart();
 
@@ -219,14 +217,14 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             mSearchBar.setVisibility(View.GONE);
 
             mBtn_Submit.setVisibility(View.GONE);
-            //禁用联系人、电话输入
+
             mEt_User.setEnabled(false);
             mEt_money.setEnabled(false);
 
 
 
         } else {              //添加报修
-            mToolBar.setTitle("我要报修");
+            mToolBar.setTitle("我要维修");
             initView();
             bindEventPart();
             bindEvent();
