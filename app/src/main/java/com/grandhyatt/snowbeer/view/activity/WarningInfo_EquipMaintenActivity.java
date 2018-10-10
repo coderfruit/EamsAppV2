@@ -1,5 +1,6 @@
 package com.grandhyatt.snowbeer.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -55,6 +56,8 @@ public class WarningInfo_EquipMaintenActivity extends ActivityBase implements IA
     private boolean mIsLoadMore = false;
     private Equip_Maintence_EntityDataListAdapter mAdapter;
 
+    String _EquipID;//传入的设备ID
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +66,15 @@ public class WarningInfo_EquipMaintenActivity extends ActivityBase implements IA
 
         initView();
         bindEvent();
-        requestNetworkData();
+
+        Intent intent = getIntent();
+        _EquipID = intent.getStringExtra("equipID");
+
+        if (_EquipID != null) {  //根据设备ID 获取预警信息
+            requestNetworkDataByEquip(_EquipID);
+        }else{                   //根据组织机构获取预警信息
+            requestNetworkData();
+        }
     }
 
     @Override
@@ -85,7 +96,11 @@ public class WarningInfo_EquipMaintenActivity extends ActivityBase implements IA
                 mPageIndex = 0;
                 mIsLoadMore = false;
                 mRefreshLayout.setNoMoreData(false);
-                requestNetworkData();
+                if (_EquipID != null) {  //根据设备ID 获取预警信息
+                    requestNetworkDataByEquip(_EquipID);
+                }else{                   //根据组织机构获取预警信息
+                    requestNetworkData();
+                }
             }
         });
         /*****************************************************************************************/
@@ -95,7 +110,11 @@ public class WarningInfo_EquipMaintenActivity extends ActivityBase implements IA
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 mPageIndex++;
                 mIsLoadMore = true;
-                requestNetworkData();
+                if (_EquipID != null) {  //根据设备ID 获取预警信息
+                    requestNetworkDataByEquip(_EquipID);
+                }else{                   //根据组织机构获取预警信息
+                    requestNetworkData();
+                }
             }
         });
     }
@@ -171,5 +190,74 @@ public class WarningInfo_EquipMaintenActivity extends ActivityBase implements IA
                 }
             });
         }
+    }
+
+    /**
+     * 根据设备获取设备预警信息
+     */
+    public void requestNetworkDataByEquip(String equipID) {
+        showLogingDialog();
+        if(equipID != null) {
+            String currentLastIdx = String.valueOf(mPageIndex * mPageSize);
+            SoapUtils.getMaintenancePlan_Equip(this, equipID, currentLastIdx, new SoapListener() {
+                @Override
+                public void onSuccess(int statusCode, SoapObject object) {
+                    dismissLoadingDialog();
+                    if (object == null) {
+                        ToastUtils.showLongToast(WarningInfo_EquipMaintenActivity.this, getString(R.string.submit_soap_result_err1));
+                        return;
+                    }
+                    //判断接口连接是否成功
+                    if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                        ToastUtils.showLongToast(WarningInfo_EquipMaintenActivity.this, getString(R.string.submit_soap_result_err2));
+                        return;
+                    }
+                    //接口返回信息正常
+                    String strData = object.getPropertyAsString(0);
+                    MaintenPlanResult result = new Gson().fromJson(strData, MaintenPlanResult.class);
+                    //校验接口返回代码
+                    if (result == null) {
+                        ToastUtils.showLongToast(WarningInfo_EquipMaintenActivity.this, getString(R.string.submit_soap_result_err3));
+                        return;
+                    } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                        ToastUtils.showLongToast(WarningInfo_EquipMaintenActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
+                        return;
+                    }
+                    List<MaintenancePlanEntity> data = result.getData();
+                    //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
+                    if (data == null) {
+                        mRefreshLayout.finishLoadMoreWithNoMoreData();
+                    }
+                    //判断是否是加载更多
+                    if (data != null && mIsLoadMore) {
+                        //更新数据源
+                        mAdapter.loadMore(data);
+                        mRefreshLayout.finishLoadMore(true);//设置SmartRefreshLayout加载更多的完成标志
+                    } else if (data != null) {
+                        //设置数据
+                        mAdapter = new Equip_Maintence_EntityDataListAdapter(WarningInfo_EquipMaintenActivity.this, data);
+                        mLv_DataList.setAdapter(mAdapter);
+                        mRefreshLayout.finishRefresh(true); //设置SmartRefreshLayout刷新完成标志
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, String content, Throwable error) {
+                    dismissLoadingDialog();
+                    mRefreshLayout.finishRefresh(false);
+                    mRefreshLayout.finishLoadMore(false);
+                    ToastUtils.showToast(WarningInfo_EquipMaintenActivity.this, getString(R.string.submit_soap_result_err5, error));
+                }
+
+                @Override
+                public void onFailure(int statusCode, SoapFault fault) {
+                    dismissLoadingDialog();
+                    mRefreshLayout.finishRefresh(false);
+                    mRefreshLayout.finishLoadMore(false);
+                    ToastUtils.showToast(WarningInfo_EquipMaintenActivity.this, getString(R.string.submit_soap_result_err4, fault));
+                }
+            });
+        }
+
     }
 }

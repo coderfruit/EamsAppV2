@@ -15,12 +15,14 @@ import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.FailureReportingEntityDataListAdapter;
+import com.grandhyatt.snowbeer.entity.CorporationEntity;
 import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.request.FailureReportingRequest;
 import com.grandhyatt.snowbeer.network.result.FailureReportingsResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
+import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -61,7 +63,7 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
     private FailureReportingEntityDataListAdapter mAdapter;
 
     public static final int RESULT_REPORT_COMPLETE_ACTIVITY = 10001;
-
+    String _EquipID;//传入的设备ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,9 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
 
         initView();
         bindEvent();
+
+        Intent intent = getIntent();
+        _EquipID = intent.getStringExtra("equipID");
         requestNetworkData();
     }
 
@@ -136,6 +141,13 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
         FailureReportingRequest request = new FailureReportingRequest();
         request.setCurrentLastIdx(String.valueOf(mPageIndex * mPageSize));
         request.setStatus("待处理");
+        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(this);
+        if(corp != null){
+            request.setCorpID(corp.getID());
+        }
+        if(_EquipID != null){
+            request.setEquipmentID(_EquipID);
+        }
 
         SoapUtils.getFailureReportsAsync(FaultReport_Mgr_Activity.this, request, new SoapListener() {
             @Override
@@ -198,6 +210,8 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
             }
         });
     }
+
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
