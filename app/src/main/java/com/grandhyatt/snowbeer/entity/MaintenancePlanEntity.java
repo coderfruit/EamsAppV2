@@ -6,6 +6,8 @@ package com.grandhyatt.snowbeer.entity;
  */
 
 public class MaintenancePlanEntity {
+
+    private  boolean IsCheck;
     private String Status;
 
     private String ID;
@@ -46,7 +48,13 @@ public class MaintenancePlanEntity {
 
     public MaintenancePlanEntity() {
     }
+    public boolean getIsCheck() {
+        return IsCheck;
+    }
 
+    public void setIsCheck(boolean status) {
+        IsCheck = status;
+    }
     public String getStatus() {
         return Status;
     }

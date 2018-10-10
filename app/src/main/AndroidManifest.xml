@@ -119,6 +119,10 @@
         <activity android:name=".view.activity.AssayQueryActivity" />
         <!--设备保养  add by tongzhiqiang-->
         <activity android:name=".view.activity.MaintenReportActivity" />
+
+        <activity android:name=".view.activity.MaintenPlanCheckActivity" />
+        <!--设备保养润滑选择物资  add by tongzhiqiang-->
+        <activity android:name=".view.activity.EquipMgrMaintenMaterialActivity" />
         <!-- **************************************  **************************************  ************************************** -->
         <!-- 复检第一步(有卡复检)-->
         <activity android:name=".view.activity.CardReCheckActivity" />

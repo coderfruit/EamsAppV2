@@ -152,7 +152,6 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     public static final int CHECK_SPARE_OK = 112;//选择维修用备件
 
     ArrayList<String> _CheckPlanIDList; //用户选中的维护计划ID
-    ArrayList<String> _CheckSpareIDList;//用户选中的备件与设备关系ID
     List<RepairmentPlanEntity> _CheckPlanEntityList = new ArrayList<>();//用户选择的数据行对象
     List<SpareInEquipmentEntity> _CheckSpareEntityList = new ArrayList<>();//用户选择的数据行对象
     List<EquipmentUseSpareEntity> _CheckSpareUseList=new ArrayList<>();// 页面选择备品配件返回数据

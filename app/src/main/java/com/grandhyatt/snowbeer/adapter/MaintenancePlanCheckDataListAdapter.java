@@ -1,36 +1,31 @@
 package com.grandhyatt.snowbeer.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.grandhyatt.snowbeer.R;
-import com.grandhyatt.snowbeer.entity.FailureReportingAttachmentEntity;
-import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
+import com.grandhyatt.snowbeer.entity.MaintenancePlanEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by ycm on 2018/8/28.
  */
 
-public class RepairmentPlanCheckDataListAdapter extends BaseAdapter {
-    private List<RepairmentPlanEntity> mDataList;
+public class MaintenancePlanCheckDataListAdapter extends BaseAdapter {
+    private List<MaintenancePlanEntity> mDataList;
     private Context mContext;
 
     private ViewHolder mViewHolder;
-
-    public RepairmentPlanCheckDataListAdapter(Context context, List<RepairmentPlanEntity> dataList) {
+    private int tempPosition = -1;  //记录已经点击的CheckBox的位置
+    public MaintenancePlanCheckDataListAdapter(Context context, List<MaintenancePlanEntity> dataList) {
         mContext = context;
         mDataList = dataList;
 
@@ -52,11 +47,11 @@ public class RepairmentPlanCheckDataListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         if (convertView == null) {
 
             mViewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_item_repairment_plan_check_activity, null);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_item_maintenance_plan_check_activity, null);
 
             mViewHolder.mCkb_ID = convertView.findViewById(R.id.mCkb_ID);
             mViewHolder.mTv_Status = convertView.findViewById(R.id.mTv_Status);
@@ -74,9 +69,9 @@ public class RepairmentPlanCheckDataListAdapter extends BaseAdapter {
             mViewHolder = (ViewHolder) convertView.getTag();
         }
 
-        RepairmentPlanEntity dataModel = mDataList.get(position);
+        MaintenancePlanEntity dataModel = mDataList.get(position);
         if (dataModel != null) {
-            mViewHolder.mTv_RepairmentLevel.setText(String.valueOf(dataModel.getRepairmentLevel()));
+            mViewHolder.mTv_RepairmentLevel.setText(String.valueOf(dataModel.getMaintenanceLevel()));
             mViewHolder.mTv_PlanInterval.setText("每" + dataModel.getInterval() + dataModel.getIntervalUnit() + "执行一次");
             mViewHolder.mTv_LastRunningDate.setText(dataModel.getLastRunningDate());
             mViewHolder.mTv_NextRunningDate.setText(dataModel.getNextRunningDate());
@@ -85,8 +80,32 @@ public class RepairmentPlanCheckDataListAdapter extends BaseAdapter {
             mViewHolder.mTv_PlanDesc.setText(dataModel.getDescription());
             mViewHolder.mTv_ID.setText(dataModel.getID());
             mViewHolder.mCkb_ID.setChecked(dataModel.getIsCheck());
+            mViewHolder.mCkb_ID.setId(position);    //设置当前position为CheckBox的id
+            mViewHolder.mCkb_ID.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        if (tempPosition != -1) {
+                            //根据id找到上次点击的CheckBox,将它设置为false.
+                            CheckBox tempCheckBox = (CheckBox) parent.findViewById(tempPosition);
+                            if (tempCheckBox != null) {
+                                tempCheckBox.setChecked(false);
+                            }
+                        }
+                        //保存当前选中CheckBox的id值
+                        tempPosition = buttonView.getId();
 
+                    } else {    //当CheckBox被选中,又被取消时,将tempPosition重新初始化.
+                        tempPosition = -1;
+                    }
+                }
+            });
+            if (position == tempPosition)   //比较位置是否一样,一样就设置为选中,否则就设置为未选中.
+                mViewHolder.mCkb_ID.setChecked(true);
+            else mViewHolder.mCkb_ID.setChecked(false);
         }
+
+
         return convertView;
     }
 
@@ -103,7 +122,7 @@ public class RepairmentPlanCheckDataListAdapter extends BaseAdapter {
         private TextView mTv_ID;
 
     }
-    public void loadMore(List<RepairmentPlanEntity> data)
+    public void loadMore(List<MaintenancePlanEntity> data)
     {
         mDataList.addAll(data);
         notifyDataSetChanged();

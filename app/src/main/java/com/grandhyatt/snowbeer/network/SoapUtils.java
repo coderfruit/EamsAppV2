@@ -479,6 +479,26 @@ public class SoapUtils {
 	}
 
 	/**
+	 * 获取设备保养计划
+	 * @param context
+	 * @param equipID 设备ID
+	 * @param maintenLevel 保养类型级别
+	 * @param callback
+	 */
+	public static void getEquipmentMaintenPlanAsync(final Context context, String equipID,String maintenLevel, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetEquipmentMaintenancePlan";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+		params.put("maintenLevel",maintenLevel);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
+
+	/**
 	 * 获取设备维护计划
 	 * @param context
 	 * @param equipID 设备ID
