@@ -197,7 +197,7 @@ public class WarningInfo_EquipRepairExActivity extends ActivityBase implements I
 
         if(equipID != null){
             String currentLastIdx = String.valueOf(mPageIndex * mPageSize);
-            SoapUtils.getRepairmentPlanEx(this, equipID, currentLastIdx, new SoapListener() {
+            SoapUtils.getRepairmentPlanEx_Equip(this, equipID, currentLastIdx, new SoapListener() {
                 @Override
                 public void onSuccess(int statusCode, SoapObject object) {
                     dismissLoadingDialog();

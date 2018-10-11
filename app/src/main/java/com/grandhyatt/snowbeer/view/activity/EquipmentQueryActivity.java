@@ -75,6 +75,8 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
     Button mBt_Search;
     @BindView(R.id.mBt_Clear)
     Button mBt_Clear;
+    @BindView(R.id.mBt_Cancle)
+    Button mBt_Cancle;
 
     @BindView(R.id.mEt_EquipInfo)
     EditText mEt_EquipInfo;
@@ -133,6 +135,9 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mBt_Search://检索
+
+                dropDownMenu.close();
+
                 mPageIndex = 0;
                 mIsLoadMore = false;
 
@@ -140,21 +145,27 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
                 requestNetworkData();
 
                 break;
-            case R.id.mBt_Clear://取消
+            case R.id.mBt_Clear://重置
+                _SelectedEquipmentType = null;
+                _SelectedDept = null;
+                mTv_UseState.setText("使用状况");
+                mTv_Dept.setText("部门");
+                mTv_EquipType.setText("设备类型");
 
-                if (!dropDownMenu.isOpen()) {
-                    dropDownMenu.open();
-                } else {
-                    dropDownMenu.close();
-                }
-//                _SelectedEquipmentType = null;
-//                _SelectedDept = null;
-//
-//                mTv_UseState.setText("使用状况");
-//                mTv_Dept.setText("部门");
-//                mTv_EquipType.setText("设备类型");
+                mEt_EquipInfo.setText("");
+                mEt_Location.setText("");
+                mEt_Keeper.setText("");
+                mEt_Manu.setText("");
 
                 break;
+
+            case R.id.mBt_Cancle: //取消
+
+                    dropDownMenu.close();
+
+                break;
+
+
             case R.id.mTv_Corp://组织机构
 
                 showSelectDialog(new SelectDialog.SelectDialogListener() {
@@ -313,11 +324,15 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
         );
         mBt_Search.setOnClickListener(this);
         mBt_Clear.setOnClickListener(this);
+        mBt_Cancle.setOnClickListener(this);
 
         //下拉刷新
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+
+                dropDownMenu.close();
+
                 mPageIndex = 0;
                 mIsLoadMore = false;
                 mRefreshLayout.setNoMoreData(false);
@@ -329,6 +344,9 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
         mRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+
+                dropDownMenu.close();
+
                 mPageIndex++;
                 mIsLoadMore = true;
                 requestNetworkData();
@@ -340,10 +358,12 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView mTv_ID = (TextView) view.findViewById(R.id.mTv_ID);
 
+                dropDownMenu.close();
+
                 //跳转至设备巡检
                 Intent intent = new Intent(EquipmentQueryActivity.this, EquipRoutingInspectionActivity.class);
                 intent.putExtra("mTv_ID", mTv_ID.getText().toString());
-                startActivityForResult(intent,RESULT_REPORT_COMPLETE_ACTIVITY);
+                startActivityForResult(intent, RESULT_REPORT_COMPLETE_ACTIVITY);
             }
         });
 
@@ -437,8 +457,6 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
                     mRefreshLayout.finishRefresh(true); //设置SmartRefreshLayout刷新完成标志
                 }
 
-
-                dropDownMenu.close();//关闭筛选条件
 
             }
 

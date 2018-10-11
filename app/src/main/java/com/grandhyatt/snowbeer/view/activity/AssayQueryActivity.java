@@ -75,6 +75,8 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
     Button mBt_Search;
     @BindView(R.id.mBt_Clear)
     Button mBt_Clear;
+    @BindView(R.id.mBt_Cancle)
+    Button mBt_Cancle;
 
     @BindView(R.id.mEt_EquipInfo)
     EditText mEt_EquipInfo;
@@ -133,6 +135,8 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.mBt_Search://检索
+                dropDownMenu.close();
+
                 mPageIndex = 0;
                 mIsLoadMore = false;
 
@@ -140,19 +144,23 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
                 requestNetworkData();
 
                 break;
-            case R.id.mBt_Clear://取消
+            case R.id.mBt_Clear://重置
+                _SelectedEquipmentType = null;
+                _SelectedDept = null;
+                mTv_UseState.setText("使用状况");
+                mTv_Dept.setText("归属部门");
+                mTv_EquipType.setText("设备类型");
 
-                if (!dropDownMenu.isOpen()) {
-                    dropDownMenu.open();
-                } else {
-                    dropDownMenu.close();
-                }
-//                _SelectedEquipmentType = null;
-//                _SelectedDept = null;
-//
-//                mTv_UseState.setText("使用状况");
-//                mTv_Dept.setText("部门");
-//                mTv_EquipType.setText("设备类型");
+                mEt_EquipInfo.setText("");
+                mEt_Location.setText("");
+                mEt_Keeper.setText("");
+                mEt_Manu.setText("");
+
+                break;
+
+            case R.id.mBt_Cancle: //取消
+
+                dropDownMenu.close();
 
                 break;
             case R.id.mTv_Corp://组织机构
@@ -313,6 +321,7 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
         );
         mBt_Search.setOnClickListener(this);
         mBt_Clear.setOnClickListener(this);
+        mBt_Cancle.setOnClickListener(this);
 
         //下拉刷新
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -435,9 +444,6 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
                     mLv_DataList.setAdapter(mAdapter);
                     mRefreshLayout.finishRefresh(true); //设置SmartRefreshLayout刷新完成标志
                 }
-
-
-                dropDownMenu.close();//关闭筛选条件
 
             }
 
