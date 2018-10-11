@@ -665,17 +665,11 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         mBtn_Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBtn_Submit.setEnabled(false);
-                showLogingDialog();
-
                 String faultDate = mTv_FaultDate.getText().toString();
                 String faultLevel = mTv_FaultLevel.getText().toString();
                 String faultDesc = mTv_FaultDesc.getText().toString();
                 String user = mEt_User.getText().toString();
                 String phone = mEt_Phone.getText().toString();
-
-                int imgSize = zz_image_box_add_mode.getAllImages().size();
-
                 //验证提交数据
                 if (_EquipmentData == null) {
                     ToastUtils.showLongToast(FaultReportActivity.this, "请首先确定要报修的设备！");
@@ -702,6 +696,12 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                     ToastUtils.showLongToast(FaultReportActivity.this, "请填写联系人电话！");
                     return;
                 }
+
+                mBtn_Submit.setEnabled(false);
+                showLogingDialog();
+
+                int imgSize = zz_image_box_add_mode.getAllImages().size();
+
 //                if (imgSize == 0) {
 //                    boolean diagValue = ShowDialog(FaultReportActivity.this, "系统提示", "没有添加故障图片是否继续？");
 //                    if (diagValue) {
