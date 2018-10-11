@@ -17,6 +17,7 @@ import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.FailureReportingEntityDataListAdapter;
+import com.grandhyatt.snowbeer.entity.CorporationEntity;
 import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
 import com.grandhyatt.snowbeer.entity.TextDictionaryEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
@@ -203,6 +204,11 @@ public class FaultReport_MyActivity extends ActivityBase implements IActivityBas
         }else {
             request.setStatus(mTv_Status.getText().toString());
         }
+        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(this);
+        if(corp != null){
+            request.setCorpID(corp.getID());
+        }
+
         String userName = SPUtils.getLastLoginUserName(this);
         request.setReportUser(userName);
         request.setCurrentLastIdx(String.valueOf(mPageIndex * mPageSize));

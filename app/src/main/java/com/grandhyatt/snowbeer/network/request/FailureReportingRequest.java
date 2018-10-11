@@ -27,6 +27,7 @@ public class FailureReportingRequest {
     public FailureReportingRequest() {
     }
 
+
     public String getCorpID() {
         return CorpID;
     }
