@@ -19,6 +19,7 @@ import com.grandhyatt.snowbeer.view.MyGridView;
 import com.grandhyatt.snowbeer.view.activity.AssayQueryActivity;
 import com.grandhyatt.snowbeer.view.activity.AssayUseActivity;
 import com.grandhyatt.snowbeer.view.activity.EquipRoutingInspectionActivity;
+import com.grandhyatt.snowbeer.view.activity.EquipmentQueryActivity;
 import com.grandhyatt.snowbeer.view.activity.FaultReport_Mgr_Activity;
 import com.grandhyatt.snowbeer.view.activity.FaultReport_MyActivity;
 import com.grandhyatt.snowbeer.view.activity.MaintenReportActivity;
@@ -128,7 +129,7 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
                         break;
                     case 5://生产设备查询
                         if(PowerUtils.isPowerShowToast(getContext(),PowerUtils.AppMenu生产设备查询)) {
-                            ToastUtils.showToast(getContext(), "正在开发中...");
+                            IntentUtil.newIntent(getContext(), EquipmentQueryActivity.class);
                         }
                         break;
                     case 6://化验仪器查询
@@ -199,12 +200,12 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
 
         mHomeFunctionEntity = new HomeFunctionEntity();
         mHomeFunctionEntity.setImage(R.drawable.shebeichaxun);
-        mHomeFunctionEntity.setName("生产设备查询");
+        mHomeFunctionEntity.setName("生产设备检索");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
         mHomeFunctionEntity.setImage(R.drawable.chaxun);
-        mHomeFunctionEntity.setName("化验设备查询");
+        mHomeFunctionEntity.setName("化验设备检索");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
