@@ -178,32 +178,32 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.chulibaoxiu128);
+        mHomeFunctionEntity.setImage(R.drawable.baoxiuchuli);
         mHomeFunctionEntity.setName("报修处理");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ic_card_check_take_back);
+        mHomeFunctionEntity.setImage(R.drawable.xunjian);
         mHomeFunctionEntity.setName("设备巡检");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.yujingtixing72);
+        mHomeFunctionEntity.setImage(R.drawable.yujingtixing);
         mHomeFunctionEntity.setName("设备预警提醒");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ssdk_oks_skyblue_logo_facebookmessenger_checked);
+        mHomeFunctionEntity.setImage(R.drawable.huaxueyiqi1);
         mHomeFunctionEntity.setName("化验仪器使用");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ssdk_oks_skyblue_logo_facebookmessenger_checked);
+        mHomeFunctionEntity.setImage(R.drawable.shebeichaxun);
         mHomeFunctionEntity.setName("生产设备查询");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ic_no_card_recheck);
+        mHomeFunctionEntity.setImage(R.drawable.chaxun);
         mHomeFunctionEntity.setName("化验设备查询");
         mDataList.add(mHomeFunctionEntity);
 
@@ -213,18 +213,18 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ssdk_oks_skyblue_logo_facebookmessenger_checked);
+        mHomeFunctionEntity.setImage(R.drawable.baoyang);
         mHomeFunctionEntity.setName("保养");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ssdk_oks_skyblue_logo_facebookmessenger_checked);
+        mHomeFunctionEntity.setImage(R.drawable.jianyan);
         mHomeFunctionEntity.setName("检验");
         mDataList.add(mHomeFunctionEntity);
 
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ic_packaging);
+        mHomeFunctionEntity.setImage(R.drawable.weixiu);
         mHomeFunctionEntity.setName("外委维修");
         mDataList.add(mHomeFunctionEntity);
 
