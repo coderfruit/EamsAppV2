@@ -1,11 +1,13 @@
 package com.grandhyatt.snowbeer.entity;
 
+import java.io.Serializable;
+
 /**
  * 设备保养计划
  * Created by ycm on 2018/9/28.
  */
 
-public class MaintenancePlanEntity {
+public class MaintenancePlanEntity implements Serializable {
 
     private  boolean IsCheck;
     private String Status;

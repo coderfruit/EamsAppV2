@@ -137,30 +137,30 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
 
                 _SpareCond = mEt_SpareCond.getText().toString();
 
-                getSparesInfo(_EquipID, _SelectedDept, _SpareCond);
+                getSparesInfo(_EquipID, _SpareCond);
             }
         });
 
-        mTv_SpareDept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSelectDialog(new SelectDialog.SelectDialogListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        String name = _DeptNamelist.get(position);
-                        _SelectedDept = _DepartmentList.get(position);
-                        mTv_SpareDept.setText(name);
-
-                        showLogingDialog();
-
-                        _SpareCond = mEt_SpareCond.getText().toString();
-
-                       // getSparesInfo(_EquipID, _SelectedDept, _SpareCond);
-
-                    }
-                }, _DeptNamelist);
-            }
-        });
+//        mTv_SpareDept.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showSelectDialog(new SelectDialog.SelectDialogListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                        String name = _DeptNamelist.get(position);
+//                        _SelectedDept = _DepartmentList.get(position);
+//                        mTv_SpareDept.setText(name);
+//
+//                        showLogingDialog();
+//
+//                        _SpareCond = mEt_SpareCond.getText().toString();
+//
+//                       // getSparesInfo(_EquipID, _SelectedDept, _SpareCond);
+//
+//                    }
+//                }, _DeptNamelist);
+//            }
+//        });
 
 
         mLv_DataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -326,15 +326,15 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
                     mTv_SpareDept.setText(data.getDepartmentName().toString());
 
                     //获取设备对应部门信息
-                    getDepartmentInfo(String.valueOf(data.getCorporationID()));
+                //    getDepartmentInfo(String.valueOf(data.getCorporationID()));
 
                     showLogingDialog();
 
-                    _SelectedDept = new DepartmentEntity();
-                    _SelectedDept.setID( data.getDepartmentID());
+//                    _SelectedDept = new DepartmentEntity();
+//                    _SelectedDept.setID( data.getDepartmentID());
 
                     //获取设备可用的备件库存信息
-                    getSparesInfo(data.getID(), _SelectedDept, "");
+                    getSparesInfo(data.getID(),  "");
                 }
             }
 
@@ -390,7 +390,7 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
                 } else {
                     _DepartmentList = data;
 
-                    bindDepart(_DepartmentList);
+                   // bindDepart(_DepartmentList);
                 }
             }
 
@@ -415,18 +415,10 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
      * @param equipID
      * @param spareContent
      */
-    private void getSparesInfo(String equipID, DepartmentEntity dept, String spareContent) {
-        String deptID = "";
-        if(dept != null)
-        {
-            deptID = dept.getID();
-        }
-        if(spareContent == null)
-        {
-            spareContent = "";
-        }
+    private void getSparesInfo(String equipID, String spareContent) {
 
-        SoapUtils.getEquipmentSparesStoreInfo(EquipMgrMaintenMaterialActivity.this, equipID, deptID, spareContent, new SoapListener() {
+
+        SoapUtils.getEquipmentMaterialStoreInfo(EquipMgrMaintenMaterialActivity.this, equipID, spareContent, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
                 dismissLoadingDialog();
@@ -485,13 +477,13 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
      * 部门下拉列表数据源赋值
      * @param dptList
      */
-    private void bindDepart(List<DepartmentEntity> dptList) {
-
-        for (DepartmentEntity item : dptList) {
-            String value = item.getDepartmentName();// + "-" + item.getDepartmentCode();
-            _DeptNamelist.add(value);
-        }
-    }
+//    private void bindDepart(List<DepartmentEntity> dptList) {
+//
+//        for (DepartmentEntity item : dptList) {
+//            String value = item.getDepartmentName();// + "-" + item.getDepartmentCode();
+//            _DeptNamelist.add(value);
+//        }
+//    }
 
 
 }

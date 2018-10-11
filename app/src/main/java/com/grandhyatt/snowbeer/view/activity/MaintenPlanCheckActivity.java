@@ -18,6 +18,8 @@ import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.MaintenancePlanCheckDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.SpareInEquipmentDataListAdapter;
 import com.grandhyatt.snowbeer.entity.MaintenancePlanEntity;
+import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
+import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.result.MaintenPlanResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
@@ -56,13 +58,11 @@ public class MaintenPlanCheckActivity extends ActivityBase implements IActivityB
     TextView mTv_AllCnt;
 
 
-    int _CheckCnt = 0;//用户选中的行数
+    int _CheckCnt = -1;//用户选中的行数
     ArrayList<String> _CheckIDList = new ArrayList<>();//用户选择的数据行ID
     ArrayList<Object> _CheckEntityList = new ArrayList<>();//用户选择的数据行对象
     String _ReapirLevel = "";
     MaintenancePlanCheckDataListAdapter adapter_Plan = null;//维护计划适配器
-    SpareInEquipmentDataListAdapter adapter_Spare = null;  //备件适配器
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -165,6 +165,48 @@ public class MaintenPlanCheckActivity extends ActivityBase implements IActivityB
 
     @Override
     public void bindEvent() {
+        mLv_DataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                MaintenancePlanEntity planEty = null;
+                MaintenancePlanEntity planEty1 = null;
+                CheckBox ckb = view.findViewById(R.id.mCkb_ID);
+                boolean ckbValue = ckb.isChecked();
+                if (!ckbValue)
+                {//取消选中
+
+                        if (_CheckCnt != -1)
+                        {
+                            if(_CheckCnt==position){
+                                planEty1 = (MaintenancePlanEntity) adapter_Plan.getItem(position);
+                                planEty1.setIsCheck(true);
+                            }
+                            else {
+                                planEty = (MaintenancePlanEntity) adapter_Plan.getItem(_CheckCnt);
+                                planEty.setIsCheck(false);
+                                planEty1 = (MaintenancePlanEntity) adapter_Plan.getItem(position);
+                                planEty1.setIsCheck(true);
+
+                            }
+                        }
+                        else {
+                            planEty1 = (MaintenancePlanEntity) adapter_Plan.getItem(position);
+                            planEty1.setIsCheck(true);
+
+                        }
+                     _CheckCnt=position;
+
+                }
+                else {
+                    planEty1 = (MaintenancePlanEntity) adapter_Plan.getItem(position);
+                    planEty1.setIsCheck(false);
+                    _CheckCnt=-1;
+
+                }
+                adapter_Plan.notifyDataSetChanged();
+            }
+        });
 
 
 
@@ -175,22 +217,23 @@ public class MaintenPlanCheckActivity extends ActivityBase implements IActivityB
                 Intent intent = new Intent();
                 _CheckEntityList.clear();
                 _CheckIDList.clear();
+                MaintenancePlanEntity rpEntity=null;
+                for (int i = 0; i < adapter_Plan.getCount(); i++) {
 
-                    View vw = null;
-                    for (int i = 0; i < mLv_DataList.getChildCount(); i++) {
-                        vw = mLv_DataList.getChildAt(i);
-                        CheckBox checkb = (CheckBox) vw.findViewById(R.id.mCkb_ID);
-                        if (checkb.isChecked()) {
-                            MaintenancePlanEntity rpEntity = (MaintenancePlanEntity) mLv_DataList.getAdapter().getItem(i);
-                            _CheckEntityList.add(rpEntity);
-                            _CheckIDList.add(rpEntity.getID());
+                         rpEntity = (MaintenancePlanEntity) mLv_DataList.getAdapter().getItem(i);
+                        if (rpEntity!=null) {
+                           if( rpEntity.getIsCheck()){
+                               _CheckEntityList.add(rpEntity);
+                               _CheckIDList.add(rpEntity.getID());
+                           }
+
                         }
                     }
 
 
                 //把返回数据存入Intent
                 intent.putStringArrayListExtra("_CheckPlanIDList", _CheckIDList);
-                intent.putExtra("_CheckEntityList", _CheckEntityList);
+                intent.putExtra("_CheckMaintenPlanList", _CheckEntityList);
 
 
                 //设置返回数据

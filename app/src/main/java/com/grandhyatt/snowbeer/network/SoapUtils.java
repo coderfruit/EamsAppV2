@@ -561,6 +561,26 @@ public class SoapUtils {
 	}
 
 	/**
+	 * 获取设备维修可用备件库存信息
+	 * @param context
+	 * @param equipID
+	 * @param materialContent
+	 * @param callback
+	 */
+	public static void getEquipmentMaterialStoreInfo(final Context context, String equipID,String materialContent, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetEquipmentMaterialStoreInfo";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+
+		params.put("materialContent",materialContent);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
+	/**
 	 * 获取组织机构下的部门信息
 	 * @param context
 	 * @param corporationID

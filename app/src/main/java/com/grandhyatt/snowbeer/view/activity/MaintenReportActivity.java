@@ -441,7 +441,6 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 intent.putExtra("_EquipmentID",_EquipmentData.getID());
                 startActivityForResult(intent,CHECK_MATERIAL_OK);
 
-
             }
         });
 
@@ -849,7 +848,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             case CHECK_PLAN_OK:
 
                     _CheckPlanIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
-                    _CheckPlanEntityList = (List<MaintenancePlanEntity>)data.getSerializableExtra("_CheckEntityList");
+                    _CheckPlanEntityList = (List<MaintenancePlanEntity>)data.getSerializableExtra("_CheckMaintenPlanList");
                     if(_CheckPlanEntityList.size()==0){
                         mLv_Show_plan.setVisibility(View.GONE);
                         mLv_Show_plan.setAdapter(null);
