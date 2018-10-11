@@ -162,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="horizontal"
-                android:layout_weight="5">
+                android:layout_weight="4">
 
                 <TextView
                     android:id="@+id/mTv_SpareDeptID"
@@ -175,16 +175,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="添加保养物资"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <ImageView
-                    android:id="@+id/mIv_SpareDept"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="10dp"
-                    android:src="@drawable/item_signature_iv_menu_defaul" />
+
             </LinearLayout>
 
             <EditText

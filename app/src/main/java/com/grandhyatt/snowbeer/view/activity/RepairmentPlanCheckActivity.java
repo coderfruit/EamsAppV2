@@ -17,6 +17,7 @@ import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.RepairmentPlanCheckDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.SpareInEquipmentDataListAdapter;
+import com.grandhyatt.snowbeer.entity.MaintenancePlanEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
@@ -334,28 +335,36 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
                 Intent intent = new Intent();
                 _CheckEntityList.clear();
                 _CheckIDList.clear();
-                if (_ReapirLevel.equals("大修")) {
-                    View vw = null;
-                    for (int i = 0; i < mLv_DataList.getChildCount(); i++) {
-                        vw = mLv_DataList.getChildAt(i);
-                        CheckBox checkb = (CheckBox) vw.findViewById(R.id.mCkb_ID);
-                        if (checkb.isChecked()) {
-                            RepairmentPlanEntity rpEntity = (RepairmentPlanEntity) mLv_DataList.getAdapter().getItem(i);
-                            _CheckEntityList.add(rpEntity);
-                            _CheckIDList.add(rpEntity.getID());
+                if (_ReapirLevel.equals("大修"))
+                {
+
+                    RepairmentPlanEntity rpEntity=null;
+                    for (int i = 0; i < adapter_Plan.getCount(); i++) {
+
+                        rpEntity = (RepairmentPlanEntity) mLv_DataList.getAdapter().getItem(i);
+                        if (rpEntity!=null) {
+                            if( rpEntity.getIsCheck()){
+                                _CheckEntityList.add(rpEntity);
+                                _CheckIDList.add(rpEntity.getID());
+                            }
                         }
                     }
+
+
+
                 } else {
-                    View vw = null;
-                    for (int i = 0; i < mLv_DataList.getChildCount(); i++) {
-                        vw = mLv_DataList.getChildAt(i);
-                        CheckBox checkb = (CheckBox) vw.findViewById(R.id.mCkb_ID);
-                        if (checkb.isChecked()) {
-                            SpareInEquipmentEntity rpEntity = (SpareInEquipmentEntity) mLv_DataList.getAdapter().getItem(i);
-                            _CheckEntityList.add(rpEntity);
-                            _CheckIDList.add(rpEntity.getID());
+                    SpareInEquipmentEntity rpEntity=null;
+                    for (int i = 0; i < adapter_Spare.getCount(); i++) {
+                        rpEntity = (SpareInEquipmentEntity) mLv_DataList.getAdapter().getItem(i);
+                        if (rpEntity!=null) {
+                            if( rpEntity.getIsCheck()){
+                                _CheckEntityList.add(rpEntity);
+                                _CheckIDList.add(rpEntity.getID());
+                            }
+
                         }
                     }
+
                 }
 
                 //把返回数据存入Intent

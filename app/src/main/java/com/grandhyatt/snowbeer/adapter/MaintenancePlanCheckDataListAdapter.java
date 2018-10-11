@@ -24,7 +24,6 @@ public class MaintenancePlanCheckDataListAdapter extends BaseAdapter {
     private Context mContext;
 
     private ViewHolder mViewHolder;
-    private int tempPosition = -1;  //记录已经点击的CheckBox的位置
     public MaintenancePlanCheckDataListAdapter(Context context, List<MaintenancePlanEntity> dataList) {
         mContext = context;
         mDataList = dataList;
@@ -47,7 +46,7 @@ public class MaintenancePlanCheckDataListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, final ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
 
             mViewHolder = new ViewHolder();
@@ -80,29 +79,7 @@ public class MaintenancePlanCheckDataListAdapter extends BaseAdapter {
             mViewHolder.mTv_PlanDesc.setText(dataModel.getDescription());
             mViewHolder.mTv_ID.setText(dataModel.getID());
             mViewHolder.mCkb_ID.setChecked(dataModel.getIsCheck());
-            mViewHolder.mCkb_ID.setId(position);    //设置当前position为CheckBox的id
-            mViewHolder.mCkb_ID.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        if (tempPosition != -1) {
-                            //根据id找到上次点击的CheckBox,将它设置为false.
-                            CheckBox tempCheckBox = (CheckBox) parent.findViewById(tempPosition);
-                            if (tempCheckBox != null) {
-                                tempCheckBox.setChecked(false);
-                            }
-                        }
-                        //保存当前选中CheckBox的id值
-                        tempPosition = buttonView.getId();
 
-                    } else {    //当CheckBox被选中,又被取消时,将tempPosition重新初始化.
-                        tempPosition = -1;
-                    }
-                }
-            });
-            if (position == tempPosition)   //比较位置是否一样,一样就设置为选中,否则就设置为未选中.
-                mViewHolder.mCkb_ID.setChecked(true);
-            else mViewHolder.mCkb_ID.setChecked(false);
         }
 
 
