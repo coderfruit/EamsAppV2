@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -23,6 +24,7 @@ import com.google.gson.Gson;
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.IntentUtil;
 import com.grandhyatt.commonlib.utils.ToastUtils;
+import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.entity.CorporationEntity;
 import com.grandhyatt.snowbeer.entity.LoginUserInfoEntity;
@@ -41,6 +43,7 @@ import com.grandhyatt.snowbeer.view.ToolBarLayout;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -362,7 +365,7 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
                 }
                 //接口返回信息正常
                 String strData = object.getPropertyAsString(0);
-                LoginResult result = new Gson().fromJson(strData, LoginResult.class);
+                final LoginResult result = new Gson().fromJson(strData, LoginResult.class);
 
                 //校验接口返回代码
                 if(result == null)
@@ -375,47 +378,44 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
                     return;
                 }
 
-                LoginUserInfoEntity data = result.getData();
+                final LoginUserInfoEntity data = result.getData();
 
                 // 用户归属工厂
-                CorporationEntity userCorp;
-                List<CorporationEntity> corpList;
-                if (data.getCorporations().size() == 0) {
+                CorporationEntity userCorp = null;
+                List<CorporationEntity> corpList = null;
+                if (data.getCorporations().size() == 0) {//用户未配置组织机构
                     ToastUtils.showLongToast(LoginActivity.this, getString(R.string.activity_login_toast_login_fail_error, "没有为用户设置归属工厂，请联系管理员！"));
                     return;
                 }
-                else {
+                else if(data.getCorporations().size() > 1) {//用户配置的组织机构是多个, 需登录用户指定
+                    corpList = data.getCorporations();
+
+                    final CorporationEntity[] finalUserCorp = {null};
+                    List<String> listCorpName = new ArrayList<String>();
+                    for(CorporationEntity item : corpList)
+                    {
+                        listCorpName.add(item.getCorporationName());
+                    }
+
+                    ToastUtils.showLongToast(LoginActivity.this,"请选择用户归属工厂");
+
+                    final List<CorporationEntity> corpListTmp = corpList;
+                    showSelectDialog(new SelectDialog.SelectDialogListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                            finalUserCorp[0] = corpListTmp.get(position);
+                            loginSuccess(result, data, finalUserCorp[0], corpListTmp, userCode, password);
+                        }
+                    }, listCorpName);
+                }
+                else{ //用户配置的组织机构只有1个
                     userCorp = data.getCorporations().get(0);
 
                     corpList = data.getCorporations();
-                }
-                //用户权限校验
-                String powers = "";
-                List<ResourceEntity> resList = data.getResources();
-                if(resList == null || resList.size() == 0)
-                {
-                    ToastUtils.showLongToast(LoginActivity.this, getString(R.string.activity_login_toast_login_fail_error, "没有为用户设置任何权限，请联系管理员！"));
-                    return;
-                }
-                else{
-                    for (ResourceEntity item : resList) {
-                        powers += item.getResourceCode() + ",";
-                    }
-                }
-                //保存当前登录用户账号和密码
-                SPUtils.setLastLoginUserID(LoginActivity.this, String.valueOf(data.getID()));//用户ID
-                SPUtils.setLastLoginUserCode(LoginActivity.this, userCode);          //用户编码
-                SPUtils.setLastLoginUserName(LoginActivity.this, data.getUserName());//用户名
-                SPUtils.setLastLoginUserPassword(LoginActivity.this, password);     //密码
-                SPUtils.setLastLoginUserCorporation(LoginActivity.this, userCorp);  //用户组织机构
-                SPUtils.setLastLoginUserPower(LoginActivity.this,powers);           //权限
-                SPUtils.setLastLoginUserPhone(LoginActivity.this,data.getPhone());  //电话
-                SPUtils.setToken(LoginActivity.this,result.getToken());
 
-                SPUtils.setLastLoginUserCorporations(LoginActivity.this, corpList);  //用户组织机构
-
-                IntentUtil.newIntent(LoginActivity.this, MainActivity.class);
-                finish();
+                    loginSuccess(result, data, userCorp, corpList, userCode, password);
+                }
 
             }
 
@@ -438,6 +438,34 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
 
     }
 
+    private void loginSuccess(LoginResult result, LoginUserInfoEntity data, CorporationEntity userCorp, List<CorporationEntity> corpList, String userCode, String password) {
+        //用户权限校验
+        String powers = "";
+        List<ResourceEntity> resList = data.getResources();
+        if(resList == null || resList.size() == 0)
+        {
+            ToastUtils.showLongToast(LoginActivity.this, getString(R.string.activity_login_toast_login_fail_error, "没有为用户设置任何权限，请联系管理员！"));
+            return;
+        }
+        else{
+            for (ResourceEntity item : resList) {
+                powers += item.getResourceCode() + ",";
+            }
+        }
+        //保存当前登录用户账号和密码
+        SPUtils.setLastLoginUserID(LoginActivity.this, String.valueOf(data.getID()));//用户ID
+        SPUtils.setLastLoginUserCode(LoginActivity.this, userCode);          //用户编码
+        SPUtils.setLastLoginUserName(LoginActivity.this, data.getUserName());//用户名
+        SPUtils.setLastLoginUserPassword(LoginActivity.this, password);     //密码
+        SPUtils.setLastLoginUserCorporation(LoginActivity.this, userCorp);  //用户组织机构
+        SPUtils.setLastLoginUserPower(LoginActivity.this,powers);           //权限
+        SPUtils.setLastLoginUserPhone(LoginActivity.this,data.getPhone());  //电话
+        SPUtils.setToken(LoginActivity.this,result.getToken());
+        SPUtils.setLastLoginUserCorporations(LoginActivity.this, corpList);  //用户组织机构
+
+        IntentUtil.newIntent(LoginActivity.this, MainActivity.class);
+        finish();
+    }
 
 
 }

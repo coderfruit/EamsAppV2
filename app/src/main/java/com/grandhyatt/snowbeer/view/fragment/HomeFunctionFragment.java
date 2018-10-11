@@ -19,6 +19,7 @@ import com.grandhyatt.snowbeer.view.MyGridView;
 import com.grandhyatt.snowbeer.view.activity.AssayQueryActivity;
 import com.grandhyatt.snowbeer.view.activity.AssayUseActivity;
 import com.grandhyatt.snowbeer.view.activity.EquipRoutingInspectionActivity;
+import com.grandhyatt.snowbeer.view.activity.EquipmentQueryActivity;
 import com.grandhyatt.snowbeer.view.activity.FaultReport_Mgr_Activity;
 import com.grandhyatt.snowbeer.view.activity.FaultReport_MyActivity;
 import com.grandhyatt.snowbeer.view.activity.MaintenReportActivity;
@@ -128,7 +129,7 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
                         break;
                     case 5://生产设备查询
                         if(PowerUtils.isPowerShowToast(getContext(),PowerUtils.AppMenu生产设备查询)) {
-                            ToastUtils.showToast(getContext(), "正在开发中...");
+                            IntentUtil.newIntent(getContext(), EquipmentQueryActivity.class);
                         }
                         break;
                     case 6://化验仪器查询
@@ -178,33 +179,33 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.chulibaoxiu128);
+        mHomeFunctionEntity.setImage(R.drawable.baoxiuchuli);
         mHomeFunctionEntity.setName("报修处理");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ic_card_check_take_back);
+        mHomeFunctionEntity.setImage(R.drawable.xunjian);
         mHomeFunctionEntity.setName("设备巡检");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.yujingtixing72);
+        mHomeFunctionEntity.setImage(R.drawable.yujingtixing);
         mHomeFunctionEntity.setName("设备预警提醒");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ssdk_oks_skyblue_logo_facebookmessenger_checked);
+        mHomeFunctionEntity.setImage(R.drawable.huaxueyiqi1);
         mHomeFunctionEntity.setName("化验仪器使用");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ssdk_oks_skyblue_logo_facebookmessenger_checked);
-        mHomeFunctionEntity.setName("生产设备查询");
+        mHomeFunctionEntity.setImage(R.drawable.shebeichaxun);
+        mHomeFunctionEntity.setName("生产设备检索");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ic_no_card_recheck);
-        mHomeFunctionEntity.setName("化验设备查询");
+        mHomeFunctionEntity.setImage(R.drawable.chaxun);
+        mHomeFunctionEntity.setName("化验设备检索");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
@@ -213,18 +214,18 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ssdk_oks_skyblue_logo_facebookmessenger_checked);
+        mHomeFunctionEntity.setImage(R.drawable.baoyang);
         mHomeFunctionEntity.setName("保养");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ssdk_oks_skyblue_logo_facebookmessenger_checked);
+        mHomeFunctionEntity.setImage(R.drawable.jianyan);
         mHomeFunctionEntity.setName("检验");
         mDataList.add(mHomeFunctionEntity);
 
 
         mHomeFunctionEntity = new HomeFunctionEntity();
-        mHomeFunctionEntity.setImage(R.drawable.ic_packaging);
+        mHomeFunctionEntity.setImage(R.drawable.weixiu);
         mHomeFunctionEntity.setName("外委维修");
         mDataList.add(mHomeFunctionEntity);
 
