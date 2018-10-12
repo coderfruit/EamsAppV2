@@ -23,7 +23,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_check_box_blue_selected" />
+            android:src="@drawable/Factory_32" />
 
         <TextView
             android:id="@+id/mTv_UserCorp"
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="60dp"
-            android:text="用户组织机构"
+            android:text="用户归属工厂"
             android:textColor="@color/gray3"
             android:textSize="14sp" />
 

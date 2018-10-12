@@ -481,7 +481,7 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
         SoapUtils.getDepartment(AssayQueryActivity.this, corporationID, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
-                dismissLoadingDialog();
+                //dismissLoadingDialog();
                 if (object == null) {
                     ToastUtils.showLongToast(AssayQueryActivity.this, getString(R.string.submit_soap_result_err1));
                     return;
@@ -516,13 +516,13 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
 
             @Override
             public void onFailure(int statusCode, String content, Throwable error) {
-                dismissLoadingDialog();
+                //dismissLoadingDialog();
                 ToastUtils.showToast(AssayQueryActivity.this, getString(R.string.submit_soap_result_err5, error));
             }
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
-                dismissLoadingDialog();
+               // dismissLoadingDialog();
                 ToastUtils.showToast(AssayQueryActivity.this, getString(R.string.submit_soap_result_err4, fault));
             }
         });
@@ -562,7 +562,7 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
         SoapUtils.getEquipmentType(AssayQueryActivity.this, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
-                dismissLoadingDialog();
+                //dismissLoadingDialog();
                 if (object == null) {
                     ToastUtils.showLongToast(AssayQueryActivity.this, getString(R.string.submit_soap_result_err1));
                     return;
@@ -597,13 +597,13 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
 
             @Override
             public void onFailure(int statusCode, String content, Throwable error) {
-                dismissLoadingDialog();
+                //dismissLoadingDialog();
                 ToastUtils.showToast(AssayQueryActivity.this, getString(R.string.submit_soap_result_err5, error));
             }
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
-                dismissLoadingDialog();
+                //dismissLoadingDialog();
                 ToastUtils.showToast(AssayQueryActivity.this, getString(R.string.submit_soap_result_err4, fault));
             }
         });

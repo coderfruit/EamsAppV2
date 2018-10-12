@@ -126,8 +126,11 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
         dropDownMenu = (DropDownMenuView) findViewById(R.id.dropDownMenu);
 
         initView();
-        bindEvent();
+
         refreshUI();
+
+        bindEvent();
+
     }
 
 
@@ -149,7 +152,7 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
                 _SelectedEquipmentType = null;
                 _SelectedDept = null;
                 mTv_UseState.setText("使用状况");
-                mTv_Dept.setText("部门");
+                mTv_Dept.setText("归属部门");
                 mTv_EquipType.setText("设备类型");
 
                 mEt_EquipInfo.setText("");
@@ -494,7 +497,7 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
         SoapUtils.getDepartment(EquipmentQueryActivity.this, corporationID, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
-                dismissLoadingDialog();
+                //dismissLoadingDialog();
                 if (object == null) {
                     ToastUtils.showLongToast(EquipmentQueryActivity.this, getString(R.string.submit_soap_result_err1));
                     return;
@@ -529,13 +532,13 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
 
             @Override
             public void onFailure(int statusCode, String content, Throwable error) {
-                dismissLoadingDialog();
+                //dismissLoadingDialog();
                 ToastUtils.showToast(EquipmentQueryActivity.this, getString(R.string.submit_soap_result_err5, error));
             }
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
-                dismissLoadingDialog();
+                //dismissLoadingDialog();
                 ToastUtils.showToast(EquipmentQueryActivity.this, getString(R.string.submit_soap_result_err4, fault));
             }
         });
@@ -575,7 +578,7 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
         SoapUtils.getEquipmentType(EquipmentQueryActivity.this, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
-                dismissLoadingDialog();
+                //dismissLoadingDialog();
                 if (object == null) {
                     ToastUtils.showLongToast(EquipmentQueryActivity.this, getString(R.string.submit_soap_result_err1));
                     return;
@@ -610,13 +613,13 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
 
             @Override
             public void onFailure(int statusCode, String content, Throwable error) {
-                dismissLoadingDialog();
+                //dismissLoadingDialog();
                 ToastUtils.showToast(EquipmentQueryActivity.this, getString(R.string.submit_soap_result_err5, error));
             }
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
-                dismissLoadingDialog();
+                //dismissLoadingDialog();
                 ToastUtils.showToast(EquipmentQueryActivity.this, getString(R.string.submit_soap_result_err4, fault));
             }
         });

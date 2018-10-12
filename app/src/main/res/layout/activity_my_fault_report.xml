@@ -24,6 +24,14 @@
         android:gravity="right">
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="状态:"
+            android:textSize="12sp"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"/>
+
+        <TextView
             android:id="@+id/mTv_Status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
