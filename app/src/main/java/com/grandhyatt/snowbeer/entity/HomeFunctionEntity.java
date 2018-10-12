@@ -19,6 +19,11 @@ public class HomeFunctionEntity implements Serializable {
     private String name;
 
     /**
+     * 预警数
+     */
+    private int msgNumber;
+
+    /**
      * 获取 image
      *
      * @return int
@@ -54,5 +59,13 @@ public class HomeFunctionEntity implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getMsgNumber() {
+        return msgNumber;
+    }
+
+    public void setMsgNumber(int msgNumber) {
+        this.msgNumber = msgNumber;
     }
 }

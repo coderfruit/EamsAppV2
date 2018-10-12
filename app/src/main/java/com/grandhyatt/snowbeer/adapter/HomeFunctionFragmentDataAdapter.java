@@ -64,4 +64,17 @@ public class HomeFunctionFragmentDataAdapter extends BaseAdapter {
     }
 
     public View.OnClickListener itemOnClickListener;
+
+    /**
+     * 修改预警消息条数
+     * @param position
+     * @param msgNumber
+     */
+    public void modifyItem(int position,int msgNumber){
+        if (mDataList != null) {
+            HomeFunctionEntity entity = mDataList.get(position);
+            entity.setMsgNumber(msgNumber);
+            notifyDataSetChanged();
+        }
+    }
 }

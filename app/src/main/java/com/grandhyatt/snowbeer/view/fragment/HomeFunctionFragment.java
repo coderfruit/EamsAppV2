@@ -7,15 +7,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
+import com.google.gson.Gson;
+import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.IntentUtil;
 import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.fragment.IFragmentBase;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.HomeFunctionFragmentDataAdapter;
+import com.grandhyatt.snowbeer.adapter.view.HomeFunctionMainActivityGridItemView;
+import com.grandhyatt.snowbeer.entity.CorporationEntity;
 import com.grandhyatt.snowbeer.entity.HomeFunctionEntity;
+import com.grandhyatt.snowbeer.entity.WarningInfoCountEntity;
+import com.grandhyatt.snowbeer.network.SoapUtils;
+import com.grandhyatt.snowbeer.network.result.WarningInfoCountResult;
+import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
+import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.utils.PowerUtils;
+import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.view.MyGridView;
+import com.grandhyatt.snowbeer.view.SquareLayout;
 import com.grandhyatt.snowbeer.view.activity.AssayQueryActivity;
 import com.grandhyatt.snowbeer.view.activity.AssayUseActivity;
 import com.grandhyatt.snowbeer.view.activity.EquipRoutingInspectionActivity;
@@ -26,12 +39,17 @@ import com.grandhyatt.snowbeer.view.activity.MaintenReportActivity;
 import com.grandhyatt.snowbeer.view.activity.RepairmentReportActivity;
 import com.grandhyatt.snowbeer.view.activity.WarningInfo_EquipActivity;
 
+import org.ksoap2.SoapFault;
+import org.ksoap2.serialization.SoapObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import q.rorbin.badgeview.Badge;
+import q.rorbin.badgeview.QBadgeView;
 
 
 public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
@@ -78,10 +96,12 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
 
         mUnbinder = ButterKnife.bind(this,view);
 
-        initView();
+
         bindEvent();
         refreshUI();
         requestNetworkData();
+
+        initView();
         return view;
     }
 
@@ -93,6 +113,11 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
 
     @Override
     public void initView() {
+
+        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(getContext());
+        if(corp != null){
+            getWarinigInfo(corp.getID());
+        }
 
     }
 
@@ -244,4 +269,76 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
     public void requestNetworkData() {
 
     }
+
+    /**
+     * 获取预警信息
+     *
+     * @param corpID
+     */
+    private void getWarinigInfo(String corpID) {
+        SoapUtils.getWarningInfoCount(this.getContext(),corpID,
+                true,true,true,true,
+                true,false,false,false,
+                false,true,
+                new SoapListener() {
+            @Override
+            public void onSuccess(int statusCode, SoapObject object) {
+
+                if (object == null) {
+                    ToastUtils.showLongToast(getContext(), "1获取报修信息数据失败" + statusCode);
+                    return;
+                }
+                //判断接口连接是否成功
+                if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                    ToastUtils.showLongToast(getContext(), "2获取报修信息数据失败" + statusCode);
+                    return;
+                }
+                //接口返回信息正常
+                String strData = object.getPropertyAsString(0);
+                WarningInfoCountResult result = new Gson().fromJson(strData, WarningInfoCountResult.class);
+
+                //校验接口返回代码
+                if (result == null) {
+                    ToastUtils.showLongToast(getContext(), "3获取报修信息数据失败" + statusCode);
+                    return;
+                } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                    ToastUtils.showLongToast(getContext(), "4获取报修信息数据失败" + statusCode + result.msg);
+                    return;
+                }
+                WarningInfoCountEntity data = result.getData();
+                if (data != null) {
+                    initWarningInfoCount(data);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, String content, Throwable error) {
+                ToastUtils.showLongToast(getContext(), "获取报修信息异常:" + error.getMessage());
+            }
+
+            @Override
+            public void onFailure(int statusCode, SoapFault fault) {
+                ToastUtils.showLongToast(getContext(), "获取报修信息失败:" + fault);
+            }
+        });
+    }
+
+    /**
+     * 初始化预警消息消息条数
+     */
+    private void initWarningInfoCount(WarningInfoCountEntity data) {
+        if (data != null) {
+            mAdapter.modifyItem(1,data.getReportFaultCount());
+
+            int iRpCnt = data.getEquipRepairPlanCount();
+            int iMtnCnt = data.getEquipMaintenPlanCount();
+            int iIspCnt = data.getEquipInspectPlanCount();
+            int iSpRpCnt = data.getEquipSpareReplacePlanCount();
+            int iRpExCnt = data.getEquipRepairExPlanCount();
+
+            int iAll = iRpCnt + iMtnCnt + iIspCnt + iSpRpCnt + iRpExCnt;
+            mAdapter.modifyItem(3,iAll);
+        }
+    }
+
 }

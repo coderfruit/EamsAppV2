@@ -649,20 +649,22 @@ public class SoapUtils {
 	 * 获取预警消息条数
 	 * @param context
 	 * @param corpID
-	 * @param isGetEpRep
-	 * @param isGetEpMan
-	 * @param isGetEpIns
-	 * @param isGetSpRep
-	 * @param isGetRepEx
-	 * @param isGetBdRep
-	 * @param isGetAsyByTm
-	 * @param isGetAsyByCy
-	 * @param isGetAsyRep
+	 * @param isGetEpRep 是否获取设备维修计划提醒
+	 * @param isGetEpMan 是否获取设备保养计划提醒
+	 * @param isGetEpIns 是否获取设备检验计划提醒
+	 * @param isGetSpRep 是否获取备件更换提醒
+	 * @param isGetRepEx 是否获取设备外委维修提醒
+	 * @param isGetBdRep 是否获取建筑物维修提醒
+	 * @param isGetAsyByTm 是否获取化学仪器按使用次数提醒
+	 * @param isGetAsyByCy 是否获取化学仪器按使用周期提醒
+	 * @param isGetAsyRep 是否获取化学仪器按维修计划提醒
+	 * @param isGetRptMsgCnt 是否获取待处理报修条数
 	 * @param callback
 	 */
 	public static void getWarningInfoCount(final Context context, String corpID,
           boolean isGetEpRep,boolean isGetEpMan,boolean isGetEpIns,boolean isGetSpRep,boolean isGetRepEx,
 		  boolean isGetBdRep,boolean isGetAsyByTm,boolean isGetAsyByCy,boolean isGetAsyRep,
+										   boolean isGetRptMsgCnt,
 		  final SoapListener callback)
 	{
 		final String url = getHostUrl();
@@ -679,6 +681,7 @@ public class SoapUtils {
 		params.put("isGetAsyByTm",String.valueOf(isGetAsyByTm));
 		params.put("isGetAsyByCy",String.valueOf(isGetAsyByCy));
 		params.put("isGetAsyRep",String.valueOf(isGetAsyRep));
+		params.put("isGetRptMsgCnt",String.valueOf(isGetRptMsgCnt));
 
 		SoapUtils.getInstance(context).call(methodName,params,callback);
 
