@@ -161,7 +161,7 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
         showLogingDialog();
 
         SoapUtils.getWarningInfoCount(WarningInfo_EquipActivity.this, corp.getID(),
-                true, true, true, true, true, false, false, false, false, new SoapListener() {
+                true, true, true, true, true, false, false, false, false,false, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
                 dismissLoadingDialog();
