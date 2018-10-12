@@ -3,6 +3,7 @@ package com.grandhyatt.snowbeer.view.fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,9 @@ import com.grandhyatt.snowbeer.view.activity.FaultReport_MyActivity;
 import com.grandhyatt.snowbeer.view.activity.MaintenReportActivity;
 import com.grandhyatt.snowbeer.view.activity.RepairmentReportActivity;
 import com.grandhyatt.snowbeer.view.activity.WarningInfo_EquipActivity;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -58,6 +62,8 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
 
     @BindView(R.id.mGridView)
     MyGridView mGridView;
+    @BindView(R.id.mRefreshLayout)
+    SmartRefreshLayout mRefreshLayout;
 
     private Unbinder mUnbinder;
 
@@ -114,12 +120,11 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
     @Override
     public void initView() {
 
-        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(getContext());
-        if(corp != null){
-            getWarinigInfo(corp.getID());
-        }
+        initWarningInfo();
 
     }
+
+
 
     @Override
     public void bindEvent() {
@@ -190,6 +195,15 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
                     default:
                         break;
                 }
+            }
+        });
+
+        //下拉刷新
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                //mRefreshLayout.setNoMoreData(false);
+                requestNetworkData();
             }
         });
     }
@@ -267,7 +281,17 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
 
     @Override
     public void requestNetworkData() {
+        initWarningInfo();
+    }
 
+    /**
+     * 初始化预警信息
+     */
+    private void initWarningInfo() {
+        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(getContext());
+        if(corp != null){
+            getWarinigInfo(corp.getID());
+        }
     }
 
     /**
@@ -313,11 +337,13 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
 
             @Override
             public void onFailure(int statusCode, String content, Throwable error) {
+                mRefreshLayout.finishRefresh(true);
                 ToastUtils.showLongToast(getContext(), "获取报修信息异常:" + error.getMessage());
             }
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
+                mRefreshLayout.finishRefresh(true);
                 ToastUtils.showLongToast(getContext(), "获取报修信息失败:" + fault);
             }
         });
@@ -339,6 +365,9 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
             int iAll = iRpCnt + iMtnCnt + iIspCnt + iSpRpCnt + iRpExCnt;
             mAdapter.modifyItem(3,iAll);
         }
+//        mRefreshLayout.finishLoadMoreWithNoMoreData(); //设置SmartRefreshLayout 完成加载并标记没有更多数据
+//        mRefreshLayout.finishLoadMore(true);//设置SmartRefreshLayout加载更多的完成标志
+        mRefreshLayout.finishRefresh(true);
     }
 
 }
