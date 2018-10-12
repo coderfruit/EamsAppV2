@@ -224,7 +224,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="16dp"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/Factory_32" />
+                            android:src="@drawable/factory_32" />
 
                         <TextView
                             android:id="@+id/mTv_UserCorp"
