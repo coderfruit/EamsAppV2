@@ -91,7 +91,9 @@ import io.objectbox.annotation.Convert;
 import static com.grandhyatt.snowbeer.Consts.CAMERA_BARCODE_SCAN;
 
 
-
+/**
+ * 设备维修
+ */
 public class RepairmentReportActivity extends ActivityBase implements IActivityBase, View.OnClickListener {
 
     @BindView(R.id.mToolBar)
@@ -195,7 +197,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        setContentView(R.layout.activity_card_re_check);
+
         setContentView(R.layout.activity_repairment_report);
         ButterKnife.bind(this);
 
@@ -280,7 +282,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         mLv_Show_plan.setVisibility(View.GONE);
         //初始化用户及手机号
         mEt_User.setText(SPUtils.getLastLoginUserName(RepairmentReportActivity.this));
-        mEt_money.setText(SPUtils.getLastLoginUserPhone(RepairmentReportActivity.this));
+        //mEt_money.setText(SPUtils.getLastLoginUserPhone(RepairmentReportActivity.this));
 
 
         SoapListener callbackFailureReportingDesc = new SoapListener() {

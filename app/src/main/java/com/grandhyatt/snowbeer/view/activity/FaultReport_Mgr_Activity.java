@@ -6,11 +6,13 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.ToastUtils;
+import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
@@ -32,6 +34,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -52,6 +55,11 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
 
     @BindView(R.id.mRefreshLayout)
     SmartRefreshLayout mRefreshLayout;
+
+    @BindView(R.id.mTv_UserCorp)
+    TextView mTv_UserCorp;
+    @BindView(R.id.mRL_UserCorp)
+    RelativeLayout mRL_UserCorp;
 
     //当前页码
     private int mPageIndex = 0;
@@ -88,6 +96,12 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
     @Override
     public void initView() {
         mToolBar.setTitle("处理报修");
+
+        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(this);
+        if(corp != null)
+        {
+            mTv_UserCorp.setText(corp.getCorporationName());
+        }
     }
 
     @Override
@@ -125,6 +139,20 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
                 intent.putExtra("isMgr", "true");
 
                 startActivityForResult(intent,RESULT_REPORT_COMPLETE_ACTIVITY);
+            }
+        });
+
+        mRL_UserCorp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showUserCorp();
+            }
+        });
+
+        mTv_UserCorp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showUserCorp();
             }
         });
     }
@@ -217,6 +245,34 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
 
         if(requestCode == RESULT_REPORT_COMPLETE_ACTIVITY){
             requestNetworkData();
+        }
+
+    }
+
+    /**
+     * 显示用户归属组织机构
+     */
+    private void showUserCorp()
+    {
+        List<String> corpName = new ArrayList<>();
+        final List<CorporationEntity> corpList = SPUtils.getLastLoginUserCorporations(this);
+        if(corpList != null && corpList.size() > 1){
+
+            for (CorporationEntity item : corpList) {
+                corpName.add(item.getCorporationName());
+            }
+
+            showSelectDialog(new SelectDialog.SelectDialogListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    CorporationEntity corp = corpList.get(position);
+
+                    mTv_UserCorp.setText(corp.getCorporationName());
+                    //SPUtils.setLastLoginUserCorporation(FaultReport_Mgr_Activity.this, corp);
+
+                    requestNetworkData();
+                }
+            },corpName);
         }
 
     }
