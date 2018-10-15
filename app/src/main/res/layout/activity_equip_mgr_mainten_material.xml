@@ -190,7 +190,7 @@
                 android:src="@drawable/item_signature_iv_menu_defaul"
                 android:textSize="12dp"
                 android:gravity="center"
-                android:layout_weight="3"/>
+                android:layout_weight="4"/>
 
             <Button
                 android:id="@+id/mBt_Search"
@@ -232,7 +232,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:gravity="right"
-                android:text="共0条/"
+                android:text="共0条"
                 android:textColor="@color/red3"
                 android:textStyle="bold" />
 
@@ -242,7 +242,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:gravity="left"
-                android:text="选中0条"
+                android:text=""
                 android:textColor="@color/red3"
                 android:textStyle="bold" />
 

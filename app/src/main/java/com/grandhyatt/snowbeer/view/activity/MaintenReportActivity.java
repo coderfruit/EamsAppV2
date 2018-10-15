@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -12,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +39,7 @@ import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.MaintenancePlanCheckDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.MaintenancePlanViewDataListAdapter;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
+import com.grandhyatt.snowbeer.entity.EquipmentMaterialEntity;
 import com.grandhyatt.snowbeer.entity.MaintenanceEntity;
 import com.grandhyatt.snowbeer.entity.MaintenanceItemEntity;
 import com.grandhyatt.snowbeer.entity.MaintenancePlanEntity;
@@ -47,6 +50,7 @@ import com.grandhyatt.snowbeer.network.request.MaintenReportingRequest;
 import com.grandhyatt.snowbeer.network.result.EquipmentResult;
 import com.grandhyatt.snowbeer.network.result.MaintenResult;
 import com.grandhyatt.snowbeer.network.result.RepairmentEquipmentResult;
+import com.grandhyatt.snowbeer.network.result.StringResult;
 import com.grandhyatt.snowbeer.network.result.TextDictoryResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
@@ -64,6 +68,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -140,6 +146,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
     public static final int CHECK_MATERIAL_OK = 112;//选择维修用备件
     ArrayList<String> _CheckPlanIDList; //用户选中的维护计划ID
     List<MaintenancePlanEntity> _CheckPlanEntityList = new ArrayList<>();//用户选择的数据行对象
+    List<EquipmentMaterialEntity> _CheckMaterialList = new ArrayList<>();//用户选择的数据行对象
     MaintenancePlanViewDataListAdapter adapter_Plan=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -394,6 +401,11 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                             lL_material.setVisibility(View.VISIBLE);
                         }
                         else {
+                            mTv_materialName.setText("");
+                            mTv_materialstand.setText("");
+                            mTv_materialUnit.setText("");
+                            mEt_materialprice.setText("0");
+                            mEt_materialsum.setText("0");
                             lL_material.setVisibility(View.GONE);
                         }
                     }
@@ -460,10 +472,13 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 String RepairmentDesc = mTv_RepairmentDesc.getText().toString().trim();
                 String user = mEt_User.getText().toString().trim();
                 String phone = mEt_money.getText().toString().trim();
+                String useCout=mEt_materialsum.getText().toString().trim();
+                String mprice=mEt_materialprice.getText().toString().trim();
 
 
 
                 //验证提交数据
+
                 if (_EquipmentData == null) {
                     ToastUtils.showLongToast(MaintenReportActivity.this, "请首先确定要保养的设备！");
                     return;
@@ -493,86 +508,119 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 else{
 
                 }
+                if(faultDesc.equals("润滑")){
 
+                    if (useCout == null|| useCout.length() == 0) {
+                        ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的数量！");
+                        return;
+                    }
+                    else {
+                        if(!isNumeric(useCout)){
+                            ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的数量为数字！");
+                            return;
+                        }
+                        else {
 
-
+                            if(Integer.parseInt(useCout)<=0){
+                                ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的数量大于0！");
+                                return;
+                            }
+                        }
+                    }
+                    if (mprice == null|| mprice.length() == 0) {
+                        ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的单价！");
+                        return;
+                    }
+                }
                 mBtn_Submit.setEnabled(false);
-
-
                 //提交数据
-
-                RepairmentEquipmentResult request = new RepairmentEquipmentResult();
+                MaintenResult request = new MaintenResult();
                 //  request.setData(_EquipmentData);
 
 
 
-                RepairmentBillEntity rpen=new RepairmentBillEntity();
+                MaintenanceEntity rpen=new MaintenanceEntity();
                 rpen.setEquipmentID(_EquipmentData.getID());
                 rpen.setCorporationID(_EquipmentData.getCorporationID());
-                rpen.setDescription(RepairmentDesc);
-                rpen.setRepairUser(user);
+                rpen.setDepartmentID(_EquipmentData.getDepartmentID());
+
                 rpen.setTotalMoney(phone);
 
-                rpen.setFaultLevel(faultDesc);
+                rpen.setMaintenUser(user);
                 rpen.setStartTime(faultDate);
                 rpen.setFinishTime(faultDate1);
+                rpen.setEquipmentID(_EquipmentData.getID());
                 rpen.setShutDownMinutes("0");
-                request.setRepairmentBillData(rpen);
-                View vw=null;
-                TextView tvid=null;
-                NumberEditText mNEdt_Check=null;
-                TextView mSumCount=null;
+                rpen.setMaintenanceLevel(faultDesc);
+                if(_CheckPlanIDList!=null ){
+                    rpen.setMaintenancePlanID(_CheckPlanIDList.get(0));
+                }
+                rpen.setRemark(RepairmentDesc);
+                request.setData(rpen);
+                if(faultDesc.equals("润滑")){
+                    List<MaintenanceItemEntity> listMItem=new ArrayList<>();
+                    MaintenanceItemEntity mItem=new MaintenanceItemEntity();
+                    mItem.setMaterialID(_CheckMaterialList.get(0).getMaterialID());
+                    mItem.setUseCount(useCout);
+                    mItem.setUsePrice(mprice);
+                    mItem.setMakeUser(user);
+                    mItem.setUseUnit(_CheckMaterialList.get(0).getUnit());
+                    mItem.setTotalMoney(phone);
+                    listMItem.add(mItem);
+                    request.setdateItemList(listMItem);
+                }
 
-                //request.setSpareInEquipmentData(_CheckSpareUseList);
-                //提交数据
-//                SoapUtils.submitNewEquipReparimentRepairAsync(RepairmentReportActivity.this, request ,_CheckPlanIDList, new SoapListener() {
-//                    @Override
-//                    public void onSuccess(int statusCode, SoapObject object) {
-//
-//                        dismissLoadingDialog();
-//                        if (object == null) {
-//                            ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err1));
-//                            return;
-//                        }
-//                        //判断接口连接是否成功
-//                        if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
-//                            ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err2));
-//                            return;
-//                        }
-//                        //接口返回信息正常
-//                        String strData = object.getPropertyAsString(0);
-//                        StringResult result = new Gson().fromJson(strData, StringResult.class);
-//                        //校验接口返回代码
-//                        if (result == null) {
-//                            ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err3));
-//                            return;
-//                        }
-//                        else if (result.code != Result.RESULT_CODE_SUCCSED) {
-//                            ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
-//                            return;
-//                        }
-//
-//
-//                        mBtn_Submit.setEnabled(false);
-//                        ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_repairment_submit_ok));
-//                        finish();
-//
-//                    }
-//
-//                    @Override
-//                    public void onFailure(int statusCode, String content, Throwable error) {
-//                        dismissLoadingDialog();
-//                        ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_repairment_submit_err, error.getMessage()));
-//                        mBtn_Submit.setEnabled(true);
-//                    }
-//
-//                    @Override
-//                    public void onFailure(int statusCode, SoapFault fault) {
-//                        dismissLoadingDialog();
-//                        ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_repairment_submit_fail, fault));
-//                        mBtn_Submit.setEnabled(true);
-//                    }
-//                });
+
+
+               // 提交数据
+                SoapUtils.submitNewEquipMaintenanceRepairAsync(MaintenReportActivity.this, request , new SoapListener() {
+                    @Override
+                    public void onSuccess(int statusCode, SoapObject object) {
+
+                        dismissLoadingDialog();
+                        if (object == null) {
+                            ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err1));
+                            return;
+                        }
+                        //判断接口连接是否成功
+                        if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                            ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err2));
+                            return;
+                        }
+                        //接口返回信息正常
+                        String strData = object.getPropertyAsString(0);
+                        StringResult result = new Gson().fromJson(strData, StringResult.class);
+                        //校验接口返回代码
+                        if (result == null) {
+                            ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err3));
+                            return;
+                        }
+                        else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                            ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
+                            return;
+                        }
+
+
+                        mBtn_Submit.setEnabled(false);
+                        ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.activity_maintenance_submit_ok));
+                        finish();
+
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, String content, Throwable error) {
+                        dismissLoadingDialog();
+                        ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.activity_maintenance_submit_err, error.getMessage()));
+                        mBtn_Submit.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, SoapFault fault) {
+                        dismissLoadingDialog();
+                        ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.activity_maintenance_submit_fail, fault));
+                        mBtn_Submit.setEnabled(true);
+                    }
+                });
 
             }
         });
@@ -765,7 +813,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     return;
                 }
                 _ReportEntity = result.getData();
-
+                _ReportFileEntitys=result.getdateItemList();
                 if (_ReportEntity != null) {
                     mTv_EquipCode.setText(_ReportEntity.getEquipmentCode());
                     mTv_EquipName.setText(_ReportEntity.getEquipmentName());
@@ -783,7 +831,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 //                    mTv_ReportNO.setVisibility(View.VISIBLE);
 //                    mTv_ReportNO.setText(_ReportEntity.getReportNO());
 
-                    _ReportFileEntitys = _ReportEntity.getMaintenanceItemEntityList();
+
 
                      if(_ReportFileEntitys!=null && _ReportFileEntitys.size()!=0){
                          lL_material.setVisibility(View.VISIBLE);
@@ -886,14 +934,25 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 
                 break;
             case CHECK_MATERIAL_OK:
-//                _CheckSpareUseList.clear();
-//                _CheckSpareUseList = (List<EquipmentUseSpareEntity>)data.getSerializableExtra("_CheckEntityList");
-//                if(_CheckSpareUseList != null && _CheckSpareUseList.size() > 0){
-//                    adapter_SpareView = new EquipRepairSpareViewDataListAdapter(RepairmentReportActivity.this, _CheckSpareUseList);
-//                    mLv_DataList_Spare.setAdapter(adapter_SpareView);
-//                    setListViewHeightBasedOnChildren(mLv_DataList_Spare);
-//
-//                }
+                _CheckMaterialList.clear();
+                _CheckMaterialList = (List<EquipmentMaterialEntity>)data.getSerializableExtra("_CheckEntityList");
+
+                if(_CheckMaterialList!=null && _CheckMaterialList.size()!=0){
+                    mTv_materialName.setText(_CheckMaterialList.get(0).getMaterialName());
+                    mTv_materialstand.setText(_CheckMaterialList.get(0).getStandard());
+                    mTv_materialUnit.setText(_CheckMaterialList.get(0).getUnit());
+                    mEt_materialprice.setText(_CheckMaterialList.get(0).getPrice());
+                    mEt_materialsum.setText("0");
+
+                }
+                else {
+                    mTv_materialName.setText("");
+                    mTv_materialstand.setText("");
+                    mTv_materialUnit.setText("");
+                    mEt_materialprice.setText("0");
+                    mEt_materialsum.setText("0");
+                }
+
 
 
         }
@@ -923,5 +982,18 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         // listView.getDividerHeight()获取子项间分隔符占用的高度
         // params.height最后得到整个ListView完整显示需要的高度
         listView.setLayoutParams(params);
+    }
+    /**
+     * 利用正则表达式判断字符串是否是数字
+     * @param str
+     * @return
+     */
+    public boolean isNumeric(String str){
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(str);
+        if( !isNum.matches() ){
+            return false;
+        }
+        return true;
     }
 }

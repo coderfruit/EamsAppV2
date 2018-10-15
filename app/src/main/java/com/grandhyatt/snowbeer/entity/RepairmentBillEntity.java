@@ -1,10 +1,12 @@
 package com.grandhyatt.snowbeer.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by tongzhiqiang on 2018-09-17.
  */
 
-public class RepairmentBillEntity {
+public class RepairmentBillEntity implements Serializable {
 
     private String ID;
 

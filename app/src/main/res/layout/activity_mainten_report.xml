@@ -494,7 +494,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="8dp"
-                        android:hint=""
+
                         android:textColor="@color/gray5"
                         android:textSize="14sp" />
 

@@ -208,7 +208,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
         if (mTv_ReportID != null && mTv_EquipID != null) {
             mToolBar.setTitle("查看维修信息");
-//            getReport(mTv_ReportID);
+            getReport(mTv_ReportID);
             getEquipmentInfoByID(mTv_EquipID);
             bindEventPart();
 

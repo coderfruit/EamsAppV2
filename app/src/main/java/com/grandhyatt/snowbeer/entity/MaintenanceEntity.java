@@ -1,5 +1,6 @@
 package com.grandhyatt.snowbeer.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  * Created by ycm on 2018/9/28.
  */
 
-public class MaintenanceEntity {
+public class MaintenanceEntity implements Serializable {
 
 
     private String Status;
@@ -27,15 +28,12 @@ public class MaintenanceEntity {
 
     private String EquipmentName;
 
-    private String DeptCode;
+    private String DepartmentID;
 
-    private String DeptName;
+
 
     private String MaintenanceLevel;
 
-    private String Interval;
-
-    private String IntervalUnit;
 
     private String StartTime;
 
@@ -44,7 +42,7 @@ public class MaintenanceEntity {
     private String TotalMoney;
 
 
-    private int  ShutDownMinutes;
+    private String  ShutDownMinutes;
 
     private String MaintenancePlanID;
 
@@ -54,17 +52,8 @@ public class MaintenanceEntity {
 
     private String Remark;
 
-    private List<MaintenanceItemEntity> MaintenanceItemEntityList;
 
     public MaintenanceEntity() {
-    }
-
-    public List<MaintenanceItemEntity> getMaintenanceItemEntityList() {
-        return MaintenanceItemEntityList;
-    }
-
-    public void setMaintenanceItemEntityList(List<MaintenanceItemEntity> value) {
-        MaintenanceItemEntityList = value;
     }
 
     public String getMaintenUser() {
@@ -88,11 +77,11 @@ public class MaintenanceEntity {
     public void setMaintenancePlanID(String value) {
         MaintenancePlanID = value;
     }
-    public int getShutDownMinutes() {
+    public String getShutDownMinutes() {
         return ShutDownMinutes;
     }
 
-    public void setShutDownMinutes(int value) {
+    public void setShutDownMinutes(String value) {
         ShutDownMinutes = value;
     }
     public String getTotalMoney() {
@@ -174,21 +163,14 @@ public class MaintenanceEntity {
         EquipmentName = equipmentName;
     }
 
-    public String getDeptCode() {
-        return DeptCode;
+    public String getDepartmentID() {
+        return DepartmentID;
     }
 
-    public void setDeptCode(String deptCode) {
-        DeptCode = deptCode;
+    public void setDepartmentID(String value) {
+        DepartmentID = value;
     }
 
-    public String getDeptName() {
-        return DeptName;
-    }
-
-    public void setDeptName(String deptName) {
-        DeptName = deptName;
-    }
 
     public String getMaintenanceLevel() {
         return MaintenanceLevel;
@@ -198,21 +180,7 @@ public class MaintenanceEntity {
         MaintenanceLevel = maintenanceLevel;
     }
 
-    public String getInterval() {
-        return Interval;
-    }
 
-    public void setInterval(String interval) {
-        Interval = interval;
-    }
-
-    public String getIntervalUnit() {
-        return IntervalUnit;
-    }
-
-    public void setIntervalUnit(String intervalUnit) {
-        IntervalUnit = intervalUnit;
-    }
 
 
 

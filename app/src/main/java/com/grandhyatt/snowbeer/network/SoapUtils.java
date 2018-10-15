@@ -13,6 +13,8 @@ import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.entity.APIHostInfoEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentUseSpareEntity;
+import com.grandhyatt.snowbeer.entity.MaintenanceEntity;
+import com.grandhyatt.snowbeer.entity.MaintenanceItemEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentBillEntity;
 import com.grandhyatt.snowbeer.entity.TextDictionaryEntity;
 import com.grandhyatt.snowbeer.network.callback.CommonCallback;
@@ -23,6 +25,8 @@ import com.grandhyatt.snowbeer.network.request.EquipmentRequest;
 import com.grandhyatt.snowbeer.network.request.FailureReportingRequest;
 import com.grandhyatt.snowbeer.network.request.LoginRequest;
 import com.grandhyatt.snowbeer.network.request.MaintenReportingRequest;
+import com.grandhyatt.snowbeer.network.request.RepairmentReportingRequest;
+import com.grandhyatt.snowbeer.network.result.MaintenResult;
 import com.grandhyatt.snowbeer.network.result.RepairmentEquipmentResult;
 import com.grandhyatt.snowbeer.network.result.TextDictoryResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapClient;
@@ -442,6 +446,19 @@ public class SoapUtils {
 
 	}
 
+	/*获取维修记录 */
+	public static void getRepairmentReportAsync(final Context context, RepairmentReportingRequest request, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "GetRepairmentReport";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("ReportID",request.getID());
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+
+	}
 	/**
 	 * 获取附件文件数据
 	 * @param context
@@ -645,6 +662,36 @@ public class SoapUtils {
         SoapUtils.getInstance(context).call(methodName, params, callback);
     }
 
+	/**
+	 * 提交保养信息
+	 * @param context
+	 * @param request
+	 * @param callback
+	 */
+	public static void submitNewEquipMaintenanceRepairAsync(final Context context, MaintenResult request, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "NewEquipMaintenanceRepair";
+
+		//String userID = SPUtils.getLastLoginUserID(context);
+		String userName = SPUtils.getLastLoginUserName(context);
+
+		//获取http请求身份验证参数
+		SoapParams params = getAuthHttpRequestHeader(context);
+
+		params.put("userName", userName);
+		MaintenanceEntity rparbill = request.getData();
+		Gson gson1 = new Gson();
+
+		String jsonrepa = gson1.toJson(rparbill, MaintenanceEntity.class);
+		params.put("mainten", jsonrepa);
+
+		List<MaintenanceItemEntity> rparbillitem = request.getdateItemList();
+
+		String jsonrepaitem = gson1.toJson(rparbillitem);
+		params.put("maintenItem", jsonrepaitem);
+		SoapUtils.getInstance(context).call(methodName, params, callback);
+	}
 	/**
 	 * 获取预警消息条数
 	 * @param context

@@ -17,12 +17,16 @@ import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.R;
+import com.grandhyatt.snowbeer.adapter.EquipMgrMaintenMaterialDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.EquipMgrRepairSpareDataListAdapter;
 import com.grandhyatt.snowbeer.entity.DepartmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
+import com.grandhyatt.snowbeer.entity.EquipmentMaterialEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentUseSpareEntity;
+import com.grandhyatt.snowbeer.entity.MaintenancePlanEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.result.DepartmentResult;
+import com.grandhyatt.snowbeer.network.result.EquipmentMaterialResult;
 import com.grandhyatt.snowbeer.network.result.EquipmentResult;
 import com.grandhyatt.snowbeer.network.result.EquipmentUseSpareResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
@@ -92,10 +96,9 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
     //用户扫码获取的设备
     EquipmentEntity _Equipment;
 
-    EquipMgrRepairSpareDataListAdapter adapter_Spare = null;//备件列表适配器
-    int _CheckCnt = 0;//用户选中的行数
-    ArrayList<String> _CheckIDList = new ArrayList<>();//用户选择的数据行ID
-    ArrayList<EquipmentUseSpareEntity> _CheckEntityList = new ArrayList<>();//用户选择的数据行对象
+    EquipMgrMaintenMaterialDataListAdapter adapter_Spare = null;//备件列表适配器
+    int _CheckCnt = -1;//用户选中的行数
+    ArrayList<EquipmentMaterialEntity> _CheckEntityList = new ArrayList<>();//用户选择的数据行对象
 
 
 
@@ -137,7 +140,7 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
 
                 _SpareCond = mEt_SpareCond.getText().toString();
 
-                getSparesInfo(_EquipID, _SpareCond);
+                getMaterialInfo(_EquipID, _SpareCond);
             }
         });
 
@@ -163,56 +166,46 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
 //        });
 
 
+
         mLv_DataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                EquipmentUseSpareEntity spareEntity = null;
-
+                EquipmentMaterialEntity planEty = null;
+                EquipmentMaterialEntity planEty1 = null;
                 CheckBox ckb = view.findViewById(R.id.mCkb_IsCheck);
-                TextView mTv_ID = view.findViewById(R.id.mTv_ID);
-                String checkedID = mTv_ID.getText().toString();
-
                 boolean ckbValue = ckb.isChecked();
-                if (ckbValue) {  //取消选中
-                    if (adapter_Spare != null) {//适配器有值
-                        if (_CheckCnt > 0) {
-                            _CheckCnt--;
-                            if (_CheckIDList.contains(checkedID)) {
-                                _CheckIDList.remove(checkedID);
-                            }
-                            mTv_CheckCnt.setText("选中" + _CheckCnt + "条");
+                if (!ckbValue)
+                {//取消选中
 
-                            spareEntity = (EquipmentUseSpareEntity) adapter_Spare.getItem(position);
-                            spareEntity.setIsCheck(false);
-                            adapter_Spare.notifyDataSetChanged();
+                    if (_CheckCnt != -1)
+                    {
+                        if(_CheckCnt==position){
+                            planEty1 = (EquipmentMaterialEntity) adapter_Spare.getItem(position);
+                            planEty1.setIsCheck(true);
+                        }
+                        else {
+                            planEty = (EquipmentMaterialEntity) adapter_Spare.getItem(_CheckCnt);
+                            planEty.setIsCheck(false);
+                            planEty1 = (EquipmentMaterialEntity) adapter_Spare.getItem(position);
+                            planEty1.setIsCheck(true);
 
-                            if (spareEntity != null) {
-                                if (_CheckEntityList.contains(spareEntity)) {
-                                    _CheckEntityList.remove(spareEntity);
-                                }
-                            }
                         }
                     }
-                } else {        //选中
-                    if (adapter_Spare != null) {//适配器有值
+                    else {
+                        planEty1 = (EquipmentMaterialEntity) adapter_Spare.getItem(position);
+                        planEty1.setIsCheck(true);
 
-                        _CheckCnt++;
-                        if (!_CheckIDList.contains(checkedID)) {
-                            _CheckIDList.add(checkedID);
-                        }
-                        mTv_CheckCnt.setText("选中" + _CheckCnt + "条");
-
-                        spareEntity = (EquipmentUseSpareEntity) adapter_Spare.getItem(position);
-                        spareEntity.setIsCheck(true);
-                        adapter_Spare.notifyDataSetChanged();
-                        if (spareEntity != null) {
-                            if (!_CheckEntityList.contains(spareEntity)) {
-                                _CheckEntityList.add(spareEntity);
-                            }
-                        }
                     }
+                    _CheckCnt=position;
+
                 }
+                else {
+                    planEty1 = (EquipmentMaterialEntity) adapter_Spare.getItem(position);
+                    planEty1.setIsCheck(false);
+                    _CheckCnt=-1;
 
+                }
+                adapter_Spare.notifyDataSetChanged();
 
             }
         });
@@ -222,34 +215,31 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
             @Override
             public void onClick(View v) {
 
-                if(_CheckIDList == null || _CheckIDList.size() == 0)
+
+                _CheckEntityList.clear();
+
+                EquipmentMaterialEntity rpEntity=null;
+                for (int i = 0; i < adapter_Spare.getCount(); i++) {
+
+                    rpEntity = (EquipmentMaterialEntity) mLv_DataList.getAdapter().getItem(i);
+                    if (rpEntity!=null) {
+                        if( rpEntity.getIsCheck()){
+                            _CheckEntityList.add(rpEntity);
+
+                        }
+
+                    }
+                }
+                if(_CheckEntityList == null || _CheckEntityList.size() == 0)
                 {
                     ToastUtils.showLongToast(EquipMgrMaintenMaterialActivity.this,"请选择使用的备件（单选或多选）");
                     return;
                 }
-
-                boolean isChk = false;
-                // 部门校验
-                for (EquipmentUseSpareEntity item : _CheckEntityList) {
-                    String spareDeptCode = item.getDeptCode().substring(0,4);
-                    String equipDeptCode = _Equipment.getDepartmentCode().substring(0,4);
-
-                    if (!spareDeptCode.equals(equipDeptCode))
-                    {
-                        isChk = true;
-                    }
-                }
-                if (isChk)
-                {
-                    ToastUtils.showLongToast(EquipMgrMaintenMaterialActivity.this,"不允许备件与设备跨大部门使用!");
-                    return;
-                }
-
                 //数据是使用Intent返回
                 Intent intent = new Intent();
 
                 //把返回数据存入Intent
-                intent.putStringArrayListExtra("_CheckIDList", _CheckIDList);
+
                 intent.putExtra("_CheckEntityList", _CheckEntityList);
 
 
@@ -334,7 +324,7 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
 //                    _SelectedDept.setID( data.getDepartmentID());
 
                     //获取设备可用的备件库存信息
-                    getSparesInfo(data.getID(),  "");
+                    getMaterialInfo(data.getID(),  "");
                 }
             }
 
@@ -415,7 +405,7 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
      * @param equipID
      * @param spareContent
      */
-    private void getSparesInfo(String equipID, String spareContent) {
+    private void getMaterialInfo(String equipID, String spareContent) {
 
 
         SoapUtils.getEquipmentMaterialStoreInfo(EquipMgrMaintenMaterialActivity.this, equipID, spareContent, new SoapListener() {
@@ -433,7 +423,7 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
                 }
                 //接口返回信息正常
                 String strData = object.getPropertyAsString(0);
-                EquipmentUseSpareResult result = new Gson().fromJson(strData, EquipmentUseSpareResult.class);
+                EquipmentMaterialResult result = new Gson().fromJson(strData, EquipmentMaterialResult.class);
                 //校验接口返回代码
                 if (result == null) {
                     ToastUtils.showLongToast(EquipMgrMaintenMaterialActivity.this, getString(R.string.submit_soap_result_err3));
@@ -442,7 +432,7 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
                     ToastUtils.showLongToast(EquipMgrMaintenMaterialActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
                     return;
                 }
-                List<EquipmentUseSpareEntity> data = result.getData();
+                List<EquipmentMaterialEntity> data = result.getData();
                 //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
                 if (data == null || data.size() == 0) {
                     ToastUtils.showToast(EquipMgrMaintenMaterialActivity.this, "没有获取到该设备可用的备件信息");
@@ -451,9 +441,9 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
                 } else {
 
                     int cnt = data.size();
-                    mTv_AllCnt.setText("共" + String.valueOf(cnt) + "条/");
+                    mTv_AllCnt.setText("共" + String.valueOf(cnt) + "条");
 
-                    adapter_Spare = new EquipMgrRepairSpareDataListAdapter(EquipMgrMaintenMaterialActivity.this, data);
+                    adapter_Spare = new EquipMgrMaintenMaterialDataListAdapter(EquipMgrMaintenMaterialActivity.this, data);
                     mLv_DataList.setAdapter(adapter_Spare);
 
                 }

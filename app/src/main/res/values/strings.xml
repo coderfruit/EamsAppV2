@@ -102,6 +102,10 @@
     <string name="activity_repairment_submit_err">维修信息提交异常,%s</string>
     <string name="activity_repairment_submit_fail">维修信息提交失败,%s</string>
 
+    <string name="activity_maintenance_submit_ok">保养信息提交成功</string>
+    <string name="activity_maintenance_submit_err">保养信息提交异常,%s</string>
+    <string name="activity_maintenance_submit_fail">保养信息提交失败,%s</string>
+
     <string name="submit_soap_result_err1">服务请求提交失败</string>
     <string name="submit_soap_result_err2">服务连接失败</string>
     <string name="submit_soap_result_err3">服务请求返回信息异常</string>

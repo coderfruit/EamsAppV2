@@ -2,6 +2,7 @@ package com.grandhyatt.snowbeer.network.result;
 
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.snowbeer.entity.MaintenanceEntity;
+import com.grandhyatt.snowbeer.entity.MaintenanceItemEntity;
 import com.grandhyatt.snowbeer.entity.MaintenancePlanEntity;
 
 import java.util.List;
@@ -14,6 +15,26 @@ import java.util.List;
 public class MaintenResult extends Result {
 
     private MaintenanceEntity data;
+    private List<MaintenanceItemEntity> dateItemList;
+
+    /**
+     * 获取 dateItemList
+     *
+     * @return com.bose.rose.model.LoginUserInfo
+     */
+    public List<MaintenanceItemEntity> getdateItemList() {
+        return dateItemList;
+    }
+
+    /**
+     * 设置 data
+     *
+     * @param value
+     * @return void
+     */
+    public void setdateItemList(List<MaintenanceItemEntity> value) {
+        this.dateItemList = value;
+    }
 
     /**
      * 获取 data
