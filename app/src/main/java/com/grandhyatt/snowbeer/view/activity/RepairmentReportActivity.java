@@ -60,9 +60,11 @@ import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
 import com.grandhyatt.snowbeer.entity.TextDictionaryEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.request.FailureReportingRequest;
+import com.grandhyatt.snowbeer.network.request.RepairmentReportingRequest;
 import com.grandhyatt.snowbeer.network.result.EquipmentResult;
 import com.grandhyatt.snowbeer.network.result.FailureReportingResult;
 import com.grandhyatt.snowbeer.network.result.RepairmentEquipmentResult;
+import com.grandhyatt.snowbeer.network.result.RepairmentResult;
 import com.grandhyatt.snowbeer.network.result.SpareInEquipmentResult;
 import com.grandhyatt.snowbeer.network.result.StringResult;
 import com.grandhyatt.snowbeer.network.result.TextDictoryResult;
@@ -179,8 +181,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
      */
     EquipmentEntity _EquipmentData;
 
-    FailureReportingEntity _ReportEntity;
-    List<FailureReportingAttachmentEntity> _ReportFileEntitys;
+    RepairmentBillEntity _ReportEntity;
     RepairmentPlanViewDataListAdapter adapter_Plan = null;//维护计划适配器
     SpareInEquipmentViewDataListAdapter adapter_Spare = null;  //备件适配器
     EquipRepairSpareViewDataListAdapter adapter_SpareView=null;
@@ -208,8 +209,9 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
         if (mTv_ReportID != null && mTv_EquipID != null) {
             mToolBar.setTitle("查看维修信息");
-//            getReport(mTv_ReportID);
             getEquipmentInfoByID(mTv_EquipID);
+           getReport(mTv_ReportID);
+
             bindEventPart();
 
             //隐藏搜索栏
@@ -968,7 +970,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 }
                 EquipmentEntity data = result.getData();
                 fillEquipInfo(data);
-
+                dismissLoadingDialog();
             }
 
             @Override
@@ -1083,10 +1085,10 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
         showLogingDialog();
 
-        FailureReportingRequest request = new FailureReportingRequest();
+        RepairmentReportingRequest request = new RepairmentReportingRequest();
         request.setID(rptID);
 
-        SoapUtils.getFailureReportAsync(RepairmentReportActivity.this, request, new SoapListener() {
+        SoapUtils.getRepairmentReportAsync(RepairmentReportActivity.this, request, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
 
@@ -1101,7 +1103,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 }
                 //接口返回信息正常
                 String strData = object.getPropertyAsString(0);
-                FailureReportingResult result = new Gson().fromJson(strData, FailureReportingResult.class);
+                RepairmentResult result = new Gson().fromJson(strData, RepairmentResult.class);
                 //校验接口返回代码
                 if (result == null) {
                     ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err3));
@@ -1113,30 +1115,22 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 _ReportEntity = result.getData();
 
                 if (_ReportEntity != null) {
-                    mTv_EquipCode.setText(_ReportEntity.getEquipmentCode());
-                    mTv_EquipName.setText(_ReportEntity.getEquipmentName());
+
                      SimpleDateFormat formatter;
                        formatter = new SimpleDateFormat ("yyyy-MM-dd KK:mm:ss a");
-                        String ctime = formatter.format(_ReportEntity.getReportDate());
+                        String ctime = formatter.format(_ReportEntity.getStartTime());
+                    String ctime1 = formatter.format(_ReportEntity.getFinishTime());
                     mTv_FaultDate.setText(ctime.substring(0,10));
-
-                    mTv_FaultLevel.setText(_ReportEntity.getFailureLevel());
-                    mTv_FaultDesc.setText(_ReportEntity.getFailureDesc());
-                    mEt_User.setText(_ReportEntity.getLinkUser());
-                    mEt_money.setText(_ReportEntity.getLinkMobile());
+                    mTv_FaultDate1.setText(ctime1.substring(0,10));
+                    mTv_FaultLevel.setText(_ReportEntity.getFaultLevel());
+                    mTv_FaultDesc.setText(_ReportEntity.getDescription());
+                    mEt_User.setText(_ReportEntity.getRepairUser());
+                    mEt_money.setText(String.valueOf(_ReportEntity.getTotalMoney()));
 //                    mTv_ReportNO.setVisibility(View.VISIBLE);
 //                    mTv_ReportNO.setText(_ReportEntity.getReportNO());
 
-                    _ReportFileEntitys = _ReportEntity.getFailureReportingAttachmentModelList();
-
-                    for(FailureReportingAttachmentEntity file : _ReportFileEntitys){
-                        String filePath = getFilePath(_ReportEntity ,file);
 
 
-                    }
-
-                    //获取报修附件信息至本地
-                    getReportFiles(_ReportFileEntitys);
                 }
 
             }
@@ -1155,91 +1149,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         });
     }
 
-    /**
-     * 获取附件数据信息
-     * @param files
-     */
-    private void getReportFiles(final List<FailureReportingAttachmentEntity> files) {
 
-        final List<Uri> bpPathlist = new ArrayList<>();
-
-        final int[] idx = {0};
-        for (final FailureReportingAttachmentEntity file : files)
-        {
-              //获取附件数据
-              SoapUtils.getFileDataAsync(RepairmentReportActivity.this, file.getFileGuid(), new SoapListener() {
-                  @Override
-                  public void onSuccess(int statusCode, SoapObject object) {
-
-                      dismissLoadingDialog();
-                      if (object == null) {
-                          ToastUtils.showLongToast(RepairmentReportActivity.this, "1获取附件信息数据失败" + statusCode);
-                          return;
-                      }
-                      //判断接口连接是否成功
-                      if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
-                          ToastUtils.showLongToast(RepairmentReportActivity.this, "2获取附件信息数据失败" + statusCode);
-                          return;
-                      }
-                      //接口返回信息正常
-                      String strData = object.getPropertyAsString(0);
-                      StringResult result = new Gson().fromJson(strData, StringResult.class);
-
-                      String filePath = getFilePath(_ReportEntity ,file);
-                      String base64Str = result.data;
-
-                      byte[] btFile = CommonUtils.base64ToByte(base64Str);
-
-                      if(file.getAttachmentType().equals("图片")) {
-                          try {
-                              CommonUtils.encodeBase64ToFile(btFile,filePath);
-                              Uri mUri = CommonUtils.getPathUri(filePath);
-                              bpPathlist.add(mUri);
-
-                          } catch (Exception e) {
-                              e.printStackTrace();
-                          }
-                      }
-                      else
-                      {
-                          try {
-                              CommonUtils.encodeBase64ToFile(btFile,filePath);
-
-
-                          } catch (Exception e) {
-                              e.printStackTrace();
-                          }
-                      }
-
-                      idx[0]++;
-                      if(idx[0] == files.size()) {
-                          final ShowImagesAdapter mlvAdapter = new ShowImagesAdapter(RepairmentReportActivity.this, bpPathlist);
-
-                      }
-
-                  }
-
-                  @Override
-                  public void onFailure(int statusCode, String content, Throwable error) {
-                      idx[0]++;
-                      if(idx[0] == files.size()) {
-                          final ShowImagesAdapter mlvAdapter = new ShowImagesAdapter(RepairmentReportActivity.this, bpPathlist);
-
-                      }
-                  }
-
-                  @Override
-                  public void onFailure(int statusCode, SoapFault fault) {
-                      idx[0]++;
-                      if(idx[0] == files.size()) {
-                          final ShowImagesAdapter mlvAdapter = new ShowImagesAdapter(RepairmentReportActivity.this, bpPathlist);
-
-                      }
-                  }
-              });
-        }
-
-    }
 
     /**
      * 获取文件路径
