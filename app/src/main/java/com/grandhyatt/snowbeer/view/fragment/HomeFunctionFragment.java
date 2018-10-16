@@ -309,12 +309,12 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
             public void onSuccess(int statusCode, SoapObject object) {
 
                 if (object == null) {
-                    ToastUtils.showLongToast(getContext(), "1获取报修信息数据失败" + statusCode);
+                    ToastUtils.showLongToast(getContext(), "1获取预警信息数据失败" + statusCode);
                     return;
                 }
                 //判断接口连接是否成功
                 if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
-                    ToastUtils.showLongToast(getContext(), "2获取报修信息数据失败" + statusCode);
+                    ToastUtils.showLongToast(getContext(), "2获取预警信息数据失败" + statusCode);
                     return;
                 }
                 //接口返回信息正常
@@ -323,10 +323,10 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
 
                 //校验接口返回代码
                 if (result == null) {
-                    ToastUtils.showLongToast(getContext(), "3获取报修信息数据失败" + statusCode);
+                    ToastUtils.showLongToast(getContext(), "3获取预警信息数据失败" + statusCode);
                     return;
                 } else if (result.code != Result.RESULT_CODE_SUCCSED) {
-                    ToastUtils.showLongToast(getContext(), "4获取报修信息数据失败" + statusCode + result.msg);
+                    ToastUtils.showLongToast(getContext(), "4获取预警信息数据失败" + statusCode + result.msg);
                     return;
                 }
                 WarningInfoCountEntity data = result.getData();
@@ -338,13 +338,13 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
             @Override
             public void onFailure(int statusCode, String content, Throwable error) {
                 mRefreshLayout.finishRefresh(true);
-                ToastUtils.showLongToast(getContext(), "获取报修信息异常:" + error.getMessage());
+                ToastUtils.showLongToast(getContext(), "获取预警信息异常:" + error.getMessage());
             }
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
                 mRefreshLayout.finishRefresh(true);
-                ToastUtils.showLongToast(getContext(), "获取报修信息失败:" + fault);
+                ToastUtils.showLongToast(getContext(), "获取预警信息失败:" + fault);
             }
         });
     }

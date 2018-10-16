@@ -1,6 +1,7 @@
 package com.grandhyatt.snowbeer.view.activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -24,6 +25,9 @@ import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -59,6 +63,8 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
     TextView mTv_UserCorp;
     @BindView(R.id.mRL_UserCorp)
     RelativeLayout mRL_UserCorp;
+    @BindView(R.id.mRefreshLayout)
+    SmartRefreshLayout mRefreshLayout;
 
     Badge qBv_mBt_EquipRepair;
     Badge qBv_mBt_EquipMaintenance;
@@ -147,6 +153,15 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
                 showUserCorp();
             }
         });
+
+        //下拉刷新
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+                mRefreshLayout.setNoMoreData(false);
+                requestNetworkData();
+            }
+        });
     }
 
     @Override
@@ -190,18 +205,21 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
                 if(data != null) {
                     initWarningInfoCount(data);
                 }
+                mRefreshLayout.finishRefresh(true); //设置SmartRefreshLayout刷新完成标志
             }
 
             @Override
             public void onFailure(int statusCode, String content, Throwable error) {
                 dismissLoadingDialog();
                 ToastUtils.showLongToast(WarningInfo_EquipActivity.this, "获取预警消息数异常:" + error.getMessage());
+                mRefreshLayout.finishRefresh(true); //设置SmartRefreshLayout刷新完成标志
             }
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
                 dismissLoadingDialog();
                 ToastUtils.showLongToast(WarningInfo_EquipActivity.this, "获取预警消息数失败:" + fault);
+                mRefreshLayout.finishRefresh(true); //设置SmartRefreshLayout刷新完成标志
             }
         });
     }
@@ -244,7 +262,7 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
                     CorporationEntity corp = corpList.get(position);
 
                     mTv_UserCorp.setText(corp.getCorporationName());
-                    SPUtils.setLastLoginUserCorporation(WarningInfo_EquipActivity.this, corp);
+                    //SPUtils.setLastLoginUserCorporation(WarningInfo_EquipActivity.this, corp);
 
                     requestNetworkData();
                 }

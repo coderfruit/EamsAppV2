@@ -1,6 +1,7 @@
 package com.grandhyatt.snowbeer.view.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -400,14 +401,23 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
                     ToastUtils.showLongToast(LoginActivity.this,"请选择用户归属工厂");
 
                     final List<CorporationEntity> corpListTmp = corpList;
-                    showSelectDialog(new SelectDialog.SelectDialogListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    showSelectDialog(new SelectDialog.SelectDialogListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                            finalUserCorp[0] = corpListTmp.get(position);
+//                            loginSuccess(result, data, finalUserCorp[0], corpListTmp, userCode, password);
+//                        }
+//                    }, listCorpName);
 
-                            finalUserCorp[0] = corpListTmp.get(position);
+                    showSelectDialog("选择归属工厂\r\n在“我的-归属工厂”可更改", listCorpName, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finalUserCorp[0] = corpListTmp.get(which);
                             loginSuccess(result, data, finalUserCorp[0], corpListTmp, userCode, password);
                         }
-                    }, listCorpName);
+                    });
+
                 }
                 else{ //用户配置的组织机构只有1个
                     userCorp = data.getCorporations().get(0);

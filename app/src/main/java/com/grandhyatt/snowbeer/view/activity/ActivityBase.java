@@ -205,5 +205,23 @@ public class ActivityBase extends com.grandhyatt.commonlib.view.activity.Activit
         return value[0];
     }
 
+    /**
+     * 弹出选择对话框
+     * @param title
+     * @param list
+     * @param listener
+     */
+    public void showSelectDialog(String title,List<String> list,DialogInterface.OnClickListener listener)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Light_Dialog_MinWidth);// Theme_Holo_Light_Dialog);
+        builder.setIcon(R.drawable.logo32);
+        builder.setTitle(title);
+
+        final String[] cities = (String[]) list.toArray(new String[list.size()]);
+
+        //设置一个下拉的列表选择项
+        builder.setItems(cities, listener);
+        builder.show();
+    }
 
 }
