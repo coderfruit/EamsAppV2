@@ -347,7 +347,6 @@
                         android:hint="添加故障描述"
                         android:textColor="@color/gray5"
                         android:textSize="14sp" />
-
                 </RelativeLayout>
             </LinearLayout>
 
