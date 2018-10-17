@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.grandhyatt.snowbeer.view.ToolBarLayout
+        android:id="@+id/mToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- 设备信息标题 begin-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="23dp"
+            android:background="@drawable/selector_linear_layout_item_gray"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="10dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:text="设备信息"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="1dp"
+            android:background="@color/white6" />
+        <!-- 设备信息标题 end -->
+
+        <LinearLayout
+            android:id="@+id/mLly_EquipInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <!-- 设备名称 编码 -->
+            <TextView
+                android:id="@+id/mTv_EquipName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="设备名称"
+                android:textColor="@color/gray5"
+                android:textSize="14sp" />
+
+
+            <TextView
+                android:id="@+id/mTv_EquipCode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="设备编码"
+                android:textColor="@color/gray5"
+                android:textSize="14sp" />
+
+           
+        </LinearLayout>
+
+        <!-- 设备维护计划/设备备件信息 begin-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="23dp"
+            android:background="@drawable/selector_linear_layout_item_gray"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="3dp"
+                android:layout_height="10dp"
+                android:layout_marginLeft="20dp"
+                android:background="@color/colorPrimary" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:text="设备检验计划/备件信息"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="1dp"
+            android:background="@color/white6" />
+
+        <!-- 设备维护计划/设备备件信息 end -->
+        <ListView
+            android:id="@+id/mLv_DataList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_listview_item"
+            android:choiceMode="multipleChoice"
+            android:divider="@null"
+            android:dividerHeight="0dp" />
+        <!-- selector_list_view_item_common_white -->
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/selector_linear_layout_item_gray">
+
+            <TextView
+                android:id="@+id/mTv_AllCnt"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:text="共0条"
+                android:textStyle="bold"
+                android:layout_weight="0.5"
+                android:gravity="right"
+                android:textColor="@color/red3"/>
+
+            <TextView
+                android:id="@+id/mTv_CheckCnt"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+
+                android:textStyle="bold"
+                android:layout_weight="0.5"
+                android:gravity="left"
+                android:textColor="@color/red3"/>
+
+            <Button
+                android:id="@+id/mBtn_OK"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_login_button_true"
+                android:text="确定"
+                android:textSize="16sp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

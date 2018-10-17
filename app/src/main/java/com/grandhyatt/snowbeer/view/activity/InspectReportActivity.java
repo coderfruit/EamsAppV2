@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -13,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,20 +34,21 @@ import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
-import com.grandhyatt.snowbeer.adapter.MaintenancePlanCheckDataListAdapter;
+import com.grandhyatt.snowbeer.adapter.InspectPlanViewDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.MaintenancePlanViewDataListAdapter;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentMaterialEntity;
+import com.grandhyatt.snowbeer.entity.InspectEntity;
+import com.grandhyatt.snowbeer.entity.InspectionPlanEntity;
 import com.grandhyatt.snowbeer.entity.MaintenanceEntity;
 import com.grandhyatt.snowbeer.entity.MaintenanceItemEntity;
 import com.grandhyatt.snowbeer.entity.MaintenancePlanEntity;
-import com.grandhyatt.snowbeer.entity.RepairmentBillEntity;
 import com.grandhyatt.snowbeer.entity.TextDictionaryEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.request.MaintenReportingRequest;
 import com.grandhyatt.snowbeer.network.result.EquipmentResult;
+import com.grandhyatt.snowbeer.network.result.InspectResult;
 import com.grandhyatt.snowbeer.network.result.MaintenResult;
-import com.grandhyatt.snowbeer.network.result.RepairmentEquipmentResult;
 import com.grandhyatt.snowbeer.network.result.StringResult;
 import com.grandhyatt.snowbeer.network.result.TextDictoryResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
@@ -57,7 +56,6 @@ import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.utils.CommonUtils;
 import com.grandhyatt.snowbeer.utils.ImageUtils;
 import com.grandhyatt.snowbeer.utils.SPUtils;
-import com.grandhyatt.snowbeer.view.NumberEditText;
 import com.grandhyatt.snowbeer.view.SearchBarLayout;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
 
@@ -75,11 +73,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.grandhyatt.snowbeer.Consts.CAMERA_BARCODE_SCAN;
+
 /**
  * Created by tongzhiqiang on 2018-10-08.
  */
 
-public class MaintenReportActivity extends ActivityBase implements IActivityBase, View.OnClickListener {
+public class InspectReportActivity extends ActivityBase implements IActivityBase, View.OnClickListener{
     @BindView(R.id.mToolBar)
     ToolBarLayout mToolBar;
 
@@ -103,51 +102,41 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 
     @BindView(R.id.mBtn_Submit)
     Button mBtn_Submit;
-    @BindView(R.id.mBtn_marAdd)
-    Button mBtn_marAdd;
+
     @BindView(R.id.mTv_jh)
     TextView mTv_jh;
     @BindView(R.id.mEt_User)
     EditText mEt_User;
+    @BindView(R.id.mEt_Com)
+    EditText mEt_Com;
     @BindView(R.id.mEt_money)
     EditText mEt_money;
-    @BindView(R.id.mTv_RepairmentDesc)
-    TextView mTv_RepairmentDesc;
-
     @BindView(R.id.mLv_Show_plan)
     ListView mLv_Show_plan;
     BroadcastReceiver mReceiver;
     IntentFilter mFilter;
 
-    @BindView(R.id.mTv_FaultDate)
-    TextView mTv_FaultDate;
-    @BindView(R.id.mTv_FaultDate1)
-    TextView mTv_FaultDate1;
-    @BindView(R.id.mTv_FaultDesc)
-    TextView mTv_FaultDesc;
-    @BindView(R.id.mTv_materialstand)
-    TextView mTv_materialstand;
-    @BindView(R.id.mTv_materialName)
-    TextView mTv_materialName;
-    @BindView(R.id.mTv_materialUnit)
-    TextView mTv_materialUnit;
-    @BindView(R.id.mEt_materialsum)
-    EditText mEt_materialsum;
-    @BindView(R.id.mEt_materialprice)
-    EditText mEt_materialprice;
+    @BindView(R.id.mTv_InspTime)
+    TextView mTv_InspTime;
+    @BindView(R.id.mTv_inspItem)
+    TextView mTv_inspItem;
+    @BindView(R.id.mTv_InspResult)
+    TextView mTv_InspResult;
+    @BindView(R.id.mTv_InspMode)
+    TextView mTv_InspMode;
 
-    @BindView(R.id.lL_material)
-    LinearLayout lL_material;
+
+
     EquipmentEntity _EquipmentData;
-    MaintenanceEntity _ReportEntity;
-    List<MaintenanceItemEntity> _ReportFileEntitys;
-    String[] _FaultDescArr;
+    InspectEntity _ReportEntity;
+    String[] _InspItemArr; //检验类型
+    String[] _InspResultArr; //检验类型
+    String[] _InspModeArr; //检验类型
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
-    public static final int CHECK_MATERIAL_OK = 112;//选择维修用备件
     ArrayList<String> _CheckPlanIDList; //用户选中的维护计划ID
-    List<MaintenancePlanEntity> _CheckPlanEntityList = new ArrayList<>();//用户选择的数据行对象
-    List<EquipmentMaterialEntity> _CheckMaterialList = new ArrayList<>();//用户选择的数据行对象
-    MaintenancePlanViewDataListAdapter adapter_Plan=null;
+    List<InspectionPlanEntity> _CheckPlanEntityList = new ArrayList<>();//用户选择的数据行对象
+
+    InspectPlanViewDataListAdapter adapter_Plan=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,8 +147,9 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_card_re_check);
-        setContentView(R.layout.activity_mainten_report);
+        setContentView(R.layout.activity_inspect_report);
         ButterKnife.bind(this);
+
 
         mReceiver = mSearchBar.getBroadcastReceiver();
         mFilter = mSearchBar.getFilter();
@@ -169,24 +159,60 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
 
         if (mTv_ReportID != null && mTv_EquipID != null) {
-            mToolBar.setTitle("查看保养信息");
-            getReport(mTv_ReportID);
+            mToolBar.setTitle("查看检验信息");
             getEquipmentInfoByID(mTv_EquipID);
+            getReport(mTv_ReportID);
             bindEventPart();
+
 
             //隐藏搜索栏
             mSearchBar.setVisibility(View.GONE);
 
             mBtn_Submit.setVisibility(View.GONE);
+            if (_ReportEntity != null) {
 
+                SimpleDateFormat formatter;
+                formatter = new SimpleDateFormat ("yyyy-MM-dd KK:mm:ss a");
+                String ctime = formatter.format(_ReportEntity.getInspectionDate());
+                mTv_InspTime.setText(ctime.substring(0,10));
+
+                mTv_inspItem.setText(_ReportEntity.getInspectionItem());
+                mTv_InspResult.setText(_ReportEntity.getInspectionResult());
+                mTv_InspMode.setText(_ReportEntity.getInspectionMode());
+                mEt_Com.setText(_ReportEntity.getInspectionCorp());
+
+
+                mEt_User.setText(_ReportEntity.getInspectionUser());
+                mEt_money.setText(_ReportEntity.getTotalMoney());
+
+
+
+
+                if(_CheckPlanEntityList==null || _CheckPlanEntityList.size()==0){
+                    mLv_Show_plan.setVisibility(View.GONE);
+                    mLv_Show_plan.setAdapter(null);
+                }else {
+                    mLv_Show_plan.setAdapter(null);
+                    adapter_Plan= new InspectPlanViewDataListAdapter(this, _CheckPlanEntityList);
+                    mLv_Show_plan.setSelection(adapter_Plan.getCount());
+
+
+                    mLv_Show_plan.setAdapter(adapter_Plan);
+                    adapter_Plan.notifyDataSetChanged();
+                    mLv_Show_plan.setVisibility(View.VISIBLE);
+                    setListViewHeightBasedOnChildren(mLv_Show_plan);
+                }
+
+
+            }
             mEt_User.setEnabled(false);
             mEt_money.setEnabled(false);
 
 
 
-        } else {              //添加报修
-            mToolBar.setTitle("我要保养");
-            lL_material.setVisibility(View.GONE);
+        } else {
+            mToolBar.setTitle("我要检验");
+
             initView();
             bindEventPart();
             bindEvent();
@@ -232,20 +258,20 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         mLv_Show_plan.setVisibility(View.GONE);
         //初始化用户及手机号
-        mEt_User.setText(SPUtils.getLastLoginUserName(MaintenReportActivity.this));
-        mEt_money.setText(SPUtils.getLastLoginUserPhone(MaintenReportActivity.this));
+        mEt_User.setText(SPUtils.getLastLoginUserName(InspectReportActivity.this));
+        mEt_money.setText(SPUtils.getLastLoginUserPhone(InspectReportActivity.this));
 
 
         SoapListener callbackFailureReportingDesc = new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
                 if (object == null) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "1获取保养类型数据失败" + statusCode);
+                    ToastUtils.showLongToast(InspectReportActivity.this, "1获取检验项目数据失败" + statusCode);
                     return;
                 }
                 //判断接口连接是否成功
                 if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "2获取保养类型数据失败" + statusCode);
+                    ToastUtils.showLongToast(InspectReportActivity.this, "2获取检验项目数据失败" + statusCode);
                     return;
                 }
                 //接口返回信息正常
@@ -254,32 +280,129 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 
                 //校验接口返回代码
                 if (result == null) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "3获取保养类型数据失败" + statusCode);
+                    ToastUtils.showLongToast(InspectReportActivity.this, "3获取检验项目数据失败" + statusCode);
                     return;
                 } else if (result.code != Result.RESULT_CODE_SUCCSED) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "4获取保养类型数据失败" + statusCode + result.msg);
+                    ToastUtils.showLongToast(InspectReportActivity.this, "4获取检验项目数据失败" + statusCode + result.msg);
                     return;
                 }
                 TextDictionaryEntity data = result.getData();
                 if (data != null) {
                     String value = data.getValue();
                     if (value != null && value.length() > 0) {
-                        _FaultDescArr = value.split("\\|");
+                        _InspItemArr = value.split("\\|");
+                    }
+                    else {
+                        _InspItemArr=null;
                     }
                 }
             }
 
             @Override
             public void onFailure(int statusCode, String content, Throwable error) {
-                ToastUtils.showLongToast(MaintenReportActivity.this, "0获取保养类型数据失败：" + error.getMessage());
+                ToastUtils.showLongToast(InspectReportActivity.this, "0获取保养类型数据失败：" + error.getMessage());
             }
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
-                ToastUtils.showLongToast(MaintenReportActivity.this, "0获取保养类型数据失败：" + fault.toString());
+                ToastUtils.showLongToast(InspectReportActivity.this, "0获取保养类型数据失败：" + fault.toString());
             }
         };
-        SoapUtils.getTextDictoryAsync(MaintenReportActivity.this, Consts.EnumTextDictonay.MaintenanceLevel, callbackFailureReportingDesc);
+        SoapUtils.getTextDictoryAsync(InspectReportActivity.this, Consts.EnumTextDictonay.InspectionItem, callbackFailureReportingDesc);
+
+        SoapListener callbackInspResult = new SoapListener() {
+            @Override
+            public void onSuccess(int statusCode, SoapObject object) {
+                if (object == null) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, "1获取检验结果数据失败" + statusCode);
+                    return;
+                }
+                //判断接口连接是否成功
+                if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, "2获取检验结果数据失败" + statusCode);
+                    return;
+                }
+                //接口返回信息正常
+                String strData = object.getPropertyAsString(0);
+                TextDictoryResult result = new Gson().fromJson(strData, TextDictoryResult.class);
+
+                //校验接口返回代码
+                if (result == null) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, "3获取检验结果数据失败" + statusCode);
+                    return;
+                } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, "4获取检验结果数据失败" + statusCode + result.msg);
+                    return;
+                }
+                TextDictionaryEntity data = result.getData();
+                if (data != null) {
+                    String value = data.getValue();
+                    if (value != null && value.length() > 0) {
+                        _InspResultArr = value.split("\\|");
+                    }
+                    else {
+                        _InspResultArr=null;
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, String content, Throwable error) {
+                ToastUtils.showLongToast(InspectReportActivity.this, "0获取检验结果数据失败：" + error.getMessage());
+            }
+
+            @Override
+            public void onFailure(int statusCode, SoapFault fault) {
+                ToastUtils.showLongToast(InspectReportActivity.this, "0获取检验结果数据失败：" + fault.toString());
+            }
+        };
+        SoapUtils.getTextDictoryAsync(InspectReportActivity.this, Consts.EnumTextDictonay.InspectionResult, callbackInspResult);
+
+        SoapListener callbackInspMode = new SoapListener() {
+            @Override
+            public void onSuccess(int statusCode, SoapObject object) {
+                if (object == null) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, "1获取检验方式数据失败" + statusCode);
+                    return;
+                }
+                //判断接口连接是否成功
+                if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, "2获取检验方式数据失败" + statusCode);
+                    return;
+                }
+                //接口返回信息正常
+                String strData = object.getPropertyAsString(0);
+                TextDictoryResult result = new Gson().fromJson(strData, TextDictoryResult.class);
+
+                //校验接口返回代码
+                if (result == null) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, "3获取检验方式数据失败" + statusCode);
+                    return;
+                } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, "4获取检验方式数据失败" + statusCode + result.msg);
+                    return;
+                }
+                TextDictionaryEntity data = result.getData();
+                if (data != null) {
+                    String value = data.getValue();
+                    if (value != null && value.length() > 0) {
+                        _InspModeArr = value.split("\\|");
+                    }
+                    else _InspModeArr=null;
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, String content, Throwable error) {
+                ToastUtils.showLongToast(InspectReportActivity.this, "0获取检验方式数据失败：" + error.getMessage());
+            }
+
+            @Override
+            public void onFailure(int statusCode, SoapFault fault) {
+                ToastUtils.showLongToast(InspectReportActivity.this, "0获取检验方式数据失败：" + fault.toString());
+            }
+        };
+        SoapUtils.getTextDictoryAsync(InspectReportActivity.this, Consts.EnumTextDictonay.InspectionMode, callbackInspMode);
 
     }
 
@@ -296,12 +419,12 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 String equipName = mTv_EquipName.getText().toString();
 
                 if (bitmap != null && equipName != null) {
-                    Intent intent = new Intent(MaintenReportActivity.this, ImageViewerActivity.class);
+                    Intent intent = new Intent(InspectReportActivity.this, ImageViewerActivity.class);
                     intent.putExtra("bitmap", bitmap);
                     intent.putExtra("title", equipName);
                     startActivity(intent);
                 } else {
-                    ToastUtils.showToast(MaintenReportActivity.this, "无图片需显示");
+                    ToastUtils.showToast(InspectReportActivity.this, "无图片需显示");
                 }
                 return false;
             }
@@ -325,6 +448,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 SearchBarcode(barcode);
             }
         });
+
         //条码文本框回车事件
         mSearchBar.setBarcodeEnterListener(new TextView.OnEditorActionListener() {
             @Override
@@ -339,7 +463,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 
 
         //日期
-        mTv_FaultDate.setOnClickListener(new View.OnClickListener() {
+        mTv_InspTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -360,56 +484,24 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     public void onSure(Date date) {
 
                         String strDate = CommonUtils.getStringDate(date);
-                        mTv_FaultDate.setText(strDate);
+                        mTv_InspTime.setText(strDate);
                     }
                 });
                 dialog.show();
             }
         });
 
-        mTv_FaultDate1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                DatePickDialog dialog = new DatePickDialog(v.getContext());
-                //设置上下年分限制
-                dialog.setYearLimt(5);
-                //设置标题
-                dialog.setTitle("选择时间");
-                //设置类型
-                dialog.setType(DateType.TYPE_YMDHM);
-                //设置消息体的显示格式，日期格式
-                dialog.setMessageFormat("yyyy-MM-dd HH:mm");
-                //设置选择回调
-                dialog.setOnChangeLisener(null);
-                //设置点击确定按钮回调
-                dialog.setOnSureLisener(new OnSureLisener() {
-                    @Override
-                    public void onSure(Date date) {
-
-                        String strDate = CommonUtils.getStringDate(date);
-                        mTv_FaultDate1.setText(strDate);
-                    }
-                });
-                dialog.show();
-            }
-        });
-
-
-
-
-        mTv_FaultDesc.setOnClickListener(new View.OnClickListener() {
+      //检验项目
+        mTv_inspItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final List<String> list = new ArrayList<String>();
-                if (_FaultDescArr != null && _FaultDescArr.length > 0) {
-                    for (String item : _FaultDescArr) {
+                if (_InspItemArr != null && _InspItemArr.length > 0) {
+                    for (String item : _InspItemArr) {
                         list.add(item);
                     }
                 } else {
-//                    list.add("润滑");
-//                    list.add("检修");
-//                    list.add("巡检");
+
 
                 }
 
@@ -418,67 +510,81 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String str = list.get(position).toString();
-                        mTv_FaultDesc.setText(str);
-                        if(str.equals("润滑")){
-                            lL_material.setVisibility(View.VISIBLE);
-                        }
-                        else {
-                            mTv_materialName.setText("");
-                            mTv_materialstand.setText("");
-                            mTv_materialUnit.setText("");
-                            mEt_materialprice.setText("0");
-                            mEt_materialsum.setText("0");
-                            lL_material.setVisibility(View.GONE);
-                        }
+                        mTv_inspItem.setText(str);
+
                     }
                 }, list);
 
             }
         });
-        //添加备注
-        mTv_RepairmentDesc.setOnClickListener(new View.OnClickListener() {
+
+        //检验结果
+        mTv_InspResult.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShowInputDialogForTextView(MaintenReportActivity.this, "请输入设备保养描述", mTv_RepairmentDesc);
+                final List<String> list = new ArrayList<String>();
+                if (_InspResultArr != null && _InspResultArr.length > 0) {
+                    for (String item : _InspResultArr) {
+                        list.add(item);
+                    }
+                } else {
+//                    list.add("润滑");
+
+                }
+
+
+                showSelectDialog(new SelectDialog.SelectDialogListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String str = list.get(position).toString();
+                        mTv_InspResult.setText(str);
+
+                    }
+                }, list);
+
             }
         });
+        //检验方式
+        mTv_InspMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final List<String> list = new ArrayList<String>();
+                if (_InspModeArr != null && _InspModeArr.length > 0) {
+                    for (String item : _InspModeArr) {
+                        list.add(item);
+                    }
+                } else {
+//                    list.add("润滑");
+
+                }
+
+
+                showSelectDialog(new SelectDialog.SelectDialogListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String str = list.get(position).toString();
+                        mTv_InspMode.setText(str);
+
+                    }
+                }, list);
+
+            }
+        });
+
         mTv_jh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if (_EquipmentData == null) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "请首先确定要保养的设备！");
+                    ToastUtils.showLongToast(InspectReportActivity.this, "请首先确定要检验的设备！");
                     return;
                 }
-                String _ReapirLevel = mTv_FaultDesc.getText().toString();
-                if (_ReapirLevel == null || _ReapirLevel.length() == 0) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "请选择保养类别！");
-                    return;
-                }
-
-                Intent intent = new Intent(MaintenReportActivity.this, MaintenPlanCheckActivity.class);
+                Intent intent = new Intent(InspectReportActivity.this, InspectPlanCheckActivity.class);
                 intent.putExtra("_EquipmentID",_EquipmentData.getID());
-                intent.putExtra("_ReapirLevel",_ReapirLevel);
                 startActivityForResult(intent,CHECK_PLAN_OK);
 
             }
         });
-
-        mBtn_marAdd.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                if (_EquipmentData == null) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "请首先确定要保养的设备！");
-                    return;
-                }
-                Intent intent = new Intent(MaintenReportActivity.this, EquipMgrMaintenMaterialActivity.class);
-                intent.putExtra("_EquipmentID",_EquipmentData.getID());
-                startActivityForResult(intent,CHECK_MATERIAL_OK);
-
-            }
-        });
-
-
 
         //提交
         mBtn_Submit.setOnClickListener(new View.OnClickListener() {
@@ -487,126 +593,95 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 
                 showLogingDialog();
 
-                String faultDate = mTv_FaultDate.getText().toString().trim();
-                String faultDate1 = mTv_FaultDate1.getText().toString().trim();
+                String faultDate = mTv_InspTime.getText().toString().trim();
 
-                String faultDesc = mTv_FaultDesc.getText().toString().trim();
-                String RepairmentDesc = mTv_RepairmentDesc.getText().toString().trim();
+
+                String inspItem = mTv_inspItem.getText().toString().trim();
+                String InspResult = mTv_InspResult.getText().toString().trim();
                 String user = mEt_User.getText().toString().trim();
-                String phone = mEt_money.getText().toString().trim();
-                String useCout=mEt_materialsum.getText().toString().trim();
-                String mprice=mEt_materialprice.getText().toString().trim();
+                String money = mEt_money.getText().toString().trim();
+                String InspMode=mTv_InspMode.getText().toString().trim();
+                String corp=mEt_Com.getText().toString().trim();
+
 
 
 
                 //验证提交数据
 
                 if (_EquipmentData == null) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "请首先确定要保养的设备！");
+                    ToastUtils.showLongToast(InspectReportActivity.this, "请首先确定要检验的设备！");
                     return;
                 }
                 if (faultDate == null || faultDate.length() == 0) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "请选择开始保养日期！");
+                    ToastUtils.showLongToast(InspectReportActivity.this, "请选择开始检验日期！");
                     return;
                 }
-                if (faultDate1 == null || faultDate1.length() == 0) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "请选择结束保养日期！");
-                    return;
-                }
-
-                if (faultDesc == null || faultDesc.length() == 0) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "请选择保养类型！");
+                if (inspItem == null || inspItem.length() == 0) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, "请选择检验项目！");
                     return;
                 }
 
+                if (InspResult == null || InspResult.length() == 0) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, "请选择检验结果！");
+                    return;
+                }
+                if (InspMode == null || InspMode.length() == 0) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, "请选择检验方式！");
+                    return;
+                }
                 if (user == null || user.length() == 0) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "请填写联系人！");
+                    ToastUtils.showLongToast(InspectReportActivity.this, "请填写联系人！");
                     return;
                 }
-                if (phone == null || phone.length() == 0) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "填写费用金额不能为空！");
+                if (money == null || money.length() == 0) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, "填写费用金额不能为空！");
                     return;
                 }
                 else{
 
                 }
-                if(faultDesc.equals("润滑")){
 
-                    if (useCout == null|| useCout.length() == 0) {
-                        ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的数量！");
-                        return;
-                    }
-                    else {
-                        if(!isNumeric(useCout)){
-                            ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的数量为数字！");
-                            return;
-                        }
-                        else {
-
-                            if(Integer.parseInt(useCout)<=0){
-                                ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的数量大于0！");
-                                return;
-                            }
-                        }
-                    }
-                    if (mprice == null|| mprice.length() == 0) {
-                        ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的单价！");
-                        return;
-                    }
-                }
                 mBtn_Submit.setEnabled(false);
                 //提交数据
-                MaintenResult request = new MaintenResult();
-                //  request.setData(_EquipmentData);
+                InspectResult result = new InspectResult();
 
-
-
-                MaintenanceEntity rpen=new MaintenanceEntity();
+                InspectEntity rpen=new InspectEntity();
                 rpen.setEquipmentID(_EquipmentData.getID());
                 rpen.setCorporationID(_EquipmentData.getCorporationID());
-                rpen.setDepartmentID(_EquipmentData.getDepartmentID());
+                rpen.setTotalMoney(money);
 
-                rpen.setTotalMoney(phone);
-
-                rpen.setMaintenUser(user);
-                rpen.setStartTime(faultDate);
-                rpen.setFinishTime(faultDate1);
-                rpen.setEquipmentID(_EquipmentData.getID());
-                rpen.setShutDownMinutes("0");
-                rpen.setMaintenanceLevel(faultDesc);
+                rpen.setInspectionUser(user);
+                rpen.setInspectionDate(faultDate);
+                rpen.setInspectionCorp(corp);
+                rpen.setInspectionResult(InspResult);
+                rpen.setInspectionMode(InspMode);
+                rpen.setInspectionItem(inspItem);
                 if(_CheckPlanIDList!=null ){
-                    rpen.setMaintenancePlanID(_CheckPlanIDList.get(0));
+                   rpen.setInspectionPlanID(_CheckPlanIDList.get(0));
                 }
-                rpen.setRemark(RepairmentDesc);
-                request.setData(rpen);
-                if(faultDesc.equals("润滑")){
-                    List<MaintenanceItemEntity> listMItem=new ArrayList<>();
-                    MaintenanceItemEntity mItem=new MaintenanceItemEntity();
-                    mItem.setMaterialID(_CheckMaterialList.get(0).getMaterialID());
-                    mItem.setUseCount(useCout);
-                    mItem.setUsePrice(mprice);
-                    mItem.setMakeUser(user);
-                    mItem.setUseUnit(_CheckMaterialList.get(0).getUnit());
-                    mItem.setTotalMoney(phone);
-                    listMItem.add(mItem);
-                    request.setdateItemList(listMItem);
-                }
+                else
+                    rpen.setInspectionPlanID(null);
+                result.setData(rpen);
+
+
 
 
 
                // 提交数据
-                SoapUtils.submitNewEquipMaintenanceRepairAsync(MaintenReportActivity.this, request , new SoapListener() {
+                SoapUtils.submitNewEquipInspectRepairAsync(InspectReportActivity.this, result , new SoapListener() {
                     @Override
                     public void onSuccess(int statusCode, SoapObject object) {
 
                         dismissLoadingDialog();
                         if (object == null) {
-                            ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err1));
+                            ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err1));
+                            mBtn_Submit.setEnabled(true);
                             return;
                         }
                         //判断接口连接是否成功
                         if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
-                            ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err2));
+                            ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err2));
+                            mBtn_Submit.setEnabled(true);
                             return;
                         }
                         //接口返回信息正常
@@ -614,17 +689,19 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                         StringResult result = new Gson().fromJson(strData, StringResult.class);
                         //校验接口返回代码
                         if (result == null) {
-                            ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err3));
+                            ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err3));
+                            mBtn_Submit.setEnabled(true);
                             return;
                         }
                         else if (result.code != Result.RESULT_CODE_SUCCSED) {
-                            ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
+                            ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
+                            mBtn_Submit.setEnabled(true);
                             return;
                         }
 
 
                         mBtn_Submit.setEnabled(false);
-                        ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.activity_maintenance_submit_ok));
+                        ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.activity_inspect_submit_ok));
                         finish();
 
                     }
@@ -632,14 +709,14 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     @Override
                     public void onFailure(int statusCode, String content, Throwable error) {
                         dismissLoadingDialog();
-                        ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.activity_maintenance_submit_err, error.getMessage()));
+                        ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.activity_inspect_submit_err, error.getMessage()));
                         mBtn_Submit.setEnabled(true);
                     }
 
                     @Override
                     public void onFailure(int statusCode, SoapFault fault) {
                         dismissLoadingDialog();
-                        ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.activity_maintenance_submit_fail, fault));
+                        ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.activity_inspect_submit_fail, fault));
                         mBtn_Submit.setEnabled(true);
                     }
                 });
@@ -664,19 +741,19 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
      * @param barcode
      */
     private void getEquipmentInfo(String barcode) {
-        SoapUtils.getEquipmentByBarcodeAsync(MaintenReportActivity.this, barcode, new SoapListener() {
+        SoapUtils.getEquipmentByBarcodeAsync(InspectReportActivity.this, barcode, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
                 dismissLoadingDialog();
                 if (object == null) {
                     fillEquipInfo(null);
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "1获取保养信息数据失败" + statusCode);
+                    ToastUtils.showLongToast(InspectReportActivity.this, "1获取保养信息数据失败" + statusCode);
                     return;
                 }
                 //判断接口连接是否成功
                 if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
                     fillEquipInfo(null);
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "2获取保养信息数据失败" + statusCode);
+                    ToastUtils.showLongToast(InspectReportActivity.this, "2获取保养信息数据失败" + statusCode);
                     return;
                 }
                 //接口返回信息正常
@@ -686,28 +763,28 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 //校验接口返回代码
                 if (result == null) {
                     fillEquipInfo(null);
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "3获取保养信息数据失败" + statusCode);
+                    ToastUtils.showLongToast(InspectReportActivity.this, "3获取保养信息数据失败" + statusCode);
                     return;
                 } else if (result.code != Result.RESULT_CODE_SUCCSED) {
                     fillEquipInfo(null);
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "4获取保养信息数据失败" + statusCode + result.msg);
+                    ToastUtils.showLongToast(InspectReportActivity.this, "4获取保养信息数据失败" + statusCode + result.msg);
                     return;
                 }
                 EquipmentEntity data = result.getData();
                 fillEquipInfo(data);
-
+                dismissLoadingDialog();
             }
 
             @Override
             public void onFailure(int statusCode, String content, Throwable error) {
                 dismissLoadingDialog();
-                ToastUtils.showLongToast(MaintenReportActivity.this, "获取保养信息异常:" + error.getMessage());
+                ToastUtils.showLongToast(InspectReportActivity.this, "获取保养信息异常:" + error.getMessage());
             }
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
                 dismissLoadingDialog();
-                ToastUtils.showLongToast(MaintenReportActivity.this, "获取保养信息失败:" + fault);
+                ToastUtils.showLongToast(InspectReportActivity.this, "获取保养信息失败:" + fault);
             }
         });
     }
@@ -753,19 +830,19 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
      * @param equipID
      */
     private void getEquipmentInfoByID(String equipID) {
-        SoapUtils.getEquipmentByIDAsync(MaintenReportActivity.this, equipID, new SoapListener() {
+        SoapUtils.getEquipmentByIDAsync(InspectReportActivity.this, equipID, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
                 dismissLoadingDialog();
                 if (object == null) {
                     fillEquipInfo(null);
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "1获取保养信息数据失败" + statusCode);
+                    ToastUtils.showLongToast(InspectReportActivity.this, "1获取保养信息数据失败" + statusCode);
                     return;
                 }
                 //判断接口连接是否成功
                 if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
                     fillEquipInfo(null);
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "2获取保养信息数据失败" + statusCode);
+                    ToastUtils.showLongToast(InspectReportActivity.this, "2获取保养信息数据失败" + statusCode);
                     return;
                 }
                 //接口返回信息正常
@@ -775,11 +852,11 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 //校验接口返回代码
                 if (result == null) {
                     fillEquipInfo(null);
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "3获取保养信息数据失败" + statusCode);
+                    ToastUtils.showLongToast(InspectReportActivity.this, "3获取保养信息数据失败" + statusCode);
                     return;
                 } else if (result.code != Result.RESULT_CODE_SUCCSED) {
                     fillEquipInfo(null);
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "4获取保养信息数据失败" + statusCode + result.msg);
+                    ToastUtils.showLongToast(InspectReportActivity.this, "4获取保养信息数据失败" + statusCode + result.msg);
                     return;
                 }
                 EquipmentEntity data = result.getData();
@@ -790,13 +867,13 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             @Override
             public void onFailure(int statusCode, String content, Throwable error) {
                 dismissLoadingDialog();
-                ToastUtils.showLongToast(MaintenReportActivity.this, "获取保养信息异常:" + error.getMessage());
+                ToastUtils.showLongToast(InspectReportActivity.this, "获取保养信息异常:" + error.getMessage());
             }
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
                 dismissLoadingDialog();
-                ToastUtils.showLongToast(MaintenReportActivity.this, "获取保养信息失败:" + fault);
+                ToastUtils.showLongToast(InspectReportActivity.this, "获取保养信息失败:" + fault);
             }
         });
     }
@@ -806,83 +883,47 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 
         showLogingDialog();
 
-        MaintenReportingRequest request = new MaintenReportingRequest();
-        request.setID(rptID);
-
-        SoapUtils.getMaintenReportAsync(MaintenReportActivity.this, request, new SoapListener() {
+        SoapUtils.getInspectReportAsync(InspectReportActivity.this, rptID, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
 
                 if (object == null) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err1));
+                    ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err1));
                     return;
                 }
                 //判断接口连接是否成功
                 if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err2));
+                    ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err2));
                     return;
                 }
                 //接口返回信息正常
                 String strData = object.getPropertyAsString(0);
 
-                MaintenResult result = new Gson().fromJson(strData, MaintenResult.class);
+                InspectResult result = new Gson().fromJson(strData, InspectResult.class);
                 //校验接口返回代码
                 if (result == null) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err3));
+                    ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err3));
                     return;
                 } else if (result.code != Result.RESULT_CODE_SUCCSED) {
-                    ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
+                    ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
                     return;
                 }
                 _ReportEntity = result.getData();
-                _ReportFileEntitys=result.getdateItemList();
-                if (_ReportEntity != null) {
-                    mTv_EquipCode.setText(_ReportEntity.getEquipmentCode());
-                    mTv_EquipName.setText(_ReportEntity.getEquipmentName());
-                    SimpleDateFormat formatter;
-                    formatter = new SimpleDateFormat ("yyyy-MM-dd KK:mm:ss a");
-                    String ctime = formatter.format(_ReportEntity.getStartTime());
-                    String ftime = formatter.format(_ReportEntity.getFinishTime());
-                    mTv_FaultDate.setText(ctime.substring(0,10));
-                    mTv_FaultDate1.setText(ctime.substring(0,10));
-
-
-                    mTv_FaultDesc.setText(_ReportEntity.getMaintenanceLevel());
-                    mEt_User.setText(_ReportEntity.getMaintenUser());
-                    mEt_money.setText(_ReportEntity.getTotalMoney());
-//                    mTv_ReportNO.setVisibility(View.VISIBLE);
-//                    mTv_ReportNO.setText(_ReportEntity.getReportNO());
-
-
-
-                     if(_ReportFileEntitys!=null && _ReportFileEntitys.size()!=0){
-                         lL_material.setVisibility(View.VISIBLE);
-                         MaintenanceItemEntity ma=_ReportFileEntitys.get(0);
-                         mTv_materialName.setText(ma.getMaterialName());
-                         mTv_materialstand.setText(ma.getStandard());
-                         mTv_materialUnit.setText(ma.getUseUnit());
-                         mEt_materialprice.setText(ma.getUsePrice());
-                         mEt_materialsum.setText(ma.getUseCount());
-                     }
-                     else {
-                         lL_material.setVisibility(View.GONE);
-                     }
-
-
-                }
+                _CheckPlanEntityList=result.getlistInspPlan();
+                showLogingDialog();
 
             }
 
             @Override
             public void onFailure(int statusCode, String content, Throwable error) {
-
-                ToastUtils.showToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err5, error));
+                showLogingDialog();
+                ToastUtils.showToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err5, error));
             }
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
-
-                ToastUtils.showToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err4, fault));
+                showLogingDialog();
+                ToastUtils.showToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err4, fault));
             }
         });
     }
@@ -894,11 +935,11 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
      */
     private void SearchBarcode(String barcode) {
         if (barcode == null) {
-            ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.activity_fault_report_barcode_empty));
+            ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.activity_fault_report_barcode_empty));
             return;
         }
         if (barcode.trim().length() == 0) {
-            ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.activity_fault_report_barcode_empty));
+            ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.activity_fault_report_barcode_empty));
             return;
         } else {
             showLogingDialog();
@@ -919,13 +960,13 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             case CHECK_PLAN_OK:
 
                     _CheckPlanIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
-                    _CheckPlanEntityList = (List<MaintenancePlanEntity>)data.getSerializableExtra("_CheckMaintenPlanList");
+                    _CheckPlanEntityList = (List<InspectionPlanEntity>)data.getSerializableExtra("_CheckInspectPlanList");
                     if(_CheckPlanEntityList.size()==0){
                         mLv_Show_plan.setVisibility(View.GONE);
                         mLv_Show_plan.setAdapter(null);
                     }else {
                         mLv_Show_plan.setAdapter(null);
-                        adapter_Plan= new MaintenancePlanViewDataListAdapter(this, _CheckPlanEntityList);
+                        adapter_Plan= new InspectPlanViewDataListAdapter(this, _CheckPlanEntityList);
                         mLv_Show_plan.setSelection(adapter_Plan.getCount());
 
 
@@ -935,10 +976,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                         setListViewHeightBasedOnChildren(mLv_Show_plan);
                     }
 
-                    ToastUtils.showLongToast(MaintenReportActivity.this,"共获取到" + _CheckPlanEntityList.size() + "条保养计划");
-
-
-
+                    ToastUtils.showLongToast(InspectReportActivity.this,"共获取到" + _CheckPlanEntityList.size() + "条检验计划");
                 break;
 
             case CAMERA_BARCODE_SCAN://相机扫码
@@ -954,30 +992,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 } else {
                     super.onActivityResult(requestCode, resultCode, data);
                 }
-
                 break;
-            case CHECK_MATERIAL_OK:
-                _CheckMaterialList.clear();
-                _CheckMaterialList = (List<EquipmentMaterialEntity>)data.getSerializableExtra("_CheckEntityList");
-
-                if(_CheckMaterialList!=null && _CheckMaterialList.size()!=0){
-                    mTv_materialName.setText(_CheckMaterialList.get(0).getMaterialName());
-                    mTv_materialstand.setText(_CheckMaterialList.get(0).getStandard());
-                    mTv_materialUnit.setText(_CheckMaterialList.get(0).getUnit());
-                    mEt_materialprice.setText(_CheckMaterialList.get(0).getPrice());
-                    mEt_materialsum.setText("0");
-
-                }
-                else {
-                    mTv_materialName.setText("");
-                    mTv_materialstand.setText("");
-                    mTv_materialUnit.setText("");
-                    mEt_materialprice.setText("0");
-                    mEt_materialsum.setText("0");
-                }
-
-
-
         }
         super.onActivityResult(requestCode, resultCode, data);
 

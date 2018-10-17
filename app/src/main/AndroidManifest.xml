@@ -125,7 +125,10 @@
         <activity android:name=".view.activity.EquipMgrMaintenMaterialActivity" />
         <!--生产设备查询  add by yangcm 1011-->
         <activity android:name=".view.activity.EquipmentQueryActivity" />
-
+        <!--生产设备检验 add by tongzhiqiang-->
+        <activity android:name=".view.activity.InspectReportActivity" />
+        <!--生产设备检验计划选择 add by tongzhiqiang-->
+        <activity android:name=".view.activity.InspectPlanCheckActivity" />
         <!-- **************************************  **************************************  ************************************** -->
         <!-- 复检第一步(有卡复检)-->
         <activity android:name=".view.activity.CardReCheckActivity" />
