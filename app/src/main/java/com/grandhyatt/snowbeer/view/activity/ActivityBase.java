@@ -18,14 +18,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import crossoverone.statuslib.StatusUtil;
 
-/**
- * Activity基类
- *
- * @author 吴立富
- * @email 18602438878@qq.com
- * @mobile 18602438878
- * @create 2018/6/1 10:57
- */
+
 public class ActivityBase extends com.grandhyatt.commonlib.view.activity.ActivityBase {
 
     private static int mInt_Count = 0;
