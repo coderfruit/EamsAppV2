@@ -338,13 +338,17 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
 
             @Override
             public void onFailure(int statusCode, String content, Throwable error) {
-                mRefreshLayout.finishRefresh(true);
+                if(mRefreshLayout != null){
+                    mRefreshLayout.finishRefresh(true);
+                }
                 ToastUtils.showLongToast(getContext(), "获取预警信息异常:" + error.getMessage());
             }
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
-                mRefreshLayout.finishRefresh(true);
+                if(mRefreshLayout != null){
+                    mRefreshLayout.finishRefresh(true);
+                }
                 ToastUtils.showLongToast(getContext(), "获取预警信息失败:" + fault);
             }
         });
@@ -368,7 +372,10 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
         }
 //        mRefreshLayout.finishLoadMoreWithNoMoreData(); //设置SmartRefreshLayout 完成加载并标记没有更多数据
 //        mRefreshLayout.finishLoadMore(true);//设置SmartRefreshLayout加载更多的完成标志
-        mRefreshLayout.finishRefresh(true);
+        if(mRefreshLayout != null){
+            mRefreshLayout.finishRefresh(true);
+        }
+
     }
 
 }

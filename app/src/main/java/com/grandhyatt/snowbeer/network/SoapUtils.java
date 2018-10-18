@@ -1114,7 +1114,32 @@ public class SoapUtils {
 		SoapUtils.getInstance(context).call(methodName,params,callback);
 	}
 
+	/**
+	 * 添加设备巡检记录
+	 * @param context
+	 * @param equipID
+	 * @param routingUserID
+	 * @param routingStatus
+	 * @param operateType
+	 * @param operateID
+	 * @param operateBillNO
+	 * @param callback
+	 */
+	public static void newEquipmentRoutingInspect(final Context context, String equipID, String routingUserID, String routingStatus, String operateType,
+												  String operateID,String operateBillNO,  final SoapListener callback){
+		final String url = getHostUrl();
+		String methodName = "NewEquipmentRoutingInspect";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+		params.put("routingUserID",routingUserID);
+		params.put("routingStatus",routingStatus);
+		params.put("operateType",operateType);
+		params.put("operateID",operateID);
+		params.put("operateBillNO",operateBillNO);
 
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
 
 
 

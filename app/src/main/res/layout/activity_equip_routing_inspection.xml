@@ -194,7 +194,7 @@
                 <Button
                     android:id="@+id/mBt_WarningInfo_Repair"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="35dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
@@ -204,9 +204,9 @@
                 <Button
                     android:id="@+id/mBt_WarningInfo_Mainten"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_height="35dp"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/ic_login_button_true"
                     android:text="保养提醒" />
@@ -225,7 +225,7 @@
                 <Button
                     android:id="@+id/mBt_WarningInfo_Inspect"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="35dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
@@ -235,9 +235,9 @@
                 <Button
                     android:id="@+id/mBt_WarningInfo_Replace"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_height="35dp"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/ic_login_button_true"
                     android:text="更换提醒" />
@@ -256,7 +256,7 @@
                 <Button
                     android:id="@+id/mBt_WarningInfo_RepairEx"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="35dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
@@ -266,9 +266,9 @@
                 <Button
                     android:id="@+id/mBt_faultRptInfo"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
+                    android:layout_height="35dp"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/ic_login_button_true"
                     android:text="报修提醒" />
@@ -308,66 +308,134 @@
             <!--操作按钮-->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@drawable/selector_linear_layout_item_white"
                 android:gravity="center"
                 android:orientation="vertical">
 
+                <!--运行正常-->
                 <LinearLayout
+                    android:id="@+id/mLl_NoOperate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-                    <Button
-                        android:id="@+id/mBt_Repair"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/ic_login_button_true"
-                        android:text="去维修" />
+                        <Button
+                            android:id="@+id/mBt_NoOperate"
+                            android:layout_width="180dp"
+                            android:layout_height="90dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:text="运转正常"
+                            android:textSize="19sp"
+                            android:background="@drawable/btn_blue" />
 
-                    <Button
-                        android:id="@+id/mBt_Mainten"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/ic_login_button_true"
-                        android:text="去保养" />
+
+                        <Button
+                            android:id="@+id/mBt_Operate"
+                            android:layout_width="160dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="10dp"
+                            android:text="运转异常"
+                            android:background="@drawable/ic_login_button_false" />
+
 
                 </LinearLayout>
-
+                <!--需处理（维修、保养、检验、外委维修、返回）-->
                 <LinearLayout
+                    android:id="@+id/mLl_Operate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/mBt_Inspect"
-                        android:layout_width="0dp"
+                    android:visibility="gone"
+                    android:orientation="vertical">
+                    <!--去维修、去保养-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/ic_login_button_true"
-                        android:text="去检验" />
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/mBt_RepairEx"
-                        android:layout_width="0dp"
+                        <Button
+                            android:id="@+id/mBt_Repair"
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ic_login_button_true"
+                            android:text="去维修" />
+
+                        <Button
+                            android:id="@+id/mBt_Mainten"
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ic_login_button_true"
+                            android:text="去保养" />
+
+                    </LinearLayout>
+                    <!--去检验、去外委维修-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/ic_login_button_true"
-                        android:text="去外委维修" />
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/mBt_Inspect"
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ic_login_button_true"
+                            android:text="去检验" />
+
+                        <Button
+                            android:id="@+id/mBt_RepairEx"
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ic_login_button_true"
+                            android:text="去外委维修" />
+                    </LinearLayout>
+                    <!--去报修-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/mBt_ReportFail"
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/ic_login_button_true"
+                            android:text="去报修" />
+
+                        <Button
+                            android:id="@+id/mBt_Back"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1"
+                            android:text="返回"
+                            android:background="@drawable/ic_login_button_false" />
+
+                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
