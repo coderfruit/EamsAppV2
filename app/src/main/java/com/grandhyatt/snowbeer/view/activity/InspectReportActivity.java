@@ -146,6 +146,9 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
         mReceiver = mSearchBar.getBroadcastReceiver();
         mFilter = mSearchBar.getFilter();
 
+        //type = 0 检验     设备id
+        //type = 2 检验     设备id ，MaintenancePlanID，
+        //type = 3 显示检验单   设备id ，MaintenanceBillID
         Intent intent = getIntent();
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
