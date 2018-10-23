@@ -54,9 +54,17 @@ public class SpareInEquipmentEntity implements Serializable {
 
     private String CurrentCount;
 
+    private String SpareUnit;
+
     public SpareInEquipmentEntity() {
     }
+    public String getSpareUnit() {
+        return SpareUnit;
+    }
 
+    public void setSpareUnit(String value) {
+        SpareUnit = value;
+    }
     public boolean getIsCheck() {
         return IsCheck;
     }

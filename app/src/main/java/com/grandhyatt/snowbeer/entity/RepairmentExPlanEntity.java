@@ -1,11 +1,15 @@
 package com.grandhyatt.snowbeer.entity;
 
+import java.io.Serializable;
+
 /**
  * 设备外委维修计划
  * Created by ycm on 2018/9/28.
  */
 
-public class RepairmentExPlanEntity {
+public class RepairmentExPlanEntity  implements Serializable {
+
+    private  Boolean IsCheck;
     private String Status;
 
     private String ID;
@@ -48,7 +52,13 @@ public class RepairmentExPlanEntity {
 
     public RepairmentExPlanEntity() {
     }
+    public Boolean getIsCheck() {
+        return IsCheck;
+    }
 
+    public void setIsCheck(Boolean value) {
+        IsCheck = value;
+    }
     public String getStatus() {
         return Status;
     }

@@ -30,8 +30,6 @@ public class MaintenanceEntity implements Serializable {
 
     private String DepartmentID;
 
-
-
     private String MaintenanceLevel;
 
 

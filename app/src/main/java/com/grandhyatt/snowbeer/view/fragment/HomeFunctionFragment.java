@@ -38,6 +38,7 @@ import com.grandhyatt.snowbeer.view.activity.FaultReport_Mgr_Activity;
 import com.grandhyatt.snowbeer.view.activity.FaultReport_MyActivity;
 import com.grandhyatt.snowbeer.view.activity.InspectReportActivity;
 import com.grandhyatt.snowbeer.view.activity.MaintenReportActivity;
+import com.grandhyatt.snowbeer.view.activity.RepairmentExReportActivity;
 import com.grandhyatt.snowbeer.view.activity.RepairmentReportActivity;
 import com.grandhyatt.snowbeer.view.activity.WarningInfo_EquipActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -185,7 +186,7 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
                         break;
                     case 10://外委维修
                         if(PowerUtils.isPowerShowToast(getContext(),PowerUtils.AppMenu外委维修)) {
-                            ToastUtils.showToast(getContext(), "正在开发中...");
+                            IntentUtil.newIntent(getActivity(), RepairmentExReportActivity.class);
                         }
                         break;
 //                    case 11://化学仪器预警提醒

@@ -5,11 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.entity.EquipmentUseSpareEntity;
+import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
 import com.grandhyatt.snowbeer.view.NumberEditText;
 
 import java.util.List;
@@ -18,13 +18,13 @@ import java.util.List;
 /**
  * 显示设备维修时可用备件名称及可用数量，用户可修改数量
  */
-public class EquipRepairSpareViewDataListAdapter extends BaseAdapter {
-    private List<EquipmentUseSpareEntity> mDataList;
+public class EquipRepairSpareShowViewDataListAdapter extends BaseAdapter {
+    private List<SpareInEquipmentEntity> mDataList;
     private Context mContext;
 
     private ViewHolder mViewHolder;
 
-    public EquipRepairSpareViewDataListAdapter(Context context, List<EquipmentUseSpareEntity> dataList) {
+    public EquipRepairSpareShowViewDataListAdapter(Context context, List<SpareInEquipmentEntity> dataList) {
         mContext = context;
         mDataList = dataList;
 
@@ -64,15 +64,14 @@ public class EquipRepairSpareViewDataListAdapter extends BaseAdapter {
             mViewHolder = (ViewHolder) convertView.getTag();
         }
 
-        EquipmentUseSpareEntity dataModel = mDataList.get(position);
+        SpareInEquipmentEntity dataModel = mDataList.get(position);
         if (dataModel != null) {
 
-            mViewHolder.mTv_SpareName.setText(dataModel.getSpareName());
+            mViewHolder.mTv_SpareName.setText(dataModel.getSpareName() );
             mViewHolder.mTv_Unit.setText(dataModel.getSpareUnit());
-
-            int inputCnt = Integer.parseInt(dataModel.getCount());
+            int inputCnt = Integer.parseInt(dataModel.getReplaceCount());
             mViewHolder.mNEdt_Check.setData(inputCnt);
-            mViewHolder.mTv_SumCountx.setText(dataModel.getCount());
+            mViewHolder.mTv_SumCountx.setText(dataModel.getAllowCount());
             mViewHolder.mTv_SpareID.setText(dataModel.getSpareID());
         }
         return convertView;

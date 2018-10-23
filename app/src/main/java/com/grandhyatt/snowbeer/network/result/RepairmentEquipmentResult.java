@@ -17,6 +17,16 @@ public class RepairmentEquipmentResult extends Result {
     private EquipmentEntity Equipmentdata;
 
     private List<EquipmentUseSpareEntity> SpareInEquipmentdata;
+
+    public List<SpareInEquipmentEntity> getSpareE() {
+        return SpareE;
+    }
+
+    public void setSpareE(List<SpareInEquipmentEntity> spareE) {
+        SpareE = spareE;
+    }
+
+    private List<SpareInEquipmentEntity> SpareE;
     private RepairmentBillEntity rbdata;
 
     /**
