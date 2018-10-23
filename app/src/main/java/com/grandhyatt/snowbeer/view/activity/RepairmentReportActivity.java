@@ -204,6 +204,9 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
         mReceiver = mSearchBar.getBroadcastReceiver();
         mFilter = mSearchBar.getFilter();
+        //0 备件更换     设备id ，备件ID
+        //1 设备维修提醒 设备id ，RepairmentPlanID，
+        //2 显示维修单   设备id ，RepairmentBillID
 
         Intent intent = getIntent();
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
