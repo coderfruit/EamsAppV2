@@ -131,6 +131,7 @@ public class Query_EquipInspectionInfoActivity extends ActivityBase implements I
 
     public void requestNetworkDataByEquip(String equipID) {
 
+        showLogingDialog();
         String currentLastIdx = String.valueOf(mPageIndex * mPageSize);
         SoapUtils.getEquipInspectionBills(Query_EquipInspectionInfoActivity.this, equipID, currentLastIdx, new SoapListener() {
             @Override
