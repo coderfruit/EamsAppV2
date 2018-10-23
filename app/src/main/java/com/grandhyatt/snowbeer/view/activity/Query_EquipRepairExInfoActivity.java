@@ -82,7 +82,7 @@ public class Query_EquipRepairExInfoActivity extends ActivityBase implements IAc
 
     @Override
     public void initView() {
-        mToolBar.setTitle("设备维修记录查询");
+        mToolBar.setTitle("设备外委维修记录查询");
     }
 
     @Override

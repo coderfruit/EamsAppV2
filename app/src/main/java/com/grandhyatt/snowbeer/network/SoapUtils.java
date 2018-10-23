@@ -1172,10 +1172,10 @@ public class SoapUtils {
 	 * @param currentLastIdx
 	 * @param callback
 	 */
-	public static void getEquipInspectionBillBills(final Context context, String equipID, String currentLastIdx,  final SoapListener callback){
+	public static void getEquipInspectionBills(final Context context, String equipID, String currentLastIdx,  final SoapListener callback){
 
 		final String url = getHostUrl();
-		String methodName = "GetEquipInspectionBillBills";
+		String methodName = "GetEquipInspectionBills";
 		//获取http请求身份验证参数
 		final SoapParams params  = getAuthHttpRequestHeader(context);
 		params.put("equipID",equipID);

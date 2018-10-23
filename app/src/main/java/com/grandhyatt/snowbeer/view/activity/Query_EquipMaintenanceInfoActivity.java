@@ -85,7 +85,7 @@ public class Query_EquipMaintenanceInfoActivity extends ActivityBase implements 
 
     @Override
     public void initView() {
-        mToolBar.setTitle("设备维修记录查询");
+        mToolBar.setTitle("设备保养记录查询");
     }
 
     @Override

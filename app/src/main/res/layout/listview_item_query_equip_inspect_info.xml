@@ -62,12 +62,12 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:text="单据编号："
                 android:textColor="@color/gray5"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/mTv_BillNo"
@@ -80,12 +80,12 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:text="检验方式："
                 android:textColor="@color/gray5"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/mTv_InspectionMode"
@@ -108,12 +108,12 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:text="检验单位："
                 android:textColor="@color/gray5"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/mTv_Inspection_Corp"
@@ -126,12 +126,12 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:text="检验结果："
                 android:textColor="@color/gray5"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/mTv_InspectionResult"
@@ -154,12 +154,12 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:text="制单人："
                 android:textColor="@color/gray5"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/mTv_makeUser"
@@ -172,12 +172,12 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:text="制单日期："
                 android:textColor="@color/gray5"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/mTv_makeDate"
@@ -200,12 +200,12 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:text="检验日期："
                 android:textColor="@color/gray5"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/mTv_Begin_Date"
@@ -218,12 +218,12 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:text="下次日期："
                 android:textColor="@color/gray5"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/mTv_End_Date"
@@ -245,12 +245,12 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:text="检验员："
                 android:textColor="@color/gray5"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/mTv_Inspection_User"
@@ -263,12 +263,12 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:layout_width="60dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:text="费用(元):"
                 android:textColor="@color/gray5"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/mTv_Money"

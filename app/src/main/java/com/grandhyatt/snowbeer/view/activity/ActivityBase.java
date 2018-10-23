@@ -206,7 +206,7 @@ public class ActivityBase extends com.grandhyatt.commonlib.view.activity.Activit
      */
     public void showSelectDialog(String title,List<String> list,DialogInterface.OnClickListener listener)
     {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,android.R.style.Theme_Holo_Light_Dialog_MinWidth);// Theme_Holo_Light_Dialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.transparentFrameWindowStyle);// Theme_Holo_Light_Dialog);
         builder.setIcon(R.drawable.logo32);
         builder.setTitle(title);
 

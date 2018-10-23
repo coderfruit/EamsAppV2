@@ -33,6 +33,7 @@ import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.utils.CommonUtils;
 import com.grandhyatt.snowbeer.utils.ImageUtils;
+import com.grandhyatt.snowbeer.utils.PopupWindowUtil;
 import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.view.SearchBarLayout;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
@@ -157,7 +158,7 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
         mToolBar.setTitle("设备巡检");
 
         mToolBar.showMenuButton();
-        mToolBar.setMenuText("检索");
+        mToolBar.setMenuText("...");
 
 
         //去除状态栏
@@ -186,19 +187,24 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
             @Override
             public void onClick(View v) {
 
-                if (_EquipmentData == null) {
-                    ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
-                }
                 List<String> list = new ArrayList<String>();
                 list.add("维修记录");
                 list.add("保养记录");
                 list.add("检验记录");
                 list.add("外委维修记录");
 
-                showSelectDialog("请选择检索内容", list, new DialogInterface.OnClickListener() {
+                final PopupWindowUtil popupWindow = new PopupWindowUtil(EquipRoutingInspectionActivity.this, list);
+                popupWindow.setItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        if(_EquipmentData == null){
+                            ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
+                            return;
+                        }
+
+                        popupWindow.dismiss();
+                        switch (position){
                             case 0:
                                 Intent intent1 = new Intent(EquipRoutingInspectionActivity.this, Query_EquipRepairInfoActivity.class);
                                 intent1.putExtra("equipID", _EquipmentData.getID());
@@ -222,8 +228,12 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
                             default:
                                 break;
                         }
+
                     }
                 });
+                //根据后面的数字 手动调节窗口的宽度
+                popupWindow.show(v, 3);
+
             }
         });
 

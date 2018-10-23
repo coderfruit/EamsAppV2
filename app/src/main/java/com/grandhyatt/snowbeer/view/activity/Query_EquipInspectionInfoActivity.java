@@ -84,7 +84,7 @@ public class Query_EquipInspectionInfoActivity extends ActivityBase implements I
 
     @Override
     public void initView() {
-        mToolBar.setTitle("设备维修记录查询");
+        mToolBar.setTitle("设备检验记录查询");
     }
 
     @Override
@@ -132,7 +132,7 @@ public class Query_EquipInspectionInfoActivity extends ActivityBase implements I
     public void requestNetworkDataByEquip(String equipID) {
 
         String currentLastIdx = String.valueOf(mPageIndex * mPageSize);
-        SoapUtils.getEquipInspectionBillBills(Query_EquipInspectionInfoActivity.this, equipID, currentLastIdx, new SoapListener() {
+        SoapUtils.getEquipInspectionBills(Query_EquipInspectionInfoActivity.this, equipID, currentLastIdx, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
                 dismissLoadingDialog();
