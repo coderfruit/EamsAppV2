@@ -4,56 +4,34 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 设备保养计划
+ * 设备保养记录
  * Created by ycm on 2018/9/28.
  */
 
-public class MaintenanceEntity implements Serializable {
-
+public class MaintenanceBillEntity implements Serializable {
 
     private String Status;
-
     private String ID;
-
     private String CorporationID;
-
     private String MaintenanceBillNO;
     private String MaintenUser;
-
     private String CorporationName;
-
     private String EquipmentID;
-
     private String EquipmentCode;
-
     private String EquipmentName;
-
     private String DepartmentID;
-
-
-
     private String MaintenanceLevel;
-
-
     private String StartTime;
-
     private String FinishTime;
-
     private String TotalMoney;
-
-
-    private String  ShutDownMinutes;
-
+    private String ShutDownMinutes;
     private String MaintenancePlanID;
-
     private String MakeUser;
-
     private String MakeDate;
-
     private String Remark;
 
 
-    public MaintenanceEntity() {
+    public MaintenanceBillEntity() {
     }
 
     public String getMaintenUser() {

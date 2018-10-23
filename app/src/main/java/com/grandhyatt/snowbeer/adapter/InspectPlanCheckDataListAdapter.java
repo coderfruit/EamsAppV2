@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.entity.InspectionPlanEntity;
-import com.grandhyatt.snowbeer.entity.MaintenancePlanEntity;
 
 import java.util.List;
 
@@ -55,8 +54,8 @@ public class InspectPlanCheckDataListAdapter extends BaseAdapter {
             mViewHolder.mTv_Status = convertView.findViewById(R.id.mTv_Status);
             mViewHolder.mTv_RepairmentLevel = convertView.findViewById(R.id.mTv_RepairmentLevel);
             mViewHolder.mTv_PlanInterval = convertView.findViewById(R.id.mTv_PlanInterval);
-            mViewHolder.mTv_LastRunningDate = convertView.findViewById(R.id.mTv_LastRunningDate);
-            mViewHolder.mTv_NextRunningDate = convertView.findViewById(R.id.mTv_NextRunningDate);
+            mViewHolder.mTv_LastRunningDate = convertView.findViewById(R.id.mTv_Inspection_Date);
+            mViewHolder.mTv_NextRunningDate = convertView.findViewById(R.id.mTv_NextDate);
             mViewHolder.mTv_inspectItem=convertView.findViewById(R.id.mTv_inspectItem);
             mViewHolder.mTv_InspectMode=convertView.findViewById(R.id.mTv_InspectMode);
             mViewHolder.mTv_PlanDesc = convertView.findViewById(R.id.mTv_PlanDesc);

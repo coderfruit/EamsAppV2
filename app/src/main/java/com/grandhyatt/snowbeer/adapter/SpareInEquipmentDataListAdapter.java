@@ -7,16 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.grandhyatt.snowbeer.R;
-import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by ycm on 2018/8/28.
@@ -59,8 +55,8 @@ public class SpareInEquipmentDataListAdapter extends BaseAdapter {
             mViewHolder.mTv_Status = convertView.findViewById(R.id.mTv_Status);
             mViewHolder.mTv_RepairmentLevel = convertView.findViewById(R.id.mTv_RepairmentLevel);
             mViewHolder.mTv_PlanInterval = convertView.findViewById(R.id.mTv_PlanInterval);
-            mViewHolder.mTv_LastRunningDate = convertView.findViewById(R.id.mTv_LastRunningDate);
-            mViewHolder.mTv_NextRunningDate = convertView.findViewById(R.id.mTv_NextRunningDate);
+            mViewHolder.mTv_LastRunningDate = convertView.findViewById(R.id.mTv_Inspection_Date);
+            mViewHolder.mTv_NextRunningDate = convertView.findViewById(R.id.mTv_NextDate);
             mViewHolder.mTv_PlanDescTitle = convertView.findViewById(R.id.mTv_PlanDescTitle);
             mViewHolder.mTv_PlanDesc = convertView.findViewById(R.id.mTv_PlanDesc);
             mViewHolder.mTv_ID = convertView.findViewById(R.id.mTv_ID);

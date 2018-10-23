@@ -129,6 +129,11 @@
         <activity android:name=".view.activity.InspectReportActivity" />
         <!--生产设备检验计划选择 add by tongzhiqiang-->
         <activity android:name=".view.activity.InspectPlanCheckActivity" />
+        <!--维修、保养、检验记录检索 1023-->
+        <activity android:name=".view.activity.Query_EquipRepairInfoActivity" />
+        <activity android:name=".view.activity.Query_EquipMaintenanceInfoActivity" />
+        <activity android:name=".view.activity.Query_EquipInspectionInfoActivity" />
+        <activity android:name=".view.activity.Query_EquipRepairExInfoActivity" />
         <!-- **************************************  **************************************  ************************************** -->
         <!-- 复检第一步(有卡复检)-->
         <activity android:name=".view.activity.CardReCheckActivity" />

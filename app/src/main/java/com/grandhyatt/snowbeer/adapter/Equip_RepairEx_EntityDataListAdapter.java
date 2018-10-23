@@ -5,12 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.grandhyatt.snowbeer.R;
-import com.grandhyatt.snowbeer.entity.FailureReportingAttachmentEntity;
-import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentExPlanEntity;
 
 import java.util.List;
@@ -61,8 +58,8 @@ public class Equip_RepairEx_EntityDataListAdapter extends BaseAdapter {
             mViewHolder.mTv_Interval = convertView.findViewById(R.id.mTv_Interval);
             mViewHolder.mTv_EquipName = convertView.findViewById(R.id.mTv_EquipName);
             mViewHolder.mTv_EquipCode = convertView.findViewById(R.id.mTv_EquipCode);
-            mViewHolder.mTv_LastRunningDate = convertView.findViewById(R.id.mTv_LastRunningDate);
-            mViewHolder.mTv_NextRunningDate = convertView.findViewById(R.id.mTv_NextRunningDate);
+            mViewHolder.mTv_LastRunningDate = convertView.findViewById(R.id.mTv_Inspection_Date);
+            mViewHolder.mTv_NextRunningDate = convertView.findViewById(R.id.mTv_NextDate);
             mViewHolder.mTv_Desc = convertView.findViewById(R.id.mTv_Desc);
 
             convertView.setTag(mViewHolder);

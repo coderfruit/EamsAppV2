@@ -4,23 +4,15 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.StringUtils;
-import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.snowbeer.App;
 import com.grandhyatt.snowbeer.Consts;
-import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.entity.APIHostInfoEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentUseSpareEntity;
-import com.grandhyatt.snowbeer.entity.InspectEntity;
-import com.grandhyatt.snowbeer.entity.InspectionPlanEntity;
-import com.grandhyatt.snowbeer.entity.MaintenanceEntity;
+import com.grandhyatt.snowbeer.entity.InspectBillEntity;
+import com.grandhyatt.snowbeer.entity.MaintenanceBillEntity;
 import com.grandhyatt.snowbeer.entity.MaintenanceItemEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentBillEntity;
-import com.grandhyatt.snowbeer.entity.TextDictionaryEntity;
-import com.grandhyatt.snowbeer.network.callback.CommonCallback;
-import com.grandhyatt.snowbeer.network.callback.LoginCallback;
 import com.grandhyatt.snowbeer.network.request.CheckUpdateRequest;
 import com.grandhyatt.snowbeer.network.request.EditPasswordRequest;
 import com.grandhyatt.snowbeer.network.request.EquipmentRequest;
@@ -28,25 +20,17 @@ import com.grandhyatt.snowbeer.network.request.FailureReportingRequest;
 import com.grandhyatt.snowbeer.network.request.LoginRequest;
 import com.grandhyatt.snowbeer.network.request.MaintenReportingRequest;
 import com.grandhyatt.snowbeer.network.request.RepairmentReportingRequest;
-import com.grandhyatt.snowbeer.network.result.InspectResult;
-import com.grandhyatt.snowbeer.network.result.MaintenResult;
+import com.grandhyatt.snowbeer.network.result.InspectBillResult;
+import com.grandhyatt.snowbeer.network.result.MaintenanceBillResult;
 import com.grandhyatt.snowbeer.network.result.RepairmentEquipmentResult;
-import com.grandhyatt.snowbeer.network.result.TextDictoryResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapClient;
-import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.soapNetWork.SoapParams;
 import com.grandhyatt.snowbeer.utils.JUnitUtils;
 import com.grandhyatt.snowbeer.utils.SPUtils;
-import com.grandhyatt.snowbeer.view.activity.MaintenReportActivity;
-import com.zhy.http.okhttp.OkHttpUtils;
-
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class SoapUtils {
@@ -700,7 +684,7 @@ public class SoapUtils {
 	 * @param request
 	 * @param callback
 	 */
-	public static void submitNewEquipMaintenanceRepairAsync(final Context context, MaintenResult request, final SoapListener callback)
+	public static void submitNewEquipMaintenanceRepairAsync(final Context context, MaintenanceBillResult request, final SoapListener callback)
 	{
 		final String url = getHostUrl();
 		String methodName = "NewEquipMaintenanceRepair";
@@ -712,10 +696,10 @@ public class SoapUtils {
 		SoapParams params = getAuthHttpRequestHeader(context);
 
 		params.put("userName", userName);
-		MaintenanceEntity rparbill = request.getData();
+		MaintenanceBillEntity rparbill = request.getData();
 		Gson gson1 = new Gson();
 
-		String jsonrepa = gson1.toJson(rparbill, MaintenanceEntity.class);
+		String jsonrepa = gson1.toJson(rparbill, MaintenanceBillEntity.class);
 		params.put("mainten", jsonrepa);
 
 		List<MaintenanceItemEntity> rparbillitem = request.getdateItemList();
@@ -731,7 +715,7 @@ public class SoapUtils {
 
 	 * @param callback
 	 */
-	public static void submitNewEquipInspectRepairAsync(final Context context, InspectResult res, final SoapListener callback)
+	public static void submitNewEquipInspectRepairAsync(final Context context, InspectBillResult res, final SoapListener callback)
 	{
 		final String url = getHostUrl();
 		String methodName = "NewEquipInspectRepair";
@@ -743,10 +727,10 @@ public class SoapUtils {
 		SoapParams params = getAuthHttpRequestHeader(context);
 
 		params.put("userName", userName);
-		InspectEntity rparbill = res.getData();
+		InspectBillEntity rparbill = res.getData();
 		Gson gson1 = new Gson();
 
-		String jsonrepa = gson1.toJson(rparbill, InspectEntity.class);
+		String jsonrepa = gson1.toJson(rparbill, InspectBillEntity.class);
 		params.put("inspect", jsonrepa);
 
 
@@ -1139,6 +1123,86 @@ public class SoapUtils {
 		params.put("operateBillNO",operateBillNO);
 
 		SoapUtils.getInstance(context).call(methodName,params,callback);
+	}
+
+	/**
+	 * 获取设备维修记录
+	 * @param context
+	 * @param equipID
+	 * @param currentLastIdx
+	 * @param callback
+	 */
+	public static void getEquipRepairBills(final Context context, String equipID, String currentLastIdx,  final SoapListener callback){
+
+		final String url = getHostUrl();
+		String methodName = "GetEquipRepairBills";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+		params.put("currentLastIdx",currentLastIdx);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+
+	}
+
+	/**
+	 * 获取设备保养记录
+	 * @param context
+	 * @param equipID
+	 * @param currentLastIdx
+	 * @param callback
+	 */
+	public static void getEquipMaintenBills(final Context context, String equipID, String currentLastIdx,  final SoapListener callback){
+
+		final String url = getHostUrl();
+		String methodName = "GetEquipMaintenBills";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+		params.put("currentLastIdx",currentLastIdx);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+
+	}
+
+	/**
+	 * 获取设备检验记录
+	 * @param context
+	 * @param equipID
+	 * @param currentLastIdx
+	 * @param callback
+	 */
+	public static void getEquipInspectionBillBills(final Context context, String equipID, String currentLastIdx,  final SoapListener callback){
+
+		final String url = getHostUrl();
+		String methodName = "GetEquipInspectionBillBills";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+		params.put("currentLastIdx",currentLastIdx);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+
+	}
+
+	/**
+	 * 获取外委设备维修记录
+	 * @param context
+	 * @param equipID
+	 * @param currentLastIdx
+	 * @param callback
+	 */
+	public static void getEquipRepairExBills(final Context context, String equipID, String currentLastIdx,  final SoapListener callback){
+
+		final String url = getHostUrl();
+		String methodName = "GetEquipRepairExBills";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+		params.put("currentLastIdx",currentLastIdx);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+
 	}
 
 

@@ -4,15 +4,19 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * 设备检验记录
  * Created by tongzhiqiang on 2018-10-16.
  */
 
-public class InspectEntity implements Serializable {
+public class InspectBillEntity implements Serializable {
+
     private String ID;
     private String CorporationID;
     private String InspectionBillNO;
     private String InspectionDate;
     private String EquipmentID;
+    private String EquipmentCode;
+    private String EquipmentName;
     private String InspectionMode;
     private String InspectionItem;
     private String InspectionResult;
@@ -24,8 +28,25 @@ public class InspectEntity implements Serializable {
     private String IsActived;
     private String InspectionPlanID;
     private String Remark;
+    private String NextInspectionDate;//下次检验日期
 
-    public InspectEntity() {
+    public InspectBillEntity() {
+    }
+
+    public String getEquipmentCode() {
+        return EquipmentCode;
+    }
+
+    public void setEquipmentCode(String equipmentCode) {
+        EquipmentCode = equipmentCode;
+    }
+
+    public String getEquipmentName() {
+        return EquipmentName;
+    }
+
+    public void setEquipmentName(String equipmentName) {
+        EquipmentName = equipmentName;
     }
 
     public String getID() {
@@ -156,4 +177,11 @@ public class InspectEntity implements Serializable {
         this.Remark = value;
     }
 
+    public String getNextInspectionDate() {
+        return NextInspectionDate;
+    }
+
+    public void setNextInspectionDate(String nextInspectionDate) {
+        NextInspectionDate = nextInspectionDate;
+    }
 }

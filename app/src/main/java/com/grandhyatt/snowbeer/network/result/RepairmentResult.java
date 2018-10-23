@@ -2,8 +2,6 @@ package com.grandhyatt.snowbeer.network.result;
 
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.snowbeer.entity.EquipmentUseSpareEntity;
-import com.grandhyatt.snowbeer.entity.MaintenanceEntity;
-import com.grandhyatt.snowbeer.entity.MaintenanceItemEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentBillEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 

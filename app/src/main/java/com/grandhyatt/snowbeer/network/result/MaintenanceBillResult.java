@@ -1,20 +1,19 @@
 package com.grandhyatt.snowbeer.network.result;
 
 import com.grandhyatt.commonlib.Result;
-import com.grandhyatt.snowbeer.entity.MaintenanceEntity;
+import com.grandhyatt.snowbeer.entity.MaintenanceBillEntity;
 import com.grandhyatt.snowbeer.entity.MaintenanceItemEntity;
-import com.grandhyatt.snowbeer.entity.MaintenancePlanEntity;
 
 import java.util.List;
 
 /**
- * 设备保养计划
+ * 设备保养记录
  * Created by ycm on 2018/9/28.
  */
 
-public class MaintenResult extends Result {
+public class MaintenanceBillResult extends Result {
 
-    private MaintenanceEntity data;
+    private MaintenanceBillEntity data;
     private List<MaintenanceItemEntity> dateItemList;
 
     /**
@@ -41,7 +40,7 @@ public class MaintenResult extends Result {
      *
      * @return com.bose.rose.model.LoginUserInfo
      */
-    public MaintenanceEntity getData() {
+    public MaintenanceBillEntity getData() {
         return data;
     }
 
@@ -51,7 +50,7 @@ public class MaintenResult extends Result {
      * @param data
      * @return void
      */
-    public void setData(MaintenanceEntity data) {
+    public void setData(MaintenanceBillEntity data) {
         this.data = data;
     }
 

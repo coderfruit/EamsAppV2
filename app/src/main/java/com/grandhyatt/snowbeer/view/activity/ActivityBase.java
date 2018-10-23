@@ -148,7 +148,7 @@ public class ActivityBase extends com.grandhyatt.commonlib.view.activity.Activit
      * @param context
      * @param title
      */
-    public String ShowDialogForText(Context context, String title) {
+    public String ShowDialogForGetText(Context context, String title) {
         final String[] strValue = {null};
         final EditText inputContrl = new EditText(context);
         inputContrl.setFocusable(true);

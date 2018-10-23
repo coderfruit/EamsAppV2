@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.entity.MaintenancePlanEntity;
-import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 
 import java.util.List;
 
@@ -53,8 +52,8 @@ public class MaintenancePlanViewDataListAdapter extends BaseAdapter {
             mViewHolder.mTv_wxjh = convertView.findViewById(R.id.mTv_wxjh);
             mViewHolder.mTv_zxzq = convertView.findViewById(R.id.mTv_zxzq);
 
-            mViewHolder.mTv_LastRunningDate = convertView.findViewById(R.id.mTv_LastRunningDate);
-            mViewHolder.mTv_NextRunningDate = convertView.findViewById(R.id.mTv_NextRunningDate);
+            mViewHolder.mTv_LastRunningDate = convertView.findViewById(R.id.mTv_Inspection_Date);
+            mViewHolder.mTv_NextRunningDate = convertView.findViewById(R.id.mTv_NextDate);
 
             convertView.setTag(mViewHolder);
 
