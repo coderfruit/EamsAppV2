@@ -16,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,20 +34,13 @@ import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.InspectPlanViewDataListAdapter;
-import com.grandhyatt.snowbeer.adapter.MaintenancePlanViewDataListAdapter;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
-import com.grandhyatt.snowbeer.entity.EquipmentMaterialEntity;
-import com.grandhyatt.snowbeer.entity.InspectEntity;
+import com.grandhyatt.snowbeer.entity.InspectBillEntity;
 import com.grandhyatt.snowbeer.entity.InspectionPlanEntity;
-import com.grandhyatt.snowbeer.entity.MaintenanceEntity;
-import com.grandhyatt.snowbeer.entity.MaintenanceItemEntity;
-import com.grandhyatt.snowbeer.entity.MaintenancePlanEntity;
 import com.grandhyatt.snowbeer.entity.TextDictionaryEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
-import com.grandhyatt.snowbeer.network.request.MaintenReportingRequest;
 import com.grandhyatt.snowbeer.network.result.EquipmentResult;
-import com.grandhyatt.snowbeer.network.result.InspectResult;
-import com.grandhyatt.snowbeer.network.result.MaintenResult;
+import com.grandhyatt.snowbeer.network.result.InspectBillResult;
 import com.grandhyatt.snowbeer.network.result.StringResult;
 import com.grandhyatt.snowbeer.network.result.TextDictoryResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
@@ -128,7 +120,7 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
 
 
     EquipmentEntity _EquipmentData;
-    InspectEntity _ReportEntity;
+    InspectBillEntity _ReportEntity;
     String[] _InspItemArr; //检验类型
     String[] _InspResultArr; //检验类型
     String[] _InspModeArr; //检验类型
@@ -643,9 +635,9 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
 
                 mBtn_Submit.setEnabled(false);
                 //提交数据
-                InspectResult result = new InspectResult();
+                InspectBillResult result = new InspectBillResult();
 
-                InspectEntity rpen=new InspectEntity();
+                InspectBillEntity rpen=new InspectBillEntity();
                 rpen.setEquipmentID(_EquipmentData.getID());
                 rpen.setCorporationID(_EquipmentData.getCorporationID());
                 rpen.setTotalMoney(money);
@@ -899,7 +891,7 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
                 //接口返回信息正常
                 String strData = object.getPropertyAsString(0);
 
-                InspectResult result = new Gson().fromJson(strData, InspectResult.class);
+                InspectBillResult result = new Gson().fromJson(strData, InspectBillResult.class);
                 //校验接口返回代码
                 if (result == null) {
                     ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err3));

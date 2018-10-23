@@ -9,53 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!--ID-->
+        <TextView
+            android:id="@+id/mTv_ID"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:orientation="horizontal">
+            android:text="RptID"
+            android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/mTv_ID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="RptID"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/mTv_Status"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_weight="4"
-                android:text="已超期9天"
-                android:textColor="@android:color/black"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/mTv_InspectItem"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="12dp"
-                android:layout_weight="2"
-                android:gravity="right"
-                android:text="外检"
-                android:textColor="@color/blue1"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/mTv_Interval"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_weight="4"
-                android:text="每12个月执行一次"
-                android:textColor="@android:color/black"
-                android:textSize="12sp" />
-
-        </LinearLayout>
-
+        <!--设备-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -67,7 +29,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:layout_weight="1"
                 android:text="设备名称"
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
@@ -76,15 +37,24 @@
                 android:id="@+id/mTv_EquipCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
                 android:text="设备编码"
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
 
+            <TextView
+                android:id="@+id/mTv_MaintenanceLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:gravity="right"
+                android:text="润滑"
+                android:textColor="@color/blue1"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
+        <!--单号、更换备件数-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -92,15 +62,88 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="上次日期："
+                android:text="单据编号："
                 android:textColor="@color/gray5"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/mTv_BillNo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1"
+                android:text="WX201809090001"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <!--制单人、制单日期-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:text="制单人："
+                android:textColor="@color/gray5"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/mTv_makeUser"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1"
+                android:text="制单人"
+                android:textColor="@android:color/black"
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/mTv_Inspection_Date"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:text="制单日期："
+                android:textColor="@color/gray5"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/mTv_makeDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="2019-12-01"
+                android:textColor="@android:color/black"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <!--开始日期、结束日期-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:text="开始日期："
+                android:textColor="@color/gray5"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/mTv_Begin_Date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -110,15 +153,15 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="下次日期："
+                android:text="结束日期："
                 android:textColor="@color/gray5"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
-                android:id="@+id/mTv_NextDate"
+                android:id="@+id/mTv_End_Date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
@@ -129,6 +172,7 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
+        <!--维修人、费用-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -136,29 +180,50 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="描述："
+                android:text="保养人："
                 android:textColor="@color/gray5"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/mTv_Mainten_User"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="1"
+                android:text="2018-12-01"
+                android:textColor="@android:color/black"
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/mTv_Desc"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
                 android:layout_marginLeft="4dp"
-                android:text="十字万向节轴承更换"
+                android:text="费用(元):"
+                android:textColor="@color/gray5"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/mTv_Money"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="0"
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
         </LinearLayout>
+
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
+        android:layout_marginTop="6dp"
         android:background="@color/white6" />
 
 </LinearLayout>

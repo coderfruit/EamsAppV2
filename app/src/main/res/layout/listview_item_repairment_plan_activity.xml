@@ -77,7 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_alignBottom="@+id/mTv_LastRunningDate"
+            android:layout_alignBottom="@+id/mTv_Inspection_Date"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:text="上次日期："
@@ -85,11 +85,11 @@
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/mTv_LastRunningDate"
+            android:id="@+id/mTv_Inspection_Date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/mTv_NextRunningDate"
-            android:layout_alignBottom="@+id/mTv_NextRunningDate"
+            android:layout_alignBaseline="@+id/mTv_NextDate"
+            android:layout_alignBottom="@+id/mTv_NextDate"
             android:layout_alignLeft="@+id/mTv_zxzq"
             android:layout_alignStart="@+id/mTv_zxzq"
             android:text="2018-07-08 1:56"
@@ -101,17 +101,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:layout_alignBottom="@+id/mTv_NextRunningDate"
+            android:layout_alignBottom="@+id/mTv_NextDate"
             android:layout_marginEnd="14dp"
             android:layout_marginRight="14dp"
-            android:layout_toLeftOf="@+id/mTv_NextRunningDate"
-            android:layout_toStartOf="@+id/mTv_NextRunningDate"
+            android:layout_toLeftOf="@+id/mTv_NextDate"
+            android:layout_toStartOf="@+id/mTv_NextDate"
             android:text="下次日期："
             android:textColor="@color/gray5"
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/mTv_NextRunningDate"
+            android:id="@+id/mTv_NextDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"

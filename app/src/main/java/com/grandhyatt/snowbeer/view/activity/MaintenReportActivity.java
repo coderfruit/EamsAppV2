@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.icu.text.DecimalFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -13,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,20 +34,17 @@ import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
-import com.grandhyatt.snowbeer.adapter.MaintenancePlanCheckDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.MaintenancePlanViewDataListAdapter;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentMaterialEntity;
-import com.grandhyatt.snowbeer.entity.MaintenanceEntity;
+import com.grandhyatt.snowbeer.entity.MaintenanceBillEntity;
 import com.grandhyatt.snowbeer.entity.MaintenanceItemEntity;
 import com.grandhyatt.snowbeer.entity.MaintenancePlanEntity;
-import com.grandhyatt.snowbeer.entity.RepairmentBillEntity;
 import com.grandhyatt.snowbeer.entity.TextDictionaryEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.request.MaintenReportingRequest;
 import com.grandhyatt.snowbeer.network.result.EquipmentResult;
-import com.grandhyatt.snowbeer.network.result.MaintenResult;
-import com.grandhyatt.snowbeer.network.result.RepairmentEquipmentResult;
+import com.grandhyatt.snowbeer.network.result.MaintenanceBillResult;
 import com.grandhyatt.snowbeer.network.result.StringResult;
 import com.grandhyatt.snowbeer.network.result.TextDictoryResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
@@ -57,7 +52,6 @@ import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.utils.CommonUtils;
 import com.grandhyatt.snowbeer.utils.ImageUtils;
 import com.grandhyatt.snowbeer.utils.SPUtils;
-import com.grandhyatt.snowbeer.view.NumberEditText;
 import com.grandhyatt.snowbeer.view.SearchBarLayout;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
 
@@ -139,7 +133,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
     @BindView(R.id.lL_material)
     LinearLayout lL_material;
     EquipmentEntity _EquipmentData;
-    MaintenanceEntity _ReportEntity;
+    MaintenanceBillEntity _ReportEntity;
     List<MaintenanceItemEntity> _ReportFileEntitys;
     String[] _FaultDescArr;
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
@@ -556,12 +550,12 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 }
                 mBtn_Submit.setEnabled(false);
                 //提交数据
-                MaintenResult request = new MaintenResult();
+                MaintenanceBillResult request = new MaintenanceBillResult();
                 //  request.setData(_EquipmentData);
 
 
 
-                MaintenanceEntity rpen=new MaintenanceEntity();
+                MaintenanceBillEntity rpen=new MaintenanceBillEntity();
                 rpen.setEquipmentID(_EquipmentData.getID());
                 rpen.setCorporationID(_EquipmentData.getCorporationID());
                 rpen.setDepartmentID(_EquipmentData.getDepartmentID());
@@ -825,7 +819,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 //接口返回信息正常
                 String strData = object.getPropertyAsString(0);
 
-                MaintenResult result = new Gson().fromJson(strData, MaintenResult.class);
+                MaintenanceBillResult result = new Gson().fromJson(strData, MaintenanceBillResult.class);
                 //校验接口返回代码
                 if (result == null) {
                     ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err3));

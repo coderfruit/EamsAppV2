@@ -2,6 +2,7 @@ package com.grandhyatt.snowbeer.view.activity;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,7 +19,9 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.grandhyatt.commonlib.Result;
+import com.grandhyatt.commonlib.utils.IntentUtil;
 import com.grandhyatt.commonlib.utils.ToastUtils;
+import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
@@ -29,12 +33,16 @@ import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.utils.CommonUtils;
 import com.grandhyatt.snowbeer.utils.ImageUtils;
+import com.grandhyatt.snowbeer.utils.PopupWindowUtil;
 import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.view.SearchBarLayout;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
 
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -149,6 +157,10 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
 
         mToolBar.setTitle("设备巡检");
 
+        mToolBar.showMenuButton();
+        mToolBar.setMenuText("...");
+
+
         //去除状态栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -170,6 +182,61 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
     @Override
     public void bindEvent() {
 
+        //显示检索菜单
+        mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                List<String> list = new ArrayList<String>();
+                list.add("维修记录");
+                list.add("保养记录");
+                list.add("检验记录");
+                list.add("外委维修记录");
+
+                final PopupWindowUtil popupWindow = new PopupWindowUtil(EquipRoutingInspectionActivity.this, list);
+                popupWindow.setItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        if(_EquipmentData == null){
+                            ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
+                            return;
+                        }
+
+                        popupWindow.dismiss();
+                        switch (position){
+                            case 0:
+                                Intent intent1 = new Intent(EquipRoutingInspectionActivity.this, Query_EquipRepairInfoActivity.class);
+                                intent1.putExtra("equipID", _EquipmentData.getID());
+                                startActivity(intent1);
+                                break;
+                            case 1:
+                                Intent intent2 = new Intent(EquipRoutingInspectionActivity.this, Query_EquipMaintenanceInfoActivity.class);
+                                intent2.putExtra("equipID", _EquipmentData.getID());
+                                startActivity(intent2);
+                                break;
+                            case 2:
+                                Intent intent3 = new Intent(EquipRoutingInspectionActivity.this, Query_EquipInspectionInfoActivity.class);
+                                intent3.putExtra("equipID", _EquipmentData.getID());
+                                startActivity(intent3);
+                                break;
+                            case 3:
+                                Intent intent4 = new Intent(EquipRoutingInspectionActivity.this, Query_EquipRepairExInfoActivity.class);
+                                intent4.putExtra("equipID", _EquipmentData.getID());
+                                startActivity(intent4);
+                                break;
+                            default:
+                                break;
+                        }
+
+                    }
+                });
+                //根据后面的数字 手动调节窗口的宽度
+                popupWindow.show(v, 3);
+
+            }
+        });
+
         //------------------------------------------------------------------------------------------------
         //操作按钮
         //------------------------------------------------------------------------------------------------
@@ -187,13 +254,17 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
             }
         });
 
-        //巡检-需处理
+        //巡检-运行异常
         mBt_Operate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBt_NoOperate.setVisibility(View.GONE);
-                mBt_Operate.setVisibility(View.GONE);
-                mLl_Operate.setVisibility(View.VISIBLE);
+                if(_EquipmentData != null){
+                    mBt_NoOperate.setVisibility(View.GONE);
+                    mBt_Operate.setVisibility(View.GONE);
+                    mLl_Operate.setVisibility(View.VISIBLE);
+                }else{
+                    ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
+                }
             }
         });
         //巡检-需处理-返回

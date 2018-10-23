@@ -1,28 +1,25 @@
 package com.grandhyatt.snowbeer.network.result;
 
 import com.grandhyatt.commonlib.Result;
-import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
-import com.grandhyatt.snowbeer.entity.InspectEntity;
+import com.grandhyatt.snowbeer.entity.InspectBillEntity;
 import com.grandhyatt.snowbeer.entity.InspectionPlanEntity;
-import com.grandhyatt.snowbeer.entity.MaintenanceEntity;
-import com.grandhyatt.snowbeer.entity.MaintenanceItemEntity;
 
 import java.util.List;
 
 /**
- * 设备保养计划
+ * 设备检验记录
  * Created by ycm on 2018/9/28.
  */
 
-public class InspectResult extends Result {
+public class InspectBillResult extends Result {
 
-    private InspectEntity data;
+    private InspectBillEntity data;
 
-    public InspectEntity getData() {
+    public InspectBillEntity getData() {
         return data;
     }
 
-    public void setData(InspectEntity data) {
+    public void setData(InspectBillEntity data) {
         this.data = data;
     }
 

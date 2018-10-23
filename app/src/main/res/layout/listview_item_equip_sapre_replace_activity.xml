@@ -99,7 +99,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/mTv_LastRunningDate"
+                android:id="@+id/mTv_Inspection_Date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
@@ -117,7 +117,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/mTv_NextRunningDate"
+                android:id="@+id/mTv_NextDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"

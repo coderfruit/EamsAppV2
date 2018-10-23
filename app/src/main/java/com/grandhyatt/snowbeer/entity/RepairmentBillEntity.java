@@ -3,55 +3,55 @@ package com.grandhyatt.snowbeer.entity;
 import java.io.Serializable;
 
 /**
+ * 设备维修记录
  * Created by tongzhiqiang on 2018-09-17.
  */
 
 public class RepairmentBillEntity implements Serializable {
 
     private String ID;
-
     private String CorporationID;
-
-
     private String EquipmentID;
-
-    private String  RepairmentBillNO;
+    private String EquipmentCode;
+    private String EquipmentName;
+    private String RepairmentBillNO;
     private String Description;
     private String RepairUser;
     private String RepairmentLevel;
     private String FaultClass;
-
     private String StartTime;
     private String FinishTime;
     private String ShutDownMinutes;
-
     private String TotalMoney;
     private String MakeUser;
-
     private String MakeDate;
-
-
     private String Interval;
-
     private String IntervalUnit;
-
     private String LastRunningDate;
-
     private String NextRunningDate;
-
     private String WarningDays;
-
-
-
-
-
     private String REMARK;
+    private String SpareCount;//维修用备件个数
 
     public RepairmentBillEntity() {
 
     }
 
+    public String getEquipmentCode() {
+        return EquipmentCode;
+    }
 
+    public void setEquipmentCode(String equipmentCode) {
+        EquipmentCode = equipmentCode;
+    }
+
+    public String getEquipmentName() {
+        return EquipmentName;
+    }
+
+    public void setEquipmentName(String equipmentName) {
+        EquipmentName = equipmentName;
+    }
 
     public String getID() {
         return ID;
@@ -206,5 +206,13 @@ public class RepairmentBillEntity implements Serializable {
 
     public void setREMARK(String REMARK) {
         this.REMARK = REMARK;
+    }
+
+    public String getSpareCount() {
+        return SpareCount;
+    }
+
+    public void setSpareCount(String spareCount) {
+        SpareCount = spareCount;
     }
 }
