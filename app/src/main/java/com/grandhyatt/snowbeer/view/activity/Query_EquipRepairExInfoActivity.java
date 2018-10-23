@@ -128,6 +128,8 @@ public class Query_EquipRepairExInfoActivity extends ActivityBase implements IAc
     }
 
     public void requestNetworkDataByEquip(String equipID) {
+
+        showLogingDialog();
         String currentLastIdx = String.valueOf(mPageIndex * mPageSize);
         SoapUtils.getEquipRepairExBills(Query_EquipRepairExInfoActivity.this, equipID, currentLastIdx, new SoapListener() {
             @Override

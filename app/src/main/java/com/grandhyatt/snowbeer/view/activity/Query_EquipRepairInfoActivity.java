@@ -134,6 +134,7 @@ public class Query_EquipRepairInfoActivity extends ActivityBase implements IActi
      */
     public void requestNetworkDataByEquip(String equipID) {
 
+        showLogingDialog();
         String currentLastIdx = String.valueOf(mPageIndex * mPageSize);
         SoapUtils.getEquipRepairBills(Query_EquipRepairInfoActivity.this, equipID, currentLastIdx, new SoapListener() {
             @Override
