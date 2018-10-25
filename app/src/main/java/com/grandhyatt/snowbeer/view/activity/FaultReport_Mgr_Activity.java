@@ -24,6 +24,7 @@ import com.grandhyatt.snowbeer.network.request.FailureReportingRequest;
 import com.grandhyatt.snowbeer.network.result.FailureReportingsResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
+import com.grandhyatt.snowbeer.utils.PopupWindowUtil;
 import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -72,6 +73,9 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
 
     public static final int RESULT_REPORT_COMPLETE_ACTIVITY = 10001;
     String _EquipID;//传入的设备ID
+    String _EquipName;//传入的设备名称
+    String _OperateUser;//传入处理人
+    String _Status;//传入处理状态
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +84,15 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
 
         ButterKnife.bind(this);
 
-        initView();
-        bindEvent();
-
         Intent intent = getIntent();
         _EquipID = intent.getStringExtra("equipID");
+        _EquipName = intent.getStringExtra("equipName");
+        _OperateUser = intent.getStringExtra("operateUser");
+        _Status = intent.getStringExtra("status");
+        _Status = "待处理";
+
+        initView();
+        bindEvent();
         requestNetworkData();
     }
 
@@ -95,7 +103,15 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
 
     @Override
     public void initView() {
-        mToolBar.setTitle("处理报修");
+        mToolBar.setTitle("待处理报修");
+        mToolBar.setMenuText("...");
+        mToolBar.showMenuButton();
+        if(_EquipID != null){
+            mToolBar.hideMenuButton();
+            if(_EquipName != null) {
+                mToolBar.setTitle(_EquipName + "待处理报修");
+            }
+        }
 
         List<CorporationEntity> corps = SPUtils.getLastLoginUserCorporations(this);
         if(corps != null){
@@ -141,11 +157,13 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_ReportID);
                 TextView mTv_EquipID = (TextView) view.findViewById(R.id.mTv_EquipID);
+                TextView mTv_Status = (TextView) view.findViewById(R.id.mTv_Status);
 
                 Intent intent = new Intent(FaultReport_Mgr_Activity.this, FaultReportActivity.class);
                 intent.putExtra("mTv_ReportID", mTv_ReportID.getText().toString());
                 intent.putExtra("mTv_EquipID", mTv_EquipID.getText().toString());
-                intent.putExtra("isMgr", "true");
+                intent.putExtra("mTv_Status", mTv_Status.getText().toString());
+                intent.putExtra("isMgr", "true");//是从待处理报修页面跳转
 
                 startActivityForResult(intent,RESULT_REPORT_COMPLETE_ACTIVITY);
             }
@@ -164,6 +182,42 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
                 showUserCorp();
             }
         });
+
+        mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<String> list = new ArrayList<String>();
+                list.add("待处理的报修");
+                list.add("我处理的报修");
+
+                final PopupWindowUtil popupWindow = new PopupWindowUtil(FaultReport_Mgr_Activity.this, list);
+                popupWindow.setItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        popupWindow.dismiss();
+                        switch (position){
+                            case 0://待处理
+                                _Status = "待处理";
+
+                                requestNetworkData();
+                                break;
+                            case 1://我处理的
+                                _Status = "已处理";
+                                _OperateUser = SPUtils.getLastLoginUserName(FaultReport_Mgr_Activity.this);
+
+                                requestNetworkData();
+                                break;
+                            default:
+                                break;
+                        }
+
+                    }
+                });
+                //根据后面的数字 手动调节窗口的宽度
+                popupWindow.show(v, 3);
+            }
+        });
     }
 
     @Override
@@ -177,7 +231,16 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
 
         FailureReportingRequest request = new FailureReportingRequest();
         request.setCurrentLastIdx(String.valueOf(mPageIndex * mPageSize));
-        request.setStatus("待处理");
+
+        if(_Status != null){
+            request.setStatus(_Status);
+        }
+        if(_EquipID != null){
+            request.setEquipmentID(_EquipID);
+        }
+        if(_OperateUser != null){
+            request.setOperateUser(_OperateUser);
+        }
 
         CorporationEntity corp = null;
         String userCorp = mTv_UserCorp.getText().toString();
@@ -189,9 +252,6 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
 
         if(corp != null){
             request.setCorpID(corp.getID());
-        }
-        if(_EquipID != null){
-            request.setEquipmentID(_EquipID);
         }
 
         SoapUtils.getFailureReportsAsync(FaultReport_Mgr_Activity.this, request, new SoapListener() {

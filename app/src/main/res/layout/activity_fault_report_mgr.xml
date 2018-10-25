@@ -73,7 +73,6 @@
             android:layout_alignParentBottom="true"
             android:orientation="vertical" >
 
-
             <ListView
                 android:id="@+id/mLv_DataList"
                 android:layout_width="match_parent"

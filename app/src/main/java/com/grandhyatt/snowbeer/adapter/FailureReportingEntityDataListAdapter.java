@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -65,7 +66,9 @@ public class FailureReportingEntityDataListAdapter  extends BaseAdapter {
             mViewHolder.mTv_ReportNO = convertView.findViewById(R.id.mTv_ReportNO);
             mViewHolder.mTv_FaultDesc = convertView.findViewById(R.id.mTv_FaultDesc);
             mViewHolder.mTv_FileCnt = convertView.findViewById(R.id.mTv_FileCnt);
-
+            mViewHolder.mTv_OperateDate = convertView.findViewById(R.id.mTv_OperateDate);
+            mViewHolder.mTv_OperateUser = convertView.findViewById(R.id.mTv_OperateUser);
+            mViewHolder.mLl_OperateInfo = convertView.findViewById(R.id.mLl_OperateInfo);
             convertView.setTag(mViewHolder);
 
         } else {
@@ -83,6 +86,17 @@ public class FailureReportingEntityDataListAdapter  extends BaseAdapter {
             mViewHolder.mTv_ReportUser.setText(dataModel.getMakeUser());
             mViewHolder.mTv_ReportNO.setText(dataModel.getReportNO());
             mViewHolder.mTv_FaultDesc.setText("故障描述:" + dataModel.getFailureDesc());
+
+            String operateDate = dataModel.getOperateDate();
+            String operateUser = dataModel.getOperateUser();
+            if((operateDate == null || operateDate.length() == 0) && (operateUser == null || operateUser.length() == 0)){
+                mViewHolder.mLl_OperateInfo.setVisibility(View.GONE);
+            }else{
+                mViewHolder.mTv_OperateDate.setText(dataModel.getOperateDate());
+                mViewHolder.mTv_OperateUser.setText(dataModel.getOperateUser());
+            }
+
+
             List<FailureReportingAttachmentEntity> attachList = dataModel.getFailureReportingAttachmentModelList();
             if(attachList != null) {
                 mViewHolder.mTv_FileCnt.setText(attachList.size() + "");
@@ -104,6 +118,9 @@ public class FailureReportingEntityDataListAdapter  extends BaseAdapter {
         private TextView mTv_ReportNO;
         private TextView mTv_FaultDesc;
         private TextView mTv_FileCnt;
+        private LinearLayout mLl_OperateInfo;
+        private TextView mTv_OperateDate;
+        private TextView mTv_OperateUser;
 
     }
 

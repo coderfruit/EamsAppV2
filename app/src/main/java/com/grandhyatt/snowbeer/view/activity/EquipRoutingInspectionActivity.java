@@ -437,6 +437,7 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
                 if (_EquipmentData != null) {
                     Intent intent = new Intent(EquipRoutingInspectionActivity.this, FaultReport_Mgr_Activity.class);
                     intent.putExtra("equipID", _EquipmentData.getID());
+                    intent.putExtra("equipName", _EquipmentData.getEquipmentName());
                     startActivityForResult(intent, FAULT_REPORT_OPERATE_AFTER);
                 } else {
                     ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");

@@ -46,10 +46,29 @@ public class FailureReportingEntity {
     private long ReportUserID ;
     private String LinkUser;
     private String LinkMobile;
+    private String OperateUser;
+    private String OperateDate;
+
 
     private List<FailureReportingAttachmentEntity> FailureReportingAttachmentModelList;
 
     public FailureReportingEntity() {
+    }
+
+    public String getOperateUser() {
+        return OperateUser;
+    }
+
+    public void setOperateUser(String operateUser) {
+        OperateUser = operateUser;
+    }
+
+    public String getOperateDate() {
+        return OperateDate;
+    }
+
+    public void setOperateDate(String operateDate) {
+        OperateDate = operateDate;
     }
 
     public long getID() {

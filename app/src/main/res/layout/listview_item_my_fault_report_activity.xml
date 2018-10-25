@@ -2,28 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@drawable/selector_listview_item">
+    android:background="@drawable/selector_listview_item"
+    android:orientation="vertical">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="6dp">
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal">
+
         <TextView
             android:id="@+id/mTv_ReportID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="RptID"
-            android:visibility="gone"/>
+            android:visibility="gone" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:text="报修编号："
             android:textColor="@color/gray5"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/mTv_ReportNO"
@@ -38,13 +40,14 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/file_48"
-            android:layout_marginLeft="2dp"/>
+            android:layout_marginLeft="2dp"
+            android:background="@drawable/file_48" />
+
         <TextView
             android:id="@+id/mTv_FileCnt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"/>
+            android:text="0" />
 
         <TextView
             android:id="@+id/mTv_Status"
@@ -64,12 +67,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:orientation="horizontal">
+
         <TextView
             android:id="@+id/mTv_EquipID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="id"
-            android:visibility="gone"/>
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/mTv_EquipInfo"
             android:layout_width="0dp"
@@ -99,6 +104,13 @@
         android:orientation="horizontal">
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:text="报修日期："
+            android:textSize="12sp" />
+
+        <TextView
             android:id="@+id/mTv_ReportDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -106,7 +118,14 @@
             android:layout_weight="6"
             android:text="2018-12-01 12:00"
             android:textColor="@color/gray5"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:text="报修人："
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/mTv_ReportUser"
@@ -117,8 +136,52 @@
             android:gravity="right"
             android:text="老吴"
             android:textColor="@color/gray5"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mLl_OperateInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:text="处理日期："
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/mTv_OperateDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_weight="6"
+            android:text="2018-12-01 12:00"
+            android:textColor="@color/gray5"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:text="处理人："
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/mTv_OperateUser"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:layout_weight="4"
+            android:gravity="right"
+            android:text="老吴"
+            android:textColor="@color/gray5"
+            android:textSize="12sp" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -133,7 +196,7 @@
             android:layout_marginBottom="6dp"
             android:layout_marginLeft="12dp"
             android:text="故障描述："
-            android:textSize="14sp" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <View

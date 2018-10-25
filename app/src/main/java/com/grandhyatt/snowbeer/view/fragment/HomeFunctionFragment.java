@@ -221,7 +221,7 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
 
         mHomeFunctionEntity = new HomeFunctionEntity();
         mHomeFunctionEntity.setImage(R.drawable.baoxiuchuli);
-        mHomeFunctionEntity.setName("报修处理");
+        mHomeFunctionEntity.setName("待处理报修");
         mDataList.add(mHomeFunctionEntity);
 
         mHomeFunctionEntity = new HomeFunctionEntity();

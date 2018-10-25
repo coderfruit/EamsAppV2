@@ -207,7 +207,8 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         Intent intent = getIntent();
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
-        String isMgr = intent.getStringExtra("isMgr");//是否处理报修
+        String mTv_Status = intent.getStringExtra("mTv_Status");
+        String isMgr = intent.getStringExtra("isMgr");//是否是从待处理报修页面跳转过来的
 
         if (mTv_ReportID != null && mTv_EquipID != null) {  //查看报修、处理报修
             mToolBar.setTitle("查看报修信息");
@@ -228,10 +229,14 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
             mGv_Show_Imgs.setVisibility(View.VISIBLE);
 
             if (isMgr != null && isMgr.length() > 0) {
-                mLl_Mgr.setVisibility(View.VISIBLE);
-                mToolBar.setTitle("处理报修");
+                if(mTv_Status.equals("待处理")){
+                    mLl_Mgr.setVisibility(View.VISIBLE);
+                    mToolBar.setTitle("处理报修");
+                }else{
+                    mLl_Mgr.setVisibility(View.GONE);
+                    mToolBar.setTitle("查看报修");
+                }
             }
-
         } else if (mTv_ReportID == null && mTv_EquipID != null){// 设备巡检报修
             mToolBar.setTitle("我要报修");
             mSearchBar.setVisibility(View.GONE);

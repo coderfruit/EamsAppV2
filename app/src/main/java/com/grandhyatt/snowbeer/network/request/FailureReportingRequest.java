@@ -23,6 +23,7 @@ public class FailureReportingRequest {
     private String OperateResult;
     private String ReportUser;
     private String CorpID;      //报修信息所属工厂
+    private String OperateUser;
 
     public FailureReportingRequest() {
     }
@@ -154,6 +155,14 @@ public class FailureReportingRequest {
 
     public void setReportDate(String reportDate) {
         ReportDate = reportDate;
+    }
+
+    public String getOperateUser() {
+        return OperateUser;
+    }
+
+    public void setOperateUser(String operateUser) {
+        OperateUser = operateUser;
     }
 
     @Override
