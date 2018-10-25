@@ -1,13 +1,10 @@
 package com.grandhyatt.snowbeer.view.activity;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -19,9 +16,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.grandhyatt.commonlib.Result;
-import com.grandhyatt.commonlib.utils.IntentUtil;
 import com.grandhyatt.commonlib.utils.ToastUtils;
-import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
@@ -48,6 +43,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import q.rorbin.badgeview.Badge;
 import q.rorbin.badgeview.QBadgeView;
+
+import static com.grandhyatt.snowbeer.Consts.FAULT_REPORT_OPERATE_AFTER;
+import static com.grandhyatt.snowbeer.Consts.INSPECT_OPERATE_AFTER;
+import static com.grandhyatt.snowbeer.Consts.MAINTEN_OPERATE_AFTER;
+import static com.grandhyatt.snowbeer.Consts.REPAIR_OPERATE_AFTER;
+import static com.grandhyatt.snowbeer.Consts.REPAIR_EX_OPERATE_AFTER;
+import static com.grandhyatt.snowbeer.Consts.REPLACE_OPERATE_AFTER;
 
 /**
  * 设备巡检
@@ -122,14 +124,6 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
     Badge bDg_WarningInfo_Replace;
     Badge bDg_WarningInfo_RepairEx;
     Badge bDg_faultRptInfo;
-
-    public static final int REPAIAR_OPERATE_AFTER = 10001;//维修操作之后
-    public static final int MAINTEN_OPERATE_AFTER = 10002;//保养操作之后
-    public static final int INSPECT_OPERATE_AFTER = 10003;//检验操作之后
-    public static final int REPLACE_OPERATE_AFTER = 10004;//备件更换操作之后
-    public static final int REPAIR_EX_OPERATE_AFTER = 10005;//外委维修之后
-    public static final int FAULT_REPORT_OPERATE_AFTER = 10006;//报修查看操作之后
-
 
     public static final int GO_FAULT_REPORT_OPERATE_AFTER = 10011;//去报修操作之后
 
@@ -282,6 +276,11 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
             public void onClick(View v) {
                 if(_EquipmentData != null){
 
+                    Intent intent = new Intent(EquipRoutingInspectionActivity.this, RepairmentReportActivity.class);
+                    intent.putExtra("type","0");
+                    intent.putExtra("mTv_EquipID", _EquipmentData.getID());
+                    startActivityForResult(intent, REPAIR_OPERATE_AFTER);
+
                 }else{
                     ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
                 }
@@ -292,7 +291,10 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
             @Override
             public void onClick(View v) {
                 if(_EquipmentData != null){
-
+                    Intent intent1 = new Intent(EquipRoutingInspectionActivity.this, MaintenReportActivity.class);
+                    intent1.putExtra("type","0");
+                    intent1.putExtra("mTv_EquipID", _EquipmentData.getID());
+                    startActivityForResult(intent1,MAINTEN_OPERATE_AFTER);
                 }else{
                     ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
                 }
@@ -304,7 +306,10 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
             @Override
             public void onClick(View v) {
                 if(_EquipmentData != null){
-
+                    Intent intent2 = new Intent(EquipRoutingInspectionActivity.this, InspectReportActivity.class);
+                    intent2.putExtra("type","0");
+                    intent2.putExtra("mTv_EquipID", _EquipmentData.getID());
+                    startActivityForResult(intent2,INSPECT_OPERATE_AFTER);
                 }else{
                     ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
                 }
@@ -367,7 +372,7 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
                 if (_EquipmentData != null) {
                     Intent intent = new Intent(EquipRoutingInspectionActivity.this, WarningInfo_EquipRepairActivity.class);
                     intent.putExtra("equipID", _EquipmentData.getID());
-                    startActivityForResult(intent, REPAIAR_OPERATE_AFTER);
+                    startActivityForResult(intent, REPAIR_OPERATE_AFTER);
                 } else {
                     ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
                 }
@@ -652,7 +657,7 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
 
         switch (requestCode) {
 
-            case REPAIAR_OPERATE_AFTER://维修之后
+            case REPAIR_OPERATE_AFTER://维修之后
                 getEquipWarinigInfo(_EquipmentData.getID());
                 break;
             case MAINTEN_OPERATE_AFTER://保养之后

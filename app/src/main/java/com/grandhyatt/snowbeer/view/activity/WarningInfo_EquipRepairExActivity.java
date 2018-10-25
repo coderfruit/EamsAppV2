@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
+import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.Equip_RepairEx_EntityDataListAdapter;
 import com.grandhyatt.snowbeer.entity.CorporationEntity;
@@ -86,6 +89,22 @@ public class WarningInfo_EquipRepairExActivity extends ActivityBase implements I
 
     @Override
     public void bindEvent() {
+        //列表明细单击事件
+        mLv_DataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_ID);
+                TextView mTv_EquipID = (TextView) view.findViewById(R.id.mTv_EquipID);
+
+                //维修-维修计划   type = 2  mTv_EquipID=设备ID    mTv_ReportID = 维修计划ID，
+                Intent intent = new Intent(WarningInfo_EquipRepairExActivity.this, RepairmentReportActivity.class);
+                intent.putExtra("type","2");
+                intent.putExtra("mTv_EquipID", mTv_EquipID.getText());
+                intent.putExtra("mTv_ReportID", mTv_ReportID.getText());
+                startActivityForResult(intent, Consts.REPAIR_EX_OPERATE_AFTER);
+            }
+        });
         //下拉刷新
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -255,6 +274,22 @@ public class WarningInfo_EquipRepairExActivity extends ActivityBase implements I
                     ToastUtils.showToast(WarningInfo_EquipRepairExActivity.this, getString(R.string.submit_soap_result_err4, fault));
                 }
             });
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (requestCode) {
+
+            case  Consts.REPAIR_EX_OPERATE_AFTER://维修之后
+                if (_EquipID != null) {  //根据设备ID 获取预警信息
+                    requestNetworkDataByEquip(_EquipID);
+                }else{                   //根据组织机构获取预警信息
+                    requestNetworkData();
+                }
+                break;
+            default:
+                break;
         }
     }
 }

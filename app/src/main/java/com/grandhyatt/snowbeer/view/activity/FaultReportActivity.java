@@ -27,10 +27,8 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,6 +79,10 @@ import butterknife.ButterKnife;
 import me.zhouzhuo.zzimagebox.ZzImageBox;
 
 import static com.grandhyatt.snowbeer.Consts.CAMERA_BARCODE_SCAN;
+import static com.grandhyatt.snowbeer.Consts.INSPECT_OPERATE_AFTER;
+import static com.grandhyatt.snowbeer.Consts.MAINTEN_OPERATE_AFTER;
+import static com.grandhyatt.snowbeer.Consts.REPAIR_EX_OPERATE_AFTER;
+import static com.grandhyatt.snowbeer.Consts.REPAIR_OPERATE_AFTER;
 
 /**
  * Created by ycm on 2018/8/14.
@@ -186,7 +188,6 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 
     MediaPlayer player;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -281,16 +282,48 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         int id = v.getId();
         switch (id) {
             case R.id.mBtn_Repair://维修
-                ToastUtils.showLongToast(FaultReportActivity.this, "维修");
-                //todo
+                if (_ReportEntity == null) {
+                    return;
+                }else{
+                    if(_EquipmentData == null){
+                        ToastUtils.showLongToast(FaultReportActivity.this, "加载设备信息失败，请后退并重新进入该界面！");
+                        return;
+                    }
+                }
+                Intent intent = new Intent(FaultReportActivity.this, RepairmentReportActivity.class);
+                intent.putExtra("type","0");
+                intent.putExtra("mTv_EquipID", _EquipmentData.getID());
+                startActivityForResult(intent, REPAIR_OPERATE_AFTER);
+
                 break;
             case R.id.mBtn_Mainten://保养
-                ToastUtils.showLongToast(FaultReportActivity.this, "保养");
-                //todo
+                if (_ReportEntity == null) {
+                    return;
+                }else{
+                    if(_EquipmentData == null){
+                        ToastUtils.showLongToast(FaultReportActivity.this, "加载设备信息失败，请后退并重新进入该界面！");
+                        return;
+                    }
+                }
+                Intent intent1 = new Intent(FaultReportActivity.this, MaintenReportActivity.class);
+                intent1.putExtra("type","0");
+                intent1.putExtra("mTv_EquipID", _EquipmentData.getID());
+                startActivityForResult(intent1,MAINTEN_OPERATE_AFTER);
+
                 break;
             case R.id.mBtn_Inspect://检验
-                ToastUtils.showLongToast(FaultReportActivity.this, "检验");
-                //todo
+                if (_ReportEntity == null) {
+                    return;
+                }else{
+                    if(_EquipmentData == null){
+                        ToastUtils.showLongToast(FaultReportActivity.this, "加载设备信息失败，请后退并重新进入该界面！");
+                        return;
+                    }
+                }
+                Intent intent2 = new Intent(FaultReportActivity.this, InspectReportActivity.class);
+                intent2.putExtra("type","0");
+                intent2.putExtra("mTv_EquipID", _EquipmentData.getID());
+                startActivityForResult(intent2,INSPECT_OPERATE_AFTER);
                 break;
             case R.id.mBtn_RepairEx://外委维修
                 ToastUtils.showLongToast(FaultReportActivity.this, "外委维修");
@@ -903,6 +936,55 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
             return;
         }
         switch (requestCode) {
+            case REPAIR_OPERATE_AFTER://维修完毕
+                //得到维修Activity 关闭后返回的数据
+                String OperateID = data.getExtras().getString("BillID");//操作单据ID
+                String OperateDesc = data.getExtras().getString("BillNO");//操作单据号
+                if(OperateID != null && OperateDesc != null) {
+                    String failureReportID = String.valueOf(_ReportEntity.getID());
+                    String status = Consts.EnumFailureStatus.已处理.toString();//处理状态
+                    String OperateResult = Consts.EnumFailureResult.已维修.toString();//处理结果
+                    ModifyFaultReport(failureReportID, status, OperateResult, OperateID, OperateDesc, "");
+                    finish();
+                }
+
+                break;
+            case MAINTEN_OPERATE_AFTER://保养完毕
+                //得到维修Activity 关闭后返回的数据
+                OperateID = data.getExtras().getString("BillID");//操作单据ID
+                OperateDesc = data.getExtras().getString("BillNO");//操作单据号
+                if(OperateID != null && OperateDesc != null) {
+                    String failureReportID = String.valueOf(_ReportEntity.getID());
+                    String status = Consts.EnumFailureStatus.已处理.toString();//处理状态
+                    String OperateResult = Consts.EnumFailureResult.已保养.toString();//处理结果
+                    ModifyFaultReport(failureReportID, status, OperateResult, OperateID, OperateDesc, "");
+                    finish();
+                }
+                break;
+            case INSPECT_OPERATE_AFTER://检验完毕
+                //得到维修Activity 关闭后返回的数据
+                OperateID = data.getExtras().getString("BillID");//操作单据ID
+                OperateDesc = data.getExtras().getString("BillNO");//操作单据号
+                if(OperateID != null && OperateDesc != null) {
+                    String failureReportID = String.valueOf(_ReportEntity.getID());
+                    String status = Consts.EnumFailureStatus.已处理.toString();//处理状态
+                    String OperateResult = Consts.EnumFailureResult.已检验.toString();//处理结果
+                    ModifyFaultReport(failureReportID, status, OperateResult, OperateID, OperateDesc, "");
+                    finish();
+                }
+                break;
+            case REPAIR_EX_OPERATE_AFTER://外委完毕
+                //得到维修Activity 关闭后返回的数据
+                OperateID = data.getExtras().getString("BillID");//操作单据ID
+                OperateDesc = data.getExtras().getString("BillNO");//操作单据号
+                if(OperateID != null && OperateDesc != null) {
+                    String failureReportID = String.valueOf(_ReportEntity.getID());
+                    String status = Consts.EnumFailureStatus.已处理.toString();//处理状态
+                    String OperateResult = Consts.EnumFailureResult.已外委维修.toString();//处理结果
+                    ModifyFaultReport(failureReportID, status, OperateResult, OperateID, OperateDesc, "");
+                    finish();
+                }
+                break;
             case SELECT_PIC_BY_PICK_PHOTO://从相册查找
                 Uri uri = data.getData();
                 if (!TextUtils.isEmpty(uri.getAuthority())) {

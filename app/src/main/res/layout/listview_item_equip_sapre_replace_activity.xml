@@ -22,6 +22,18 @@
                 android:layout_height="wrap_content"
                 android:text="RptID"
                 android:visibility="gone" />
+            <TextView
+                android:id="@+id/mTv_EquipID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EquipID"
+                android:visibility="gone" />
+            <TextView
+                android:id="@+id/mTv_SpareID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SpareID"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/mTv_Status"
