@@ -133,6 +133,11 @@ public class Consts {
         FailureReportingDesc,    //报修描述
 
     }
-
+    public static final int REPAIR_OPERATE_AFTER = 10001;//维修操作之后
+    public static final int MAINTEN_OPERATE_AFTER = 10002;//保养操作之后
+    public static final int INSPECT_OPERATE_AFTER = 10003;//检验操作之后
+    public static final int REPLACE_OPERATE_AFTER = 10004;//备件更换操作之后
+    public static final int REPAIR_EX_OPERATE_AFTER = 10005;//外委维修之后
+    public static final int FAULT_REPORT_OPERATE_AFTER = 10006;//报修查看操作之后
 
 }

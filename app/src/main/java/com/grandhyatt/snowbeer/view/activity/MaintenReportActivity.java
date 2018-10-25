@@ -158,9 +158,9 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         mReceiver = mSearchBar.getBroadcastReceiver();
         mFilter = mSearchBar.getFilter();
 
-        //type = 0 保养     设备id
-        //type = 2 保养     设备id ，MaintenancePlanID，
-        //type = 3 显示保养单   设备id ，MaintenanceBillID
+        //保养            type = 0    mTv_EquipID=设备id
+        //保养t-保养计划  type = 2    mTv_EquipID=设备id  mTv_ReportID = 保养计划ID，
+        //保养-显示保养单 type = 3    mTv_EquipID=设备id  mTv_ReportID = 保养单ID
 
         Intent intent = getIntent();
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
