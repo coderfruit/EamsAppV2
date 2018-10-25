@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
+import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.Equip_Maintence_EntityDataListAdapter;
 import com.grandhyatt.snowbeer.entity.CorporationEntity;
@@ -89,6 +92,22 @@ public class WarningInfo_EquipMaintenActivity extends ActivityBase implements IA
 
     @Override
     public void bindEvent() {
+        //列表明细单击事件
+        mLv_DataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_ID);
+                TextView mTv_EquipID = (TextView) view.findViewById(R.id.mTv_EquipID);
+
+                //保养-保养计划  type = 2    mTv_EquipID=设备id  mTv_ReportID = 保养计划ID，
+                Intent intent = new Intent(WarningInfo_EquipMaintenActivity.this, RepairmentReportActivity.class);
+                intent.putExtra("type","2");
+                intent.putExtra("mTv_EquipID", mTv_EquipID.getText());
+                intent.putExtra("mTv_ReportID", mTv_ReportID.getText());
+                startActivityForResult(intent, Consts.MAINTEN_OPERATE_AFTER);
+            }
+        });
         //下拉刷新
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -260,4 +279,21 @@ public class WarningInfo_EquipMaintenActivity extends ActivityBase implements IA
         }
 
     }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (requestCode) {
+
+            case  Consts.MAINTEN_OPERATE_AFTER://维修之后
+                if (_EquipID != null) {  //根据设备ID 获取预警信息
+                    requestNetworkDataByEquip(_EquipID);
+                }else{                   //根据组织机构获取预警信息
+                    requestNetworkData();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
 }

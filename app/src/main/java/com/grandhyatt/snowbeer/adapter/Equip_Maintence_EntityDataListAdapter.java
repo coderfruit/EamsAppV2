@@ -54,6 +54,7 @@ public class Equip_Maintence_EntityDataListAdapter extends BaseAdapter {
 
             mViewHolder.mTv_Status = convertView.findViewById(R.id.mTv_Status);
             mViewHolder.mTv_ID = convertView.findViewById(R.id.mTv_ID);
+            mViewHolder.mTv_EquipID = convertView.findViewById(R.id.mTv_EquipID);
             mViewHolder.mTv_MaintenLevel = convertView.findViewById(R.id.mTv_MaintenLevel);
             mViewHolder.mTv_Interval = convertView.findViewById(R.id.mTv_Interval);
             mViewHolder.mTv_EquipName = convertView.findViewById(R.id.mTv_EquipName);
@@ -72,6 +73,7 @@ public class Equip_Maintence_EntityDataListAdapter extends BaseAdapter {
         if (dataModel != null) {
             mViewHolder.mTv_Status.setText(dataModel.getStatus());
             mViewHolder.mTv_ID.setText(dataModel.getID());
+            mViewHolder.mTv_EquipID.setText(dataModel.getEquipmentID());
             mViewHolder.mTv_MaintenLevel.setText(dataModel.getMaintenanceLevel());
             mViewHolder.mTv_Interval.setText("每" + dataModel.getInterval() + dataModel.getIntervalUnit() + "执行一次");
             mViewHolder.mTv_EquipName.setText(dataModel.getEquipmentName());
@@ -88,6 +90,7 @@ public class Equip_Maintence_EntityDataListAdapter extends BaseAdapter {
 
         private TextView mTv_Status;
         private TextView mTv_ID;
+        private TextView mTv_EquipID;
         private TextView mTv_MaintenLevel;
         private TextView mTv_Interval;
         private TextView mTv_EquipName;

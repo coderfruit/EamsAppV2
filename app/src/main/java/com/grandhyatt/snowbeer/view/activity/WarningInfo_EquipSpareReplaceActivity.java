@@ -4,14 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
+import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
-import com.grandhyatt.snowbeer.adapter.Equip_Repair_EntityDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.Equip_SpareReplace_EntityDataListAdapter;
 import com.grandhyatt.snowbeer.entity.CorporationEntity;
 import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
@@ -88,6 +90,22 @@ public class WarningInfo_EquipSpareReplaceActivity extends ActivityBase implemen
 
     @Override
     public void bindEvent() {
+        //列表明细单击事件
+        mLv_DataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_SpareID);
+                TextView mTv_EquipID = (TextView) view.findViewById(R.id.mTv_EquipID);
+
+                //维修-备件更换   type = 1  mTv_EquipID=设备ID    mTv_ReportID = 备件ID
+                Intent intent = new Intent(WarningInfo_EquipSpareReplaceActivity.this, RepairmentReportActivity.class);
+                intent.putExtra("type","1");
+                intent.putExtra("mTv_EquipID", mTv_EquipID.getText());
+                intent.putExtra("mTv_ReportID", mTv_ReportID.getText());
+                startActivityForResult(intent, Consts.REPAIR_OPERATE_AFTER);
+            }
+        });
         //下拉刷新
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -257,6 +275,22 @@ public class WarningInfo_EquipSpareReplaceActivity extends ActivityBase implemen
                     ToastUtils.showToast(WarningInfo_EquipSpareReplaceActivity.this, getString(R.string.submit_soap_result_err4, fault));
                 }
             });
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        switch (requestCode) {
+
+            case  Consts.REPLACE_OPERATE_AFTER://维修之后
+                if (_EquipID != null) {  //根据设备ID 获取预警信息
+                    requestNetworkDataByEquip(_EquipID);
+                }else{                   //根据组织机构获取预警信息
+                    requestNetworkData();
+                }
+                break;
+            default:
+                break;
         }
     }
 }
