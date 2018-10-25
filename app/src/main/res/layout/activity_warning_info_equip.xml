@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="60dp"
-            android:text="用户归属工厂"
+            android:hint="用户归属工厂"
             android:textColor="@color/gray3"
             android:textSize="14sp" />
 

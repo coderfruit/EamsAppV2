@@ -284,6 +284,24 @@ public class SPUtils extends com.grandhyatt.commonlib.utils.SPUtils {
     }
 
     /**
+     * 获取用户组织机构，根据组织机构名称
+     * @param context
+     * @param corpName
+     * @return
+     */
+    public static CorporationEntity getLastLoginUserCorporations(Context context,String corpName){
+        CorporationEntity corp = null;
+        String base64Str = (String) get(context, "LAST_LGOIN_USER_CORPORATIONS", "");
+        List<CorporationEntity> corpList = Base64StrToCorpList(base64Str);
+        for (CorporationEntity item:corpList) {
+            if(item.getCorporationName().equals(corpName)){
+                corp = item;
+            }
+        }
+        return corp;
+    }
+
+    /**
      * 对象转换为base64字符串
      * @param obj
      * @return

@@ -94,10 +94,18 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
     public void initView() {
         mToolBar.setTitle("设备预警信息");
 
-        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(this);
-        if(corp != null)
-        {
-            mTv_UserCorp.setText(corp.getCorporationName());
+        List<CorporationEntity> corps = SPUtils.getLastLoginUserCorporations(this);
+        if(corps != null){
+            if(corps.size() == 1){
+                mRL_UserCorp.setVisibility(View.GONE);
+            }else{
+                CorporationEntity corp = SPUtils.getLastLoginUserCorporation(this);
+                if(corp != null)
+                {
+                    mTv_UserCorp.setText(corp.getCorporationName());
+                }
+                mRL_UserCorp.setVisibility(View.VISIBLE);
+            }
         }
 
         qBv_mBt_EquipRepair = new QBadgeView(this).bindTarget(mBt_EquipRepair);
@@ -171,8 +179,14 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
 
     @Override
     public void requestNetworkData() {
+        CorporationEntity corp = null;
+        String userCorp = mTv_UserCorp.getText().toString();
+        if(userCorp.length() > 0) {
+            corp = SPUtils.getLastLoginUserCorporations(WarningInfo_EquipActivity.this, userCorp);
+        }else{
+            corp = SPUtils.getLastLoginUserCorporation(WarningInfo_EquipActivity.this);
+        }
 
-        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(WarningInfo_EquipActivity.this);
         showLogingDialog();
 
         SoapUtils.getWarningInfoCount(WarningInfo_EquipActivity.this, corp.getID(),

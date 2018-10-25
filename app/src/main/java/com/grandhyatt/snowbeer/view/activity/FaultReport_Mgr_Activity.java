@@ -97,11 +97,20 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
     public void initView() {
         mToolBar.setTitle("处理报修");
 
-        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(this);
-        if(corp != null)
-        {
-            mTv_UserCorp.setText(corp.getCorporationName());
+        List<CorporationEntity> corps = SPUtils.getLastLoginUserCorporations(this);
+        if(corps != null){
+            if(corps.size() == 1){
+                mRL_UserCorp.setVisibility(View.GONE);
+            }else{
+                CorporationEntity corp = SPUtils.getLastLoginUserCorporation(this);
+                if(corp != null)
+                {
+                    mTv_UserCorp.setText(corp.getCorporationName());
+                }
+                mRL_UserCorp.setVisibility(View.VISIBLE);
+            }
         }
+
     }
 
     @Override
@@ -169,7 +178,15 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
         FailureReportingRequest request = new FailureReportingRequest();
         request.setCurrentLastIdx(String.valueOf(mPageIndex * mPageSize));
         request.setStatus("待处理");
-        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(this);
+
+        CorporationEntity corp = null;
+        String userCorp = mTv_UserCorp.getText().toString();
+        if(userCorp.length() > 0) {
+            corp = SPUtils.getLastLoginUserCorporations(FaultReport_Mgr_Activity.this, userCorp);
+        }else{
+            corp = SPUtils.getLastLoginUserCorporation(FaultReport_Mgr_Activity.this);
+        }
+
         if(corp != null){
             request.setCorpID(corp.getID());
         }

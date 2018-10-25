@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="60dp"
-            android:text="用户归属工厂"
+            android:hint="用户归属工厂"
             android:textColor="@color/gray3"
             android:textSize="14sp" />
 
@@ -43,6 +43,13 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="16dp"
             android:src="@drawable/item_signature_iv_menu_defaul" />
+
+        <View
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/white6"
+            />
     </RelativeLayout>
 
 
@@ -56,7 +63,6 @@
         app:srlPrimaryColor="@color/blue_title_bar"
         app:srlAccentColor="@android:color/white"
         app:srlEnableLoadMore="true">
-
         <com.scwang.smartrefresh.header.WaterDropHeader
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -65,14 +71,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical" >
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/white6"
-                />
 
             <ListView
                 android:id="@+id/mLv_DataList"

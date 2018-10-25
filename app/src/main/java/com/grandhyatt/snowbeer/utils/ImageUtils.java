@@ -131,7 +131,7 @@ public class ImageUtils {
     public static Bitmap compressImg(String itemUrl)
     {
         BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inSampleSize = 6;    //这个的值压缩的倍数（2的整数倍），数值越小，压缩率越小，图片越清晰
+        opts.inSampleSize = 2;    //这个的值压缩的倍数（2的整数倍），数值越小，压缩率越小，图片越清晰
         Bitmap bitmap = BitmapFactory.decodeFile(itemUrl,opts);//返回原图解码之后的bitmap对象
         return bitmap;
     }
