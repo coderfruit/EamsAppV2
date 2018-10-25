@@ -1035,6 +1035,8 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                 }
 
                 break;
+            default:
+                break;
         }
         super.onActivityResult(requestCode, resultCode, data);
 

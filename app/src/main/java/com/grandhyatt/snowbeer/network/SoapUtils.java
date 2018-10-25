@@ -32,6 +32,9 @@ import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.soapNetWork.SoapParams;
 import com.grandhyatt.snowbeer.utils.JUnitUtils;
 import com.grandhyatt.snowbeer.utils.SPUtils;
+import com.grandhyatt.snowbeer.view.activity.EquipMgrRepairExSpareCheckActivity;
+import com.grandhyatt.snowbeer.view.activity.RepairmentExPlanCheckActivity;
+import com.grandhyatt.snowbeer.view.activity.RepairmentExReportActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1210,9 +1213,12 @@ public class SoapUtils {
 	}
 
 
+	public static void getEquipmentSparesDeptAsync(EquipMgrRepairExSpareCheckActivity equipMgrRepairExSpareCheckActivity, String equipID, String deptID, String spareContent, SoapListener callback) {
+	}
 
+	public static void getEquipmentExPlanAsync(RepairmentExPlanCheckActivity repairmentExPlanCheckActivity, String equipmentID, SoapListener callback) {
+	}
 
-
-
-
+	public static void submitNewEquipReparimentExRepairAsync(RepairmentExReportActivity repairmentExReportActivity, String faultDesc, RepairmentEquipmentResult request, ArrayList<String> checkPlanIDList, SoapListener callback) {
+	}
 }
