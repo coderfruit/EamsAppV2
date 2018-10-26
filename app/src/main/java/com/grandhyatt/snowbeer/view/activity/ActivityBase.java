@@ -160,8 +160,8 @@ public class ActivityBase extends com.grandhyatt.commonlib.view.activity.Activit
         builder.setTitle(title)
                 .setIcon(R.drawable.logo32)
                 .setView(ctl)
-                .setNegativeButton("取消", cancleCallBack);
-        builder.setPositiveButton("确定",okCallBack);
+                .setNegativeButton("否", cancleCallBack);
+        builder.setPositiveButton("是",okCallBack);
         builder.show();
     }
 
