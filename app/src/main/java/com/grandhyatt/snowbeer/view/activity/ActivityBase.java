@@ -144,37 +144,25 @@ public class ActivityBase extends com.grandhyatt.commonlib.view.activity.Activit
     }
 
     /**
-     * 弹出选择对话框获取用户选择的是否
+     * 弹出选择对话框获取
      * @param context
      * @param title
      * @param showText
      * @return
      */
-    public boolean ShowDialog(Context context, String title,String showText) {
+    public void ShowDialog(Context context, String title,String showText,DialogInterface.OnClickListener okCallBack,DialogInterface.OnClickListener cancleCallBack) {
 
-        final boolean[] value = {false};
-        final TextView inputContrl = new TextView(context);
-        inputContrl.setText(showText);
+        final TextView ctl = new TextView(context);
+        ctl.setText(showText);
+        ctl.setTextSize(15);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title)
-                .setIcon(R.drawable.logo)
-                .setView(inputContrl)
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        value[0] = false;
-                    }
-                });
-        builder.setPositiveButton("确定",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        value[0] = true;
-                    }
-                });
+                .setIcon(R.drawable.logo32)
+                .setView(ctl)
+                .setNegativeButton("取消", cancleCallBack);
+        builder.setPositiveButton("确定",okCallBack);
         builder.show();
-
-        return value[0];
     }
 
     /**

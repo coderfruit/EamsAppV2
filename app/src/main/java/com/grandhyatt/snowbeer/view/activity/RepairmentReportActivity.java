@@ -2,6 +2,7 @@ package com.grandhyatt.snowbeer.view.activity;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -118,10 +119,9 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     TextView mTv_FaultClass;
     @BindView(R.id.mTv_RepairDesc)
     TextView mTv_RepairDesc;
-    @BindView(R.id.mTv_jh)
-    TextView mTv_jh;
-    @BindView(R.id.mLl_RepairmentPlan)
-    LinearLayout mLl_RepairmentPlan;
+
+    @BindView(R.id.mBtn_ChoicePlan)
+    Button mBtn_ChoicePlan;
 
     @BindView(R.id.mEt_User)
     EditText mEt_User;
@@ -137,6 +137,11 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     ListView mLv_DataList_Spare;
     @BindView(R.id.mLv_Show_plan)
     ListView mLv_Show_plan;
+
+    @BindView(R.id.mLl_Plan)
+    LinearLayout mLl_Plan;//维修计划信息容器
+    @BindView(R.id.mLl_Spare)
+    LinearLayout mLl_Spare;//备件信息容器
 
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
     public static final int CHECK_SPARE_OK = 112;//选择维修用备件
@@ -424,12 +429,12 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                        if(_EquipmentData == null){
-                            ToastUtils.showLongToast(RepairmentReportActivity.this, "请先确定设备");
+                        if (_EquipmentData == null) {
+                            ToastUtils.showToast(RepairmentReportActivity.this, "请先确定设备");
                             return;
                         }
                         popupWindow.dismiss();
-                        switch (position){
+                        switch (position) {
                             case 0:
                                 Intent intent1 = new Intent(RepairmentReportActivity.this, Query_EquipRepairInfoActivity.class);
                                 intent1.putExtra("equipID", _EquipmentData.getID());
@@ -468,6 +473,10 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         mTv_StartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (_EquipmentData == null) {
+                    ToastUtils.showToast(RepairmentReportActivity.this, "请先确定设备");
+                    return;
+                }
                 DatePickDialog dialog = new DatePickDialog(v.getContext());
                 //设置上下年分限制
                 dialog.setYearLimt(5);
@@ -495,7 +504,10 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         mTv_FinishDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (_EquipmentData == null) {
+                    ToastUtils.showToast(RepairmentReportActivity.this, "请先确定设备");
+                    return;
+                }
                 DatePickDialog dialog = new DatePickDialog(v.getContext());
                 //设置上下年分限制
                 dialog.setYearLimt(5);
@@ -523,6 +535,10 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         mTv_RepairLevel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (_EquipmentData == null) {
+                    ToastUtils.showToast(RepairmentReportActivity.this, "请先确定设备");
+                    return;
+                }
                 final List<String> list = new ArrayList<String>();
                 if (_FaultLevelArr != null && _FaultLevelArr.length > 0) {
                     for (String item : _FaultLevelArr) {
@@ -536,14 +552,39 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 showSelectDialog(new SelectDialog.SelectDialogListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        //界面赋值
                         mTv_RepairLevel.setText(list.get(position).toString());
+
+                        //大修
                         if (list.get(position).toString().equals("大修")) {
+                            mLl_Plan.setVisibility(View.VISIBLE);
+                            mBtn_ChoicePlan.performClick();
+
                             if (_CheckSpareEntityList != null && _CheckSpareEntityList.size() > 0) {
                                 _CheckSpareEntityList.clear();
                                 mLv_Show_plan.setVisibility(View.GONE);
                                 mLv_Show_plan.setAdapter(null);
                             }
-                        } else {
+                        }
+                        //定修、日常维修
+                        else {
+                            ShowDialog(RepairmentReportActivity.this, "提示", "是否按计划执行?",
+                                    //是
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            mBtn_ChoicePlan.performClick();
+                                            mLl_Plan.setVisibility(View.VISIBLE);
+                                        }
+                                    },
+                                    //否
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            mLl_Plan.setVisibility(View.GONE);
+                                        }
+                                    });
+
                             if (_CheckPlanEntityList != null && _CheckPlanEntityList.size() > 0) {
                                 _CheckPlanEntityList.clear();
                                 _CheckPlanIDList.clear();
@@ -559,6 +600,11 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         mTv_FaultClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (_EquipmentData == null) {
+                    ToastUtils.showToast(RepairmentReportActivity.this, "请先确定设备");
+                    return;
+                }
                 final List<String> list = new ArrayList<String>();
                 if (_FaultDescArr != null && _FaultDescArr.length > 0) {
                     for (String item : _FaultDescArr) {
@@ -584,20 +630,24 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         mTv_RepairDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (_EquipmentData == null) {
+                    ToastUtils.showToast(RepairmentReportActivity.this, "请先确定设备");
+                    return;
+                }
                 ShowInputDialogForTextView(RepairmentReportActivity.this, "请输入设备维修描述", mTv_RepairDesc);
             }
         });
         //选择计划
-        mLl_RepairmentPlan.setOnClickListener(new View.OnClickListener() {
+        mBtn_ChoicePlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (_EquipmentData == null) {
-                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请首先确定要维修的设备！");
+                    ToastUtils.showToast(RepairmentReportActivity.this, "请先确定设备！");
                     return;
                 }
                 String _ReapirLevel = mTv_RepairLevel.getText().toString();
                 if (_ReapirLevel == null || _ReapirLevel.length() == 0) {
-                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择维修级别！");
+                    ToastUtils.showToast(RepairmentReportActivity.this, "请选择维修级别！");
                     return;
                 }
                 Intent intent = new Intent(RepairmentReportActivity.this, RepairmentPlanCheckActivity.class);
@@ -612,7 +662,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             @Override
             public void onClick(View v) {
                 if (_EquipmentData == null) {
-                    ToastUtils.showLongToast(RepairmentReportActivity.this, "请首先确定要维修的设备！");
+                    ToastUtils.showToast(RepairmentReportActivity.this, "请先确定设备！");
                     return;
                 }
                 Intent intent = new Intent(RepairmentReportActivity.this, EquipMgrRepairSpareActivity.class);
@@ -993,7 +1043,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
         //验证提交数据
         if (_EquipmentData == null) {
-            ToastUtils.showLongToast(RepairmentReportActivity.this, "请首先确定要维修的设备！");
+            ToastUtils.showLongToast(RepairmentReportActivity.this, "请先确定设备！");
             return;
         }
         if (faultDate == null || faultDate.length() == 0) {
