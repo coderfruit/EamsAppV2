@@ -70,13 +70,13 @@ import butterknife.ButterKnife;
 
 import static com.grandhyatt.snowbeer.Consts.CAMERA_BARCODE_SCAN;
 /**
+ * 设备保养操作界面
  * Created by tongzhiqiang on 2018-10-08.
  */
 
 public class MaintenReportActivity extends ActivityBase implements IActivityBase, View.OnClickListener {
     @BindView(R.id.mToolBar)
     ToolBarLayout mToolBar;
-
     @BindView(R.id.mSearchBar)
     SearchBarLayout mSearchBar;
 
@@ -159,30 +159,36 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         mFilter = mSearchBar.getFilter();
 
         //保养            type = 0    mTv_EquipID=设备id
-        //保养t-保养计划  type = 2    mTv_EquipID=设备id  mTv_ReportID = 保养计划ID，
+        //保养-保养计划   type = 2    mTv_EquipID=设备id  mTv_ReportID = 保养计划ID
         //保养-显示保养单 type = 3    mTv_EquipID=设备id  mTv_ReportID = 保养单ID
 
         Intent intent = getIntent();
+        String type = intent.getStringExtra("type");
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
 
-        if (mTv_ReportID != null && mTv_EquipID != null) {
+        //保养-显示保养单 type = 3    mTv_EquipID=设备id  mTv_ReportID = 保养单ID
+        if ((type != null && type.equals("3")) && mTv_ReportID != null && mTv_EquipID != null) {
             mToolBar.setTitle("查看保养信息");
             getReport(mTv_ReportID);
             getEquipmentInfoByID(mTv_EquipID);
             bindEventPart();
-
             //隐藏搜索栏
             mSearchBar.setVisibility(View.GONE);
-
             mBtn_Submit.setVisibility(View.GONE);
-
             mEt_User.setEnabled(false);
             mEt_money.setEnabled(false);
+        }
+        //保养-保养计划  type = 2    mTv_EquipID=设备id  mTv_ReportID = 保养计划ID
+        else  if ((type != null && type.equals("2")) && mTv_ReportID != null && mTv_EquipID != null) {
 
+        }
+        //保养            type = 0    mTv_EquipID=设备id
+        else  if ((type != null && type.equals("0")) && mTv_EquipID != null) {
 
-
-        } else {              //添加报修
+        }
+        //正常保养
+        else {
             mToolBar.setTitle("我要保养");
             lL_material.setVisibility(View.GONE);
             initView();
@@ -190,7 +196,6 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             bindEvent();
             refreshUI();
             requestNetworkData();
-
         }
     }
     @Override

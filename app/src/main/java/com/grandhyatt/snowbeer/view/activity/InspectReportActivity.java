@@ -67,13 +67,13 @@ import butterknife.ButterKnife;
 import static com.grandhyatt.snowbeer.Consts.CAMERA_BARCODE_SCAN;
 
 /**
+ * 设备检验操作界面
  * Created by tongzhiqiang on 2018-10-08.
  */
 
 public class InspectReportActivity extends ActivityBase implements IActivityBase, View.OnClickListener{
     @BindView(R.id.mToolBar)
     ToolBarLayout mToolBar;
-
     @BindView(R.id.mSearchBar)
     SearchBarLayout mSearchBar;
 
@@ -91,7 +91,6 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
     TextView mTv_EquipLocation;
     @BindView(R.id.mIv_EquipImg)
     ImageView mIv_EquipImg;
-
     @BindView(R.id.mBtn_Submit)
     Button mBtn_Submit;
 
@@ -116,8 +115,6 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
     TextView mTv_InspResult;
     @BindView(R.id.mTv_InspMode)
     TextView mTv_InspMode;
-
-
 
     EquipmentEntity _EquipmentData;
     InspectBillEntity _ReportEntity;
@@ -147,75 +144,43 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
         mFilter = mSearchBar.getFilter();
 
         //检验            type = 0    mTv_EquipID=设备id
-        //检验-检验计划   type = 2    mTv_EquipID=设备id  mTv_ReportID = 检验计划ID，
+        //检验-检验计划   type = 2    mTv_EquipID=设备id  mTv_ReportID = 检验计划ID
         //检验-显示检验单 type = 3    mTv_EquipID=设备id  mTv_ReportID = 检验单ID
         Intent intent = getIntent();
+        String type = intent.getStringExtra("type");
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
 
-        if (mTv_ReportID != null && mTv_EquipID != null) {
+        //检验-显示检验单 type = 3    mTv_EquipID=设备id  mTv_ReportID = 检验单ID
+        if ((type != null && type.equals("3")) && mTv_ReportID != null && mTv_EquipID != null) {
             mToolBar.setTitle("查看检验信息");
             getEquipmentInfoByID(mTv_EquipID);
             getReport(mTv_ReportID);
             bindEventPart();
-
-
             //隐藏搜索栏
             mSearchBar.setVisibility(View.GONE);
-
             mBtn_Submit.setVisibility(View.GONE);
-            if (_ReportEntity != null) {
+            bindUIData(_ReportEntity);
+        }
+        //检验-检验计划   type = 2    mTv_EquipID=设备id  mTv_ReportID = 检验计划ID
+        else  if ((type != null && type.equals("2")) && mTv_ReportID != null && mTv_EquipID != null){
 
-                SimpleDateFormat formatter;
-                formatter = new SimpleDateFormat ("yyyy-MM-dd KK:mm:ss a");
-                String ctime = formatter.format(_ReportEntity.getInspectionDate());
-                mTv_InspTime.setText(ctime.substring(0,10));
+        }
+        //检验            type = 0    mTv_EquipID=设备id
+        else if ((type != null && type.equals("0")) && mTv_EquipID != null){
 
-                mTv_inspItem.setText(_ReportEntity.getInspectionItem());
-                mTv_InspResult.setText(_ReportEntity.getInspectionResult());
-                mTv_InspMode.setText(_ReportEntity.getInspectionMode());
-                mEt_Com.setText(_ReportEntity.getInspectionCorp());
-
-
-                mEt_User.setText(_ReportEntity.getInspectionUser());
-                mEt_money.setText(_ReportEntity.getTotalMoney());
-
-
-
-
-                if(_CheckPlanEntityList==null || _CheckPlanEntityList.size()==0){
-                    mLv_Show_plan.setVisibility(View.GONE);
-                    mLv_Show_plan.setAdapter(null);
-                }else {
-                    mLv_Show_plan.setAdapter(null);
-                    adapter_Plan= new InspectPlanViewDataListAdapter(this, _CheckPlanEntityList);
-                    mLv_Show_plan.setSelection(adapter_Plan.getCount());
-
-
-                    mLv_Show_plan.setAdapter(adapter_Plan);
-                    adapter_Plan.notifyDataSetChanged();
-                    mLv_Show_plan.setVisibility(View.VISIBLE);
-                    setListViewHeightBasedOnChildren(mLv_Show_plan);
-                }
-
-
-            }
-            mEt_User.setEnabled(false);
-            mEt_money.setEnabled(false);
-
-
-
-        } else {
+        }
+        //正常检验
+        else {
             mToolBar.setTitle("我要检验");
-
             initView();
             bindEventPart();
             bindEvent();
             refreshUI();
             requestNetworkData();
-
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -1028,5 +993,37 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
             return false;
         }
         return true;
+    }
+
+    /***
+     * 绑定检验单到页面
+     */
+    private void bindUIData(InspectBillEntity entity) {
+        if (entity != null) {
+            SimpleDateFormat formatter;
+            formatter = new SimpleDateFormat ("yyyy-MM-dd KK:mm:ss a");
+            String ctime = formatter.format(entity.getInspectionDate());
+            mTv_InspTime.setText(ctime.substring(0,10));
+            mTv_inspItem.setText(entity.getInspectionItem());
+            mTv_InspResult.setText(entity.getInspectionResult());
+            mTv_InspMode.setText(entity.getInspectionMode());
+            mEt_Com.setText(entity.getInspectionCorp());
+            mEt_User.setText(entity.getInspectionUser());
+            mEt_money.setText(entity.getTotalMoney());
+            if(_CheckPlanEntityList==null || _CheckPlanEntityList.size()==0){
+                mLv_Show_plan.setVisibility(View.GONE);
+                mLv_Show_plan.setAdapter(null);
+            }else {
+                mLv_Show_plan.setAdapter(null);
+                adapter_Plan= new InspectPlanViewDataListAdapter(this, _CheckPlanEntityList);
+                mLv_Show_plan.setSelection(adapter_Plan.getCount());
+                mLv_Show_plan.setAdapter(adapter_Plan);
+                adapter_Plan.notifyDataSetChanged();
+                mLv_Show_plan.setVisibility(View.VISIBLE);
+                setListViewHeightBasedOnChildren(mLv_Show_plan);
+            }
+        }
+        mEt_User.setEnabled(false);
+        mEt_money.setEnabled(false);
     }
 }

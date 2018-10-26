@@ -82,22 +82,16 @@ import static com.grandhyatt.snowbeer.Consts.CAMERA_BARCODE_SCAN;
 
 
 /**
- * 设备维修
+ * 设备外委维修操作界面
  */
 public class RepairmentExReportActivity extends ActivityBase implements IActivityBase, View.OnClickListener {
 
     @BindView(R.id.mToolBar)
     ToolBarLayout mToolBar;
-
     @BindView(R.id.mSearchBar)
     SearchBarLayout mSearchBar;
-
-
-
-
     BroadcastReceiver mReceiver;
     IntentFilter mFilter;
-
     @BindView(R.id.mTv_EquipName)
     TextView mTv_EquipName;
     @BindView(R.id.mTv_EquipCorp)
@@ -112,46 +106,37 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
     TextView mTv_EquipLocation;
     @BindView(R.id.mIv_EquipImg)
     ImageView mIv_EquipImg;
-
     @BindView(R.id.mTv_FaultDate)
     TextView mTv_FaultDate;
     @BindView(R.id.mTv_FaultDate1)
     TextView mTv_FaultDate1;
-
     @BindView(R.id.mTv_FaultDesc)
     TextView mTv_FaultDesc;
-
     @BindView(R.id.mTv_jh)
     TextView mTv_jh;
     @BindView(R.id.mEt_User)
     EditText mEt_User;
     @BindView(R.id.mEt_money)
     EditText mEt_money;
-
     @BindView(R.id.mBtn_Submit)
     Button mBtn_Submit;
     @BindView(R.id.mBtn_marAdd)
     Button mBtn_marAdd;
-
     @BindView(R.id.mLv_DataList_Spare)
     ListView mLv_DataList_Spare;
     @BindView(R.id.mLv_Show_plan)
     ListView mLv_Show_plan;
-
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
     public static final int CHECK_SPARE_OK = 112;//选择维修用备件
-
     ArrayList<String> _CheckPlanIDList; //用户选中的维护计划ID
     List<RepairmentExPlanEntity> _CheckPlanEntityList = new ArrayList<>();//用户选择的数据行对象
     List<EquipmentUseSpareEntity> _CheckSpareUseList=new ArrayList<>();// 页面选择备品配件返回数据
     List<SpareInEquipmentEntity> _CheckSpareEquiList=new ArrayList<>();// 页面选择备品配件返回数据
-
     /**
      * 获取到的图片路径
      */
     private String _PicPath;
     private Uri takePhotoUrl;
-
     /**
      * 故障级别
      */
@@ -160,21 +145,15 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
      * 故障描述
      */
     String[] _FaultDescArr;
-
     MediaRecorder mRecorder;
-
-
     /**
      * 设备信息
      */
     EquipmentEntity _EquipmentData;
-
     RepairmentBillEntity _ReportEntity;
     RepairmentExPlanViewDataListAdapter adapter_Plan = null;//维护计划适配器
     EquipRepairSpareShowViewDataListAdapter adapter_SpareView = null;  //备件适配器
     EquipRepairSpareViewDataListAdapter adapter_Spare=null;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,48 +162,53 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
         //去除状态栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
         setContentView(R.layout.activity_repairmentex_report);
         ButterKnife.bind(this);
-
         mReceiver = mSearchBar.getBroadcastReceiver();
         mFilter = mSearchBar.getFilter();
 
+        //外委维修            type = 0  mTv_EquipID=设备ID
+        //外委维修-维修计划   type = 2  mTv_EquipID=设备ID    mTv_ReportID = 维修计划ID，
+        //外委维修-显示维修单 type = 3  mTv_EquipID=设备ID    mTv_ReportID = 维修单ID
+
         Intent intent = getIntent();
+        String type = intent.getStringExtra("type");
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
 
-        if (mTv_ReportID != null && mTv_EquipID != null) {
+        //外委维修-显示维修单 type = 3  mTv_EquipID=设备ID    mTv_ReportID = 维修单ID
+        if ((type != null && type.equals("3")) && mTv_ReportID != null && mTv_EquipID != null) {
             mToolBar.setTitle("查看维修信息");
             getEquipmentInfoByID(mTv_EquipID);
-           getReport(mTv_ReportID);
-
+            getReport(mTv_ReportID);
             bindEventPart();
             bindEvent();
             //隐藏搜索栏
             mSearchBar.setVisibility(View.GONE);
-
             mBtn_Submit.setVisibility(View.GONE);
-
             mEt_User.setEnabled(false);
             mEt_money.setEnabled(false);
+        }
+        //外委维修-维修计划   type = 2  mTv_EquipID=设备ID    mTv_ReportID = 维修计划ID，
+        else if ((type != null && type.equals("2")) && mTv_ReportID != null && mTv_EquipID != null) {
 
 
+        }
+        //外委维修            type = 0  mTv_EquipID=设备ID
+        else if ((type != null && type.equals("0")) && mTv_EquipID != null) {
 
-        } else {              //添加报修
+        }
+        //正常外委维修
+        else {
             mToolBar.setTitle("我要维修");
             initView();
             bindEventPart();
             bindEvent();
             refreshUI();
             requestNetworkData();
-
         }
     }
-
-
 
     @Override
     protected void onResume() {
@@ -694,8 +678,6 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
         });
     }
 
-
-
     /**
      * 根据条码检索设备
      *
@@ -716,11 +698,6 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
             dismissLoadingDialog();
         }
     }
-
-
-
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -810,8 +787,6 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
         super.onActivityResult(requestCode, resultCode, data);
 
     }
-
-
 
     public void setListViewHeightBasedOnChildren(ListView listView) {
         // 获取ListView对应的Adapter
@@ -1047,8 +1022,6 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
             }
         });
     }
-
-
 
     /**
      * 获取文件路径

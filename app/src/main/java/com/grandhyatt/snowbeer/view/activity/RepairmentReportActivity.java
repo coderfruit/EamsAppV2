@@ -94,18 +94,14 @@ import static com.grandhyatt.snowbeer.Consts.CAMERA_BARCODE_SCAN;
 
 
 /**
- * 设备维修
+ * 设备维修操作界面
  */
 public class RepairmentReportActivity extends ActivityBase implements IActivityBase, View.OnClickListener {
 
     @BindView(R.id.mToolBar)
     ToolBarLayout mToolBar;
-
     @BindView(R.id.mSearchBar)
     SearchBarLayout mSearchBar;
-
-
-
 
     BroadcastReceiver mReceiver;
     IntentFilter mFilter;
@@ -174,15 +170,12 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
      * 故障描述
      */
     String[] _FaultDescArr;
-
     MediaRecorder mRecorder;
-
 
     /**
      * 设备信息
      */
     EquipmentEntity _EquipmentData;
-
     RepairmentBillEntity _ReportEntity;
     RepairmentPlanViewDataListAdapter adapter_Plan = null;//维护计划适配器
     SpareInEquipmentViewDataListAdapter adapter_Spare = null;  //备件适配器
@@ -211,34 +204,42 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         //维修-显示维修单 type = 3  mTv_EquipID=设备ID    mTv_ReportID = 维修单ID
 
         Intent intent = getIntent();
-        String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
+        String type = intent.getStringExtra("type");
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
+        String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
 
-        if (mTv_ReportID != null && mTv_EquipID != null) {
+        //维修-显示维修单 type = 3  mTv_EquipID=设备ID    mTv_ReportID = 维修单ID
+        if ((type != null && type.equals("3")) && mTv_ReportID != null && mTv_EquipID != null) {
             mToolBar.setTitle("查看维修信息");
             getEquipmentInfoByID(mTv_EquipID);
-           getReport(mTv_ReportID);
-
+            getReport(mTv_ReportID);
             bindEventPart();
-
             //隐藏搜索栏
             mSearchBar.setVisibility(View.GONE);
-
             mBtn_Submit.setVisibility(View.GONE);
-
             mEt_User.setEnabled(false);
             mEt_money.setEnabled(false);
+        }
+        //维修-维修计划   type = 2  mTv_EquipID=设备ID    mTv_ReportID = 维修计划ID，
+        else if((type != null && type.equals("2")) && mTv_ReportID != null && mTv_EquipID != null){
 
+        }
+        //维修-备件更换   type = 1  mTv_EquipID=设备ID    mTv_ReportID = 备件ID
+        else if((type != null && type.equals("1")) && mTv_ReportID != null && mTv_EquipID != null){
 
+        }
+        //维修            type = 0  mTv_EquipID=设备ID
+        else if((type != null && type.equals("0")) && mTv_EquipID != null){
 
-        } else {              //添加报修
+        }
+        //正常维修
+        else {
             mToolBar.setTitle("我要维修");
             initView();
             bindEventPart();
             bindEvent();
             refreshUI();
             requestNetworkData();
-
         }
     }
 
