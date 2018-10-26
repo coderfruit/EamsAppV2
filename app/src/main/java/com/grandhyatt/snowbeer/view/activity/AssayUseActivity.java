@@ -1,6 +1,8 @@
 package com.grandhyatt.snowbeer.view.activity;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -10,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -18,7 +21,9 @@ import com.google.gson.Gson;
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
+import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
+import com.grandhyatt.snowbeer.entity.CorporationEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentUseReasonEntity;
 import com.grandhyatt.snowbeer.entity.WarningInfoCountEntity;
@@ -31,6 +36,8 @@ import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.utils.CommonUtils;
 import com.grandhyatt.snowbeer.utils.ImageUtils;
 import com.grandhyatt.snowbeer.Ctrls.MyGridView;
+import com.grandhyatt.snowbeer.utils.PopupWindowUtil;
+import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.view.SearchBarLayout;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
 
@@ -115,6 +122,9 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
     @Override
     public void initView() {
         mToolBar.setTitle("化学仪器使用");
+        mToolBar.showMenuButton();
+        mToolBar.setMenuText("...");
+
         //去除状态栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -127,7 +137,39 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
 
     @Override
     public void bindEvent() {
+        mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<String> list = new ArrayList<String>();
+                list.add("使用记录");
 
+                final PopupWindowUtil popupWindow = new PopupWindowUtil(AssayUseActivity.this, list);
+                popupWindow.setItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        if(_EquipmentData == null){
+                            ToastUtils.showLongToast(AssayUseActivity.this, "请先确定设备");
+                            return;
+                        }
+
+                        popupWindow.dismiss();
+                        switch (position){
+                            case 0:
+                                Intent intent1 = new Intent(AssayUseActivity.this, Query_AssayUseInfoActivity.class);
+                                intent1.putExtra("equipID", _EquipmentData.getID());
+                                startActivity(intent1);
+                                break;
+                            default:
+                                break;
+                        }
+
+                    }
+                });
+                //根据后面的数字 手动调节窗口的宽度
+                popupWindow.show(v, 3);
+            }
+        });
         //检索事件
         mSearchBar.setSearchButtonOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,8 +219,51 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
                 HashMap<String,String> map=(HashMap<String,String>)mGv_Datas.getItemAtPosition(position);
 
                 if(_EquipmentData != null && map != null){
-                    String useReason = map.get("mTv_Desc");
-                    addAssayEquipUseRecord(_EquipmentData.getID(), useReason);
+                    String userReasonID = map.get("mTv_ID");
+                    final String useReason = map.get("mTv_Desc");
+
+                    if(userReasonID.equals("0") && useReason.equals("其他")){//需用户录入新使用事由
+
+                        final EditText inputContrl = new EditText(AssayUseActivity.this);
+                        inputContrl.setFocusable(true);
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(AssayUseActivity.this);
+                        builder.setTitle("请录入使用事由")
+                                .setIcon(R.drawable.logo32)
+                                .setView(inputContrl)
+                                .setNegativeButton("取消", null);
+                        builder.setPositiveButton("确定",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String strValue = inputContrl.getText().toString();
+                                        if(strValue == null || strValue.trim().length() > 0){
+                                            boolean isHave = false;
+                                            for(int i = 0; i < mGv_Datas.getAdapter().getCount(); i++){
+                                                HashMap<String,String> itemMap = (HashMap<String,String>)mGv_Datas.getItemAtPosition(i);
+                                                String itemUseReason = itemMap.get("mTv_Desc");
+                                                if(itemUseReason.equals(strValue)){
+                                                    isHave = true;
+                                                    break;
+                                                }
+                                            }
+                                            if(!isHave){
+                                                addAssayEquipUseRecord(_EquipmentData.getID(), strValue,true);
+                                            }else{
+                                                ToastUtils.showToast(AssayUseActivity.this, "录入的使用事由已存在，请重新录入!");
+                                                return;
+                                            }
+                                        } else{
+                                            ToastUtils.showToast(AssayUseActivity.this, "使用事由不可为空");
+                                            return;
+                                        }
+                                    }
+                                });
+                        builder.show();
+
+                    }else{//直接增加使用记录
+                        addAssayEquipUseRecord(_EquipmentData.getID(), useReason,false);
+                    }
+
                 }
 
             }
@@ -277,6 +362,19 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
     private void fillEquipInfo(EquipmentEntity data) {
         _EquipmentData = data;//全局变量赋值
         if (data != null) {//获取到设备信息
+
+            if(!data.getAssetTypeID().equals(Consts.AssetType_Chemical)){
+                ToastUtils.showLongToast(AssayUseActivity.this, data.getEquipmentName() + " 不是化学仪器");
+                return;
+            }
+            CorporationEntity corp = SPUtils.getLastLoginUserCorporation(AssayUseActivity.this);
+            if(corp != null){
+                if(!corp.getID().equals(data.getCorporationID())){
+                    ToastUtils.showLongToast(AssayUseActivity.this, data.getEquipmentName() + " 不属于用户当前归属[" + corp.getCorporationName() + "]");
+                    return;
+                }
+            }
+
             mTv_EquipCode.setText(data.getEquipmentCode());
             mTv_EquipName.setText(data.getEquipmentName());
             mTv_EquipCorp.setText(data.getCorporationName());
@@ -389,6 +487,11 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
             map.put("mTv_Desc", item.getReasonDesc());
             data_list.add(map);
         }
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("mTv_ID","0");
+        map.put("mTv_Desc", "其他");
+        data_list.add(map);
+
         return data_list;
     }
 
@@ -396,8 +499,9 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
      * 添加化学仪器使用记录
      * @param equipID
      * @param useReason
+     * @param isOther 录入的是其他
      */
-    private void addAssayEquipUseRecord(String equipID, final String useReason)
+    private void addAssayEquipUseRecord(String equipID, final String useReason, final boolean isOther)
     {
         showLogingDialog();
         SoapUtils.addAssayEquipUseRecordAsync(AssayUseActivity.this, equipID, useReason, new SoapListener() {
@@ -430,6 +534,11 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
                 }
                 CommonUtils.playMusic(AssayUseActivity.this);
                 ToastUtils.showToast(AssayUseActivity.this, useReason + " 使用记录提交成功！");
+
+                if(isOther){
+                    //获取设备使用事由
+                    getAssayEquipUseReason(_EquipmentData.getID());
+                }
 
             }
 

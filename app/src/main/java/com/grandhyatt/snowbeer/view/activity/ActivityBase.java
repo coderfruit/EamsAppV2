@@ -144,33 +144,12 @@ public class ActivityBase extends com.grandhyatt.commonlib.view.activity.Activit
     }
 
     /**
-     * 弹出输入框，将录入内容写入EditText控件
+     * 弹出选择对话框获取用户选择的是否
      * @param context
      * @param title
+     * @param showText
+     * @return
      */
-    public String ShowDialogForGetText(Context context, String title) {
-        final String[] strValue = {null};
-        final EditText inputContrl = new EditText(context);
-        inputContrl.setFocusable(true);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(title)
-                .setIcon(R.drawable.logo32)
-                .setView(inputContrl)
-                .setNegativeButton("取消", null);
-        builder.setPositiveButton("确定",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        strValue[0] = inputContrl.getText().toString();
-                    }
-                });
-        builder.show();
-
-        return strValue[0];
-    }
-
-
-
     public boolean ShowDialog(Context context, String title,String showText) {
 
         final boolean[] value = {false};

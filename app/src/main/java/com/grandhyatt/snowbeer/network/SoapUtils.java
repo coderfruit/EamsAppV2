@@ -1221,4 +1221,46 @@ public class SoapUtils {
 
 	public static void submitNewEquipReparimentExRepairAsync(RepairmentExReportActivity repairmentExReportActivity, String faultDesc, RepairmentEquipmentResult request, ArrayList<String> checkPlanIDList, SoapListener callback) {
 	}
+
+	/**
+	 * 获取化学仪器使用记录
+	 * @param context
+	 * @param equipID
+	 * @param currentLastIdx
+	 * @param callback
+	 */
+	public static void getAssayEquipUseInfo(final Context context, String equipID, String currentLastIdx,  final SoapListener callback){
+
+		final String url = getHostUrl();
+		String methodName = "GetAssayEquipUseInfo";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+		params.put("currentLastIdx",currentLastIdx);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+
+	}
+
+	/**
+	 * 移除化学仪器使用记录
+	 * @param context
+	 * @param equipID
+	 * @param itemID
+	 * @param callback
+	 */
+	public static void removeAssayEquipUseInfo(final Context context, String equipID, String itemID,  final SoapListener callback){
+
+		final String url = getHostUrl();
+		String methodName = "RemoveAssayEquipUseInfo";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+		params.put("itemID",itemID);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+
+	}
+
+
 }

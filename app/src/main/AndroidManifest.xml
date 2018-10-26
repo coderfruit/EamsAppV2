@@ -140,6 +140,9 @@
         <activity android:name=".view.activity.RepairmentExPlanCheckActivity" />
 
         <activity android:name=".view.activity.EquipMgrRepairExSpareCheckActivity" />
+        <!-- 化学仪器使用记录查询 -->
+        <activity android:name=".view.activity.Query_AssayUseInfoActivity" />
+
 
         <!-- **************************************  **************************************  ************************************** -->
         <!-- 复检第一步(有卡复检)-->

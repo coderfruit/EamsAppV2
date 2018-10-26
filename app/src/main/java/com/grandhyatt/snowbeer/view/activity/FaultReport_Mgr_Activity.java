@@ -187,8 +187,8 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
             @Override
             public void onClick(View v) {
                 List<String> list = new ArrayList<String>();
-                list.add("待处理的报修");
-                list.add("我处理的报修");
+                list.add("待处理的");
+                list.add("我已处理的");
 
                 final PopupWindowUtil popupWindow = new PopupWindowUtil(FaultReport_Mgr_Activity.this, list);
                 popupWindow.setItemClickListener(new AdapterView.OnItemClickListener() {

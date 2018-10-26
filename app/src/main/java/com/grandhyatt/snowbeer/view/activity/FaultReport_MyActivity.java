@@ -355,12 +355,12 @@ public class FaultReport_MyActivity extends ActivityBase implements IActivityBas
 
                             @Override
                             public void onFailure(int statusCode, String content, Throwable error) {
-
+                                ToastUtils.showLongToast(FaultReport_MyActivity.this,"删除异常，请重试");
                             }
 
                             @Override
                             public void onFailure(int statusCode, SoapFault fault) {
-
+                                ToastUtils.showLongToast(FaultReport_MyActivity.this,"删除失败，请重试");
                             }
                         });
 

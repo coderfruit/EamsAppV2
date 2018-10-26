@@ -49,6 +49,11 @@ public class FailureReportingEntityDataListAdapter  extends BaseAdapter {
         return position;
     }
 
+    public void removeItem(int position){
+        mDataList.remove(position);
+        notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {

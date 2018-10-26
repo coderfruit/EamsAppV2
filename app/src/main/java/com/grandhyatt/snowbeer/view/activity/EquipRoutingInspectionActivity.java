@@ -18,7 +18,9 @@ import com.google.gson.Gson;
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
+import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
+import com.grandhyatt.snowbeer.entity.CorporationEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
 import com.grandhyatt.snowbeer.entity.WarningInfoCountEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
@@ -539,6 +541,19 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
     private void fillEquipInfo(EquipmentEntity data) {
         _EquipmentData = data;//全局变量赋值
         if (data != null) {//获取到设备信息
+
+            if(!data.getAssetTypeID().equals(Consts.AssetType_sc)){
+                ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, data.getEquipmentName() + " 不是生产设备");
+                return;
+            }
+            CorporationEntity corp = SPUtils.getLastLoginUserCorporation(EquipRoutingInspectionActivity.this);
+            if(corp != null){
+                if(!corp.getID().equals(data.getCorporationID())){
+                    ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, data.getEquipmentName() + " 不属于用户当前归属[" + corp.getCorporationName() + "]");
+                    return;
+                }
+            }
+
             mTv_EquipCode.setText(data.getEquipmentCode());
             mTv_EquipName.setText(data.getEquipmentName());
             mTv_EquipCorp.setText(data.getCorporationName());
