@@ -22,7 +22,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:checked="false"
-                android:focusable="false"/>
+                android:focusable="false"
+                android:enabled="false" />
             <TextView
                 android:id="@+id/mTv_ID"
                 android:layout_width="wrap_content"

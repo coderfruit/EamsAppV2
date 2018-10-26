@@ -854,7 +854,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     mEt_User.setText(_ReportEntity.getMaintenUser());
                     mEt_money.setText(_ReportEntity.getTotalMoney());
 //                    mTv_ReportNO.setVisibility(View.VISIBLE);
-//                    mTv_ReportNO.setText(_ReportEntity.getReportNO());
+//                    mTv_ReportNO.setText(_RepairmentBillEntity.getReportNO());
 
 
 

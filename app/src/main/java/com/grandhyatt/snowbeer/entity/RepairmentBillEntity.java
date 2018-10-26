@@ -68,6 +68,7 @@ public class RepairmentBillEntity implements Serializable {
     public void setTotalMoney(String totalMoney) {
         TotalMoney = totalMoney;
     }
+
     public String getShutDownMinutes() {
         return ShutDownMinutes;
     }
@@ -75,6 +76,7 @@ public class RepairmentBillEntity implements Serializable {
     public void setShutDownMinutes(String shutDownMinutes) {
         ShutDownMinutes = shutDownMinutes;
     }
+
     public String getFinishTime() {
         return FinishTime;
     }
@@ -82,6 +84,7 @@ public class RepairmentBillEntity implements Serializable {
     public void setFinishTime(String finishTime) {
         FinishTime = finishTime;
     }
+
     public String getStartTime() {
         return StartTime;
     }
@@ -89,13 +92,15 @@ public class RepairmentBillEntity implements Serializable {
     public void setStartTime(String startTime) {
         StartTime = startTime;
     }
-    public String getFaultLevel() {
+
+    public String getFaultClass() {
         return FaultClass;
     }
 
-    public void setFaultLevel(String faultLevel) {
+    public void setFaultClass(String faultLevel) {
         FaultClass = faultLevel;
     }
+
     public String getRepairUser() {
         return RepairUser;
     }
@@ -103,6 +108,7 @@ public class RepairmentBillEntity implements Serializable {
     public void setRepairUser(String sepairUser) {
         RepairUser = sepairUser;
     }
+
     public String getRepairmentBillNO() {
         return RepairmentBillNO;
     }

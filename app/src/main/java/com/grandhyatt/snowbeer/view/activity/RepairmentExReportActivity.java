@@ -35,34 +35,27 @@ import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
-import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.EquipRepairSpareShowViewDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.EquipRepairSpareViewDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.RepairmentExPlanViewDataListAdapter;
-import com.grandhyatt.snowbeer.adapter.RepairmentPlanViewDataListAdapter;
-import com.grandhyatt.snowbeer.adapter.SpareInEquipmentViewDataListAdapter;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentUseSpareEntity;
 import com.grandhyatt.snowbeer.entity.FailureReportingAttachmentEntity;
 import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentBillEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentExPlanEntity;
-import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
-import com.grandhyatt.snowbeer.entity.TextDictionaryEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.request.RepairmentReportingRequest;
 import com.grandhyatt.snowbeer.network.result.EquipmentResult;
 import com.grandhyatt.snowbeer.network.result.RepairmentEquipmentResult;
 import com.grandhyatt.snowbeer.network.result.RepairmentResult;
 import com.grandhyatt.snowbeer.network.result.StringResult;
-import com.grandhyatt.snowbeer.network.result.TextDictoryResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.utils.CommonUtils;
 import com.grandhyatt.snowbeer.utils.ImageUtils;
-import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.view.NumberEditText;
 import com.grandhyatt.snowbeer.view.SearchBarLayout;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
@@ -553,7 +546,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                 rpen.setRepairUser(user);
                 rpen.setTotalMoney(phone);
 
-                rpen.setFaultLevel(faultDesc);
+                rpen.setFaultClass(faultDesc);
                 rpen.setStartTime(faultDate);
                 rpen.setFinishTime(faultDate1);
                 rpen.setShutDownMinutes("0");
@@ -1005,7 +998,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                     mEt_User.setText(_ReportEntity.getRepairUser());
                     mEt_money.setText(String.valueOf(_ReportEntity.getTotalMoney()));
 //                    mTv_ReportNO.setVisibility(View.VISIBLE);
-//                    mTv_ReportNO.setText(_ReportEntity.getReportNO());
+//                    mTv_ReportNO.setText(_RepairmentBillEntity.getReportNO());
                 }
             }
 

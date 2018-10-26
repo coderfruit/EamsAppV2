@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/selector_linear_layout_item_white">
+    android:background="@drawable/selector_linear_layout_item_white"
+    android:orientation="vertical">
     <!-- 标题 -->
     <com.grandhyatt.snowbeer.view.ToolBarLayout
         android:id="@+id/mToolBar"
@@ -172,7 +172,7 @@
                 android:background="@drawable/selector_linear_layout_item_white">
 
                 <TextView
-                    android:id="@+id/mTv_FaultLevel"
+                    android:id="@+id/mTv_RepairLevel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
@@ -188,28 +188,34 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/mTv_FaultLevel"
+                    android:layout_toRightOf="@+id/mTv_RepairLevel"
                     android:src="@drawable/item_signature_iv_menu_defaul" />
 
-                <ImageView
-                    android:id="@+id/mIv_jh"
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/iv_add" />
-
-                <TextView
-                    android:id="@+id/mTv_jh"
+                <!--选择维修计划-->
+                <LinearLayout
+                    android:id="@+id/mLl_RepairmentPlan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/mIv_jh"
-                    android:hint="选择维修计划"
-                    android:textColor="@color/gray5"
-                    android:textSize="14sp" />
+                    android:layout_alignParentRight="true"
+                    android:gravity="center">
 
+                    <TextView
+                        android:id="@+id/mTv_jh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="选择维修计划"
+                        android:textColor="@color/gray5"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/mIv_jh"
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/iv_add" />
+
+
+                </LinearLayout>
 
             </RelativeLayout>
 
@@ -243,16 +249,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/selector_linear_layout_item_white"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
+                android:orientation="horizontal">
 
                 <RelativeLayout
-                    android:layout_width="200dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
+                    <!--开始日期-->
                     <TextView
-                        android:id="@+id/mTv_FaultDate"
+                        android:id="@+id/mTv_StartDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -267,40 +273,31 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_toRightOf="@id/mTv_FaultDate"
+                        android:layout_toRightOf="@id/mTv_StartDate"
                         android:src="@drawable/item_signature_iv_menu_defaul" />
 
-                    <RelativeLayout
-                        android:layout_width="200dp"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:background="@drawable/selector_linear_layout_item_white">
+                    <!--结束日期-->
+                    <ImageView
+                        android:id="@+id/mIv_FinishDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/item_signature_iv_menu_defaul" />
 
-                        <TextView
-                            android:id="@+id/mTv_FaultDate1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerHorizontal="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:hint="结束日期"
-                            android:textColor="@color/gray5"
-                            android:textSize="14sp" />
-
-                        <ImageView
-                            android:id="@+id/imtg_FaultDate1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="10dp"
-
-                            android:layout_toRightOf="@id/mTv_FaultDate1"
-                            android:src="@drawable/item_signature_iv_menu_defaul" />
-                    </RelativeLayout>
+                    <TextView
+                        android:id="@+id/mTv_FinishDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/mIv_FinishDate"
+                        android:hint="结束日期"
+                        android:textColor="@color/gray5"
+                        android:textSize="14sp" />
 
 
                 </RelativeLayout>
@@ -310,15 +307,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-               android:layout_marginTop="10dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
                 <!--故障类别-->
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/mTv_FaultDesc"
+                        android:id="@+id/mTv_FaultClass"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
@@ -334,7 +331,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_toRightOf="@id/mTv_FaultDesc"
+                        android:layout_toRightOf="@id/mTv_FaultClass"
                         android:src="@drawable/item_signature_iv_menu_defaul" />
 
                     <ImageView
@@ -347,7 +344,7 @@
                         android:src="@drawable/item_signature_iv_menu_defaul" />
 
                     <TextView
-                        android:id="@+id/mTv_RepairmentDesc"
+                        android:id="@+id/mTv_RepairDesc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="false"
@@ -370,17 +367,33 @@
                 <!--联系人-->
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
+                    android:layout_height="wrap_content">
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="clip_vertical"
+                        android:layout_marginLeft="10dp">
+                    <TextView
+                        android:id="@+id/mTv_UserTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center_vertical"
+                        android:text="维修人："
+                        android:textSize="12sp" />
                     <EditText
                         android:id="@+id/mEt_User"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        android:hint="维修人员"
+                        android:layout_toRightOf="@+id/mTv_UserTitle"
+                        android:hint="维修人"
                         android:textColor="@color/gray5"
                         android:textSize="14sp" />
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/mTv_t3"
@@ -396,25 +409,26 @@
 
                     <EditText
                         android:id="@+id/mEt_money"
-                        android:layout_width="50dp"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_toLeftOf="@id/mTv_t3"
                         android:hint="0"
                         android:inputType="phone"
                         android:textColor="@color/gray5"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:gravity="right"/>
 
                     <TextView
                         android:id="@+id/mTv_t2"
-                        android:layout_width="50dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
                         android:layout_toLeftOf="@id/mEt_money"
-                        android:hint="费用"
+                        android:text="费用："
                         android:textColor="@color/gray5"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
 
                 </RelativeLayout>
@@ -474,7 +488,7 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/mBtn_marAdd"
+                        android:id="@+id/mBtn_AddSpare"
                         android:layout_width="80dp"
                         android:layout_height="20dp"
                         android:layout_centerInParent="true"
@@ -494,7 +508,6 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/selector_listview_item"
                 android:divider="@null"
-
                 android:dividerHeight="0dp"
                 android:transcriptMode="alwaysScroll" />
 
@@ -505,19 +518,16 @@
                 android:layout_marginRight="1dp"
                 android:background="@color/white6" />
             <!-- 提交重置按钮 -->
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="15dp"
                 android:gravity="right">
 
-
                 <Button
                     android:id="@+id/mBtn_Submit"
                     android:layout_width="110sp"
                     android:layout_height="40dp"
-
                     android:layout_marginRight="10dp"
                     android:background="@drawable/ic_login_button_true"
                     android:text="提交维修信息" />

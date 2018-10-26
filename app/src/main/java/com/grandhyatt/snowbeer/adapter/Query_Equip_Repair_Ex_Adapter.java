@@ -79,7 +79,7 @@ public class Query_Equip_Repair_Ex_Adapter extends BaseAdapter {
 
             mViewHolder.mTv_RepairmentLevel.setText(dataModel.getRepairmentLevel());
             mViewHolder.mTv_BillNo.setText(dataModel.getRepairmentBillNO());
-            mViewHolder.mTv_ExType.setText(dataModel.getFaultLevel());
+            mViewHolder.mTv_ExType.setText(dataModel.getFaultClass());
             mViewHolder.mTv_makeUser.setText(dataModel.getMakeUser());
             mViewHolder.mTv_makeDate.setText(dataModel.getMakeDate());
             mViewHolder.mTv_Begin_Date.setText(dataModel.getStartTime());
