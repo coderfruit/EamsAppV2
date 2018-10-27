@@ -178,9 +178,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //去除状态栏
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         setContentView(R.layout.activity_repairment_report);
         ButterKnife.bind(this);
 
@@ -293,11 +291,14 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
         mToolBar.setTitle("设备维修");
         mToolBar.hideMenuButton();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        mLv_Show_plan.setVisibility(View.GONE);
-        //初始化用户及手机号
-        mEt_User.setText(SPUtils.getLastLoginUserName(RepairmentReportActivity.this));
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  //去除状态栏
+
+        mLv_Show_plan.setVisibility(View.GONE);
+        mEt_User.setText(SPUtils.getLastLoginUserName(RepairmentReportActivity.this)); //初始化用户
+
+        //设备故障类别
         SoapListener callbackFailureReportingDesc = new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
