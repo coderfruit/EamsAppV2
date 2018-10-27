@@ -146,7 +146,15 @@ public class NumberEditText extends RelativeLayout {
                                 if(inputText != null && inputText.trim().length() != 0) {
                                     try {
                                         double intData = Double.parseDouble(inputText);
-                                        mEdt_Data.setText(inputText);
+
+                                        if(NumberLimit > 0){
+                                            if(intData > NumberLimit){
+                                                ToastUtils.showToast(getContext(),"数量不可超过" + NumberLimit );
+                                                intData = NumberLimit;
+                                            }
+                                        }
+
+                                        mEdt_Data.setText(String.valueOf(intData));
                                     } catch (Exception ex) {
 
                                     }

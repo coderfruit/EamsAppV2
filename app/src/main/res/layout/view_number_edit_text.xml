@@ -2,13 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="50dp"
-    android:minWidth="120dp"
+    android:minWidth="160dp"
     android:orientation="vertical">
 
     <ImageButton
         android:id="@+id/mIBtn_Sub"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginLeft="0dp"
         android:layout_centerVertical="true"
         android:src="@drawable/ic_button_sub_gray"
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:minWidth="80dp"
+        android:minWidth="75dp"
         android:background="#00FFFFFF"
         android:inputType="number"
         android:maxLength="8"
@@ -35,8 +35,8 @@
 
     <ImageButton
         android:id="@+id/mIBtn_Add"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_marginRight="0dp"

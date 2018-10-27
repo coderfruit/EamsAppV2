@@ -200,7 +200,6 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             mToolBar.setTitle("设备维修");
             getEquipmentInfoByID(mTv_EquipID);
             getRepairmentBill(mTv_ReportID);
-            bindEventPart();
             //隐藏搜索栏
             mSearchBar.setVisibility(View.GONE);
             mBtn_Submit.setVisibility(View.GONE);
@@ -211,9 +210,15 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         else if ((type != null && type.equals("2")) && mTv_ReportID != null && mTv_EquipID != null) {
             mSearchBar.setVisibility(View.GONE);
             mToolBar.setTitle("设备维修-按计划");
+            initView();
+            bindEvent();
+
+            //根据设备id获取设备信息
+            getEquipmentInfoByID(mTv_EquipID);
             //根据计划ID获取计划Entity
 
             //根据获取到的计划Entity绑定 “维修级别”“维修计划”
+
 
 
         }
@@ -221,25 +226,30 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         else if ((type != null && type.equals("1")) && mTv_ReportID != null && mTv_EquipID != null) {
             mSearchBar.setVisibility(View.GONE);
             mToolBar.setTitle("设备维修-按备件");
+            initView();
+            bindEvent();
 
-            //根据备件ID选中“定修”的计划
-
-            //并将备件填充至备件信息
+            //根据设备id获取设备信息
+            getEquipmentInfoByID(mTv_EquipID);
+            //根据备件ID“定修”的计划
+            mTv_RepairLevel.setText("定修");
+            //并将备件填充至备件列表
 
         }
         //维修            type = 0  mTv_EquipID=设备ID
         else if ((type != null && type.equals("0")) && mTv_EquipID != null) {
             mSearchBar.setVisibility(View.GONE);
             mToolBar.setTitle("设备维修");
+            initView();
+            bindEvent();
 
-            //填充设备信息
-
+            //根据设备id获取设备信息
+            getEquipmentInfoByID(mTv_EquipID);
         }
         //正常维修
         else {
             mToolBar.setTitle("设备维修");
             initView();
-            bindEventPart();
             bindEvent();
         }
     }
@@ -392,33 +402,6 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
     @Override
     public void requestNetworkData() {
-
-    }
-
-    public void bindEventPart() {
-
-        //设备图片点击事件
-        mIv_EquipImg.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                mIv_EquipImg.setDrawingCacheEnabled(true);
-                Bitmap bitmap = Bitmap.createBitmap(mIv_EquipImg.getDrawingCache());
-                mIv_EquipImg.setDrawingCacheEnabled(false);
-                String equipName = mTv_EquipName.getText().toString();
-
-                if (bitmap != null && equipName != null) {
-                    Intent intent = new Intent(RepairmentReportActivity.this, ImageViewerActivity.class);
-                    intent.putExtra("bitmap", bitmap);
-                    intent.putExtra("title", equipName);
-                    startActivity(intent);
-                } else {
-                    ToastUtils.showToast(RepairmentReportActivity.this, "无图片需显示");
-                }
-                return false;
-            }
-        });
-
 
     }
 
@@ -704,6 +687,28 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             @Override
             public void onClick(View v) {
                 submitRepairmentBill();
+            }
+        });
+
+        //设备图片点击事件
+        mIv_EquipImg.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                mIv_EquipImg.setDrawingCacheEnabled(true);
+                Bitmap bitmap = Bitmap.createBitmap(mIv_EquipImg.getDrawingCache());
+                mIv_EquipImg.setDrawingCacheEnabled(false);
+                String equipName = mTv_EquipName.getText().toString();
+
+                if (bitmap != null && equipName != null) {
+                    Intent intent = new Intent(RepairmentReportActivity.this, ImageViewerActivity.class);
+                    intent.putExtra("bitmap", bitmap);
+                    intent.putExtra("title", equipName);
+                    startActivity(intent);
+                } else {
+                    ToastUtils.showToast(RepairmentReportActivity.this, "无图片需显示");
+                }
+                return false;
             }
         });
     }
