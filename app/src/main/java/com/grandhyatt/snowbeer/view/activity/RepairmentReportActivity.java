@@ -229,7 +229,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         //-------------------------------------------------------------------------------------------------------------
         //维修            type = 0  mTv_EquipID=设备ID
         else if ((type != null && type.equals("0")) && mTv_EquipID != null) {
-
+            mSearchBar.setVisibility(View.GONE);
             mToolBar.setTitle("设备维修");
             initView();
             bindEvent();
