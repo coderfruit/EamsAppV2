@@ -1262,5 +1262,21 @@ public class SoapUtils {
 
 	}
 
+	/**
+	 * 获取维修单明细列表
+	 * @param context
+	 * @param billID
+	 * @param callback
+	 */
+	public static void getRepairmentBillItems(final Context context, String billID, final SoapListener callback){
+		final String url = getHostUrl();
+		String methodName = "GetRepairmentBillItems";
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("billID",billID);
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
+
+	}
 
 }

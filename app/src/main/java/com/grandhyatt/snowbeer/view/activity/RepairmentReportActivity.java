@@ -9,8 +9,6 @@ import android.graphics.Bitmap;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -40,12 +38,10 @@ import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.EquipRepairSpareViewDataListAdapter;
-import com.grandhyatt.snowbeer.adapter.RepairmentPlanViewDataListAdapter;
-import com.grandhyatt.snowbeer.adapter.SpareInEquipmentViewDataListAdapter;
+import com.grandhyatt.snowbeer.adapter.RepairmentPlanCheckDataListAdapter;
+import com.grandhyatt.snowbeer.adapter.SpareInEquipmentDataListAdapter;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentUseSpareEntity;
-import com.grandhyatt.snowbeer.entity.FailureReportingAttachmentEntity;
-import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentBillEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
@@ -172,9 +168,11 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
      */
     EquipmentEntity _EquipmentData;
     RepairmentBillEntity _RepairmentBillEntity;
-    RepairmentPlanViewDataListAdapter adapter_Plan = null;//维护计划适配器
-    SpareInEquipmentViewDataListAdapter adapter_Spare = null;  //备件适配器
-    EquipRepairSpareViewDataListAdapter adapter_SpareView = null;
+
+    RepairmentPlanCheckDataListAdapter adapter_Plan = null;      //维护计划适配器
+    SpareInEquipmentDataListAdapter adapter_Spare = null;  //备件更换适配器
+
+    EquipRepairSpareViewDataListAdapter adapter_SpareView = null; //添加配件适配器
 
 
     @Override
@@ -218,9 +216,6 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             //根据计划ID获取计划Entity
 
             //根据获取到的计划Entity绑定 “维修级别”“维修计划”
-
-            //如果是“定修”“日常维修”，根据计划中选定的备件，填充至备件信息
-
 
 
         }
@@ -666,6 +661,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 Intent intent = new Intent(RepairmentReportActivity.this, RepairmentPlanCheckActivity.class);
                 intent.putExtra("_EquipmentID", _EquipmentData.getID());
                 intent.putExtra("_ReapirLevel", _ReapirLevel);
+
                 startActivityForResult(intent, CHECK_PLAN_OK);
             }
         });
@@ -684,12 +680,20 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             }
         });
 
-        //长按显示删除
+        mLv_Show_plan.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                deletePlanRow(position);
+                return false;
+            }
+        });
+        //备件列表长按显示删除
         mLv_DataList_Spare.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_SpareID);
-                deleteRow(mTv_ReportID.getText().toString(), position);
+                //TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_SpareID);
+                deleteSpareRow(position);
                 setListViewHeightBasedOnChildren(mLv_DataList_Spare);
                 return false;
             }
@@ -698,7 +702,6 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         mBtn_Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 submitRepairmentBill();
             }
         });
@@ -743,7 +746,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                         mLv_Show_plan.setAdapter(null);
                     } else {
                         mLv_Show_plan.setAdapter(null);
-                        adapter_Plan = new RepairmentPlanViewDataListAdapter(this, _CheckPlanEntityList);
+                        adapter_Plan = new RepairmentPlanCheckDataListAdapter(this, _CheckPlanEntityList);
                         mLv_Show_plan.setSelection(adapter_Plan.getCount());
                         mLv_Show_plan.setAdapter(adapter_Plan);
                         mLv_Show_plan.setVisibility(View.VISIBLE);
@@ -759,12 +762,11 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                         mLv_Show_plan.setAdapter(null);
                     } else {
                         mLv_Show_plan.setAdapter(null);
-                        adapter_Spare = new SpareInEquipmentViewDataListAdapter(this, _CheckSpareEntityList);
+                        adapter_Spare = new SpareInEquipmentDataListAdapter(this, _CheckSpareEntityList);
                         mLv_Show_plan.setAdapter(adapter_Spare);
                         mLv_Show_plan.setVisibility(View.VISIBLE);
                         setListViewHeightBasedOnChildren(mLv_Show_plan);
                     }
-
                     ToastUtils.showLongToast(RepairmentReportActivity.this, "共获取到" + _CheckSpareEntityList.size() + "条备件记录");
                 }
                 break;
@@ -1020,7 +1022,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         });
     }
 
-    private void deleteRow(final String RptID, final int pron) {
+    private void deleteSpareRow(final int pron) {
         List<String> menuList = new ArrayList<String>();
         menuList.add("删除");
         showSelectDialog(new SelectDialog.SelectDialogListener() {
@@ -1042,6 +1044,44 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
     }
 
+    private void deletePlanRow(final int pron) {
+        List<String> menuList = new ArrayList<String>();
+        menuList.add("删除");
+        showSelectDialog(new SelectDialog.SelectDialogListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                switch (position) {
+                    case 0://删除
+                        String reapirLevel = mTv_RepairLevel.getText().toString();
+                        if(reapirLevel.equals("大修") && adapter_Plan != null && adapter_Plan.getCount() > 0){
+                            RepairmentPlanEntity eus = (RepairmentPlanEntity) adapter_Plan.getItem(pron);
+                            if(eus != null){
+                                if(_CheckPlanEntityList != null){
+                                    _CheckPlanEntityList.remove(eus);
+                                    adapter_Plan.removeItem(pron);
+                                    setListViewHeightBasedOnChildren(mLv_Show_plan);
+                                }
+                            }
+                        } else if(adapter_Spare != null && adapter_Spare.getCount() > 0) {
+                            SpareInEquipmentEntity spare = (SpareInEquipmentEntity) adapter_Spare.getItem(pron);
+                            if (spare != null) {
+                                if(_CheckSpareEntityList != null){
+                                    _CheckSpareEntityList.remove(spare);
+                                    adapter_Spare.removeItem(pron);
+                                    setListViewHeightBasedOnChildren(mLv_Show_plan);
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }, menuList);
+
+    }
+
     /**
      * 提交维修单
      */
@@ -1052,7 +1092,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         String faultDesc = mTv_FaultClass.getText().toString().trim();
         String RepairmentDesc = mTv_RepairDesc.getText().toString().trim();
         String user = mEt_User.getText().toString().trim();
-        String phone = mEt_money.getText().toString().trim();
+        String money = mEt_money.getText().toString().trim();
 
         //验证提交数据
         if (_EquipmentData == null) {
@@ -1079,9 +1119,10 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             ToastUtils.showLongToast(RepairmentReportActivity.this, "请填写联系人！");
             return;
         }
-        if (phone == null || phone.length() == 0) {
-            ToastUtils.showLongToast(RepairmentReportActivity.this, "填写费用金额不能为空！");
-            return;
+        if (money == null || money.length() == 0) {
+            money = "0";
+//            ToastUtils.showLongToast(RepairmentReportActivity.this, "填写费用金额不能为空！");
+//            return;
         }
         if (_CheckSpareUseList == null || _CheckSpareUseList.size() == 0) {
             ToastUtils.showLongToast(RepairmentReportActivity.this, "请添加备品备件信息！");
@@ -1097,14 +1138,16 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 return;
             }
         } else {
-            _CheckPlanIDList.clear();
+            if(_CheckPlanIDList != null) {
+                _CheckPlanIDList.clear();
+            }
         }
         RepairmentBillEntity rpen = new RepairmentBillEntity();
         rpen.setEquipmentID(_EquipmentData.getID());
         rpen.setCorporationID(_EquipmentData.getCorporationID());
         rpen.setDescription(RepairmentDesc);
         rpen.setRepairUser(user);
-        rpen.setTotalMoney(phone);
+        rpen.setTotalMoney(money);
         rpen.setRepairmentLevel(faultLevel);
         rpen.setFaultClass(faultDesc);
         rpen.setStartTime(faultDate);
@@ -1123,7 +1166,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         for (int i = 0; i < mLv_DataList_Spare.getChildCount(); i++) {
             View vw = mLv_DataList_Spare.getChildAt(i);
             tvid = (TextView) vw.findViewById(R.id.mTv_SpareID);
-            int edtcount = 0;
+            double edtcount = 0;
             int sumcount = 0;
 
             for (EquipmentUseSpareEntity e : _CheckSpareUseList) {
@@ -1137,7 +1180,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                         ToastUtils.showLongToast(RepairmentReportActivity.this, "备件:" + e.getSpareName() + " 数量超出库存数量！");
                         return;
                     } else {
-                        e.setCount(Integer.toString(edtcount));
+                        e.setCount(Double.toString(edtcount));
                     }
                 }
             }

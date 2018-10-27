@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.grandhyatt.commonlib.Result;
@@ -15,11 +17,14 @@ import com.grandhyatt.snowbeer.adapter.Equip_Inspect_EntityDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.Query_Equip_Repair_Adapter;
 import com.grandhyatt.snowbeer.entity.InspectionPlanEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentBillEntity;
+import com.grandhyatt.snowbeer.entity.RepairmentBillItemEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.result.InspectPlanResult;
+import com.grandhyatt.snowbeer.network.result.RepairmentBillItemResult;
 import com.grandhyatt.snowbeer.network.result.RepairmentBillResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
+import com.grandhyatt.snowbeer.utils.PopupWindowUtil;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -29,6 +34,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -88,6 +94,20 @@ public class Query_EquipRepairInfoActivity extends ActivityBase implements IActi
 
     @Override
     public void bindEvent() {
+        //显示备件列表
+        mLv_DataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                //获取维修单ID
+                TextView mTv_ID = (TextView) view.findViewById(R.id.mTv_ID);
+                String itemID = mTv_ID.getText().toString();
+
+                //根据维修单获取维修单中的备件列表
+                getRepairmentBillItems(itemID,view);
+            }
+        });
+
         //下拉刷新
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -195,4 +215,70 @@ public class Query_EquipRepairInfoActivity extends ActivityBase implements IActi
             }
         });
     }
+
+    /***
+     * 获取维修单明细
+     * @param billID
+     */
+    private void getRepairmentBillItems(String billID, final View view)
+    {
+        showLogingDialog();
+        SoapUtils.getRepairmentBillItems(Query_EquipRepairInfoActivity.this, billID, new SoapListener() {
+            @Override
+            public void onSuccess(int statusCode, SoapObject object) {
+                dismissLoadingDialog();
+                if (object == null) {
+                    ToastUtils.showLongToast(Query_EquipRepairInfoActivity.this, getString(R.string.submit_soap_result_err1));
+                    return;
+                }
+                //判断接口连接是否成功
+                if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                    ToastUtils.showLongToast(Query_EquipRepairInfoActivity.this, getString(R.string.submit_soap_result_err2));
+                    return;
+                }
+                //接口返回信息正常
+                String strData = object.getPropertyAsString(0);
+                RepairmentBillItemResult result = new Gson().fromJson(strData, RepairmentBillItemResult.class);
+                //校验接口返回代码
+                if (result == null) {
+                    ToastUtils.showLongToast(Query_EquipRepairInfoActivity.this, "获取数据失败" + statusCode);
+                    return;
+                } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                    ToastUtils.showLongToast(Query_EquipRepairInfoActivity.this, "获取数据失败" + statusCode + result.msg);
+                    return;
+                }
+                List<RepairmentBillItemEntity> data = result.getData();
+                ShowPopWindow(data,view);
+            }
+
+            @Override
+            public void onFailure(int statusCode, String content, Throwable error) {
+                dismissLoadingDialog();
+                ToastUtils.showToast(Query_EquipRepairInfoActivity.this, getString(R.string.submit_soap_result_err5, error));
+            }
+
+            @Override
+            public void onFailure(int statusCode, SoapFault fault) {
+                dismissLoadingDialog();
+                ToastUtils.showToast(Query_EquipRepairInfoActivity.this, getString(R.string.submit_soap_result_err4, fault));
+            }
+        });
+    }
+
+    /**
+     * 弹出窗口显示维修细表
+     * @param data
+     */
+    private void ShowPopWindow(List<RepairmentBillItemEntity> data ,View view)
+    {
+        List<String> list = new ArrayList<>();
+        for(RepairmentBillItemEntity item : data){
+            list.add(item.getSpareName() + "(" + item.getSpareCode() + ")  " + item.getCount() + item.getSpareUnit() );
+        }
+        showListPopupWindow(Query_EquipRepairInfoActivity.this,view,list,null);
+
+//        final PopupWindowUtil popupWindow = new PopupWindowUtil(Query_EquipRepairInfoActivity.this, list);
+//        popupWindow.show(view, 3);  //根据后面的数字 手动调节窗口的宽度
+    }
+
 }

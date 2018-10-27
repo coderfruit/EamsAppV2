@@ -562,7 +562,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                         for (int i = 0; i < mLv_DataList_Spare.getChildCount(); i++) {
                             vw = mLv_DataList_Spare.getChildAt(i);
                             tvid= (TextView) vw.findViewById(R.id.mTv_SpareID);
-                            int edtcount=0;
+                            double edtcount=0;
                             int sumcount=0;
                             for (EquipmentUseSpareEntity e : _CheckSpareUseList){
                                 if(e.getSpareID()==tvid.getText().toString().trim()){
@@ -576,7 +576,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                                         return;
                                     }
                                     else {
-                                        e.setCount(Integer.toString(edtcount));
+                                        e.setCount(Double.toString(edtcount));
 
                                     }
                                 }
@@ -591,7 +591,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                         for (int i = 0; i < mLv_DataList_Spare.getChildCount(); i++) {
                             vw = mLv_DataList_Spare.getChildAt(i);
                             tvid= (TextView) vw.findViewById(R.id.mTv_SpareID);
-                            int edtcount=0;
+                            double edtcount=0;
                             int sumcount=0;
                             for (SpareInEquipmentEntity e : _CheckSpareEquiList){
                                 if(e.getSpareID()==tvid.getText().toString().trim()){
@@ -605,7 +605,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                                         return;
                                     }
                                     else {
-                                        e.setReplaceCount(Integer.toString(edtcount));
+                                        e.setReplaceCount(Double.toString(edtcount));
 
                                     }
                                 }

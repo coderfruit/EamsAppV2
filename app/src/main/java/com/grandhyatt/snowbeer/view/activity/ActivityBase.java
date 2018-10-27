@@ -4,8 +4,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.v7.widget.ListPopupWindow;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -182,6 +187,28 @@ public class ActivityBase extends com.grandhyatt.commonlib.view.activity.Activit
         //设置一个下拉的列表选择项
         builder.setItems(cities, listener);
         builder.show();
+    }
+
+    /**
+     * 显示列表
+     * @param context
+     * @param view
+     * @param itemCallBack
+     */
+    public void showListPopupWindow(Context context,View view,List<String> list, AdapterView.OnItemClickListener itemCallBack) {
+
+        String[] items = (String[])list.toArray(new String[list.size()]);
+
+        ListPopupWindow listPopupWindow = new ListPopupWindow(context);
+        listPopupWindow.setAdapter(new ArrayAdapter<String>(context, R.layout.list_item_string, items));   // ListView适配器
+        listPopupWindow.setOnItemClickListener(itemCallBack); // 选择item的监听事件
+        listPopupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);//ViewGroup.LayoutParams.WRAP_CONTENT，自动包裹所有的内容
+        listPopupWindow.setWidth(view.getWidth() * list.size()); //该count 是手动调整窗口的宽度
+        listPopupWindow.setAnchorView(view); // ListPopupWindow的锚,弹出框的位置是相对当前View的位置
+        listPopupWindow.setHorizontalOffset(0);
+        listPopupWindow.setVerticalOffset(0);
+        listPopupWindow.setModal(true);
+        listPopupWindow.show();
     }
 
 }

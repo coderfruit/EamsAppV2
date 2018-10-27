@@ -362,8 +362,8 @@
                         android:layout_marginLeft="5dp"
                         android:layout_toLeftOf="@id/mTv_t3"
                         android:gravity="right"
-                        android:hint="0"
-                        android:inputType="phone"
+                        android:hint="外委费用"
+                        android:inputType="numberDecimal"
                         android:textColor="@color/gray5"
                         android:textSize="14sp" />
 
@@ -374,7 +374,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
                         android:layout_toLeftOf="@id/mEt_money"
-                        android:text="费用："
+                        android:text="外委费用："
                         android:textColor="@color/gray5"
                         android:textSize="12sp" />
 
@@ -540,17 +540,11 @@
                     android:id="@+id/mLv_DataList_Spare"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/selector_listview_item"
+                    android:listSelector="@drawable/selector_listview_item"
                     android:divider="@null"
                     android:dividerHeight="0dp"
                     android:transcriptMode="alwaysScroll" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginRight="1dp"
-                    android:background="@color/white6" />
             </LinearLayout>
 
 

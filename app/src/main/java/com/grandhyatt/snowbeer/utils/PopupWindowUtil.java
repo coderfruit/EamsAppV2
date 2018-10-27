@@ -2,10 +2,12 @@ package com.grandhyatt.snowbeer.utils;
 
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v7.widget.ListPopupWindow;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -32,19 +34,15 @@ public class PopupWindowUtil {
     public PopupWindowUtil(Context context, List<String> datas) {
 
         window = new PopupWindow(context);
-        //ViewGroup.LayoutParams.WRAP_CONTENT，自动包裹所有的内容
-        window.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        window.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);//ViewGroup.LayoutParams.WRAP_CONTENT，自动包裹所有的内容
         window.setFocusable(true);
-        //点击 back 键的时候，窗口会自动消失
-        window.setBackgroundDrawable(new BitmapDrawable());
+        window.setBackgroundDrawable(new BitmapDrawable());//点击 back 键的时候，窗口会自动消失
 
         View localView = LayoutInflater.from(context).inflate(R.layout.lv_pw_menu, null);
         listView = (ListView) localView.findViewById(R.id.lv_pop_list);
-
         listView.setAdapter(new MyAdapter(context, datas));
         listView.setTag(window);
-        //设置显示的视图
-        window.setContentView(localView);
+        window.setContentView(localView); //设置显示的视图
     }
 
     public void setItemClickListener(AdapterView.OnItemClickListener listener) {
@@ -68,12 +66,10 @@ public class PopupWindowUtil {
      * @param paramView 点击的按钮
      */
     public void show(View paramView, int count) {
-        //该count 是手动调整窗口的宽度
-        window.setWidth(paramView.getWidth() * count);
-        //设置窗口显示位置, 后面两个0 是表示偏移量，可以自由设置
-        window.showAsDropDown(paramView, xOff, yOff);
-        //更新窗口状态
-        window.update();
+
+        window.setWidth(paramView.getWidth() * count); //该count 是手动调整窗口的宽度
+        window.showAsDropDown(paramView, xOff, yOff);   //设置窗口显示位置, 后面两个0 是表示偏移量，可以自由设置
+        window.update(); //更新窗口状态
     }
 
     class MyAdapter extends BaseAdapter {
@@ -118,4 +114,6 @@ public class PopupWindowUtil {
             return convertView;
         }
     }
+
+
 }

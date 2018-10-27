@@ -22,7 +22,7 @@
         android:layout_centerInParent="true"
         android:minWidth="80dp"
         android:background="#00FFFFFF"
-        android:inputType="phone"
+        android:inputType="number"
         android:maxLength="8"
         android:maxLines="1"
         android:paddingRight="6dp"

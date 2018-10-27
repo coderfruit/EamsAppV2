@@ -70,10 +70,12 @@ public class SpareInEquipmentDataListAdapter extends BaseAdapter {
         SpareInEquipmentEntity dataModel = mDataList.get(position);
         if (dataModel != null) {
             mViewHolder.mTv_Status.setText(dataModel.getStatus());
-            if(dataModel.getStatus().contains("超期"))
-            {
+            if(dataModel.getStatus().contains("超期")) {
                 mViewHolder.mTv_Status.setTextColor(Color.RED);
+            }else{
+                mViewHolder.mTv_Status.setTextColor(Color.BLACK);
             }
+
             mViewHolder.mTv_RepairmentLevel.setText(String.valueOf(dataModel.getRepairmentLevel()));
             mViewHolder.mTv_PlanInterval.setText("每" + dataModel.getReplaceCycles() + "天执行一次");
             mViewHolder.mTv_LastRunningDate.setText(dataModel.getLastReplaceDate());
@@ -96,6 +98,11 @@ public class SpareInEquipmentDataListAdapter extends BaseAdapter {
         private TextView mTv_PlanDescTitle;
         private TextView mTv_PlanDesc;
         private TextView mTv_ID;
+    }
+
+    public  void  removeItem(int position){
+//        mDataList.remove(position);
+        notifyDataSetChanged();
     }
 
 }

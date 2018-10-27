@@ -53,11 +53,10 @@ public class EquipRepairSpareViewDataListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_item_repairment_spare_check_activity, null);
 
             mViewHolder.mTv_SpareName = convertView.findViewById(R.id.mTv_SpareName);
-
             mViewHolder.mTv_Unit = convertView.findViewById(R.id.mTv_Unit);
             mViewHolder.mNEdt_Check = convertView.findViewById(R.id.mNEdt_Check);
-            mViewHolder.mTv_SumCountx= convertView.findViewById(R.id.mTv_SumCountx);
-            mViewHolder.mTv_SpareID=convertView.findViewById(R.id.mTv_SpareID);
+            mViewHolder.mTv_SumCountx = convertView.findViewById(R.id.mTv_SumCountx);
+            mViewHolder.mTv_SpareID = convertView.findViewById(R.id.mTv_SpareID);
             convertView.setTag(mViewHolder);
 
         } else {
@@ -69,17 +68,18 @@ public class EquipRepairSpareViewDataListAdapter extends BaseAdapter {
 
             mViewHolder.mTv_SpareName.setText(dataModel.getSpareName());
             mViewHolder.mTv_Unit.setText(dataModel.getSpareUnit());
-
-            int inputCnt = Integer.parseInt(dataModel.getCount());
-            mViewHolder.mNEdt_Check.setData(inputCnt);
+            mViewHolder.mNEdt_Check.setData(1);
+            double limit = Double.parseDouble(dataModel.getCount());
+            mViewHolder.mNEdt_Check.SetNumberLimit(limit);
             mViewHolder.mTv_SumCountx.setText(dataModel.getCount());
             mViewHolder.mTv_SpareID.setText(dataModel.getSpareID());
+
         }
         return convertView;
     }
 
-    public  void  removeItem(int position){
-       // mDataList.remove(position);
+    public void removeItem(int position) {
+        // mDataList.remove(position);
         notifyDataSetChanged();
     }
 
@@ -89,7 +89,7 @@ public class EquipRepairSpareViewDataListAdapter extends BaseAdapter {
         private NumberEditText mNEdt_Check;
         private TextView mTv_Unit;
         private TextView mTv_SumCountx;
-        private  TextView mTv_SpareID;
+        private TextView mTv_SpareID;
 
 
     }
