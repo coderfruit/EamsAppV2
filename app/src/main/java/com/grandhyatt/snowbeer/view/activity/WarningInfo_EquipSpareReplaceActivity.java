@@ -95,14 +95,17 @@ public class WarningInfo_EquipSpareReplaceActivity extends ActivityBase implemen
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_ID);
-                TextView mTv_EquipID = (TextView) view.findViewById(R.id.mTv_EquipID);
+                SpareInEquipmentEntity entity = (SpareInEquipmentEntity)mAdapter.getItem(position);
 
-                //维修-备件更换   type = 1  mTv_EquipID=设备ID    mTv_ReportID = 备件ID
+                //维修-备件更换   type = 1  mTv_EquipID=设备ID    mTv_ReportID = 备件与设备关系ID
                 Intent intent = new Intent(WarningInfo_EquipSpareReplaceActivity.this, RepairmentReportActivity.class);
                 intent.putExtra("type","1");
-                intent.putExtra("mTv_EquipID", mTv_EquipID.getText());
-                intent.putExtra("mTv_ReportID", mTv_ReportID.getText());
+                intent.putExtra("mTv_EquipID", entity.getEquipmentID());
+                intent.putExtra("mTv_ReportID", entity.getID());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("entity", entity);
+                intent.putExtras(bundle);
+
                 startActivityForResult(intent, Consts.REPAIR_OPERATE_AFTER);
             }
         });

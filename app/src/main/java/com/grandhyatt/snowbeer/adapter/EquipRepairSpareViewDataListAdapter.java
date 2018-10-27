@@ -69,9 +69,11 @@ public class EquipRepairSpareViewDataListAdapter extends BaseAdapter {
             mViewHolder.mTv_SpareName.setText(dataModel.getSpareName());
             mViewHolder.mTv_Unit.setText(dataModel.getSpareUnit());
             mViewHolder.mNEdt_Check.setData(1);
-            double limit = Double.parseDouble(dataModel.getCount());
-            mViewHolder.mNEdt_Check.SetNumberLimit(limit);
-            mViewHolder.mTv_SumCountx.setText(dataModel.getCount());
+            if(dataModel.getCount() != null && dataModel.getCount().length() > 0) {
+                double limit = Double.parseDouble(dataModel.getCount());
+                mViewHolder.mNEdt_Check.SetNumberLimit(limit);
+            }
+            mViewHolder.mTv_SumCountx.setText(dataModel.getCount());//可用量
             mViewHolder.mTv_SpareID.setText(dataModel.getSpareID());
 
         }
@@ -80,6 +82,18 @@ public class EquipRepairSpareViewDataListAdapter extends BaseAdapter {
 
     public void removeItem(int position) {
         // mDataList.remove(position);
+        notifyDataSetChanged();
+    }
+
+    /**
+     * 修改可用量
+     * @param position
+     * @param count
+     */
+    public void modifyCount(int position,String count)
+    {
+        EquipmentUseSpareEntity item = (EquipmentUseSpareEntity)getItem(0);
+        item.setCount(count);
         notifyDataSetChanged();
     }
 

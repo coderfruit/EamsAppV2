@@ -9,51 +9,31 @@ import java.io.Serializable;
 public class SpareInEquipmentEntity implements Serializable {
 
     private  boolean IsCheck;
-
     private String ID;
-
     private String Status;
-
     private String RepairmentLevel;
-
     private String EquipmentID;
-
     private String EquipmentCode;
-
     private String EquipmentName;
-
     private String EquipmentTypeID;
-
     private String EquipmentTypeName;
-
+    private String DeptID;
+    private String DeptCode;
+    private String DeptName;
     private String SpareID;
-
     private String SpareCode;
-
     private String SpareName;
-
     private String Location;
-
     private String ReplaceCount;
-
     private String ReplaceCycles;
-
     private String ReplaceCyclesManual;
-
     private String LastReplaceDate;
-
     private String NextReplaceDate;
-
     private String MakeUser;
-
     private String MakeDate;
-
     private String REMARK;
-
     private String AllowCount;
-
     private String CurrentCount;
-
     private String SpareUnit;
 
     public SpareInEquipmentEntity() {
@@ -248,5 +228,37 @@ public class SpareInEquipmentEntity implements Serializable {
     public String getRepairmentLevel() {
         this.RepairmentLevel = "定修";
         return RepairmentLevel;
+    }
+
+    public boolean isCheck() {
+        return IsCheck;
+    }
+
+    public void setCheck(boolean check) {
+        IsCheck = check;
+    }
+
+    public String getDeptID() {
+        return DeptID;
+    }
+
+    public void setDeptID(String deptID) {
+        DeptID = deptID;
+    }
+
+    public String getDeptCode() {
+        return DeptCode;
+    }
+
+    public void setDeptCode(String deptCode) {
+        DeptCode = deptCode;
+    }
+
+    public String getDeptName() {
+        return DeptName;
+    }
+
+    public void setDeptName(String deptName) {
+        DeptName = deptName;
     }
 }
