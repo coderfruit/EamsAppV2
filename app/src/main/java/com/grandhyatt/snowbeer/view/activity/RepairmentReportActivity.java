@@ -186,7 +186,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         mFilter = mSearchBar.getFilter();
 
         //维修            type = 0  mTv_EquipID=设备ID
-        //维修-备件更换   type = 1  mTv_EquipID=设备ID    mTv_ReportID = 备件ID
+        //维修-备件更换   type = 1  mTv_EquipID=设备ID    mTv_ReportID = 备件与设备关系ID
         //维修-维修计划   type = 2  mTv_EquipID=设备ID    mTv_ReportID = 维修计划ID，
         //维修-显示维修单 type = 3  mTv_EquipID=设备ID    mTv_ReportID = 维修单ID
 
@@ -215,14 +215,14 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
             //根据设备id获取设备信息
             getEquipmentInfoByID(mTv_EquipID);
-            //根据计划ID获取计划Entity
+            //根据计划ID获取计划
 
-            //根据获取到的计划Entity绑定 “维修级别”“维修计划”
+            //绑定 “维修级别”
 
-
+            //绑定 “维修计划”
 
         }
-        //维修-备件更换   type = 1  mTv_EquipID=设备ID    mTv_ReportID = 备件ID
+        //维修-备件更换   type = 1  mTv_EquipID=设备ID    mTv_ReportID = 备件与设备关系ID
         else if ((type != null && type.equals("1")) && mTv_ReportID != null && mTv_EquipID != null) {
             mSearchBar.setVisibility(View.GONE);
             mToolBar.setTitle("设备维修-按备件");
@@ -231,7 +231,9 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
             //根据设备id获取设备信息
             getEquipmentInfoByID(mTv_EquipID);
-            //根据备件ID“定修”的计划
+            //根据备件ID获取备件更换计划
+
+            // 将维修级别设置为“定修”
             mTv_RepairLevel.setText("定修");
             //并将备件填充至备件列表
 

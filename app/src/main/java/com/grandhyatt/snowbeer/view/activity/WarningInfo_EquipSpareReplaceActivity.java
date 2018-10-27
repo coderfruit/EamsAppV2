@@ -95,7 +95,7 @@ public class WarningInfo_EquipSpareReplaceActivity extends ActivityBase implemen
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_SpareID);
+                TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_ID);
                 TextView mTv_EquipID = (TextView) view.findViewById(R.id.mTv_EquipID);
 
                 //维修-备件更换   type = 1  mTv_EquipID=设备ID    mTv_ReportID = 备件ID
