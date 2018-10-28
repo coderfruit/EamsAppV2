@@ -167,7 +167,10 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 
         Intent intent = getIntent();
         String type = intent.getStringExtra("type");
-        _Type = type;
+        if(type!=null)
+            _Type = type;
+        else
+            _Type="9";
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
         //------------------------------------------------------------------------------------------------------
@@ -633,7 +636,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                         }
 
                         if(_Type.equals("0")){
-                            String [] reDate=  result.getData().split(",");
+                            String [] reDate=  result.msg.split(",");
                             //数据是使用Intent返回
                             Intent intent = new Intent();
                             //把返回数据存入Intent

@@ -1213,13 +1213,64 @@ public class SoapUtils {
 	}
 
 
-	public static void getEquipmentSparesDeptAsync(EquipMgrRepairExSpareCheckActivity equipMgrRepairExSpareCheckActivity, String equipID, String deptID, String spareContent, SoapListener callback) {
+	public static void getEquipmentSparesDeptAsync(final Context context, String equipID, String deptID, String spareContent, SoapListener callback) {
+		final String url = getHostUrl();
+		String methodName = "GetEquipmentSpares";
+
+		//获取http请求身份验证参数
+		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("equipID",equipID);
+
+
+		SoapUtils.getInstance(context).call(methodName,params,callback);
 	}
 
-	public static void getEquipmentExPlanAsync(RepairmentExPlanCheckActivity repairmentExPlanCheckActivity, String equipmentID, SoapListener callback) {
+	public static void getEquipmentExPlanAsync(final Context context, String equipmentID, SoapListener callback) {
+
+        final String url = getHostUrl();
+        String methodName = "GetEquipmentExPlan";
+
+        //获取http请求身份验证参数
+        final SoapParams params  = getAuthHttpRequestHeader(context);
+        params.put("equipID",equipmentID);
+
+
+        SoapUtils.getInstance(context).call(methodName,params,callback);
 	}
 
-	public static void submitNewEquipReparimentExRepairAsync(RepairmentExReportActivity repairmentExReportActivity, String faultDesc, RepairmentEquipmentResult request, ArrayList<String> checkPlanIDList, SoapListener callback) {
+	public static void submitNewEquipReparimentExRepairAsync(final Context context, String faultDesc, RepairmentEquipmentResult request, ArrayList<String> checkPlanIDList, SoapListener callback) {
+        final String url = getHostUrl();
+        String methodName = "NewEquipReparimentExRepair";
+
+        //String userID = SPUtils.getLastLoginUserID(context);
+        String userName = SPUtils.getLastLoginUserName(context);
+
+        //获取http请求身份验证参数
+        SoapParams params = getAuthHttpRequestHeader(context);
+
+        params.put("userName", userName);
+        RepairmentBillEntity rparbill = request.getRepairmentBillData();
+        Gson gson1 = new Gson();
+
+        String jsonrepa = gson1.toJson(rparbill, RepairmentBillEntity.class);
+        params.put("repariment", jsonrepa);
+        if (checkPlanIDList != null && checkPlanIDList.size()>0 ) {
+            String jsonPlan = gson1.toJson(checkPlanIDList);
+            params.put("listPlanID", jsonPlan);
+        }
+        if(faultDesc.equals("包工不包料")){
+            List<EquipmentUseSpareEntity> listeuse = request.getSpareInEquipmentData();
+            String jsonEquiSpare = gson1.toJson(listeuse);
+            params.put("ListSpareEqer", jsonEquiSpare);
+        }
+        else {
+            List<SpareInEquipmentEntity> listeuse = request.getSpareE();
+            String jsonEquiSpare = gson1.toJson(listeuse);
+            params.put("ListSpareEqer", jsonEquiSpare);
+        }
+
+        SoapUtils.getInstance(context).call(methodName, params, callback);
+
 	}
 
 	/**

@@ -195,7 +195,10 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
         Intent intent = getIntent();
         String type = intent.getStringExtra("type");
-        _Type = type;
+        if(type!=null)
+            _Type = type;
+        else
+            _Type="9";
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
         Object entity = (Object)intent.getSerializableExtra("entity");
@@ -1370,7 +1373,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 //维修-维修计划   type = 2  mTv_EquipID=设备ID    mTv_ReportID = 维修计划ID         entity = 维修计划对象
                 //维修-显示维修单 type = 3  mTv_EquipID=设备ID    mTv_ReportID = 维修单ID
                  if(_Type.equals("0")){
-                   String [] reDate=  result.getData().split(",");
+                   String [] reDate=  result.msg.split(",");
                      //数据是使用Intent返回
                      Intent intent = new Intent();
                      //把返回数据存入Intent
