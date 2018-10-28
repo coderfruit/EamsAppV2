@@ -171,8 +171,9 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             _Type = type;
         else
             _Type="9";
-        String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
+        String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
+        Object entity = (Object)intent.getSerializableExtra("entity");
         //------------------------------------------------------------------------------------------------------
         //保养-显示保养单 type = 3    mTv_EquipID=设备id  mTv_ReportID = 保养单ID
         if ((type != null && type.equals("3")) && mTv_ReportID != null && mTv_EquipID != null) {
@@ -189,7 +190,14 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         //------------------------------------------------------------------------------------------------------
         //保养-保养计划  type = 2    mTv_EquipID=设备id  mTv_ReportID = 保养计划ID
         else  if ((type != null && type.equals("2")) && mTv_ReportID != null && mTv_EquipID != null) {
+            mSearchBar.setVisibility(View.GONE);
+            mToolBar.setTitle("设备保养-按计划");
+            initView();
+            bindEvent();
 
+
+            //保养计划
+            Repair_RepairmentPlan(mTv_EquipID, entity);
         }
         //------------------------------------------------------------------------------------------------------
         //保养            type = 0    mTv_EquipID=设备id
@@ -247,7 +255,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         //初始化用户及手机号
         mEt_User.setText(SPUtils.getLastLoginUserName(MaintenReportActivity.this));
         mEt_money.setText(SPUtils.getLastLoginUserPhone(MaintenReportActivity.this));
-
+      //  mLl_Plan.setVisibility(View.GONE);
 
         SoapListener callbackFailureReportingDesc = new SoapListener() {
             @Override
@@ -434,6 +442,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                         mTv_FaultDesc.setText(str);
                         if(str.equals("润滑")){
                             lL_material.setVisibility(View.VISIBLE);
+                            mBtn_marAdd.performClick();
                         }
                         else {
                             mTv_materialName.setText("");
@@ -1041,4 +1050,27 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         }
         return true;
     }
+
+    private void Repair_RepairmentPlan(String mTv_EquipID, Object entity) {
+        getEquipmentInfoByID(mTv_EquipID);
+        if(entity != null) {
+            mTv_jh.setEnabled(false);
+            // 将维修级别设置为“定修”
+
+            //根据备件ID获取备件更换计划
+            MaintenancePlanEntity planEntity = (MaintenancePlanEntity) entity;
+            planEntity.setIsCheck(true);
+            //维修级别
+            mTv_FaultDesc.setText(planEntity.getMaintenanceLevel());
+
+            //将计划填充至计划列表
+            _CheckPlanEntityList.add(planEntity);
+            adapter_Plan = new MaintenancePlanViewDataListAdapter(MaintenReportActivity.this, _CheckPlanEntityList);
+            mLv_Show_plan.setAdapter(adapter_Plan);
+            mLv_Show_plan.setVisibility(View.VISIBLE);
+            setListViewHeightBasedOnChildren(mLv_Show_plan);
+            mLl_Plan.setVisibility(View.VISIBLE);
+        }
+    }
+
 }

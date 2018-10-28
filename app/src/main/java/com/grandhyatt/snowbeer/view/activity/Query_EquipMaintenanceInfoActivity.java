@@ -90,6 +90,8 @@ public class Query_EquipMaintenanceInfoActivity extends ActivityBase implements 
 
     @Override
     public void bindEvent() {
+
+
         //下拉刷新
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override

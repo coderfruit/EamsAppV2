@@ -97,15 +97,17 @@ public class WarningInfo_EquipMaintenActivity extends ActivityBase implements IA
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_ID);
-                TextView mTv_EquipID = (TextView) view.findViewById(R.id.mTv_EquipID);
+                MaintenancePlanEntity entity = (MaintenancePlanEntity) mAdapter.getItem(position);
 
-                //保养-保养计划  type = 2    mTv_EquipID=设备id  mTv_ReportID = 保养计划ID，
-                Intent intent = new Intent(WarningInfo_EquipMaintenActivity.this, RepairmentReportActivity.class);
+                //维修-维修计划   type = 2  mTv_EquipID=设备ID    mTv_ReportID = 维修计划ID，
+                Intent intent = new Intent(WarningInfo_EquipMaintenActivity.this, MaintenReportActivity.class);
                 intent.putExtra("type","2");
-                intent.putExtra("mTv_EquipID", mTv_EquipID.getText());
-                intent.putExtra("mTv_ReportID", mTv_ReportID.getText());
-                startActivityForResult(intent, Consts.MAINTEN_OPERATE_AFTER);
+                intent.putExtra("mTv_EquipID",entity.getEquipmentID());
+                intent.putExtra("mTv_ReportID", entity.getID());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("entity", entity);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, Consts.REPAIR_OPERATE_AFTER);
             }
         });
         //下拉刷新

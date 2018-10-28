@@ -297,7 +297,7 @@
 
                 <EditText
                     android:id="@+id/mEt_User"
-                    android:layout_width="0dp"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
