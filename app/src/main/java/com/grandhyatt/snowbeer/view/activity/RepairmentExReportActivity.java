@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -119,6 +120,8 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
     ListView mLv_DataList_Spare;
     @BindView(R.id.mLv_Show_plan)
     ListView mLv_Show_plan;
+    @BindView(R.id.mLl_Plan)
+    LinearLayout mLl_Plan;//计划容器
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
     public static final int CHECK_SPARE_OK = 112;//选择维修用备件
     ArrayList<String> _CheckPlanIDList; //用户选中的维护计划ID
