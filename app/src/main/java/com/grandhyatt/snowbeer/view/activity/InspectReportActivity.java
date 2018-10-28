@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -115,6 +116,8 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
     TextView mTv_InspResult;
     @BindView(R.id.mTv_InspMode)
     TextView mTv_InspMode;
+    @BindView(R.id.mLl_Plan)
+    LinearLayout mLl_Plan;
 
     EquipmentEntity _EquipmentData;
     InspectBillEntity _ReportEntity;
@@ -135,7 +138,7 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        setContentView(R.layout.activity_card_re_check);
+
         setContentView(R.layout.activity_inspect_report);
         ButterKnife.bind(this);
 

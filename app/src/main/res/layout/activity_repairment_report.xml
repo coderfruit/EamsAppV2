@@ -591,7 +591,7 @@
 
                 <Button
                     android:id="@+id/mBtn_Submit"
-                    android:layout_width="110sp"
+                    android:layout_width="120sp"
                     android:layout_height="40dp"
                     android:layout_marginRight="4dp"
                     android:background="@drawable/ic_login_button_true"

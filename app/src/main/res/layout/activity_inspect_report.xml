@@ -25,13 +25,44 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <!-- 设备信息标题 begin-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="23dp"
+                android:background="@drawable/selector_linear_layout_item_gray"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginTop="3dp">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@color/colorPrimary" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:text="设备信息"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="1dp"
+                android:background="@color/white6" />
+            <!-- 设备信息标题 end -->
 
             <!-- 设备信息、设备图片 -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="1dp"
-                android:layout_marginTop="1dp"
                 android:background="@color/white6" />
 
             <LinearLayout
@@ -124,7 +155,7 @@
             </LinearLayout>
 
 
-            <!-- 报修信息标题 -->
+            <!-- 检验信息标题 -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
@@ -154,8 +185,6 @@
                     android:text="检验信息"
                     android:textColor="@color/colorPrimary"
                     android:textSize="12sp" />
-
-
             </LinearLayout>
 
             <View
@@ -164,88 +193,19 @@
                 android:layout_marginLeft="1dp"
                 android:layout_marginTop="1dp"
                 android:background="@color/white6" />
-            <!-- 选择故障日期  选择故障级别-->
 
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:background="@drawable/selector_linear_layout_item_white">
-
-            </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginTop="1dp"
-                android:background="@color/white6" />
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:background="@drawable/selector_linear_layout_item_white">
-
-
-                <TextView
-                    android:id="@+id/mTv_jh"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:hint="选择检验计划"
-                    android:textColor="@color/blue_title_bar"
-                    android:textSize="14sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@id/mTv_jh"
-                    android:layout_toRightOf="@id/mTv_jh"
-
-                    android:src="@drawable/add_16px" />
-
-            </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginTop="1dp"
-                android:background="@color/white6" />
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:background="@drawable/selector_linear_layout_item_white">
-
-                <ListView
-                    android:id="@+id/mLv_Show_plan"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/selector_listview_item"
-                    android:divider="@null"
-                    android:dividerHeight="0dp"
-                    android:stackFromBottom="true"
-                    android:transcriptMode="alwaysScroll" />
-
-            </RelativeLayout>
+            <!--检验时间\检验项目-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-
                 android:orientation="horizontal">
-
+                <!--检验时间-->
                 <RelativeLayout
                     android:layout_width="172dp"
                     android:layout_height="match_parent"
-
                     android:background="@drawable/selector_linear_layout_item_white">
 
                     <TextView
@@ -264,17 +224,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-
-
                         android:layout_toRightOf="@id/mTv_InspTime"
                         android:src="@drawable/item_signature_iv_menu_defaul" />
 
                 </RelativeLayout>
-
+                <!--检验项目-->
                 <RelativeLayout
                     android:layout_width="200dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/selector_linear_layout_item_white">
+
                     <TextView
                         android:id="@+id/mTv_inspItem"
                         android:layout_width="wrap_content"
@@ -282,7 +241,6 @@
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
-
                         android:hint="检验项目"
                         android:textColor="@color/gray5"
                         android:textSize="14sp" />
@@ -298,19 +256,18 @@
 
             </LinearLayout>
 
+            <!--检验结果、检验方式-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-
                 android:orientation="horizontal">
 
                 <RelativeLayout
                     android:layout_width="172dp"
                     android:layout_height="match_parent"
-
                     android:background="@drawable/selector_linear_layout_item_white">
 
                     <TextView
@@ -320,7 +277,6 @@
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
-
                         android:hint="检验结果"
                         android:textColor="@color/gray5"
                         android:textSize="14sp" />
@@ -337,6 +293,7 @@
                     android:layout_width="200dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/selector_linear_layout_item_white">
+
                     <TextView
                         android:id="@+id/mTv_InspMode"
                         android:layout_width="wrap_content"
@@ -344,7 +301,6 @@
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
-
                         android:hint="检验方式"
                         android:textColor="@color/gray5"
                         android:textSize="14sp" />
@@ -360,116 +316,171 @@
 
             </LinearLayout>
 
-
-            <!-- 故障描述 -->
-
-
+            <!--检验单位\费用-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-
-
                 android:background="@drawable/selector_linear_layout_item_white">
-
 
                 <TextView
                     android:id="@+id/mTv_t1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
-
-                    android:hint="检验单位"
+                    android:hint="检验人员："
                     android:textColor="@color/gray5"
                     android:textSize="14sp" />
 
                 <EditText
-                    android:id="@+id/mEt_Com"
-                    android:layout_width="120dp"
+                    android:id="@+id/mEt_User"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-
-
-                    android:singleLine="true"
                     android:textColor="@color/gray5"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:hint="检验人员"
+                    android:layout_weight="1"/>
 
                 <TextView
                     android:id="@+id/mTv_t2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
-
-                    android:hint="费用"
+                    android:hint="费用:"
+                    android:textColor="@color/gray5"
+                    android:textSize="14sp" />
+                <EditText
+                    android:id="@+id/mEt_money"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:hint="0"
+                    android:textColor="@color/gray5"
+                    android:textSize="12sp"
+                    android:gravity="right"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:hint="元"
                     android:textColor="@color/gray5"
                     android:textSize="14sp" />
 
-                <EditText
-                    android:id="@+id/mEt_money"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-
-
-                    android:hint="0"
-
-                    android:singleLine="true"
-                    android:textColor="@color/gray5"
-                    android:textSize="12sp" />
-
             </LinearLayout>
 
-
+            <!--检验人员-->
             <LinearLayout
                 android:id="@+id/lL_material"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-
-
-
-
-
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
-
-
                     android:background="@drawable/selector_linear_layout_item_white">
 
-
                     <TextView
-                        android:id="@+id/mTv_m6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
-
-                        android:hint="检验人员"
+                        android:hint="检验单位："
                         android:textColor="@color/gray5"
                         android:textSize="14sp" />
 
                     <EditText
-                        android:id="@+id/mEt_User"
-                        android:layout_width="100dp"
+                        android:id="@+id/mEt_Com"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-
-
-
-                        android:inputType="phone"
-                        android:singleLine="true"
                         android:textColor="@color/gray5"
-                        android:textSize="14sp" />
+                        android:hint="检验单位"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+            android:id="@+id/mLl_Plan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- 检验计划标题 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white6" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="23dp"
+                android:background="@drawable/selector_linear_layout_item_gray"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@color/colorPrimary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="20dp"
+                    android:text="检验计划信息"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/mTv_jh"
+                        android:layout_width="100dp"
+                        android:layout_height="20dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/ic_login_button_true"
+                        android:text="选择检验计划"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--选择检验计划-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginTop="1dp"
+                android:background="@color/white6" />
+            <!--检验计划列表-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/selector_linear_layout_item_white">
+
+                <ListView
+                    android:id="@+id/mLv_Show_plan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/selector_listview_item"
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
+                    android:stackFromBottom="true"
+                    android:transcriptMode="alwaysScroll" />
+            </RelativeLayout>
             </LinearLayout>
 
             <View
@@ -479,21 +490,17 @@
                 android:layout_marginRight="1dp"
                 android:background="@color/white6" />
 
-
             <!-- 提交重置按钮 -->
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="15dp"
                 android:gravity="right">
 
-
                 <Button
                     android:id="@+id/mBtn_Submit"
                     android:layout_width="110sp"
                     android:layout_height="40dp"
-
                     android:layout_marginRight="10dp"
                     android:background="@drawable/ic_login_button_true"
                     android:text="提交检验信息" />

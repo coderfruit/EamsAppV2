@@ -100,7 +100,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
     @BindView(R.id.mBtn_marAdd)
     Button mBtn_marAdd;
     @BindView(R.id.mTv_jh)
-    TextView mTv_jh;
+    Button mTv_jh;
     @BindView(R.id.mEt_User)
     EditText mEt_User;
     @BindView(R.id.mEt_money)
@@ -129,6 +129,9 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
     EditText mEt_materialsum;
     @BindView(R.id.mEt_materialprice)
     EditText mEt_materialprice;
+    @BindView(R.id.mLl_Plan)
+    LinearLayout mLl_Plan;//保养计划容器
+
 
     @BindView(R.id.lL_material)
     LinearLayout lL_material;
@@ -152,7 +155,6 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        setContentView(R.layout.activity_card_re_check);
         setContentView(R.layout.activity_mainten_report);
         ButterKnife.bind(this);
 
@@ -160,7 +162,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         mFilter = mSearchBar.getFilter();
 
         //保养            type = 0    mTv_EquipID=设备id
-        //保养-保养计划   type = 2    mTv_EquipID=设备id  mTv_ReportID = 保养计划ID
+        //保养-保养计划   type = 2    mTv_EquipID=设备id  mTv_ReportID = 保养计划ID   entity = 保养计划对象
         //保养-显示保养单 type = 3    mTv_EquipID=设备id  mTv_ReportID = 保养单ID
 
         Intent intent = getIntent();
@@ -168,7 +170,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         _Type = type;
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
-
+        //------------------------------------------------------------------------------------------------------
         //保养-显示保养单 type = 3    mTv_EquipID=设备id  mTv_ReportID = 保养单ID
         if ((type != null && type.equals("3")) && mTv_ReportID != null && mTv_EquipID != null) {
             mToolBar.setTitle("查看保养信息");
@@ -181,14 +183,17 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             mEt_User.setEnabled(false);
             mEt_money.setEnabled(false);
         }
+        //------------------------------------------------------------------------------------------------------
         //保养-保养计划  type = 2    mTv_EquipID=设备id  mTv_ReportID = 保养计划ID
         else  if ((type != null && type.equals("2")) && mTv_ReportID != null && mTv_EquipID != null) {
 
         }
+        //------------------------------------------------------------------------------------------------------
         //保养            type = 0    mTv_EquipID=设备id
         else  if ((type != null && type.equals("0")) && mTv_EquipID != null) {
 
         }
+        //------------------------------------------------------------------------------------------------------
         //正常保养
         else {
             mToolBar.setTitle("我要保养");
