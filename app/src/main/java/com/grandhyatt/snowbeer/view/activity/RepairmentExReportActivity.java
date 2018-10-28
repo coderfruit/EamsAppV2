@@ -125,6 +125,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
     List<RepairmentExPlanEntity> _CheckPlanEntityList = new ArrayList<>();//用户选择的数据行对象
     List<EquipmentUseSpareEntity> _CheckSpareUseList=new ArrayList<>();// 页面选择备品配件返回数据
     List<SpareInEquipmentEntity> _CheckSpareEquiList=new ArrayList<>();// 页面选择备品配件返回数据
+    private String _Type;
     /**
      * 获取到的图片路径
      */
@@ -167,6 +168,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
 
         Intent intent = getIntent();
         String type = intent.getStringExtra("type");
+         _Type = type;
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
 
@@ -563,13 +565,13 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                             vw = mLv_DataList_Spare.getChildAt(i);
                             tvid= (TextView) vw.findViewById(R.id.mTv_SpareID);
                             double edtcount=0;
-                            int sumcount=0;
+                            double sumcount=0;
                             for (EquipmentUseSpareEntity e : _CheckSpareUseList){
                                 if(e.getSpareID()==tvid.getText().toString().trim()){
                                     mNEdt_Check= (NumberEditText) vw.findViewById(R.id.mNEdt_Check);
                                     mSumCount= (TextView) vw.findViewById(R.id.mTv_SumCountx);
                                     edtcount=mNEdt_Check.getData();
-                                    sumcount=Integer.parseInt( mSumCount.getText().toString().trim());
+                                    sumcount =new Double(mSumCount.getText().toString().trim()).doubleValue();
                                     if(edtcount>sumcount){
                                         mBtn_Submit.setEnabled(true);
                                         ToastUtils.showLongToast(RepairmentExReportActivity.this, "备件:"+e.getSpareName()+" 数量超出库存数量！");
@@ -645,6 +647,18 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                             return;
                         }
 
+                        if(_Type.equals("0")){
+                            String [] reDate=  result.getData().split(",");
+                            //数据是使用Intent返回
+                            Intent intent = new Intent();
+                            //把返回数据存入Intent
+                            intent.putExtra("BillID", reDate[0]);
+                            intent.putExtra("BillNO", reDate[1]);
+                            //设置返回数据
+                            RepairmentExReportActivity.this.setResult(RESULT_OK, intent);
+
+
+                        }
 
                             mBtn_Submit.setEnabled(true);
                             ToastUtils.showLongToast(RepairmentExReportActivity.this, getString(R.string.activity_repairment_submit_ok));

@@ -155,7 +155,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
      */
     private String _PicPath;
     private Uri takePhotoUrl;
-
+    private String _Type;
     /**
      * 故障级别
      */
@@ -195,6 +195,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
         Intent intent = getIntent();
         String type = intent.getStringExtra("type");
+        _Type = type;
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
         Object entity = (Object)intent.getSerializableExtra("entity");
@@ -1364,9 +1365,22 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                     ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
                     return;
                 }
+                //维修            type = 0  mTv_EquipID=设备ID
+                //维修-备件更换   type = 1  mTv_EquipID=设备ID    mTv_ReportID = 备件与设备关系ID   entity = 备件与设备关系对象
+                //维修-维修计划   type = 2  mTv_EquipID=设备ID    mTv_ReportID = 维修计划ID         entity = 维修计划对象
+                //维修-显示维修单 type = 3  mTv_EquipID=设备ID    mTv_ReportID = 维修单ID
+                 if(_Type.equals("0")){
+                   String [] reDate=  result.getData().split(",");
+                     //数据是使用Intent返回
+                     Intent intent = new Intent();
+                     //把返回数据存入Intent
+                     intent.putExtra("BillID", reDate[0]);
+                     intent.putExtra("BillNO", reDate[1]);
+                     //设置返回数据
+                     RepairmentReportActivity.this.setResult(RESULT_OK, intent);
+                 }
 
-
-                mBtn_Submit.setEnabled(false);
+                mBtn_Submit.setEnabled(true);
                 ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_repairment_submit_ok));
                 finish();
 

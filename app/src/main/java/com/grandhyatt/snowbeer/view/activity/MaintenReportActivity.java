@@ -142,6 +142,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
     List<MaintenancePlanEntity> _CheckPlanEntityList = new ArrayList<>();//用户选择的数据行对象
     List<EquipmentMaterialEntity> _CheckMaterialList = new ArrayList<>();//用户选择的数据行对象
     MaintenancePlanViewDataListAdapter adapter_Plan=null;
+    private String _Type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,6 +165,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 
         Intent intent = getIntent();
         String type = intent.getStringExtra("type");
+        _Type = type;
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
 
@@ -625,7 +627,16 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                             return;
                         }
 
-
+                        if(_Type.equals("0")){
+                            String [] reDate=  result.getData().split(",");
+                            //数据是使用Intent返回
+                            Intent intent = new Intent();
+                            //把返回数据存入Intent
+                            intent.putExtra("BillID", reDate[0]);
+                            intent.putExtra("BillNO", reDate[1]);
+                            //设置返回数据
+                            MaintenReportActivity.this.setResult(RESULT_OK, intent);
+                        }
                         mBtn_Submit.setEnabled(false);
                         ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.activity_maintenance_submit_ok));
                         finish();

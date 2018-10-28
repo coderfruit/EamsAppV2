@@ -124,7 +124,7 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
     ArrayList<String> _CheckPlanIDList; //用户选中的维护计划ID
     List<InspectionPlanEntity> _CheckPlanEntityList = new ArrayList<>();//用户选择的数据行对象
-
+    private  String _Type;
     InspectPlanViewDataListAdapter adapter_Plan=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +148,7 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
         //检验-显示检验单 type = 3    mTv_EquipID=设备id  mTv_ReportID = 检验单ID
         Intent intent = getIntent();
         String type = intent.getStringExtra("type");
+        _Type = type;
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
 
@@ -659,7 +660,16 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
                             return;
                         }
 
-
+                        if(_Type.equals("0")){
+                            String [] reDate=  result.getData().split(",");
+                            //数据是使用Intent返回
+                            Intent intent = new Intent();
+                            //把返回数据存入Intent
+                            intent.putExtra("BillID", reDate[0]);
+                            intent.putExtra("BillNO", reDate[1]);
+                            //设置返回数据
+                            InspectReportActivity.this.setResult(RESULT_OK, intent);
+                        }
                         mBtn_Submit.setEnabled(false);
                         ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.activity_inspect_submit_ok));
                         finish();
