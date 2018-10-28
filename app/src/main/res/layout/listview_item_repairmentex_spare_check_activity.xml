@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
+            android:layout_marginLeft="10dp"
             android:text="备件名称及型号"
             android:textColor="@color/black"
             android:textSize="13sp"
@@ -22,17 +22,14 @@
 
         <com.grandhyatt.snowbeer.view.NumberEditText
             android:id="@+id/mNEdt_Check"
-            android:layout_width="160dp"
+            android:layout_width="150dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginEnd="50dp"
-            android:layout_marginRight="50dp"
-
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
             >
-
-
         </com.grandhyatt.snowbeer.view.NumberEditText>
 
         <TextView
@@ -42,8 +39,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/mTv_SpareName"
-            android:layout_marginEnd="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
             android:text="个"
             android:textColor="@color/gray5"
             android:textSize="14sp" />

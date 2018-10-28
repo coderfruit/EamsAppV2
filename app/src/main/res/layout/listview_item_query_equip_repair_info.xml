@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:layout_weight="1"
-                android:gravity="right"
+                android:gravity="center"
                 android:text="33件"
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
@@ -126,10 +126,10 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="制单日期："
+                android:text="日期："
                 android:textColor="@color/gray5"
                 android:textSize="10sp" />
 
@@ -154,10 +154,10 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="开始日期："
+                android:text="开始："
                 android:textColor="@color/gray5"
                 android:textSize="10sp" />
 
@@ -172,10 +172,10 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="结束日期："
+                android:text="结束："
                 android:textColor="@color/gray5"
                 android:textSize="10sp" />
 

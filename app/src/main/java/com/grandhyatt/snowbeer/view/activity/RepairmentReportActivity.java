@@ -1315,14 +1315,14 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             View vw = mLv_DataList_Spare.getChildAt(i);
             tvid = (TextView) vw.findViewById(R.id.mTv_SpareID);
             double edtcount = 0;
-            int sumcount = 0;
+            double sumcount = 0;
 
             for (EquipmentUseSpareEntity e : _CheckSpareUseList) {
                 if (e.getSpareID() == tvid.getText().toString().trim()) {
                     mNEdt_Check = (NumberEditText) vw.findViewById(R.id.mNEdt_Check);
                     mSumCount = (TextView) vw.findViewById(R.id.mTv_SumCountx);
                     edtcount = mNEdt_Check.getData();
-                    sumcount = Integer.parseInt(mSumCount.getText().toString().trim());
+                    sumcount =new Double(mSumCount.getText().toString().trim()).doubleValue();
                     if (edtcount > sumcount) {
                         mBtn_Submit.setEnabled(true);
                         ToastUtils.showLongToast(RepairmentReportActivity.this, "备件:" + e.getSpareName() + " 数量超出库存数量！");
@@ -1344,11 +1344,13 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 dismissLoadingDialog();
                 if (object == null) {
                     ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err1));
+                    mBtn_Submit.setEnabled(true);
                     return;
                 }
                 //判断接口连接是否成功
                 if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
                     ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err2));
+                    mBtn_Submit.setEnabled(true);
                     return;
                 }
                 //接口返回信息正常

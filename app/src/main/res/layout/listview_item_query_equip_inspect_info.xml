@@ -154,7 +154,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:text="制单人："
@@ -172,10 +172,10 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="制单日期："
+                android:text="日期："
                 android:textColor="@color/gray5"
                 android:textSize="10sp" />
 
@@ -200,10 +200,10 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="检验日期："
+                android:text="检验："
                 android:textColor="@color/gray5"
                 android:textSize="10sp" />
 
@@ -218,10 +218,10 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="下次日期："
+                android:text="下次："
                 android:textColor="@color/gray5"
                 android:textSize="10sp" />
 
@@ -245,7 +245,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="50dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:text="检验员："
