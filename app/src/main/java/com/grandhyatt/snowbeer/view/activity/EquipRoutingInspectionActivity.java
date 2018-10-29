@@ -128,6 +128,7 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
     Badge bDg_faultRptInfo;
 
     public static final int GO_FAULT_REPORT_OPERATE_AFTER = 10011;//去报修操作之后
+    String _EquipID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +141,8 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
 
         Intent intent = getIntent();
         String mTv_ID = intent.getStringExtra("mTv_ID");//设备ID
+        _EquipID = mTv_ID;
+
         if (mTv_ID != null && mTv_ID != null) {
 
             mSearchBar.setVisibility(View.GONE);
@@ -551,7 +554,7 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
             }
             CorporationEntity corp = SPUtils.getLastLoginUserCorporation(EquipRoutingInspectionActivity.this);
             if(corp != null){
-                if(!corp.getID().equals(data.getCorporationID())){
+                if(_EquipID == null && !corp.getID().equals(data.getCorporationID())){
                     ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, data.getEquipmentName() + " 不属于用户当前归属[" + corp.getCorporationName() + "]");
                     return;
                 }
