@@ -401,7 +401,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="6"
-                    android:background="@drawable/ic_login_button_true"
+                    android:background="@drawable/btn_bg"
                     android:text="按住录入语音" />
 
                 <Button
