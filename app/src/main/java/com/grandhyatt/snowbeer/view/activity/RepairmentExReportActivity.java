@@ -193,6 +193,8 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
             getReport(mTv_ReportID);
             bindEventPart();
             bindEvent();
+            bindEvent_PlanRemove();
+            bindEvent_SpareRemove();
             //隐藏搜索栏
             mSearchBar.setVisibility(View.GONE);
             mBtn_Submit.setVisibility(View.GONE);
@@ -225,6 +227,8 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
             bindEventPart();
             initView();
             bindEvent();
+            bindEvent_PlanRemove();
+            bindEvent_SpareRemove();
             mLl_Plan.setVisibility(View.GONE);
             mLl_Spare.setVisibility(View.GONE);
 
@@ -235,6 +239,8 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
             initView();
             bindEventPart();
             bindEvent();
+            bindEvent_PlanRemove();
+            bindEvent_SpareRemove();
             refreshUI();
             requestNetworkData();
             mLl_Plan.setVisibility(View.GONE);
@@ -533,24 +539,6 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                     }
                 }, list);
 
-                ShowDialog(RepairmentExReportActivity.this, "提示", "是否按计划执行?",
-                        //是
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mTv_jh.performClick();
-                            }
-                        },
-                        //否
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mLv_Show_plan.setAdapter(null);
-                                mLv_Show_plan.setVisibility(View.GONE);
-                                mLl_Plan.setVisibility(View.GONE);
-                            }
-                        });
-
             }
         });
 
@@ -674,6 +662,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                                     sumcount =new Double(mSumCount.getText().toString().trim()).doubleValue();
                                     if(edtcount>sumcount){
                                         mBtn_Submit.setEnabled(true);
+                                        dismissLoadingDialog();
                                         ToastUtils.showLongToast(RepairmentExReportActivity.this, "备件:"+e.getSpareName()+" 数量超出库存数量！");
                                         return;
                                     }
@@ -703,6 +692,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                                     sumcount=Integer.parseInt( mSumCount.getText().toString().trim());
                                     if(edtcount>sumcount){
                                         mBtn_Submit.setEnabled(true);
+                                        dismissLoadingDialog();
                                         ToastUtils.showLongToast(RepairmentExReportActivity.this, "备件:"+e.getSpareName()+" 数量超出库存数量！");
                                         return;
                                     }
@@ -815,10 +805,6 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
         switch (requestCode) {
 
             case CHECK_PLAN_OK:
-
-
-
-
                     _CheckPlanIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
                     _CheckPlanEntityList = (List<RepairmentExPlanEntity>)data.getSerializableExtra("_CheckEntityList");
                       if(_CheckPlanEntityList.size()==0){
@@ -834,6 +820,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                           mLv_Show_plan.setAdapter(adapter_Plan);
                           mLv_Show_plan.setVisibility(View.VISIBLE);
                          setListViewHeightBasedOnChildren(mLv_Show_plan);
+                              mLl_Plan.setVisibility(View.VISIBLE);
                       }
 
                     ToastUtils.showLongToast(RepairmentExReportActivity.this,"共获取到" + _CheckPlanEntityList.size() + "条外委维护计划");
@@ -868,7 +855,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                         mLv_DataList_Spare.setAdapter(adapter_Spare);
                         adapter_Spare.notifyDataSetChanged();
                         setListViewHeightBasedOnChildren(mLv_DataList_Spare);
-
+                        mLl_Spare.setVisibility(View.VISIBLE);
                     }
                 }
                 else if (mTv_FaultDesc.getText().toString().trim().equals("包工包料")) {
@@ -881,13 +868,30 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                         mLv_DataList_Spare.setAdapter(adapter_SpareView);
                         adapter_SpareView.notifyDataSetChanged();
                        setListViewHeightBasedOnChildren(mLv_DataList_Spare);
+                        mLl_Spare.setVisibility(View.VISIBLE);
 
                     }
                 }
                 else{
             }
 
-
+                ShowDialog(RepairmentExReportActivity.this, "提示", "是否按计划执行?",
+                        //是
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mTv_jh.performClick();
+                            }
+                        },
+                        //否
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mLv_Show_plan.setAdapter(null);
+                                mLv_Show_plan.setVisibility(View.GONE);
+                                mLl_Plan.setVisibility(View.GONE);
+                            }
+                        });
 
 
         }
@@ -1201,7 +1205,49 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
 
     }
 
+    private void deletePlanRow(final int pron) {
+        List<String> menuList = new ArrayList<String>();
+        menuList.add("删除");
+        showSelectDialog(new SelectDialog.SelectDialogListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                switch (position) {
+                    case 0://删除
+
+
+                            RepairmentExPlanEntity eus = (RepairmentExPlanEntity) adapter_Plan.getItem(pron);
+                            if (eus != null) {
+                                if (_CheckPlanEntityList != null) {
+                                    _CheckPlanEntityList.remove(eus);
+                                    adapter_Plan.notifyDataSetChanged();
+                                    setListViewHeightBasedOnChildren(mLv_Show_plan);
+                                }
+                            }
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }, menuList);
+
+    }
+
+    /**
+     * 计划列表长按删除
+     */
+    private void bindEvent_PlanRemove() {
+        //计划列表长按删除
+        mLv_Show_plan.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                deletePlanRow(position);
+                return false;
+            }
+        });
+    }
 
     /**
      * 备件列表长按删除

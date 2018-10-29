@@ -36,11 +36,15 @@ import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.MaintenancePlanViewDataListAdapter;
+import com.grandhyatt.snowbeer.adapter.RepairmentExPlanViewDataListAdapter;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentMaterialEntity;
 import com.grandhyatt.snowbeer.entity.MaintenanceBillEntity;
 import com.grandhyatt.snowbeer.entity.MaintenanceItemEntity;
 import com.grandhyatt.snowbeer.entity.MaintenancePlanEntity;
+import com.grandhyatt.snowbeer.entity.RepairmentExPlanEntity;
+import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
+import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
 import com.grandhyatt.snowbeer.entity.TextDictionaryEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.request.MaintenReportingRequest;
@@ -181,7 +185,16 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         //------------------------------------------------------------------------------------------------------
         //保养-显示保养单 type = 3    mTv_EquipID=设备id  mTv_ReportID = 保养单ID
         if ((type != null && type.equals("3")) && mTv_ReportID != null && mTv_EquipID != null) {
-
+            getEquipmentInfoByID(mTv_EquipID);
+            getReport(mTv_ReportID);
+            mToolBar.setTitle("设备保养");
+            lL_material.setVisibility(View.GONE);
+            initView();
+            bindEventPart();
+            bindEvent();
+            bindEvent_PlanRemove();
+            refreshUI();
+            requestNetworkData();
         }
         //------------------------------------------------------------------------------------------------------
         //保养-保养计划  type = 2    mTv_EquipID=设备id  mTv_ReportID = 保养计划ID
@@ -202,6 +215,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             mToolBar.setTitle("设备保养");
             initView();
             bindEvent();
+            bindEvent_PlanRemove();
             mTv_FaultDesc.setEnabled(true);
             mLl_Plan.setVisibility(View.GONE);
             mLv_Show_plan.setAdapter(null);
@@ -222,6 +236,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             initView();
             bindEventPart();
             bindEvent();
+            bindEvent_PlanRemove();
             refreshUI();
             requestNetworkData();
         }
@@ -1142,6 +1157,48 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             setListViewHeightBasedOnChildren(mLv_Show_plan);
             mLl_Plan.setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     * 计划列表长按删除
+     */
+    private void bindEvent_PlanRemove() {
+        //计划列表长按删除
+        mLv_Show_plan.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                deletePlanRow(position);
+                return false;
+            }
+        });
+    }
+
+    private void deletePlanRow(final int pron) {
+        List<String> menuList = new ArrayList<String>();
+        menuList.add("删除");
+        showSelectDialog(new SelectDialog.SelectDialogListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                switch (position) {
+                    case 0://删除
+                            MaintenancePlanEntity eus = (MaintenancePlanEntity) adapter_Plan.getItem(pron);
+                            if (eus != null) {
+                                if (_CheckPlanEntityList != null) {
+                                    _CheckPlanEntityList.remove(eus);
+                                    adapter_Plan.notifyDataSetChanged();
+                                    setListViewHeightBasedOnChildren(mLv_Show_plan);
+                                }
+                            }
+
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }, menuList);
+
     }
 
 }
