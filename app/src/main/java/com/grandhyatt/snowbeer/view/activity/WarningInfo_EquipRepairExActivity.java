@@ -16,11 +16,13 @@ import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.Equip_RepairEx_EntityDataListAdapter;
 import com.grandhyatt.snowbeer.entity.CorporationEntity;
+import com.grandhyatt.snowbeer.entity.InspectionPlanEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentExPlanEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.result.RepairmentExPlanResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
+import com.grandhyatt.snowbeer.utils.PopupWindowUtil;
 import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -31,6 +33,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,6 +61,8 @@ public class WarningInfo_EquipRepairExActivity extends ActivityBase implements I
     private Equip_RepairEx_EntityDataListAdapter mAdapter;
 
     String _EquipID;//传入的设备ID
+    String _CorpID; //传入的组织机构ID
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +74,7 @@ public class WarningInfo_EquipRepairExActivity extends ActivityBase implements I
 
         Intent intent = getIntent();
         _EquipID = intent.getStringExtra("equipID");
+        _CorpID = intent.getStringExtra("corpID");
 
         if (_EquipID != null) {  //根据设备ID 获取预警信息
             requestNetworkDataByEquip(_EquipID);
@@ -85,6 +91,34 @@ public class WarningInfo_EquipRepairExActivity extends ActivityBase implements I
     @Override
     public void initView() {
         mToolBar.setTitle("外委维修提醒");
+
+        mToolBar.setMenuText("...");
+        mToolBar.showMenuButton();
+        mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<String> list = new ArrayList<String>();
+                list.add("外委维修记录");
+                final PopupWindowUtil popupWindow = new PopupWindowUtil(WarningInfo_EquipRepairExActivity.this, list);
+                popupWindow.setItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        popupWindow.dismiss();
+                        switch (position){
+                            case 0:
+                                Intent intent1 = new Intent(WarningInfo_EquipRepairExActivity.this, Query_EquipRepairExInfoActivity.class);
+                                intent1.putExtra("corpID", _CorpID);
+                                startActivity(intent1);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+                //根据后面的数字 手动调节窗口的宽度
+                popupWindow.show(v, 3);
+            }
+        });
     }
 
     @Override
@@ -94,14 +128,21 @@ public class WarningInfo_EquipRepairExActivity extends ActivityBase implements I
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                RepairmentExPlanEntity entity = (RepairmentExPlanEntity) mAdapter.getItem(position);
+
                 TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_ID);
                 TextView mTv_EquipID = (TextView) view.findViewById(R.id.mTv_EquipID);
 
                 //维修-维修计划   type = 2  mTv_EquipID=设备ID    mTv_ReportID = 维修计划ID，
-                Intent intent = new Intent(WarningInfo_EquipRepairExActivity.this, RepairmentReportActivity.class);
+                Intent intent = new Intent(WarningInfo_EquipRepairExActivity.this, RepairmentExReportActivity.class);
                 intent.putExtra("type","2");
                 intent.putExtra("mTv_EquipID", mTv_EquipID.getText());
                 intent.putExtra("mTv_ReportID", mTv_ReportID.getText());
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("entity", entity);
+                intent.putExtras(bundle);
+
                 startActivityForResult(intent, Consts.REPAIR_EX_OPERATE_AFTER);
             }
         });
@@ -144,10 +185,9 @@ public class WarningInfo_EquipRepairExActivity extends ActivityBase implements I
     public void requestNetworkData() {
         showLogingDialog();
 
-        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(this);
-        if(corp != null){
+        if(_CorpID != null){
             String currentLastIdx = String.valueOf(mPageIndex * mPageSize);
-            SoapUtils.getRepairmentPlanEx(this, corp.getID(), currentLastIdx, new SoapListener() {
+            SoapUtils.getRepairmentPlanEx(this, _CorpID, currentLastIdx, new SoapListener() {
                 @Override
                 public void onSuccess(int statusCode, SoapObject object) {
                     dismissLoadingDialog();

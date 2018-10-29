@@ -57,6 +57,7 @@ public class Query_EquipInspectionInfoActivity extends ActivityBase implements I
     private Query_Equip_Inspect_Adapter mAdapter;
 
     String _EquipID;//传入的设备id
+    String _CorpID; //传入的组织机构ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +70,10 @@ public class Query_EquipInspectionInfoActivity extends ActivityBase implements I
 
         Intent intent = getIntent();
         _EquipID = intent.getStringExtra("equipID");
+        _CorpID = intent.getStringExtra("corpID");
 
-        if (_EquipID != null) {  //根据设备ID 获取维修记录
-            requestNetworkDataByEquip(_EquipID);
-        }else{                   //根据组织机构获取预警信息
-            requestNetworkData();
-        }
+        requestNetworkDataByEquip(_CorpID, _EquipID);
+
     }
 
     @Override
@@ -96,11 +95,9 @@ public class Query_EquipInspectionInfoActivity extends ActivityBase implements I
                 mPageIndex = 0;
                 mIsLoadMore = false;
                 mRefreshLayout.setNoMoreData(false);
-                if (_EquipID != null) {  //根据设备ID 获取预警信息
-                    requestNetworkDataByEquip(_EquipID);
-                }else{                   //根据组织机构获取预警信息
-                    requestNetworkData();
-                }
+
+                requestNetworkDataByEquip(_CorpID, _EquipID);
+
             }
         });
         /*****************************************************************************************/
@@ -110,11 +107,9 @@ public class Query_EquipInspectionInfoActivity extends ActivityBase implements I
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 mPageIndex++;
                 mIsLoadMore = true;
-                if (_EquipID != null) {  //根据设备ID 获取预警信息
-                    requestNetworkDataByEquip(_EquipID);
-                }else{                   //根据组织机构获取预警信息
-                    requestNetworkData();
-                }
+
+                requestNetworkDataByEquip(_CorpID, _EquipID);
+
             }
         });
     }
@@ -129,11 +124,11 @@ public class Query_EquipInspectionInfoActivity extends ActivityBase implements I
 
     }
 
-    public void requestNetworkDataByEquip(String equipID) {
+    public void requestNetworkDataByEquip(String corpID, String equipID) {
 
         showLogingDialog();
         String currentLastIdx = String.valueOf(mPageIndex * mPageSize);
-        SoapUtils.getEquipInspectionBills(Query_EquipInspectionInfoActivity.this, equipID, currentLastIdx, new SoapListener() {
+        SoapUtils.getEquipInspectionBills(Query_EquipInspectionInfoActivity.this, corpID, equipID, currentLastIdx, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
                 dismissLoadingDialog();

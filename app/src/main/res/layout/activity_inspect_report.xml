@@ -29,10 +29,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="23dp"
+                android:layout_marginTop="3dp"
                 android:background="@drawable/selector_linear_layout_item_gray"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:layout_marginTop="3dp">
+                android:orientation="horizontal">
 
                 <View
                     android:layout_width="3dp"
@@ -51,6 +51,7 @@
                     android:textSize="12sp" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
@@ -202,32 +203,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:orientation="horizontal">
-                <!--检验时间-->
-                <RelativeLayout
-                    android:layout_width="172dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/selector_linear_layout_item_white">
 
-                    <TextView
-                        android:id="@+id/mTv_InspTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="10dp"
-                        android:hint="检验时间"
-                        android:textColor="@color/gray5"
-                        android:textSize="14sp" />
-
-                    <ImageView
-                        android:id="@+id/mIv_FaultDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@id/mTv_InspTime"
-                        android:src="@drawable/item_signature_iv_menu_defaul" />
-
-                </RelativeLayout>
                 <!--检验项目-->
                 <RelativeLayout
                     android:layout_width="200dp"
@@ -241,6 +217,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
                         android:hint="检验项目"
                         android:textColor="@color/gray5"
                         android:textSize="14sp" />
@@ -250,6 +227,34 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/mTv_inspItem"
+                        android:src="@drawable/item_signature_iv_menu_defaul" />
+
+                </RelativeLayout>
+
+                <!--检验时间-->
+                <RelativeLayout
+                    android:layout_width="172dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_linear_layout_item_white">
+
+                    <TextView
+                        android:id="@+id/mTv_InspTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:hint="检验时间"
+                        android:textColor="@color/gray5"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/mIv_FaultDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/mTv_InspTime"
                         android:src="@drawable/item_signature_iv_menu_defaul" />
 
                 </RelativeLayout>
@@ -266,30 +271,6 @@
                 android:orientation="horizontal">
 
                 <RelativeLayout
-                    android:layout_width="172dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/selector_linear_layout_item_white">
-
-                    <TextView
-                        android:id="@+id/mTv_InspResult"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="10dp"
-                        android:hint="检验结果"
-                        android:textColor="@color/gray5"
-                        android:textSize="14sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@id/mTv_InspResult"
-                        android:src="@drawable/item_signature_iv_menu_defaul" />
-                </RelativeLayout>
-
-                <RelativeLayout
                     android:layout_width="200dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/selector_linear_layout_item_white">
@@ -301,6 +282,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
                         android:hint="检验方式"
                         android:textColor="@color/gray5"
                         android:textSize="14sp" />
@@ -313,6 +295,32 @@
                         android:src="@drawable/item_signature_iv_menu_defaul" />
 
                 </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="172dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/selector_linear_layout_item_white">
+
+                    <TextView
+                        android:id="@+id/mTv_InspResult"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:hint="检验结果"
+                        android:textColor="@color/gray5"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/mTv_InspResult"
+                        android:src="@drawable/item_signature_iv_menu_defaul" />
+                </RelativeLayout>
+
 
             </LinearLayout>
 
@@ -337,33 +345,35 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:textColor="@color/gray5"
-                    android:textSize="12sp"
+                    android:layout_weight="1"
                     android:hint="检验人员"
-                    android:layout_weight="1"/>
+                    android:textColor="@color/gray5"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/mTv_t2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:hint="费用:"
+                    android:hint="费用："
                     android:textColor="@color/gray5"
                     android:textSize="14sp" />
+
                 <EditText
                     android:id="@+id/mEt_money"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
                     android:hint="0"
                     android:textColor="@color/gray5"
-                    android:textSize="12sp"
-                    android:gravity="right"
-                    android:layout_weight="1"/>
+                    android:textSize="12sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:hint="元"
                     android:textColor="@color/gray5"
                     android:textSize="14sp" />
@@ -397,90 +407,91 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
-                        android:textColor="@color/gray5"
                         android:hint="检验单位"
+                        android:textColor="@color/gray5"
                         android:textSize="12sp" />
 
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-            android:id="@+id/mLl_Plan"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <!-- 检验计划标题 -->
-            <View
+                android:id="@+id/mLl_Plan"
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginTop="1dp"
-                android:background="@color/white6" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="23dp"
-                android:background="@drawable/selector_linear_layout_item_gray"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <!-- 检验计划标题 -->
                 <View
-                    android:layout_width="3dp"
-                    android:layout_height="10dp"
-                    android:layout_marginLeft="20dp"
-                    android:background="@color/colorPrimary" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="20dp"
-                    android:text="检验计划信息"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="12sp" />
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginTop="1dp"
+                    android:background="@color/white6" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
+                    android:layout_height="23dp"
+                    android:background="@drawable/selector_linear_layout_item_gray"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <Button
-                        android:id="@+id/mTv_jh"
-                        android:layout_width="100dp"
-                        android:layout_height="20dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@drawable/ic_login_button_true"
-                        android:text="选择检验计划"
+                    <View
+                        android:layout_width="3dp"
+                        android:layout_height="10dp"
+                        android:layout_marginLeft="20dp"
+                        android:background="@color/colorPrimary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="20dp"
+                        android:text="检验计划信息"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/mTv_jh"
+                            android:layout_width="100dp"
+                            android:layout_height="20dp"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/ic_login_button_true"
+                            android:text="选择检验计划"
+                            android:textSize="12sp" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
 
-            <!--选择检验计划-->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginTop="1dp"
-                android:background="@color/white6" />
-            <!--检验计划列表-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:background="@drawable/selector_linear_layout_item_white">
-
-                <ListView
-                    android:id="@+id/mLv_Show_plan"
+                <!--选择检验计划-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginTop="1dp"
+                    android:background="@color/white6" />
+                <!--检验计划列表-->
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/selector_listview_item"
-                    android:divider="@null"
-                    android:dividerHeight="0dp"
-                    android:stackFromBottom="true"
-                    android:transcriptMode="alwaysScroll" />
-            </RelativeLayout>
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/selector_linear_layout_item_white">
+
+                    <ListView
+                        android:id="@+id/mLv_Show_plan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/selector_listview_item"
+                        android:divider="@null"
+                        android:dividerHeight="0dp"
+                        android:stackFromBottom="true"
+                        android:transcriptMode="alwaysScroll" />
+                </RelativeLayout>
             </LinearLayout>
 
             <View

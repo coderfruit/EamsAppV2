@@ -62,6 +62,7 @@ public class Query_EquipRepairInfoActivity extends ActivityBase implements IActi
     private Query_Equip_Repair_Adapter mAdapter;
 
     String _EquipID;//传入的设备id
+    String _CorpID; //传入的组织机构ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +75,10 @@ public class Query_EquipRepairInfoActivity extends ActivityBase implements IActi
 
         Intent intent = getIntent();
         _EquipID = intent.getStringExtra("equipID");
+        _CorpID = intent.getStringExtra("corpID");
 
-        if (_EquipID != null) {  //根据设备ID 获取维修记录
-            requestNetworkDataByEquip(_EquipID);
-        }else{                   //根据组织机构获取预警信息
-            requestNetworkData();
-        }
+        requestNetworkDataByEquip(_CorpID, _EquipID);
+
     }
 
     @Override
@@ -104,7 +103,7 @@ public class Query_EquipRepairInfoActivity extends ActivityBase implements IActi
                 String itemID = mTv_ID.getText().toString();
 
                 //根据维修单获取维修单中的备件列表
-                getRepairmentBillItems(itemID,view);
+                getRepairmentBillItems(itemID, view);
             }
         });
 
@@ -115,11 +114,9 @@ public class Query_EquipRepairInfoActivity extends ActivityBase implements IActi
                 mPageIndex = 0;
                 mIsLoadMore = false;
                 mRefreshLayout.setNoMoreData(false);
-                if (_EquipID != null) {  //根据设备ID 获取预警信息
-                    requestNetworkDataByEquip(_EquipID);
-                }else{                   //根据组织机构获取预警信息
-                    requestNetworkData();
-                }
+
+                requestNetworkDataByEquip(_CorpID, _EquipID);
+
             }
         });
         /*****************************************************************************************/
@@ -129,11 +126,9 @@ public class Query_EquipRepairInfoActivity extends ActivityBase implements IActi
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 mPageIndex++;
                 mIsLoadMore = true;
-                if (_EquipID != null) {  //根据设备ID 获取预警信息
-                    requestNetworkDataByEquip(_EquipID);
-                }else{                   //根据组织机构获取预警信息
-                    requestNetworkData();
-                }
+
+                requestNetworkDataByEquip(_CorpID, _EquipID);
+
             }
         });
     }
@@ -150,13 +145,14 @@ public class Query_EquipRepairInfoActivity extends ActivityBase implements IActi
 
     /**
      * 根据设备ID获取设备维修记录
+     *
      * @param equipID
      */
-    public void requestNetworkDataByEquip(String equipID) {
+    public void requestNetworkDataByEquip(String corpID, String equipID) {
 
         showLogingDialog();
         String currentLastIdx = String.valueOf(mPageIndex * mPageSize);
-        SoapUtils.getEquipRepairBills(Query_EquipRepairInfoActivity.this, equipID, currentLastIdx, new SoapListener() {
+        SoapUtils.getEquipRepairBills(Query_EquipRepairInfoActivity.this, corpID, equipID, currentLastIdx, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
                 dismissLoadingDialog();
@@ -220,8 +216,7 @@ public class Query_EquipRepairInfoActivity extends ActivityBase implements IActi
      * 获取维修单明细
      * @param billID
      */
-    private void getRepairmentBillItems(String billID, final View view)
-    {
+    private void getRepairmentBillItems(String billID, final View view) {
         showLogingDialog();
         SoapUtils.getRepairmentBillItems(Query_EquipRepairInfoActivity.this, billID, new SoapListener() {
             @Override
@@ -248,7 +243,7 @@ public class Query_EquipRepairInfoActivity extends ActivityBase implements IActi
                     return;
                 }
                 List<RepairmentBillItemEntity> data = result.getData();
-                ShowPopWindow(data,view);
+                ShowPopWindow(data, view);
             }
 
             @Override
@@ -267,15 +262,15 @@ public class Query_EquipRepairInfoActivity extends ActivityBase implements IActi
 
     /**
      * 弹出窗口显示维修细表
+     *
      * @param data
      */
-    private void ShowPopWindow(List<RepairmentBillItemEntity> data ,View view)
-    {
+    private void ShowPopWindow(List<RepairmentBillItemEntity> data, View view) {
         List<String> list = new ArrayList<>();
-        for(RepairmentBillItemEntity item : data){
-            list.add(item.getSpareName() + "(" + item.getSpareCode() + ")  " + item.getCount() + item.getSpareUnit() );
+        for (RepairmentBillItemEntity item : data) {
+            list.add(item.getSpareName() + "(" + item.getSpareCode() + ")  " + item.getCount() + item.getSpareUnit());
         }
-        showListPopupWindow(Query_EquipRepairInfoActivity.this,view,list,null);
+        showListPopupWindow(Query_EquipRepairInfoActivity.this, view, list, null);
 
 //        final PopupWindowUtil popupWindow = new PopupWindowUtil(Query_EquipRepairInfoActivity.this, list);
 //        popupWindow.show(view, 3);  //根据后面的数字 手动调节窗口的宽度

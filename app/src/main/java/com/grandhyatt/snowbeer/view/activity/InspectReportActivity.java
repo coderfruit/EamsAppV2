@@ -2,6 +2,7 @@ package com.grandhyatt.snowbeer.view.activity;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -48,6 +49,7 @@ import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.utils.CommonUtils;
 import com.grandhyatt.snowbeer.utils.ImageUtils;
+import com.grandhyatt.snowbeer.utils.PopupWindowUtil;
 import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.view.SearchBarLayout;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
@@ -72,7 +74,7 @@ import static com.grandhyatt.snowbeer.Consts.CAMERA_BARCODE_SCAN;
  * Created by tongzhiqiang on 2018-10-08.
  */
 
-public class InspectReportActivity extends ActivityBase implements IActivityBase, View.OnClickListener{
+public class InspectReportActivity extends ActivityBase implements IActivityBase, View.OnClickListener {
     @BindView(R.id.mToolBar)
     ToolBarLayout mToolBar;
     @BindView(R.id.mSearchBar)
@@ -96,7 +98,7 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
     Button mBtn_Submit;
 
     @BindView(R.id.mTv_jh)
-    TextView mTv_jh;
+    TextView mBtn_ChoicePlan;
     @BindView(R.id.mEt_User)
     EditText mEt_User;
     @BindView(R.id.mEt_Com)
@@ -125,10 +127,11 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
     String[] _InspResultArr; //检验类型
     String[] _InspModeArr; //检验类型
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
-    ArrayList<String> _CheckPlanIDList; //用户选中的维护计划ID
+//    ArrayList<String> _CheckPlanIDList; //用户选中的维护计划ID
     List<InspectionPlanEntity> _CheckPlanEntityList = new ArrayList<>();//用户选择的数据行对象
-    private  String _Type;
-    InspectPlanViewDataListAdapter adapter_Plan=null;
+    private String _Type;
+    InspectPlanViewDataListAdapter adapter_Plan = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,38 +154,48 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
         //检验-显示检验单 type = 3    mTv_EquipID=设备id  mTv_ReportID = 检验单ID
         Intent intent = getIntent();
         String type = intent.getStringExtra("type");
-        if(type!=null)
+        if (type != null)
             _Type = type;
         else
-            _Type="9";
+            _Type = "9";
+
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
+        Object entity = (Object) intent.getSerializableExtra("entity");
 
         //检验-显示检验单 type = 3    mTv_EquipID=设备id  mTv_ReportID = 检验单ID
         if ((type != null && type.equals("3")) && mTv_ReportID != null && mTv_EquipID != null) {
-            mToolBar.setTitle("查看检验信息");
-            getEquipmentInfoByID(mTv_EquipID);
-            getReport(mTv_ReportID);
-            bindEventPart();
-            //隐藏搜索栏
-            mSearchBar.setVisibility(View.GONE);
-            mBtn_Submit.setVisibility(View.GONE);
-            bindUIData(_ReportEntity);
+
         }
         //检验-检验计划   type = 2    mTv_EquipID=设备id  mTv_ReportID = 检验计划ID
-        else  if ((type != null && type.equals("2")) && mTv_ReportID != null && mTv_EquipID != null){
+        else if ((type != null && type.equals("2")) && mTv_ReportID != null && mTv_EquipID != null) {
+            mSearchBar.setVisibility(View.GONE);
+            mToolBar.setTitle("设备检验-按计划");
+            initView();
+            bindEvent();
 
+            //维修-备件更换
+            Inspect_ByPlan(mTv_EquipID, entity);
         }
         //检验            type = 0    mTv_EquipID=设备id
-        else if ((type != null && type.equals("0")) && mTv_EquipID != null){
+        else if ((type != null && type.equals("0")) && mTv_EquipID != null) {
+            mSearchBar.setVisibility(View.GONE);
+            mToolBar.setTitle("设备检验");
+            initView();
+            bindEvent();
+            bindEvent_InspectItem_Mode();
+            bindEvent_PlanRemove();
 
+            //根据设备id获取设备信息
+            getEquipmentInfoByID(mTv_EquipID);
         }
         //正常检验
         else {
-            mToolBar.setTitle("我要检验");
+            mToolBar.setTitle("设备检验");
             initView();
-            bindEventPart();
             bindEvent();
+            bindEvent_InspectItem_Mode();
+            bindEvent_PlanRemove();
             refreshUI();
             requestNetworkData();
         }
@@ -211,6 +224,7 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
         mFilter = null;
         super.onDestroy();
     }
+
     @Override
     public void onClick(View v) {
 
@@ -220,14 +234,11 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
     public void initView() {
         fillEquipInfo(null);
 
-        mToolBar.setTitle("设备保养");
+        mToolBar.setTitle("设备检验");
         mToolBar.hideMenuButton();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        mLv_Show_plan.setVisibility(View.GONE);
-        //初始化用户及手机号
-        mEt_User.setText(SPUtils.getLastLoginUserName(InspectReportActivity.this));
-        mEt_money.setText(SPUtils.getLastLoginUserPhone(InspectReportActivity.this));
-
+        mLl_Plan.setVisibility(View.GONE);
+        mEt_User.setText(SPUtils.getLastLoginUserName(InspectReportActivity.this)); //初始化用户
 
         SoapListener callbackFailureReportingDesc = new SoapListener() {
             @Override
@@ -258,9 +269,8 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
                     String value = data.getValue();
                     if (value != null && value.length() > 0) {
                         _InspItemArr = value.split("\\|");
-                    }
-                    else {
-                        _InspItemArr=null;
+                    } else {
+                        _InspItemArr = null;
                     }
                 }
             }
@@ -306,9 +316,8 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
                     String value = data.getValue();
                     if (value != null && value.length() > 0) {
                         _InspResultArr = value.split("\\|");
-                    }
-                    else {
-                        _InspResultArr=null;
+                    } else {
+                        _InspResultArr = null;
                     }
                 }
             }
@@ -354,8 +363,7 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
                     String value = data.getValue();
                     if (value != null && value.length() > 0) {
                         _InspModeArr = value.split("\\|");
-                    }
-                    else _InspModeArr=null;
+                    } else _InspModeArr = null;
                 }
             }
 
@@ -373,39 +381,41 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
 
     }
 
-    public void bindEventPart() {
-
-        //设备图片点击事件
-        mIv_EquipImg.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                mIv_EquipImg.setDrawingCacheEnabled(true);
-                Bitmap bitmap = Bitmap.createBitmap(mIv_EquipImg.getDrawingCache());
-                mIv_EquipImg.setDrawingCacheEnabled(false);
-                String equipName = mTv_EquipName.getText().toString();
-
-                if (bitmap != null && equipName != null) {
-                    Intent intent = new Intent(InspectReportActivity.this, ImageViewerActivity.class);
-                    intent.putExtra("bitmap", bitmap);
-                    intent.putExtra("title", equipName);
-                    startActivity(intent);
-                } else {
-                    ToastUtils.showToast(InspectReportActivity.this, "无图片需显示");
-                }
-                return false;
-            }
-        });
-
-
-
-
-
-
-    }
-
     @Override
     public void bindEvent() {
+        mToolBar.showMenuButton();
+        mToolBar.setMenuText("...");
+        mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<String> list = new ArrayList<String>();
+                list.add("检验记录");
+
+                final PopupWindowUtil popupWindow = new PopupWindowUtil(InspectReportActivity.this, list);
+                popupWindow.setItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        if (_EquipmentData == null) {
+                            ToastUtils.showToast(InspectReportActivity.this, "请先确定设备");
+                            return;
+                        }
+                        popupWindow.dismiss();
+                        switch (position) {
+                            case 0:
+                                Intent intent1 = new Intent(InspectReportActivity.this, Query_EquipInspectionInfoActivity.class);
+                                intent1.putExtra("equipID", _EquipmentData.getID());
+                                startActivity(intent1);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+                //根据后面的数字 手动调节窗口的宽度
+                popupWindow.show(v, 3);
+            }
+        });
 
         //检索事件
         mSearchBar.setSearchButtonOnClickListener(new View.OnClickListener() {
@@ -458,33 +468,6 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
             }
         });
 
-      //检验项目
-        mTv_inspItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final List<String> list = new ArrayList<String>();
-                if (_InspItemArr != null && _InspItemArr.length > 0) {
-                    for (String item : _InspItemArr) {
-                        list.add(item);
-                    }
-                } else {
-
-
-                }
-
-
-                showSelectDialog(new SelectDialog.SelectDialogListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        String str = list.get(position).toString();
-                        mTv_inspItem.setText(str);
-
-                    }
-                }, list);
-
-            }
-        });
-
         //检验结果
         mTv_InspResult.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -495,8 +478,12 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
                         list.add(item);
                     }
                 } else {
-//                    list.add("润滑");
-
+                    //合格|不合格|维修再检|报废|停用
+                    list.add("合格");
+                    list.add("不合格");
+                    list.add("维修再检");
+                    list.add("报废");
+                    list.add("停用");
                 }
 
 
@@ -511,6 +498,75 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
 
             }
         });
+
+        mBtn_ChoicePlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (_EquipmentData == null) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, "请首先确定要检验的设备！");
+                    return;
+                }
+                Intent intent = new Intent(InspectReportActivity.this, InspectPlanCheckActivity.class);
+                intent.putExtra("_EquipmentID", _EquipmentData.getID());
+                startActivityForResult(intent, CHECK_PLAN_OK);
+
+            }
+        });
+
+        //提交
+        mBtn_Submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                submit_InspectBill();
+
+            }
+        });
+
+        //设备图片点击事件
+        mIv_EquipImg.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                mIv_EquipImg.setDrawingCacheEnabled(true);
+                Bitmap bitmap = Bitmap.createBitmap(mIv_EquipImg.getDrawingCache());
+                mIv_EquipImg.setDrawingCacheEnabled(false);
+                String equipName = mTv_EquipName.getText().toString();
+
+                if (bitmap != null && equipName != null) {
+                    Intent intent = new Intent(InspectReportActivity.this, ImageViewerActivity.class);
+                    intent.putExtra("bitmap", bitmap);
+                    intent.putExtra("title", equipName);
+                    startActivity(intent);
+                } else {
+                    ToastUtils.showToast(InspectReportActivity.this, "无图片需显示");
+                }
+                return false;
+            }
+        });
+    }
+
+    /**
+     *  绑定-检验计划删除事件
+     */
+    private void bindEvent_PlanRemove(){
+        //计划-长按删除
+        mLv_Show_plan.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                deletePlanRow(position);
+
+                return false;
+            }
+        });
+    }
+
+    /**
+     * 绑定-检验项目、检验方式点击事件
+     */
+    private void bindEvent_InspectItem_Mode(){
         //检验方式
         mTv_InspMode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -521,16 +577,68 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
                         list.add(item);
                     }
                 } else {
-//                    list.add("润滑");
-
+                    //内检|外检
+                    list.add("内检");
+                    list.add("外检");
                 }
 
+                showSelectDialog(new SelectDialog.SelectDialogListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        String str = list.get(position).toString();
+                        mTv_InspMode.setText(str);
+                    }
+                }, list);
+
+            }
+        });
+
+        //检验项目
+        mTv_inspItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final List<String> list = new ArrayList<String>();
+                if (_InspItemArr != null && _InspItemArr.length > 0) {
+                    for (String item : _InspItemArr) {
+                        list.add(item);
+                    }
+                } else {
+                    //安全检验|压力检验|精度检验
+                    list.add("安全检验");
+                    list.add("压力检验");
+                    list.add("精度检验");
+                }
 
                 showSelectDialog(new SelectDialog.SelectDialogListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String str = list.get(position).toString();
-                        mTv_InspMode.setText(str);
+                        mTv_inspItem.setText(str);
+
+                        ShowDialog(InspectReportActivity.this, "提示", "是否按计划执行?",
+                                //是
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        mBtn_ChoicePlan.performClick();
+                                        mLl_Plan.setVisibility(View.VISIBLE);
+                                    }
+                                },
+                                //否
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        mLl_Plan.setVisibility(View.GONE);
+                                    }
+                                });
+                        if (_CheckPlanEntityList != null && _CheckPlanEntityList.size() > 0) {
+                            _CheckPlanEntityList.clear();
+                            //_CheckPlanIDList.clear();
+                            mLv_Show_plan.setVisibility(View.GONE);
+                            adapter_Plan = null;
+                            mLv_Show_plan.setAdapter(adapter_Plan);
+                        }
 
                     }
                 }, list);
@@ -538,167 +646,6 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
             }
         });
 
-        mTv_jh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (_EquipmentData == null) {
-                    ToastUtils.showLongToast(InspectReportActivity.this, "请首先确定要检验的设备！");
-                    return;
-                }
-                Intent intent = new Intent(InspectReportActivity.this, InspectPlanCheckActivity.class);
-                intent.putExtra("_EquipmentID",_EquipmentData.getID());
-                startActivityForResult(intent,CHECK_PLAN_OK);
-
-            }
-        });
-
-        //提交
-        mBtn_Submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                showLogingDialog();
-
-                String faultDate = mTv_InspTime.getText().toString().trim();
-
-
-                String inspItem = mTv_inspItem.getText().toString().trim();
-                String InspResult = mTv_InspResult.getText().toString().trim();
-                String user = mEt_User.getText().toString().trim();
-                String money = mEt_money.getText().toString().trim();
-                String InspMode=mTv_InspMode.getText().toString().trim();
-                String corp=mEt_Com.getText().toString().trim();
-
-
-
-
-                //验证提交数据
-
-                if (_EquipmentData == null) {
-                    ToastUtils.showLongToast(InspectReportActivity.this, "请首先确定要检验的设备！");
-                    return;
-                }
-                if (faultDate == null || faultDate.length() == 0) {
-                    ToastUtils.showLongToast(InspectReportActivity.this, "请选择开始检验日期！");
-                    return;
-                }
-                if (inspItem == null || inspItem.length() == 0) {
-                    ToastUtils.showLongToast(InspectReportActivity.this, "请选择检验项目！");
-                    return;
-                }
-
-                if (InspResult == null || InspResult.length() == 0) {
-                    ToastUtils.showLongToast(InspectReportActivity.this, "请选择检验结果！");
-                    return;
-                }
-                if (InspMode == null || InspMode.length() == 0) {
-                    ToastUtils.showLongToast(InspectReportActivity.this, "请选择检验方式！");
-                    return;
-                }
-                if (user == null || user.length() == 0) {
-                    ToastUtils.showLongToast(InspectReportActivity.this, "请填写联系人！");
-                    return;
-                }
-                if (money == null || money.length() == 0) {
-                    ToastUtils.showLongToast(InspectReportActivity.this, "填写费用金额不能为空！");
-                    return;
-                }
-                else{
-
-                }
-
-                mBtn_Submit.setEnabled(false);
-                //提交数据
-                InspectBillResult result = new InspectBillResult();
-
-                InspectBillEntity rpen=new InspectBillEntity();
-                rpen.setEquipmentID(_EquipmentData.getID());
-                rpen.setCorporationID(_EquipmentData.getCorporationID());
-                rpen.setTotalMoney(money);
-
-                rpen.setInspectionUser(user);
-                rpen.setInspectionDate(faultDate);
-                rpen.setInspectionCorp(corp);
-                rpen.setInspectionResult(InspResult);
-                rpen.setInspectionMode(InspMode);
-                rpen.setInspectionItem(inspItem);
-                if(_CheckPlanIDList!=null ){
-                   rpen.setInspectionPlanID(_CheckPlanIDList.get(0));
-                }
-                else
-                    rpen.setInspectionPlanID(null);
-                result.setData(rpen);
-
-
-
-
-
-               // 提交数据
-                SoapUtils.submitNewEquipInspectRepairAsync(InspectReportActivity.this, result , new SoapListener() {
-                    @Override
-                    public void onSuccess(int statusCode, SoapObject object) {
-
-                        dismissLoadingDialog();
-                        if (object == null) {
-                            ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err1));
-                            mBtn_Submit.setEnabled(true);
-                            return;
-                        }
-                        //判断接口连接是否成功
-                        if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
-                            ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err2));
-                            mBtn_Submit.setEnabled(true);
-                            return;
-                        }
-                        //接口返回信息正常
-                        String strData = object.getPropertyAsString(0);
-                        StringResult result = new Gson().fromJson(strData, StringResult.class);
-                        //校验接口返回代码
-                        if (result == null) {
-                            ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err3));
-                            mBtn_Submit.setEnabled(true);
-                            return;
-                        }
-                        else if (result.code != Result.RESULT_CODE_SUCCSED) {
-                            ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
-                            mBtn_Submit.setEnabled(true);
-                            return;
-                        }
-
-                        if(_Type.equals("0")){
-                            String [] reDate=  result.msg.split(",");
-                            //数据是使用Intent返回
-                            Intent intent = new Intent();
-                            //把返回数据存入Intent
-                            intent.putExtra("BillID", reDate[0]);
-                            intent.putExtra("BillNO", reDate[1]);
-                            //设置返回数据
-                            InspectReportActivity.this.setResult(RESULT_OK, intent);
-                        }
-                        mBtn_Submit.setEnabled(false);
-                        ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.activity_inspect_submit_ok));
-                        finish();
-
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, String content, Throwable error) {
-                        dismissLoadingDialog();
-                        ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.activity_inspect_submit_err, error.getMessage()));
-                        mBtn_Submit.setEnabled(true);
-                    }
-
-                    @Override
-                    public void onFailure(int statusCode, SoapFault fault) {
-                        dismissLoadingDialog();
-                        ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.activity_inspect_submit_fail, fault));
-                        mBtn_Submit.setEnabled(true);
-                    }
-                });
-
-            }
-        });
     }
 
     @Override
@@ -885,7 +832,7 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
                     return;
                 }
                 _ReportEntity = result.getData();
-                _CheckPlanEntityList=result.getlistInspPlan();
+                _CheckPlanEntityList = result.getlistInspPlan();
                 showLogingDialog();
 
             }
@@ -935,24 +882,24 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
 
             case CHECK_PLAN_OK:
 
-                    _CheckPlanIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
-                    _CheckPlanEntityList = (List<InspectionPlanEntity>)data.getSerializableExtra("_CheckInspectPlanList");
-                    if(_CheckPlanEntityList.size()==0){
-                        mLv_Show_plan.setVisibility(View.GONE);
-                        mLv_Show_plan.setAdapter(null);
-                    }else {
-                        mLv_Show_plan.setAdapter(null);
-                        adapter_Plan= new InspectPlanViewDataListAdapter(this, _CheckPlanEntityList);
-                        mLv_Show_plan.setSelection(adapter_Plan.getCount());
+                //_CheckPlanIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
+                _CheckPlanEntityList = (List<InspectionPlanEntity>) data.getSerializableExtra("_CheckInspectPlanList");
+                if (_CheckPlanEntityList.size() == 0) {
+                    mLv_Show_plan.setVisibility(View.GONE);
+                    mLv_Show_plan.setAdapter(null);
+                } else {
+                    mLv_Show_plan.setAdapter(null);
+                    adapter_Plan = new InspectPlanViewDataListAdapter(this, _CheckPlanEntityList);
+                    mLv_Show_plan.setSelection(adapter_Plan.getCount());
 
 
-                        mLv_Show_plan.setAdapter(adapter_Plan);
-                        adapter_Plan.notifyDataSetChanged();
-                        mLv_Show_plan.setVisibility(View.VISIBLE);
-                        setListViewHeightBasedOnChildren(mLv_Show_plan);
-                    }
+                    mLv_Show_plan.setAdapter(adapter_Plan);
+                    adapter_Plan.notifyDataSetChanged();
+                    mLv_Show_plan.setVisibility(View.VISIBLE);
+                    setListViewHeightBasedOnChildren(mLv_Show_plan);
+                }
 
-                    ToastUtils.showLongToast(InspectReportActivity.this,"共获取到" + _CheckPlanEntityList.size() + "条检验计划");
+                ToastUtils.showLongToast(InspectReportActivity.this, "共获取到" + _CheckPlanEntityList.size() + "条检验计划");
                 break;
 
             case CAMERA_BARCODE_SCAN://相机扫码
@@ -997,15 +944,17 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
         // params.height最后得到整个ListView完整显示需要的高度
         listView.setLayoutParams(params);
     }
+
     /**
      * 利用正则表达式判断字符串是否是数字
+     *
      * @param str
      * @return
      */
-    public boolean isNumeric(String str){
+    public boolean isNumeric(String str) {
         Pattern pattern = Pattern.compile("[0-9]*");
         Matcher isNum = pattern.matcher(str);
-        if( !isNum.matches() ){
+        if (!isNum.matches()) {
             return false;
         }
         return true;
@@ -1017,21 +966,21 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
     private void bindUIData(InspectBillEntity entity) {
         if (entity != null) {
             SimpleDateFormat formatter;
-            formatter = new SimpleDateFormat ("yyyy-MM-dd KK:mm:ss a");
+            formatter = new SimpleDateFormat("yyyy-MM-dd KK:mm:ss a");
             String ctime = formatter.format(entity.getInspectionDate());
-            mTv_InspTime.setText(ctime.substring(0,10));
+            mTv_InspTime.setText(ctime.substring(0, 10));
             mTv_inspItem.setText(entity.getInspectionItem());
             mTv_InspResult.setText(entity.getInspectionResult());
             mTv_InspMode.setText(entity.getInspectionMode());
             mEt_Com.setText(entity.getInspectionCorp());
             mEt_User.setText(entity.getInspectionUser());
             mEt_money.setText(entity.getTotalMoney());
-            if(_CheckPlanEntityList==null || _CheckPlanEntityList.size()==0){
+            if (_CheckPlanEntityList == null || _CheckPlanEntityList.size() == 0) {
                 mLv_Show_plan.setVisibility(View.GONE);
                 mLv_Show_plan.setAdapter(null);
-            }else {
+            } else {
                 mLv_Show_plan.setAdapter(null);
-                adapter_Plan= new InspectPlanViewDataListAdapter(this, _CheckPlanEntityList);
+                adapter_Plan = new InspectPlanViewDataListAdapter(this, _CheckPlanEntityList);
                 mLv_Show_plan.setSelection(adapter_Plan.getCount());
                 mLv_Show_plan.setAdapter(adapter_Plan);
                 adapter_Plan.notifyDataSetChanged();
@@ -1041,5 +990,201 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
         }
         mEt_User.setEnabled(false);
         mEt_money.setEnabled(false);
+    }
+
+    /**
+     * 检验-按计划
+     *
+     * @param mTv_EquipID
+     * @param entity
+     */
+    private void Inspect_ByPlan(String mTv_EquipID, Object entity) {
+        getEquipmentInfoByID(mTv_EquipID);
+        if (entity != null) {
+
+            //根据备件ID获取备件更换计划
+            InspectionPlanEntity planEntity = (InspectionPlanEntity) entity;
+            planEntity.setIsCheck(true);
+
+            String inspectionItem = planEntity.getInspectionItem();
+            String inspectionMode = planEntity.getInspectionMode();
+            mTv_inspItem.setText(inspectionItem);
+            mTv_InspMode.setText(inspectionMode);
+
+            mTv_InspMode.setEnabled(false);
+            mTv_inspItem.setEnabled(false);
+            mBtn_ChoicePlan.setEnabled(false);
+
+            //将计划填充至计划列表
+            _CheckPlanEntityList.add(planEntity);
+            adapter_Plan = new InspectPlanViewDataListAdapter(InspectReportActivity.this, _CheckPlanEntityList);
+            mLv_Show_plan.setAdapter(adapter_Plan);
+            mLv_Show_plan.setVisibility(View.VISIBLE);
+            setListViewHeightBasedOnChildren(mLv_Show_plan);
+            mLl_Plan.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * 删除计划行
+     * @param pron
+     */
+    private void deletePlanRow(final int pron) {
+        List<String> menuList = new ArrayList<String>();
+        menuList.add("删除");
+        showSelectDialog(new SelectDialog.SelectDialogListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                switch (position) {
+                    case 0://删除
+                        InspectionPlanEntity eus = (InspectionPlanEntity) adapter_Plan.getItem(pron);
+                            if(eus != null){
+                                if(_CheckPlanEntityList != null){
+                                    _CheckPlanEntityList.remove(eus);
+                                    adapter_Plan.removeItem(pron);
+                                    setListViewHeightBasedOnChildren(mLv_Show_plan);
+                                }
+                            }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }, menuList);
+
+    }
+
+    /**
+     * 提交检验信息
+     */
+    private void submit_InspectBill() {
+        showLogingDialog();
+
+        String faultDate = mTv_InspTime.getText().toString().trim();
+        String inspItem = mTv_inspItem.getText().toString().trim();
+        String InspResult = mTv_InspResult.getText().toString().trim();
+        String user = mEt_User.getText().toString().trim();
+        String money = mEt_money.getText().toString().trim();
+        String InspMode = mTv_InspMode.getText().toString().trim();
+        String corp = mEt_Com.getText().toString().trim();
+
+        //验证提交数据
+        if (_EquipmentData == null) {
+            ToastUtils.showLongToast(InspectReportActivity.this, "请首先确定要检验的设备！");
+            return;
+        }
+        if (faultDate == null || faultDate.length() == 0) {
+            ToastUtils.showLongToast(InspectReportActivity.this, "请选择开始检验日期！");
+            return;
+        }
+        if (inspItem == null || inspItem.length() == 0) {
+            ToastUtils.showLongToast(InspectReportActivity.this, "请选择检验项目！");
+            return;
+        }
+
+        if (InspResult == null || InspResult.length() == 0) {
+            ToastUtils.showLongToast(InspectReportActivity.this, "请选择检验结果！");
+            return;
+        }
+        if (InspMode == null || InspMode.length() == 0) {
+            ToastUtils.showLongToast(InspectReportActivity.this, "请选择检验方式！");
+            return;
+        }
+        if (user == null || user.length() == 0) {
+            ToastUtils.showLongToast(InspectReportActivity.this, "请填写联系人！");
+            return;
+        }
+        if (money == null || money.length() == 0) {
+            money = "0";
+//            ToastUtils.showLongToast(InspectReportActivity.this, "填写费用金额不能为空！");
+            return;
+        } else {
+
+        }
+
+        mBtn_Submit.setEnabled(false);
+        //提交数据
+        InspectBillResult result = new InspectBillResult();
+
+        InspectBillEntity rpen = new InspectBillEntity();
+        rpen.setEquipmentID(_EquipmentData.getID());
+        rpen.setCorporationID(_EquipmentData.getCorporationID());
+        rpen.setTotalMoney(money);
+        rpen.setInspectionUser(user);
+        rpen.setInspectionDate(faultDate);
+        rpen.setInspectionCorp(corp);
+        rpen.setInspectionResult(InspResult);
+        rpen.setInspectionMode(InspMode);
+        rpen.setInspectionItem(inspItem);
+
+        if(adapter_Plan != null && adapter_Plan.getCount() > 0){
+            InspectionPlanEntity entity = (InspectionPlanEntity)adapter_Plan.getItem(0);
+            rpen.setInspectionPlanID(entity.getID());
+        }
+
+        result.setData(rpen);
+
+        // 提交数据
+        SoapUtils.submitNewEquipInspectRepairAsync(InspectReportActivity.this, result, new SoapListener() {
+            @Override
+            public void onSuccess(int statusCode, SoapObject object) {
+
+                dismissLoadingDialog();
+                if (object == null) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err1));
+                    mBtn_Submit.setEnabled(true);
+                    return;
+                }
+                //判断接口连接是否成功
+                if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err2));
+                    mBtn_Submit.setEnabled(true);
+                    return;
+                }
+                //接口返回信息正常
+                String strData = object.getPropertyAsString(0);
+                StringResult result = new Gson().fromJson(strData, StringResult.class);
+                //校验接口返回代码
+                if (result == null) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err3));
+                    mBtn_Submit.setEnabled(true);
+                    return;
+                } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                    ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
+                    mBtn_Submit.setEnabled(true);
+                    return;
+                }
+
+                if (_Type.equals("0")) {
+                    String[] reDate = result.msg.split(",");
+                    //数据是使用Intent返回
+                    Intent intent = new Intent();
+                    //把返回数据存入Intent
+                    intent.putExtra("BillID", reDate[0]);
+                    intent.putExtra("BillNO", reDate[1]);
+                    //设置返回数据
+                    InspectReportActivity.this.setResult(RESULT_OK, intent);
+                }
+                mBtn_Submit.setEnabled(false);
+                ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.activity_inspect_submit_ok));
+                finish();
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, String content, Throwable error) {
+                dismissLoadingDialog();
+                ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.activity_inspect_submit_err, error.getMessage()));
+                mBtn_Submit.setEnabled(true);
+            }
+
+            @Override
+            public void onFailure(int statusCode, SoapFault fault) {
+                dismissLoadingDialog();
+                ToastUtils.showLongToast(InspectReportActivity.this, getString(R.string.activity_inspect_submit_fail, fault));
+                mBtn_Submit.setEnabled(true);
+            }
+        });
     }
 }
