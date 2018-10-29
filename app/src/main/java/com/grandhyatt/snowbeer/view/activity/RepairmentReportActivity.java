@@ -195,13 +195,13 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
         Intent intent = getIntent();
         String type = intent.getStringExtra("type");
-        if(type!=null)
+        if (type != null)
             _Type = type;
         else
-            _Type="9";
+            _Type = "9";
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
-        Object entity = (Object)intent.getSerializableExtra("entity");
+        Object entity = (Object) intent.getSerializableExtra("entity");
         //-------------------------------------------------------------------------------------------------------------
         //维修-显示维修单 type = 3  mTv_EquipID=设备ID    mTv_ReportID = 维修单ID
         if ((type != null && type.equals("3")) && mTv_ReportID != null && mTv_EquipID != null) {
@@ -255,12 +255,13 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
     /**
      * 维修-维修计划
+     *
      * @param mTv_EquipID
      * @param entity
      */
     private void Repair_RepairmentPlan(String mTv_EquipID, Object entity) {
         getEquipmentInfoByID(mTv_EquipID);
-        if(entity != null) {
+        if (entity != null) {
             mBtn_ChoicePlan.setEnabled(false);
             // 将维修级别设置为“定修”
             mTv_RepairLevel.setText("定修");
@@ -282,6 +283,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
     /**
      * 维修-备件更换
+     *
      * @param mTv_EquipID
      * @param entity
      */
@@ -291,7 +293,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         // 将维修级别设置为“定修”
         mTv_RepairLevel.setText("定修");
         mTv_RepairLevel.setEnabled(false);
-        if(entity != null) {
+        if (entity != null) {
             mBtn_ChoicePlan.setEnabled(false);
             //根据备件ID获取备件更换计划
             SpareInEquipmentEntity spInEpEntity = (SpareInEquipmentEntity) entity;
@@ -317,7 +319,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             mLv_DataList_Spare.setAdapter(adapter_SpareView);
             setListViewHeightBasedOnChildren(mLv_DataList_Spare);
             //获取可用量
-            getSparesInfo(spInEpEntity.getEquipmentID(),spInEpEntity.getSpareID(),spInEpEntity.getDeptID());
+            getSparesInfo(spInEpEntity.getEquipmentID(), spInEpEntity.getSpareID(), spInEpEntity.getDeptID());
 
         }
     }
@@ -781,8 +783,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     /**
      * 备件列表长按删除
      */
-    private void bindEvent_SpareRemove()
-    {
+    private void bindEvent_SpareRemove() {
         //备件列表长按删除
         mLv_DataList_Spare.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -1116,7 +1117,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
      *
      * @param equipID
      */
-    private void getSparesInfo(String equipID,String spareID ,String deptID) {
+    private void getSparesInfo(String equipID, String spareID, String deptID) {
 
         SoapUtils.getEquipmentSparesStoreInfo(RepairmentReportActivity.this, equipID, deptID, spareID, new SoapListener() {
             @Override
@@ -1145,16 +1146,16 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 List<EquipmentUseSpareEntity> data = result.getData();
                 //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
                 if (data == null || data.size() == 0) {
-                    if(adapter_SpareView != null && adapter_SpareView.getCount() > 0){
+                    if (adapter_SpareView != null && adapter_SpareView.getCount() > 0) {
 
-                        adapter_SpareView.modifyCount(0,"0");
+                        adapter_SpareView.modifyCount(0, "0");
                     }
                     ToastUtils.showLongToast(RepairmentReportActivity.this, "没有获取到该备件的可用量");
                 } else {
-                    if(data.size() > 0){
-                        if(adapter_SpareView != null && adapter_SpareView.getCount() > 0){
+                    if (data.size() > 0) {
+                        if (adapter_SpareView != null && adapter_SpareView.getCount() > 0) {
                             EquipmentUseSpareEntity useSpareQty = data.get(0);
-                           adapter_SpareView.modifyCount(0,useSpareQty.getCount());
+                            adapter_SpareView.modifyCount(0, useSpareQty.getCount());
                         }
                     }
                 }
@@ -1206,19 +1207,19 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 switch (position) {
                     case 0://删除
                         String reapirLevel = mTv_RepairLevel.getText().toString();
-                        if(reapirLevel.equals("大修") && adapter_Plan != null && adapter_Plan.getCount() > 0){
+                        if (reapirLevel.equals("大修") && adapter_Plan != null && adapter_Plan.getCount() > 0) {
                             RepairmentPlanEntity eus = (RepairmentPlanEntity) adapter_Plan.getItem(pron);
-                            if(eus != null){
-                                if(_CheckPlanEntityList != null){
+                            if (eus != null) {
+                                if (_CheckPlanEntityList != null) {
                                     _CheckPlanEntityList.remove(eus);
                                     adapter_Plan.removeItem(pron);
                                     setListViewHeightBasedOnChildren(mLv_Show_plan);
                                 }
                             }
-                        } else if(adapter_Spare != null && adapter_Spare.getCount() > 0) {
+                        } else if (adapter_Spare != null && adapter_Spare.getCount() > 0) {
                             SpareInEquipmentEntity spare = (SpareInEquipmentEntity) adapter_Spare.getItem(pron);
                             if (spare != null) {
-                                if(_CheckSpareEntityList != null){
+                                if (_CheckSpareEntityList != null) {
                                     _CheckSpareEntityList.remove(spare);
                                     adapter_Spare.removeItem(pron);
                                     setListViewHeightBasedOnChildren(mLv_Show_plan);
@@ -1290,7 +1291,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 return;
             }
         } else {
-            if(_CheckPlanIDList != null) {
+            if (_CheckPlanIDList != null) {
                 _CheckPlanIDList.clear();
             }
         }
@@ -1326,7 +1327,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                     mNEdt_Check = (NumberEditText) vw.findViewById(R.id.mNEdt_Check);
                     mSumCount = (TextView) vw.findViewById(R.id.mTv_SumCountx);
                     edtcount = mNEdt_Check.getData();
-                    sumcount =new Double(mSumCount.getText().toString().trim()).doubleValue();
+                    sumcount = new Double(mSumCount.getText().toString().trim()).doubleValue();
                     if (edtcount > sumcount) {
                         mBtn_Submit.setEnabled(true);
                         ToastUtils.showLongToast(RepairmentReportActivity.this, "备件:" + e.getSpareName() + " 数量超出库存数量！");
@@ -1372,16 +1373,16 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 //维修-备件更换   type = 1  mTv_EquipID=设备ID    mTv_ReportID = 备件与设备关系ID   entity = 备件与设备关系对象
                 //维修-维修计划   type = 2  mTv_EquipID=设备ID    mTv_ReportID = 维修计划ID         entity = 维修计划对象
                 //维修-显示维修单 type = 3  mTv_EquipID=设备ID    mTv_ReportID = 维修单ID
-                 if(_Type.equals("0")){
-                   String [] reDate=  result.msg.split(",");
-                     //数据是使用Intent返回
-                     Intent intent = new Intent();
-                     //把返回数据存入Intent
-                     intent.putExtra("BillID", reDate[0]);
-                     intent.putExtra("BillNO", reDate[1]);
-                     //设置返回数据
-                     RepairmentReportActivity.this.setResult(RESULT_OK, intent);
-                 }
+                if (_Type.equals("0")) {
+                    String[] reDate = result.msg.split(",");
+                    //数据是使用Intent返回
+                    Intent intent = new Intent();
+                    //把返回数据存入Intent
+                    intent.putExtra("BillID", reDate[0]);
+                    intent.putExtra("BillNO", reDate[1]);
+                    //设置返回数据
+                    RepairmentReportActivity.this.setResult(RESULT_OK, intent);
+                }
 
                 mBtn_Submit.setEnabled(true);
                 ToastUtils.showLongToast(RepairmentReportActivity.this, getString(R.string.activity_repairment_submit_ok));

@@ -71,6 +71,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.grandhyatt.snowbeer.Consts.CAMERA_BARCODE_SCAN;
+
 /**
  * 设备保养操作界面
  * Created by tongzhiqiang on 2018-10-08.
@@ -146,8 +147,9 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
     ArrayList<String> _CheckPlanIDList; //用户选中的维护计划ID
     List<MaintenancePlanEntity> _CheckPlanEntityList = new ArrayList<>();//用户选择的数据行对象
     List<EquipmentMaterialEntity> _CheckMaterialList = new ArrayList<>();//用户选择的数据行对象
-    MaintenancePlanViewDataListAdapter adapter_Plan=null;
+    MaintenancePlanViewDataListAdapter adapter_Plan = null;
     private String _Type;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,13 +171,13 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 
         Intent intent = getIntent();
         String type = intent.getStringExtra("type");
-        if(type!=null)
+        if (type != null)
             _Type = type;
         else
-            _Type="9";
+            _Type = "9";
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
         String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
-        Object entity = (Object)intent.getSerializableExtra("entity");
+        Object entity = (Object) intent.getSerializableExtra("entity");
         //------------------------------------------------------------------------------------------------------
         //保养-显示保养单 type = 3    mTv_EquipID=设备id  mTv_ReportID = 保养单ID
         if ((type != null && type.equals("3")) && mTv_ReportID != null && mTv_EquipID != null) {
@@ -183,24 +185,24 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         }
         //------------------------------------------------------------------------------------------------------
         //保养-保养计划  type = 2    mTv_EquipID=设备id  mTv_ReportID = 保养计划ID
-        else  if ((type != null && type.equals("2")) && mTv_ReportID != null && mTv_EquipID != null) {
+        else if ((type != null && type.equals("2")) && mTv_ReportID != null && mTv_EquipID != null) {
             mSearchBar.setVisibility(View.GONE);
             mToolBar.setTitle("设备保养-按计划");
             initView();
             bindEvent();
-            mTv_FaultDesc.setVisibility(View.GONE);
+            mTv_FaultDesc.setEnabled(false);
 
             //保养计划
             Repair_RepairmentPlan(mTv_EquipID, entity);
         }
         //------------------------------------------------------------------------------------------------------
         //保养            type = 0    mTv_EquipID=设备id
-        else  if ((type != null && type.equals("0")) && mTv_EquipID != null) {
+        else if ((type != null && type.equals("0")) && mTv_EquipID != null) {
             mSearchBar.setVisibility(View.GONE);
-            mToolBar.setTitle("设备维修");
+            mToolBar.setTitle("设备保养");
             initView();
             bindEvent();
-            mTv_FaultDesc.setVisibility(View.VISIBLE);
+            mTv_FaultDesc.setEnabled(true);
             mLl_Plan.setVisibility(View.GONE);
             mLv_Show_plan.setAdapter(null);
             lL_material.setVisibility(View.GONE);
@@ -215,7 +217,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         //------------------------------------------------------------------------------------------------------
         //正常保养
         else {
-            mToolBar.setTitle("我要保养");
+            mToolBar.setTitle("设备保养");
             lL_material.setVisibility(View.GONE);
             initView();
             bindEventPart();
@@ -224,6 +226,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             requestNetworkData();
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -247,6 +250,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         mFilter = null;
         super.onDestroy();
     }
+
     @Override
     public void onClick(View v) {
 
@@ -262,8 +266,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         mLv_Show_plan.setVisibility(View.GONE);
         //初始化用户及手机号
         mEt_User.setText(SPUtils.getLastLoginUserName(MaintenReportActivity.this));
-        mEt_money.setText(SPUtils.getLastLoginUserPhone(MaintenReportActivity.this));
-      //  mLl_Plan.setVisibility(View.GONE);
+        mLl_Plan.setVisibility(View.GONE);
 
         SoapListener callbackFailureReportingDesc = new SoapListener() {
             @Override
@@ -335,10 +338,6 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 return false;
             }
         });
-
-
-
-
 
 
     }
@@ -459,8 +458,6 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         });
 
 
-
-
         mTv_FaultDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -475,9 +472,9 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                         list.add(item);
                     }
                 } else {
-//                    list.add("润滑");
-//                    list.add("检修");
-//                    list.add("巡检");
+                    list.add("润滑");
+                    list.add("检修");
+                    list.add("巡检");
 
                 }
 
@@ -487,38 +484,38 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String str = list.get(position).toString();
                         mTv_FaultDesc.setText(str);
-                        if(str.equals("润滑")){
+                        if (str.equals("润滑")) {
                             lL_material.setVisibility(View.VISIBLE);
                             mBtn_marAdd.performClick();
-                        }
-                        else {
+                        } else {
                             mTv_materialName.setText("");
                             mTv_materialstand.setText("");
                             mTv_materialUnit.setText("");
                             mEt_materialprice.setText("0");
                             mEt_materialsum.setText("0");
                             lL_material.setVisibility(View.GONE);
+
+                            ShowDialog(MaintenReportActivity.this, "提示", "是否按计划执行?",
+                                    //是
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            mTv_jh.performClick();
+                                        }
+                                    },
+                                    //否
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            mLv_Show_plan.setAdapter(null);
+                                            mLv_Show_plan.setVisibility(View.GONE);
+                                            mLl_Plan.setVisibility(View.GONE);
+                                        }
+                                    });
                         }
 
                     }
                 }, list);
-                ShowDialog(MaintenReportActivity.this, "提示", "是否按计划执行?",
-                        //是
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mTv_jh.performClick();
-                            }
-                        },
-                        //否
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mLv_Show_plan.setAdapter(null);
-                                mLv_Show_plan.setVisibility(View.GONE);
-                                mLl_Plan.setVisibility(View.GONE);
-                            }
-                        });
 
             }
         });
@@ -544,14 +541,14 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 }
 
                 Intent intent = new Intent(MaintenReportActivity.this, MaintenPlanCheckActivity.class);
-                intent.putExtra("_EquipmentID",_EquipmentData.getID());
-                intent.putExtra("_ReapirLevel",_ReapirLevel);
-                startActivityForResult(intent,CHECK_PLAN_OK);
+                intent.putExtra("_EquipmentID", _EquipmentData.getID());
+                intent.putExtra("_ReapirLevel", _ReapirLevel);
+                startActivityForResult(intent, CHECK_PLAN_OK);
 
             }
         });
 
-        mBtn_marAdd.setOnClickListener(new View.OnClickListener(){
+        mBtn_marAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (_EquipmentData == null) {
@@ -559,12 +556,11 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     return;
                 }
                 Intent intent = new Intent(MaintenReportActivity.this, EquipMgrMaintenMaterialActivity.class);
-                intent.putExtra("_EquipmentID",_EquipmentData.getID());
-                startActivityForResult(intent,CHECK_MATERIAL_OK);
+                intent.putExtra("_EquipmentID", _EquipmentData.getID());
+                startActivityForResult(intent, CHECK_MATERIAL_OK);
 
             }
         });
-
 
 
         //提交
@@ -581,9 +577,8 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 String RepairmentDesc = mTv_RepairmentDesc.getText().toString().trim();
                 String user = mEt_User.getText().toString().trim();
                 String phone = mEt_money.getText().toString().trim();
-                String useCout=mEt_materialsum.getText().toString().trim();
-                String mprice=mEt_materialprice.getText().toString().trim();
-
+                String useCout = mEt_materialsum.getText().toString().trim();
+                String mprice = mEt_materialprice.getText().toString().trim();
 
 
                 //验证提交数据
@@ -613,30 +608,27 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 if (phone == null || phone.length() == 0) {
                     ToastUtils.showLongToast(MaintenReportActivity.this, "填写费用金额不能为空！");
                     return;
-                }
-                else{
+                } else {
 
                 }
-                if(faultDesc.equals("润滑")){
+                if (faultDesc.equals("润滑")) {
 
-                    if (useCout == null|| useCout.length() == 0) {
+                    if (useCout == null || useCout.length() == 0) {
                         ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的数量！");
                         return;
-                    }
-                    else {
-                        if(!isNumeric(useCout)){
+                    } else {
+                        if (!isNumeric(useCout)) {
                             ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的数量为数字！");
                             return;
-                        }
-                        else {
+                        } else {
 
-                            if(Integer.parseInt(useCout)<=0){
+                            if (Integer.parseInt(useCout) <= 0) {
                                 ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的数量大于0！");
                                 return;
                             }
                         }
                     }
-                    if (mprice == null|| mprice.length() == 0) {
+                    if (mprice == null || mprice.length() == 0) {
                         ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的单价！");
                         return;
                     }
@@ -647,8 +639,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 //  request.setData(_EquipmentData);
 
 
-
-                MaintenanceBillEntity rpen=new MaintenanceBillEntity();
+                MaintenanceBillEntity rpen = new MaintenanceBillEntity();
                 rpen.setEquipmentID(_EquipmentData.getID());
                 rpen.setCorporationID(_EquipmentData.getCorporationID());
                 rpen.setDepartmentID(_EquipmentData.getDepartmentID());
@@ -661,14 +652,14 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 rpen.setEquipmentID(_EquipmentData.getID());
                 rpen.setShutDownMinutes("0");
                 rpen.setMaintenanceLevel(faultDesc);
-                if(_CheckPlanIDList!=null ){
+                if (_CheckPlanIDList != null) {
                     rpen.setMaintenancePlanID(_CheckPlanIDList.get(0));
                 }
                 rpen.setRemark(RepairmentDesc);
                 request.setData(rpen);
-                if(faultDesc.equals("润滑")){
-                    List<MaintenanceItemEntity> listMItem=new ArrayList<>();
-                    MaintenanceItemEntity mItem=new MaintenanceItemEntity();
+                if (faultDesc.equals("润滑")) {
+                    List<MaintenanceItemEntity> listMItem = new ArrayList<>();
+                    MaintenanceItemEntity mItem = new MaintenanceItemEntity();
                     mItem.setMaterialID(_CheckMaterialList.get(0).getMaterialID());
                     mItem.setUseCount(useCout);
                     mItem.setUsePrice(mprice);
@@ -680,9 +671,8 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 }
 
 
-
-               // 提交数据
-                SoapUtils.submitNewEquipMaintenanceRepairAsync(MaintenReportActivity.this, request , new SoapListener() {
+                // 提交数据
+                SoapUtils.submitNewEquipMaintenanceRepairAsync(MaintenReportActivity.this, request, new SoapListener() {
                     @Override
                     public void onSuccess(int statusCode, SoapObject object) {
 
@@ -703,14 +693,13 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                         if (result == null) {
                             ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err3));
                             return;
-                        }
-                        else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                        } else if (result.code != Result.RESULT_CODE_SUCCSED) {
                             ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
                             return;
                         }
 
-                        if(_Type.equals("0")){
-                            String [] reDate=  result.msg.split(",");
+                        if (_Type.equals("0")) {
+                            String[] reDate = result.msg.split(",");
                             //数据是使用Intent返回
                             Intent intent = new Intent();
                             //把返回数据存入Intent
@@ -931,16 +920,16 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     return;
                 }
                 _ReportEntity = result.getData();
-                _ReportFileEntitys=result.getdateItemList();
+                _ReportFileEntitys = result.getdateItemList();
                 if (_ReportEntity != null) {
                     mTv_EquipCode.setText(_ReportEntity.getEquipmentCode());
                     mTv_EquipName.setText(_ReportEntity.getEquipmentName());
                     SimpleDateFormat formatter;
-                    formatter = new SimpleDateFormat ("yyyy-MM-dd KK:mm:ss a");
+                    formatter = new SimpleDateFormat("yyyy-MM-dd KK:mm:ss a");
                     String ctime = formatter.format(_ReportEntity.getStartTime());
                     String ftime = formatter.format(_ReportEntity.getFinishTime());
-                    mTv_FaultDate.setText(ctime.substring(0,10));
-                    mTv_FaultDate1.setText(ctime.substring(0,10));
+                    mTv_FaultDate.setText(ctime.substring(0, 10));
+                    mTv_FaultDate1.setText(ctime.substring(0, 10));
 
 
                     mTv_FaultDesc.setText(_ReportEntity.getMaintenanceLevel());
@@ -950,19 +939,17 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 //                    mTv_ReportNO.setText(_RepairmentBillEntity.getReportNO());
 
 
-
-                     if(_ReportFileEntitys!=null && _ReportFileEntitys.size()!=0){
-                         lL_material.setVisibility(View.VISIBLE);
-                         MaintenanceItemEntity ma=_ReportFileEntitys.get(0);
-                         mTv_materialName.setText(ma.getMaterialName());
-                         mTv_materialstand.setText(ma.getStandard());
-                         mTv_materialUnit.setText(ma.getUseUnit());
-                         mEt_materialprice.setText(ma.getUsePrice());
-                         mEt_materialsum.setText(ma.getUseCount());
-                     }
-                     else {
-                         lL_material.setVisibility(View.GONE);
-                     }
+                    if (_ReportFileEntitys != null && _ReportFileEntitys.size() != 0) {
+                        lL_material.setVisibility(View.VISIBLE);
+                        MaintenanceItemEntity ma = _ReportFileEntitys.get(0);
+                        mTv_materialName.setText(ma.getMaterialName());
+                        mTv_materialstand.setText(ma.getStandard());
+                        mTv_materialUnit.setText(ma.getUseUnit());
+                        mEt_materialprice.setText(ma.getUsePrice());
+                        mEt_materialsum.setText(ma.getUseCount());
+                    } else {
+                        lL_material.setVisibility(View.GONE);
+                    }
 
 
                 }
@@ -1014,27 +1001,26 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 
             case CHECK_PLAN_OK:
 
-                    _CheckPlanIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
-                    _CheckPlanEntityList = (List<MaintenancePlanEntity>)data.getSerializableExtra("_CheckMaintenPlanList");
-                    if(_CheckPlanEntityList==null || _CheckPlanEntityList.size()==0){
-                        mLv_Show_plan.setVisibility(View.GONE);
-                        mLl_Plan.setVisibility(View.GONE);
-                        mLv_Show_plan.setAdapter(null);
-                    }else {
-                        mLv_Show_plan.setAdapter(null);
-                        adapter_Plan= new MaintenancePlanViewDataListAdapter(this, _CheckPlanEntityList);
-                        mLv_Show_plan.setSelection(adapter_Plan.getCount());
+                _CheckPlanIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
+                _CheckPlanEntityList = (List<MaintenancePlanEntity>) data.getSerializableExtra("_CheckMaintenPlanList");
+                if (_CheckPlanEntityList == null || _CheckPlanEntityList.size() == 0) {
+                    mLv_Show_plan.setVisibility(View.GONE);
+                    mLl_Plan.setVisibility(View.GONE);
+                    mLv_Show_plan.setAdapter(null);
+                } else {
+                    mLv_Show_plan.setAdapter(null);
+                    adapter_Plan = new MaintenancePlanViewDataListAdapter(this, _CheckPlanEntityList);
+                    mLv_Show_plan.setSelection(adapter_Plan.getCount());
 
-                        mLv_Show_plan.setAdapter(adapter_Plan);
-                        adapter_Plan.notifyDataSetChanged();
-                        mLl_Plan.setVisibility(View.VISIBLE);
-                        mLv_Show_plan.setVisibility(View.VISIBLE);
+                    mLv_Show_plan.setAdapter(adapter_Plan);
+                    adapter_Plan.notifyDataSetChanged();
+                    mLl_Plan.setVisibility(View.VISIBLE);
+                    mLv_Show_plan.setVisibility(View.VISIBLE);
 
-                        setListViewHeightBasedOnChildren(mLv_Show_plan);
-                    }
+                    setListViewHeightBasedOnChildren(mLv_Show_plan);
+                }
 
-                    ToastUtils.showLongToast(MaintenReportActivity.this,"共获取到" + _CheckPlanEntityList.size() + "条保养计划");
-
+                ToastUtils.showLongToast(MaintenReportActivity.this, "共获取到" + _CheckPlanEntityList.size() + "条保养计划");
 
 
                 break;
@@ -1056,17 +1042,16 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 break;
             case CHECK_MATERIAL_OK:
                 _CheckMaterialList.clear();
-                _CheckMaterialList = (List<EquipmentMaterialEntity>)data.getSerializableExtra("_CheckEntityList");
+                _CheckMaterialList = (List<EquipmentMaterialEntity>) data.getSerializableExtra("_CheckEntityList");
 
-                if(_CheckMaterialList!=null && _CheckMaterialList.size()!=0){
+                if (_CheckMaterialList != null && _CheckMaterialList.size() != 0) {
                     mTv_materialName.setText(_CheckMaterialList.get(0).getMaterialName());
                     mTv_materialstand.setText(_CheckMaterialList.get(0).getStandard());
                     mTv_materialUnit.setText(_CheckMaterialList.get(0).getUnit());
                     mEt_materialprice.setText(_CheckMaterialList.get(0).getPrice());
                     mEt_materialsum.setText("0");
 
-                }
-                else {
+                } else {
                     mTv_materialName.setText("");
                     mTv_materialstand.setText("");
                     mTv_materialUnit.setText("");
@@ -1074,6 +1059,23 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     mEt_materialsum.setText("0");
                 }
 
+                ShowDialog(MaintenReportActivity.this, "提示", "是否按计划执行?",
+                        //是
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mTv_jh.performClick();
+                            }
+                        },
+                        //否
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mLv_Show_plan.setAdapter(null);
+                                mLv_Show_plan.setVisibility(View.GONE);
+                                mLl_Plan.setVisibility(View.GONE);
+                            }
+                        });
 
 
         }
@@ -1104,15 +1106,17 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         // params.height最后得到整个ListView完整显示需要的高度
         listView.setLayoutParams(params);
     }
+
     /**
      * 利用正则表达式判断字符串是否是数字
+     *
      * @param str
      * @return
      */
-    public boolean isNumeric(String str){
+    public boolean isNumeric(String str) {
         Pattern pattern = Pattern.compile("[0-9]*");
         Matcher isNum = pattern.matcher(str);
-        if( !isNum.matches() ){
+        if (!isNum.matches()) {
             return false;
         }
         return true;
@@ -1120,7 +1124,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 
     private void Repair_RepairmentPlan(String mTv_EquipID, Object entity) {
         getEquipmentInfoByID(mTv_EquipID);
-        if(entity != null) {
+        if (entity != null) {
             mTv_jh.setEnabled(false);
             // 将维修级别设置为“定修”
 
