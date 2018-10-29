@@ -73,7 +73,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/selector_login_background"
+            android:background="@drawable/btn_bg"
             android:text="设备维修提醒"
             android:textSize="16sp" />
 
@@ -84,7 +84,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/selector_login_background"
+            android:background="@drawable/btn_bg"
             android:text="设备保养提醒"
             android:textSize="16sp" />
 
@@ -95,7 +95,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/selector_login_background"
+            android:background="@drawable/btn_bg"
             android:text="设备检验提醒"
             android:textSize="16sp" />
 
@@ -106,7 +106,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/selector_login_background"
+            android:background="@drawable/btn_bg"
             android:text="备件更换提醒"
             android:textSize="16sp" />
 
@@ -117,7 +117,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/selector_login_background"
+            android:background="@drawable/btn_bg"
             android:text="外委维修提醒"
             android:textSize="16sp" />
 

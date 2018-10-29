@@ -1,6 +1,7 @@
 package com.grandhyatt.snowbeer.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,11 @@ public class Equip_Maintence_EntityDataListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_item_equip_maintence_activity, null);
 
             mViewHolder.mTv_Status = convertView.findViewById(R.id.mTv_Status);
+            if(mViewHolder.mTv_Status.getText().toString().contains("超期")){
+                mViewHolder.mTv_Status.setTextColor(Color.RED);
+            }else{
+                mViewHolder.mTv_Status.setTextColor(Color.BLACK);
+            }
             mViewHolder.mTv_ID = convertView.findViewById(R.id.mTv_ID);
             mViewHolder.mTv_EquipID = convertView.findViewById(R.id.mTv_EquipID);
             mViewHolder.mTv_MaintenLevel = convertView.findViewById(R.id.mTv_MaintenLevel);

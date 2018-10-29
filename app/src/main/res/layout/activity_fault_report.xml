@@ -13,7 +13,8 @@
     <com.grandhyatt.snowbeer.view.SearchBarLayout
         android:id="@+id/mSearchBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="3dp"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -422,24 +423,25 @@
                 <!-- 维修、保养-->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="35dp"
                     android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/mBtn_Repair"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="30dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:background="@drawable/ic_login_button_true"
-                        android:text="维修" />
+                        android:text="维修"
+                        android:textSize="12sp"/>
 
                     <Button
                         android:id="@+id/mBtn_Mainten"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="30dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
@@ -449,14 +451,14 @@
                 <!--  检验、外委维修-->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="35dp"
                     android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/mBtn_Inspect"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="30dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
@@ -466,7 +468,7 @@
                     <Button
                         android:id="@+id/mBtn_RepairEx"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="30dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
@@ -476,16 +478,16 @@
                 <!--关闭报修-->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="35dp"
                     android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/mBtn_Close"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="60dp"
+                        android:layout_marginRight="60dp"
                         android:layout_weight="1"
                         android:background="@drawable/ic_login_button_true"
                         android:text="关闭报修" />

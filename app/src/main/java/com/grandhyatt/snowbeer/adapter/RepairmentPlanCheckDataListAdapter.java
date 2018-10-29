@@ -54,6 +54,11 @@ public class RepairmentPlanCheckDataListAdapter extends BaseAdapter {
 
             mViewHolder.mCkb_ID = convertView.findViewById(R.id.mCkb_ID);
             mViewHolder.mTv_Status = convertView.findViewById(R.id.mTv_Status);
+            if(mViewHolder.mTv_Status.getText().toString().contains("超期")){
+                mViewHolder.mTv_Status.setTextColor(Color.RED);
+            }else{
+                mViewHolder.mTv_Status.setTextColor(Color.GREEN);
+            }
             mViewHolder.mTv_RepairmentLevel = convertView.findViewById(R.id.mTv_RepairmentLevel);
             mViewHolder.mTv_PlanInterval = convertView.findViewById(R.id.mTv_PlanInterval);
             mViewHolder.mTv_LastRunningDate = convertView.findViewById(R.id.mTv_Inspection_Date);
@@ -74,7 +79,7 @@ public class RepairmentPlanCheckDataListAdapter extends BaseAdapter {
             if(dataModel.getStatus().contains("超期")) {
                 mViewHolder.mTv_Status.setTextColor(Color.RED);
             }else{
-                mViewHolder.mTv_Status.setTextColor(Color.BLACK);
+                mViewHolder.mTv_Status.setTextColor(Color.GREEN);
             }
             mViewHolder.mTv_RepairmentLevel.setText(String.valueOf(dataModel.getRepairmentLevel()));
             mViewHolder.mTv_PlanInterval.setText("每" + dataModel.getInterval() + dataModel.getIntervalUnit() + "执行一次");

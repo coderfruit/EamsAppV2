@@ -35,6 +35,7 @@ import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
+import com.grandhyatt.snowbeer.adapter.MaintenancePlanCheckDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.MaintenancePlanViewDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.RepairmentExPlanViewDataListAdapter;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
@@ -148,10 +149,10 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
     String[] _FaultDescArr;
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
     public static final int CHECK_MATERIAL_OK = 112;//选择维修用备件
-    ArrayList<String> _CheckPlanIDList; //用户选中的维护计划ID
+
     List<MaintenancePlanEntity> _CheckPlanEntityList = new ArrayList<>();//用户选择的数据行对象
     List<EquipmentMaterialEntity> _CheckMaterialList = new ArrayList<>();//用户选择的数据行对象
-    MaintenancePlanViewDataListAdapter adapter_Plan = null;
+    MaintenancePlanCheckDataListAdapter adapter_Plan = null;
     private String _Type;
 
     @Override
@@ -667,9 +668,13 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 rpen.setEquipmentID(_EquipmentData.getID());
                 rpen.setShutDownMinutes("0");
                 rpen.setMaintenanceLevel(faultDesc);
-                if (_CheckPlanIDList != null) {
-                    rpen.setMaintenancePlanID(_CheckPlanIDList.get(0));
+
+                if( adapter_Plan != null &&adapter_Plan.getCount() > 0){
+                    MaintenanceItemEntity checkEntity = (MaintenanceItemEntity)adapter_Plan.getItem(0);
+                    String strPlanID = checkEntity.getID();
+                    rpen.setMaintenancePlanID(strPlanID);
                 }
+
                 rpen.setRemark(RepairmentDesc);
                 request.setData(rpen);
                 if (faultDesc.equals("润滑")) {
@@ -1016,7 +1021,6 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 
             case CHECK_PLAN_OK:
 
-                _CheckPlanIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
                 _CheckPlanEntityList = (List<MaintenancePlanEntity>) data.getSerializableExtra("_CheckMaintenPlanList");
                 if (_CheckPlanEntityList == null || _CheckPlanEntityList.size() == 0) {
                     mLv_Show_plan.setVisibility(View.GONE);
@@ -1024,7 +1028,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     mLv_Show_plan.setAdapter(null);
                 } else {
                     mLv_Show_plan.setAdapter(null);
-                    adapter_Plan = new MaintenancePlanViewDataListAdapter(this, _CheckPlanEntityList);
+                    adapter_Plan = new MaintenancePlanCheckDataListAdapter(this, _CheckPlanEntityList);
                     mLv_Show_plan.setSelection(adapter_Plan.getCount());
 
                     mLv_Show_plan.setAdapter(adapter_Plan);
@@ -1064,14 +1068,14 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     mTv_materialstand.setText(_CheckMaterialList.get(0).getStandard());
                     mTv_materialUnit.setText(_CheckMaterialList.get(0).getUnit());
                     mEt_materialprice.setText(_CheckMaterialList.get(0).getPrice());
-                    mEt_materialsum.setText("0");
+                    mEt_materialsum.setText("");
 
                 } else {
                     mTv_materialName.setText("");
                     mTv_materialstand.setText("");
                     mTv_materialUnit.setText("");
-                    mEt_materialprice.setText("0");
-                    mEt_materialsum.setText("0");
+                    mEt_materialprice.setText("");
+                    mEt_materialsum.setText("");
                 }
 
                 ShowDialog(MaintenReportActivity.this, "提示", "是否按计划执行?",
@@ -1151,7 +1155,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 
             //将计划填充至计划列表
             _CheckPlanEntityList.add(planEntity);
-            adapter_Plan = new MaintenancePlanViewDataListAdapter(MaintenReportActivity.this, _CheckPlanEntityList);
+            adapter_Plan = new MaintenancePlanCheckDataListAdapter(MaintenReportActivity.this, _CheckPlanEntityList);
             mLv_Show_plan.setAdapter(adapter_Plan);
             mLv_Show_plan.setVisibility(View.VISIBLE);
             setListViewHeightBasedOnChildren(mLv_Show_plan);

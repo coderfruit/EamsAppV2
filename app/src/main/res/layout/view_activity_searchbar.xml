@@ -61,7 +61,7 @@
             android:textColor="@color/black"
             android:textColorHint="#c4c4c4"
             android:textCursorDrawable="@drawable/edittext_cursor"
-            android:textSize="12sp" />
+            android:textSize="12sp"  />
 
     </LinearLayout>
     <!-- 筛选 -->

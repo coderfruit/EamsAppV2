@@ -1,6 +1,7 @@
 package com.grandhyatt.snowbeer.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +71,11 @@ public class Equip_Repair_EntityDataListAdapter extends BaseAdapter {
         RepairmentPlanEntity dataModel = mDataList.get(position);
         if (dataModel != null) {
             mViewHolder.mTv_Status.setText(dataModel.getStatus());
+            if(mViewHolder.mTv_Status.getText().toString().contains("超期")){
+                mViewHolder.mTv_Status.setTextColor(Color.RED);
+            }else{
+                mViewHolder.mTv_Status.setTextColor(Color.BLACK);
+            }
             mViewHolder.mTv_ID.setText(dataModel.getID());
             mViewHolder.mTv_EquipID.setText(dataModel.getEquipmentID());
             mViewHolder.mTv_RepairmentLevel.setText(dataModel.getRepairmentLevel());

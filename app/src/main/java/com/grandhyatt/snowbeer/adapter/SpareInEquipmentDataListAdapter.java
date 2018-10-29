@@ -73,7 +73,7 @@ public class SpareInEquipmentDataListAdapter extends BaseAdapter {
             if(dataModel.getStatus().contains("超期")) {
                 mViewHolder.mTv_Status.setTextColor(Color.RED);
             }else{
-                mViewHolder.mTv_Status.setTextColor(Color.BLACK);
+                mViewHolder.mTv_Status.setTextColor(Color.GREEN);
             }
 
             mViewHolder.mTv_RepairmentLevel.setText(String.valueOf(dataModel.getRepairmentLevel()));

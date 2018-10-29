@@ -1,6 +1,7 @@
 package com.grandhyatt.snowbeer.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,11 @@ public class MaintenancePlanCheckDataListAdapter extends BaseAdapter {
             mViewHolder.mTv_LastRunningDate.setText(dataModel.getLastRunningDate());
             mViewHolder.mTv_NextRunningDate.setText(dataModel.getNextRunningDate());
             mViewHolder.mTv_Status.setText(dataModel.getStatus());
+            if(dataModel.getStatus().contains("超期")) {
+                mViewHolder.mTv_Status.setTextColor(Color.RED);
+            }else{
+                mViewHolder.mTv_Status.setTextColor(Color.GREEN);
+            }
             //mViewHolder.mTv_PlanDescTitle.setText("");
             mViewHolder.mTv_PlanDesc.setText(dataModel.getDescription());
             mViewHolder.mTv_ID.setText(dataModel.getID());
