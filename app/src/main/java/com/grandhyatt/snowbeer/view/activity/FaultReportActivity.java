@@ -331,8 +331,18 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                 startActivityForResult(intent2,INSPECT_OPERATE_AFTER);
                 break;
             case R.id.mBtn_RepairEx://外委维修
-                ToastUtils.showLongToast(FaultReportActivity.this, "外委维修");
-                //todo
+                if (_ReportEntity == null) {
+                    return;
+                }else{
+                    if(_EquipmentData == null){
+                        ToastUtils.showLongToast(FaultReportActivity.this, "加载设备信息失败，请后退并重新进入该界面！");
+                        return;
+                    }
+                }
+                Intent intent3 = new Intent(FaultReportActivity.this, RepairmentExReportActivity.class);
+                intent3.putExtra("type","0");
+                intent3.putExtra("mTv_EquipID", _EquipmentData.getID());
+                startActivityForResult(intent3, REPAIR_OPERATE_AFTER);
                 break;
             case R.id.mBtn_Close://关闭报修
                 if (_ReportEntity == null) {

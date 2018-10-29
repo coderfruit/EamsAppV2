@@ -328,37 +328,44 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
                 Intent intent = new Intent();
                 _CheckEntityList.clear();
                 _CheckIDList.clear();
-                if (_ReapirLevel.equals("大修")) {
-                    RepairmentPlanEntity rpEntity = null;
-                    for (int i = 0; i < adapter_Plan.getCount(); i++) {
-
-                        rpEntity = (RepairmentPlanEntity) mLv_DataList.getAdapter().getItem(i);
-                        if (rpEntity != null) {
-                            if (rpEntity.getIsCheck()) {
-                                _CheckEntityList.add(rpEntity);
-                                _CheckIDList.add(rpEntity.getID());
-                            }
-                        }
-                    }
-                } else {
-                    SpareInEquipmentEntity rpEntity = null;
-                    for (int i = 0; i < adapter_Spare.getCount(); i++) {
-                        rpEntity = (SpareInEquipmentEntity) mLv_DataList.getAdapter().getItem(i);
-                        if (rpEntity != null) {
-                            if (rpEntity.getIsCheck()) {
-                                _CheckEntityList.add(rpEntity);
-                                _CheckIDList.add(rpEntity.getID());
-                            }
-                        }
-                    }
+                if(adapter_Plan==null && adapter_Spare == null) {
+                    //关闭Activity
+                    RepairmentPlanCheckActivity.this.finish();
                 }
-                //把返回数据存入Intent
-                intent.putStringArrayListExtra("_CheckPlanIDList", _CheckIDList);
-                intent.putExtra("_CheckEntityList", _CheckEntityList);
-                //设置返回数据
-                RepairmentPlanCheckActivity.this.setResult(RESULT_OK, intent);
-                //关闭Activity
-                RepairmentPlanCheckActivity.this.finish();
+                else {
+                    if (_ReapirLevel.equals("大修")) {
+                        RepairmentPlanEntity rpEntity = null;
+                        for (int i = 0; i < adapter_Plan.getCount(); i++) {
+
+                            rpEntity = (RepairmentPlanEntity) mLv_DataList.getAdapter().getItem(i);
+                            if (rpEntity != null) {
+                                if (rpEntity.getIsCheck()) {
+                                    _CheckEntityList.add(rpEntity);
+                                    _CheckIDList.add(rpEntity.getID());
+                                }
+                            }
+                        }
+                    } else {
+                        SpareInEquipmentEntity rpEntity = null;
+                        for (int i = 0; i < adapter_Spare.getCount(); i++) {
+                            rpEntity = (SpareInEquipmentEntity) mLv_DataList.getAdapter().getItem(i);
+                            if (rpEntity != null) {
+                                if (rpEntity.getIsCheck()) {
+                                    _CheckEntityList.add(rpEntity);
+                                    _CheckIDList.add(rpEntity.getID());
+                                }
+                            }
+                        }
+                    }
+                    //把返回数据存入Intent
+                    intent.putStringArrayListExtra("_CheckPlanIDList", _CheckIDList);
+                    intent.putExtra("_CheckEntityList", _CheckEntityList);
+                    //设置返回数据
+                    RepairmentPlanCheckActivity.this.setResult(RESULT_OK, intent);
+                    //关闭Activity
+                    RepairmentPlanCheckActivity.this.finish();
+                }
+
             }
         });
 

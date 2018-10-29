@@ -472,25 +472,26 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                             mEt_materialsum.setText("0");
                             lL_material.setVisibility(View.GONE);
                         }
-                        ShowDialog(MaintenReportActivity.this, "提示", "是否按计划执行?",
-                                //是
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        mTv_jh.performClick();
-                                    }
-                                },
-                                //否
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        mLv_Show_plan.setAdapter(null);
-                                        mLv_Show_plan.setVisibility(View.GONE);
-                                        mLl_Plan.setVisibility(View.GONE);
-                                    }
-                                });
+
                     }
                 }, list);
+                ShowDialog(MaintenReportActivity.this, "提示", "是否按计划执行?",
+                        //是
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mTv_jh.performClick();
+                            }
+                        },
+                        //否
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mLv_Show_plan.setAdapter(null);
+                                mLv_Show_plan.setVisibility(View.GONE);
+                                mLl_Plan.setVisibility(View.GONE);
+                            }
+                        });
 
             }
         });

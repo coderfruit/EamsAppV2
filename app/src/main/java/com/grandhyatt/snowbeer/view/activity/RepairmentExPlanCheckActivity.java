@@ -230,32 +230,39 @@ public class RepairmentExPlanCheckActivity extends ActivityBase implements IActi
                 Intent intent = new Intent();
                 _CheckEntityList.clear();
                 _CheckIDList.clear();
-                RepairmentExPlanEntity rpEntity=null;
-                if(adapter_Plan!=null || adapter_Plan.getCount()!=0){
-                    for (int i = 0; i < adapter_Plan.getCount(); i++) {
+                if(adapter_Plan==null){
+                    //关闭Activity
+                    RepairmentExPlanCheckActivity.this.finish();
+                }
+                else {
+                    RepairmentExPlanEntity rpEntity=null;
+                    if(adapter_Plan!=null || adapter_Plan.getCount()!=0){
+                        for (int i = 0; i < adapter_Plan.getCount(); i++) {
 
-                        rpEntity = (RepairmentExPlanEntity) adapter_Plan.getItem(i);
-                        if (rpEntity!=null) {
-                            if( rpEntity.getIsCheck()){
-                                _CheckEntityList.add(rpEntity);
-                                _CheckIDList.add(rpEntity.getID());
+                            rpEntity = (RepairmentExPlanEntity) adapter_Plan.getItem(i);
+                            if (rpEntity!=null) {
+                                if( rpEntity.getIsCheck()){
+                                    _CheckEntityList.add(rpEntity);
+                                    _CheckIDList.add(rpEntity.getID());
+                                }
+
                             }
-
                         }
                     }
+
+
+
+                    //把返回数据存入Intent
+                    intent.putStringArrayListExtra("_CheckPlanIDList", _CheckIDList);
+                    intent.putExtra("_CheckEntityList", _CheckEntityList);
+
+
+                    //设置返回数据
+                    RepairmentExPlanCheckActivity.this.setResult(RESULT_OK, intent);
+                    //关闭Activity
+                    RepairmentExPlanCheckActivity.this.finish();
                 }
 
-
-
-                //把返回数据存入Intent
-                intent.putStringArrayListExtra("_CheckPlanIDList", _CheckIDList);
-                intent.putExtra("_CheckEntityList", _CheckEntityList);
-
-
-                //设置返回数据
-                RepairmentExPlanCheckActivity.this.setResult(RESULT_OK, intent);
-                //关闭Activity
-                RepairmentExPlanCheckActivity.this.finish();
 
             }
         });

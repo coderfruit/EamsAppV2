@@ -17,6 +17,7 @@ import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.Equip_RepairEx_EntityDataListAdapter;
 import com.grandhyatt.snowbeer.entity.CorporationEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentExPlanEntity;
+import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.result.RepairmentExPlanResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
@@ -94,15 +95,17 @@ public class WarningInfo_EquipRepairExActivity extends ActivityBase implements I
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_ID);
-                TextView mTv_EquipID = (TextView) view.findViewById(R.id.mTv_EquipID);
+                RepairmentExPlanEntity entity = (RepairmentExPlanEntity) mAdapter.getItem(position);
 
                 //维修-维修计划   type = 2  mTv_EquipID=设备ID    mTv_ReportID = 维修计划ID，
-                Intent intent = new Intent(WarningInfo_EquipRepairExActivity.this, RepairmentReportActivity.class);
+                Intent intent = new Intent(WarningInfo_EquipRepairExActivity.this, RepairmentExReportActivity.class);
                 intent.putExtra("type","2");
-                intent.putExtra("mTv_EquipID", mTv_EquipID.getText());
-                intent.putExtra("mTv_ReportID", mTv_ReportID.getText());
-                startActivityForResult(intent, Consts.REPAIR_EX_OPERATE_AFTER);
+                intent.putExtra("mTv_EquipID",entity.getEquipmentID());
+                intent.putExtra("mTv_ReportID", entity.getID());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("entity", entity);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, Consts.REPAIR_OPERATE_AFTER);
             }
         });
         //下拉刷新

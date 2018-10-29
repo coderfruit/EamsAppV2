@@ -2,6 +2,7 @@ package com.grandhyatt.snowbeer.view.activity;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -40,12 +41,14 @@ import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.EquipRepairSpareShowViewDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.EquipRepairSpareViewDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.RepairmentExPlanViewDataListAdapter;
+import com.grandhyatt.snowbeer.adapter.RepairmentPlanCheckDataListAdapter;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentUseSpareEntity;
 import com.grandhyatt.snowbeer.entity.FailureReportingAttachmentEntity;
 import com.grandhyatt.snowbeer.entity.FailureReportingEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentBillEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentExPlanEntity;
+import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.request.RepairmentReportingRequest;
@@ -122,6 +125,8 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
     ListView mLv_Show_plan;
     @BindView(R.id.mLl_Plan)
     LinearLayout mLl_Plan;//计划容器
+    @BindView(R.id.mLl_Spare)
+    LinearLayout mLl_Spare;//计划容器
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
     public static final int CHECK_SPARE_OK = 112;//选择维修用备件
     ArrayList<String> _CheckPlanIDList; //用户选中的维护计划ID
@@ -143,6 +148,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
      */
     String[] _FaultDescArr;
     MediaRecorder mRecorder;
+    private  Boolean _IsPlan; //验证是否可以修改计划
     /**
      * 设备信息
      */
@@ -168,15 +174,16 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
         //外委维修            type = 0  mTv_EquipID=设备ID
         //外委维修-维修计划   type = 2  mTv_EquipID=设备ID    mTv_ReportID = 维修计划ID，
         //外委维修-显示维修单 type = 3  mTv_EquipID=设备ID    mTv_ReportID = 维修单ID
-
+        _IsPlan=true;
         Intent intent = getIntent();
         String type = intent.getStringExtra("type");
         if(type!=null)
          _Type = type;
         else
             _Type="9";
-        String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
         String mTv_EquipID = intent.getStringExtra("mTv_EquipID");
+        String mTv_ReportID = intent.getStringExtra("mTv_ReportID");
+        Object entity = (Object)intent.getSerializableExtra("entity");
 
         //外委维修-显示维修单 type = 3  mTv_EquipID=设备ID    mTv_ReportID = 维修单ID
         if ((type != null && type.equals("3")) && mTv_ReportID != null && mTv_EquipID != null) {
@@ -193,11 +200,32 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
         }
         //外委维修-维修计划   type = 2  mTv_EquipID=设备ID    mTv_ReportID = 维修计划ID，
         else if ((type != null && type.equals("2")) && mTv_ReportID != null && mTv_EquipID != null) {
+            _IsPlan=false;
+            mSearchBar.setVisibility(View.GONE);
+            mToolBar.setTitle("设备外委维修-按计划");
+            getEquipmentInfoByID(mTv_EquipID);
+         //  getReport(mTv_ReportID);
+            bindEventPart();
+            initView();
+            bindEvent();
+          mLl_Plan.setVisibility(View.VISIBLE);
+            mLl_Spare.setVisibility(View.GONE);
 
+            //维修-维修计划
+            Repair_RepairmentPlan(mTv_EquipID, entity);
 
         }
         //外委维修            type = 0  mTv_EquipID=设备ID
         else if ((type != null && type.equals("0")) && mTv_EquipID != null) {
+            mSearchBar.setVisibility(View.GONE);
+            mToolBar.setTitle("设备维修");
+            //根据设备id获取设备信息
+            getEquipmentInfoByID(mTv_EquipID);
+            bindEventPart();
+            initView();
+            bindEvent();
+            mLl_Plan.setVisibility(View.GONE);
+            mLl_Spare.setVisibility(View.GONE);
 
         }
         //正常外委维修
@@ -208,6 +236,8 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
             bindEvent();
             refreshUI();
             requestNetworkData();
+            mLl_Plan.setVisibility(View.GONE);
+            mLl_Spare.setVisibility(View.GONE);
         }
     }
 
@@ -385,6 +415,10 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
         mTv_jh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+              if(!_IsPlan){
+                  ToastUtils.showLongToast(RepairmentExReportActivity.this, "当前外委维修提醒，无法修改维修计划！");
+                  return;
+              }
 
                 if (_EquipmentData == null) {
                     ToastUtils.showLongToast(RepairmentExReportActivity.this, "请首先确定要维修的设备！");
@@ -397,7 +431,31 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
 
             }
         });
+        mBtn_marAdd.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if (_EquipmentData == null) {
+                    ToastUtils.showLongToast(RepairmentExReportActivity.this, "请首先确定要维修的设备！");
+                    return;
+                }
+                String wtsx=mTv_FaultDesc.getText().toString().trim();
+                if(wtsx==""){
+                    ToastUtils.showLongToast(RepairmentExReportActivity.this, "请首先确定外委委托形式！");
+                    return;
+                }
+                if(wtsx.equals("包工不包料")){
+                    Intent intent = new Intent(RepairmentExReportActivity.this, EquipMgrRepairSpareActivity.class);
+                    intent.putExtra("_EquipmentID",_EquipmentData.getID());
+                    startActivityForResult(intent,CHECK_SPARE_OK);
+                }
+                else{
+                    Intent intent = new Intent(RepairmentExReportActivity.this, EquipMgrRepairExSpareCheckActivity.class);
+                    intent.putExtra("_EquipmentID",_EquipmentData.getID());
+                    startActivityForResult(intent,CHECK_SPARE_OK);
+                }
 
+            }
+        });
 
         mTv_FaultDesc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -424,7 +482,9 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                                _CheckSpareUseList.clear();
                                 mLv_DataList_Spare.setAdapter(null);
                                 adapter_Spare.notifyDataSetChanged();
+
                             }
+                            mBtn_marAdd.performClick();
                         }
                         else {
 
@@ -432,39 +492,35 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                                 _CheckSpareEquiList.clear();
                                 mLv_DataList_Spare.setAdapter(null);
                                 adapter_SpareView.notifyDataSetChanged();
+
                             }
+                            mBtn_marAdd.performClick();
                         }
                     }
                 }, list);
 
-            }
-        });
-
-        mBtn_marAdd.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                if (_EquipmentData == null) {
-                    ToastUtils.showLongToast(RepairmentExReportActivity.this, "请首先确定要维修的设备！");
-                    return;
-                }
-                String wtsx=mTv_FaultDesc.getText().toString().trim();
-                if(wtsx==""){
-                    ToastUtils.showLongToast(RepairmentExReportActivity.this, "请首先确定外委委托形式！");
-                    return;
-                }
-                if(wtsx.equals("包工不包料")){
-                    Intent intent = new Intent(RepairmentExReportActivity.this, EquipMgrRepairSpareActivity.class);
-                    intent.putExtra("_EquipmentID",_EquipmentData.getID());
-                    startActivityForResult(intent,CHECK_SPARE_OK);
-                }
-                else{
-                    Intent intent = new Intent(RepairmentExReportActivity.this, EquipMgrRepairExSpareCheckActivity.class);
-                    intent.putExtra("_EquipmentID",_EquipmentData.getID());
-                    startActivityForResult(intent,CHECK_SPARE_OK);
-                }
+                ShowDialog(RepairmentExReportActivity.this, "提示", "是否按计划执行?",
+                        //是
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mTv_jh.performClick();
+                            }
+                        },
+                        //否
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mLv_Show_plan.setAdapter(null);
+                                mLv_Show_plan.setVisibility(View.GONE);
+                                mLl_Plan.setVisibility(View.GONE);
+                            }
+                        });
 
             }
         });
+
+
 
         //长按显示删除
         mLv_DataList_Spare.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -514,10 +570,12 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                 }
 
                 if (user == null || user.length() == 0) {
+                    dismissLoadingDialog();
                     ToastUtils.showLongToast(RepairmentExReportActivity.this, "请填写联系人！");
                     return;
                 }
                 if (phone == null || phone.length() == 0) {
+                    dismissLoadingDialog();
                     ToastUtils.showLongToast(RepairmentExReportActivity.this, "填写费用金额不能为空！");
                     return;
                 }
@@ -526,12 +584,14 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                 }
                 if(faultDesc.equals("包工不包料")){
                     if(_CheckSpareUseList==null || _CheckSpareUseList.size()==0){
+                        dismissLoadingDialog();
                         ToastUtils.showLongToast(RepairmentExReportActivity.this, "请添加备件信息！");
                         return;
                     }
                 }
                 else if(faultDesc.equals("包工包料")){
                     if(_CheckSpareEquiList==null || _CheckSpareEquiList.size()==0){
+                        dismissLoadingDialog();
                         ToastUtils.showLongToast(RepairmentExReportActivity.this, "请添加备件信息！");
                         return;
                     }
@@ -1083,5 +1143,72 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
             }
         }, menuList);
 
+    }
+
+    private void deleteSpareRow(final int pron) {
+        List<String> menuList = new ArrayList<String>();
+        menuList.add("删除");
+        showSelectDialog(new SelectDialog.SelectDialogListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                switch (position) {
+                    case 0:
+                        //删除
+                        EquipmentUseSpareEntity eus = (EquipmentUseSpareEntity) adapter_SpareView.getItem(pron);
+                        _CheckSpareUseList.remove(eus);
+                        adapter_SpareView.removeItem(pron);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }, menuList);
+
+    }
+
+
+
+    /**
+     * 备件列表长按删除
+     */
+    private void bindEvent_SpareRemove()
+    {
+        //备件列表长按删除
+        mLv_DataList_Spare.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                //TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_SpareID);
+                deleteSpareRow(position);
+                setListViewHeightBasedOnChildren(mLv_DataList_Spare);
+                return false;
+            }
+        });
+
+    }
+
+    /**
+     * 维修-维修计划
+     * @param mTv_EquipID
+     * @param entity
+     */
+    private void Repair_RepairmentPlan(String mTv_EquipID, Object entity) {
+        getEquipmentInfoByID(mTv_EquipID);
+        if(entity != null) {
+            mTv_jh.setEnabled(false);
+
+
+            //根据备件ID获取备件更换计划
+            RepairmentExPlanEntity planEntity = (RepairmentExPlanEntity) entity;
+            planEntity.setIsCheck(true);
+
+            //将计划填充至计划列表
+            _CheckPlanEntityList.add(planEntity);
+            adapter_Plan = new RepairmentExPlanViewDataListAdapter(RepairmentExReportActivity.this, _CheckPlanEntityList);
+            mLv_Show_plan.setAdapter(adapter_Plan);
+            mLv_Show_plan.setVisibility(View.VISIBLE);
+            setListViewHeightBasedOnChildren(mLv_Show_plan);
+            mLl_Plan.setVisibility(View.VISIBLE);
+        }
     }
 }

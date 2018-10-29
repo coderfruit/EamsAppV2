@@ -318,7 +318,7 @@
 
                 <EditText
                     android:id="@+id/mEt_money"
-                    android:layout_width="0dp"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
@@ -424,6 +424,11 @@
 
 
             <!--备件信息-->
+        <LinearLayout
+            android:id="@+id/mLl_Spare"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="23dp"
@@ -491,6 +496,7 @@
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp"
                 android:background="@color/white6" />
+            </LinearLayout>
             <!-- 提交重置按钮 -->
 
             <LinearLayout
