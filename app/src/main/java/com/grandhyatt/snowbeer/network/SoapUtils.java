@@ -1139,12 +1139,13 @@ public class SoapUtils {
 	 * @param currentLastIdx
 	 * @param callback
 	 */
-	public static void getEquipRepairBills(final Context context, String equipID, String currentLastIdx,  final SoapListener callback){
+	public static void getEquipRepairBills(final Context context,String corpID, String equipID, String currentLastIdx,  final SoapListener callback){
 
 		final String url = getHostUrl();
 		String methodName = "GetEquipRepairBills";
 		//获取http请求身份验证参数
 		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("corpID",corpID);
 		params.put("equipID",equipID);
 		params.put("currentLastIdx",currentLastIdx);
 
@@ -1159,12 +1160,13 @@ public class SoapUtils {
 	 * @param currentLastIdx
 	 * @param callback
 	 */
-	public static void getEquipMaintenBills(final Context context, String equipID, String currentLastIdx,  final SoapListener callback){
+	public static void getEquipMaintenBills(final Context context, String corpID, String equipID, String currentLastIdx,  final SoapListener callback){
 
 		final String url = getHostUrl();
 		String methodName = "GetEquipMaintenBills";
 		//获取http请求身份验证参数
 		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("corpID",corpID);
 		params.put("equipID",equipID);
 		params.put("currentLastIdx",currentLastIdx);
 
@@ -1179,12 +1181,13 @@ public class SoapUtils {
 	 * @param currentLastIdx
 	 * @param callback
 	 */
-	public static void getEquipInspectionBills(final Context context, String equipID, String currentLastIdx,  final SoapListener callback){
+	public static void getEquipInspectionBills(final Context context,String corpID,  String equipID, String currentLastIdx,  final SoapListener callback){
 
 		final String url = getHostUrl();
 		String methodName = "GetEquipInspectionBills";
 		//获取http请求身份验证参数
 		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("corpID",corpID);
 		params.put("equipID",equipID);
 		params.put("currentLastIdx",currentLastIdx);
 
@@ -1199,12 +1202,13 @@ public class SoapUtils {
 	 * @param currentLastIdx
 	 * @param callback
 	 */
-	public static void getEquipRepairExBills(final Context context, String equipID, String currentLastIdx,  final SoapListener callback){
+	public static void getEquipRepairExBills(final Context context, String corpID, String equipID, String currentLastIdx,  final SoapListener callback){
 
 		final String url = getHostUrl();
 		String methodName = "GetEquipRepairExBills";
 		//获取http请求身份验证参数
 		final SoapParams params  = getAuthHttpRequestHeader(context);
+		params.put("corpID",corpID);
 		params.put("equipID",equipID);
 		params.put("currentLastIdx",currentLastIdx);
 

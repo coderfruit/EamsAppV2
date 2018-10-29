@@ -86,4 +86,9 @@ public class InspectPlanViewDataListAdapter extends BaseAdapter {
         private TextView mTv_NextRunningDate;
 
     }
+
+    public  void  removeItem(int position){
+//        mDataList.remove(position);
+        notifyDataSetChanged();
+    }
 }

@@ -1,5 +1,6 @@
 package com.grandhyatt.snowbeer.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.grandhyatt.snowbeer.network.result.EquipmentResult;
 import com.grandhyatt.snowbeer.network.result.WarningInfoCountResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
+import com.grandhyatt.snowbeer.utils.PopupWindowUtil;
 import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -93,6 +95,14 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
     @Override
     public void initView() {
         mToolBar.setTitle("设备预警信息");
+        mToolBar.setMenuText("...");
+        mToolBar.showMenuButton();
+        mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initMenuButton(v);
+            }
+        });
 
         List<CorporationEntity> corps = SPUtils.getLastLoginUserCorporations(this);
         if(corps != null){
@@ -115,36 +125,109 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
         qBv_mBt_EquipRepairEx = new QBadgeView(this).bindTarget(mBt_EquipRepairEx);
     }
 
+    /**
+     * 初始化页面菜单按钮事件
+     * @param v
+     */
+    private void initMenuButton(View v) {
+        List<String> list = new ArrayList<String>();
+        list.add("维修记录");
+        list.add("保养记录");
+        list.add("检验记录");
+        list.add("外委维修记录");
+
+        CorporationEntity corp = null;
+        String userCorp = mTv_UserCorp.getText().toString();
+        if(userCorp.length() > 0) {
+            corp = SPUtils.getLastLoginUserCorporations(WarningInfo_EquipActivity.this, userCorp);
+        }else{
+            corp = SPUtils.getLastLoginUserCorporation(WarningInfo_EquipActivity.this);
+        }
+        final CorporationEntity finalCorp = corp;
+
+        final PopupWindowUtil popupWindow = new PopupWindowUtil(WarningInfo_EquipActivity.this, list);
+
+        popupWindow.setItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                popupWindow.dismiss();
+                switch (position){
+                    case 0:
+                        Intent intent1 = new Intent(WarningInfo_EquipActivity.this, Query_EquipRepairInfoActivity.class);
+                        intent1.putExtra("corpID", finalCorp.getID());
+                        startActivity(intent1);
+                        break;
+                    case 1:
+                        Intent intent2 = new Intent(WarningInfo_EquipActivity.this, Query_EquipMaintenanceInfoActivity.class);
+                        intent2.putExtra("corpID", finalCorp.getID());
+                        startActivity(intent2);
+                        break;
+                    case 2:
+                        Intent intent3 = new Intent(WarningInfo_EquipActivity.this, Query_EquipInspectionInfoActivity.class);
+                        intent3.putExtra("corpID", finalCorp.getID());
+                        startActivity(intent3);
+                        break;
+                    case 3:
+                        Intent intent4 = new Intent(WarningInfo_EquipActivity.this, Query_EquipRepairExInfoActivity.class);
+                        intent4.putExtra("corpID", finalCorp.getID());
+                        startActivity(intent4);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        });
+        //根据后面的数字 手动调节窗口的宽度
+        popupWindow.show(v, 3);
+    }
+
     @Override
     public void bindEvent() {
         mBt_EquipRepair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentUtil.newIntent(WarningInfo_EquipActivity.this, WarningInfo_EquipRepairActivity.class);
+                CorporationEntity corp = getCheckedCorporationEntity();
+                Intent intent = new Intent(WarningInfo_EquipActivity.this, WarningInfo_EquipRepairActivity.class);
+                intent.putExtra("corpID", corp.getID());
+                startActivity(intent);
             }
         });
         mBt_EquipMaintenance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentUtil.newIntent(WarningInfo_EquipActivity.this, WarningInfo_EquipMaintenActivity.class);
+                CorporationEntity corp = getCheckedCorporationEntity();
+                Intent intent = new Intent(WarningInfo_EquipActivity.this, WarningInfo_EquipMaintenActivity.class);
+                intent.putExtra("corpID", corp.getID());
+                startActivity(intent);
             }
         });
         mBt_EquipInspection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentUtil.newIntent(WarningInfo_EquipActivity.this, WarningInfo_EquipInspectionActivity.class);
+                CorporationEntity corp = getCheckedCorporationEntity();
+                Intent intent = new Intent(WarningInfo_EquipActivity.this, WarningInfo_EquipInspectionActivity.class);
+                intent.putExtra("corpID", corp.getID());
+                startActivity(intent);
             }
         });
         mBt_EquipSpareReplace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentUtil.newIntent(WarningInfo_EquipActivity.this, WarningInfo_EquipSpareReplaceActivity.class);
+                CorporationEntity corp = getCheckedCorporationEntity();
+                Intent intent = new Intent(WarningInfo_EquipActivity.this, WarningInfo_EquipSpareReplaceActivity.class);
+                intent.putExtra("corpID", corp.getID());
+                startActivity(intent);
             }
         });
         mBt_EquipRepairEx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentUtil.newIntent(WarningInfo_EquipActivity.this, WarningInfo_EquipRepairExActivity.class);
+                CorporationEntity corp = getCheckedCorporationEntity();
+                Intent intent = new Intent(WarningInfo_EquipActivity.this, WarningInfo_EquipRepairExActivity.class);
+                intent.putExtra("corpID", corp.getID());
+                startActivity(intent);
             }
         });
 
@@ -283,6 +366,17 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
             },corpName);
         }
 
+    }
+
+    private CorporationEntity getCheckedCorporationEntity(){
+        CorporationEntity corp = null;
+        String userCorp = mTv_UserCorp.getText().toString();
+        if(userCorp.length() > 0) {
+            corp = SPUtils.getLastLoginUserCorporations(WarningInfo_EquipActivity.this, userCorp);
+        }else{
+            corp = SPUtils.getLastLoginUserCorporation(WarningInfo_EquipActivity.this);
+        }
+        return corp;
     }
 
 }

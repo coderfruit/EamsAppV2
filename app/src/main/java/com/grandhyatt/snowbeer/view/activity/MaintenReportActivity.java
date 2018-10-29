@@ -52,6 +52,7 @@ import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.utils.CommonUtils;
 import com.grandhyatt.snowbeer.utils.ImageUtils;
+import com.grandhyatt.snowbeer.utils.PopupWindowUtil;
 import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.view.SearchBarLayout;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
@@ -178,15 +179,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         //------------------------------------------------------------------------------------------------------
         //保养-显示保养单 type = 3    mTv_EquipID=设备id  mTv_ReportID = 保养单ID
         if ((type != null && type.equals("3")) && mTv_ReportID != null && mTv_EquipID != null) {
-            mToolBar.setTitle("查看保养信息");
-            getReport(mTv_ReportID);
-            getEquipmentInfoByID(mTv_EquipID);
-            bindEventPart();
-            //隐藏搜索栏
-            mSearchBar.setVisibility(View.GONE);
-            mBtn_Submit.setVisibility(View.GONE);
-            mEt_User.setEnabled(false);
-            mEt_money.setEnabled(false);
+
         }
         //------------------------------------------------------------------------------------------------------
         //保养-保养计划  type = 2    mTv_EquipID=设备id  mTv_ReportID = 保养计划ID
@@ -352,6 +345,40 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 
     @Override
     public void bindEvent() {
+        mToolBar.showMenuButton();
+        mToolBar.setMenuText("...");
+        mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<String> list = new ArrayList<String>();
+                list.add("保养记录");
+
+                final PopupWindowUtil popupWindow = new PopupWindowUtil(MaintenReportActivity.this, list);
+                popupWindow.setItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        if (_EquipmentData == null) {
+                            ToastUtils.showToast(MaintenReportActivity.this, "请先确定设备");
+                            return;
+                        }
+                        popupWindow.dismiss();
+                        switch (position) {
+                            case 0:
+                                Intent intent1 = new Intent(MaintenReportActivity.this, Query_EquipMaintenanceInfoActivity.class);
+                                intent1.putExtra("equipID", _EquipmentData.getID());
+                                startActivity(intent1);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+                //根据后面的数字 手动调节窗口的宽度
+                popupWindow.show(v, 3);
+            }
+        });
+
 
         //检索事件
         mSearchBar.setSearchButtonOnClickListener(new View.OnClickListener() {

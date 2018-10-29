@@ -16,12 +16,13 @@ import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.Equip_RepairEx_EntityDataListAdapter;
 import com.grandhyatt.snowbeer.entity.CorporationEntity;
+import com.grandhyatt.snowbeer.entity.InspectionPlanEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentExPlanEntity;
-import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.result.RepairmentExPlanResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
+import com.grandhyatt.snowbeer.utils.PopupWindowUtil;
 import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -32,6 +33,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -97,15 +99,21 @@ public class WarningInfo_EquipRepairExActivity extends ActivityBase implements I
 
                 RepairmentExPlanEntity entity = (RepairmentExPlanEntity) mAdapter.getItem(position);
 
+                TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_ID);
+                TextView mTv_EquipID = (TextView) view.findViewById(R.id.mTv_EquipID);
+                RepairmentExPlanEntity entity = (RepairmentExPlanEntity) mAdapter.getItem(position);
+
                 //维修-维修计划   type = 2  mTv_EquipID=设备ID    mTv_ReportID = 维修计划ID，
                 Intent intent = new Intent(WarningInfo_EquipRepairExActivity.this, RepairmentExReportActivity.class);
                 intent.putExtra("type","2");
-                intent.putExtra("mTv_EquipID",entity.getEquipmentID());
-                intent.putExtra("mTv_ReportID", entity.getID());
+                intent.putExtra("mTv_EquipID", mTv_EquipID.getText());
+                intent.putExtra("mTv_ReportID", mTv_ReportID.getText());
+
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("entity", entity);
                 intent.putExtras(bundle);
-                startActivityForResult(intent, Consts.REPAIR_OPERATE_AFTER);
+
+                startActivityForResult(intent, Consts.REPAIR_EX_OPERATE_AFTER);
             }
         });
         //下拉刷新

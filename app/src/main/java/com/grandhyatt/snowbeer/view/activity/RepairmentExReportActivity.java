@@ -60,6 +60,7 @@ import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.utils.CommonUtils;
 import com.grandhyatt.snowbeer.utils.ImageUtils;
+import com.grandhyatt.snowbeer.utils.PopupWindowUtil;
 import com.grandhyatt.snowbeer.view.NumberEditText;
 import com.grandhyatt.snowbeer.view.SearchBarLayout;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
@@ -333,6 +334,39 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
 
     @Override
     public void bindEvent() {
+        mToolBar.showMenuButton();
+        mToolBar.setMenuText("...");
+        mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<String> list = new ArrayList<String>();
+                list.add("外委维修记录");
+
+                final PopupWindowUtil popupWindow = new PopupWindowUtil(RepairmentExReportActivity.this, list);
+                popupWindow.setItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                        if (_EquipmentData == null) {
+                            ToastUtils.showToast(RepairmentExReportActivity.this, "请先确定设备");
+                            return;
+                        }
+                        popupWindow.dismiss();
+                        switch (position) {
+                            case 0:
+                                Intent intent1 = new Intent(RepairmentExReportActivity.this, Query_EquipRepairExInfoActivity.class);
+                                intent1.putExtra("equipID", _EquipmentData.getID());
+                                startActivity(intent1);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+                //根据后面的数字 手动调节窗口的宽度
+                popupWindow.show(v, 3);
+            }
+        });
 
         //检索事件
         mSearchBar.setSearchButtonOnClickListener(new View.OnClickListener() {
