@@ -101,7 +101,6 @@ public class WarningInfo_EquipRepairExActivity extends ActivityBase implements I
 
                 TextView mTv_ReportID = (TextView) view.findViewById(R.id.mTv_ID);
                 TextView mTv_EquipID = (TextView) view.findViewById(R.id.mTv_EquipID);
-                RepairmentExPlanEntity entity = (RepairmentExPlanEntity) mAdapter.getItem(position);
 
                 //维修-维修计划   type = 2  mTv_EquipID=设备ID    mTv_ReportID = 维修计划ID，
                 Intent intent = new Intent(WarningInfo_EquipRepairExActivity.this, RepairmentExReportActivity.class);
