@@ -2,6 +2,7 @@ package com.grandhyatt.snowbeer.view.activity;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -194,7 +195,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             mToolBar.setTitle("设备保养-按计划");
             initView();
             bindEvent();
-
+            mTv_FaultDesc.setVisibility(View.GONE);
 
             //保养计划
             Repair_RepairmentPlan(mTv_EquipID, entity);
@@ -202,7 +203,21 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         //------------------------------------------------------------------------------------------------------
         //保养            type = 0    mTv_EquipID=设备id
         else  if ((type != null && type.equals("0")) && mTv_EquipID != null) {
-
+            mSearchBar.setVisibility(View.GONE);
+            mToolBar.setTitle("设备维修");
+            initView();
+            bindEvent();
+            mTv_FaultDesc.setVisibility(View.VISIBLE);
+            mLl_Plan.setVisibility(View.GONE);
+            mLv_Show_plan.setAdapter(null);
+            lL_material.setVisibility(View.GONE);
+            mTv_materialName.setText("");
+            mTv_materialstand.setText("");
+            mTv_materialUnit.setText("");
+            mEt_materialprice.setText("0");
+            mEt_materialsum.setText("0");
+            //根据设备id获取设备信息
+            getEquipmentInfoByID(mTv_EquipID);
         }
         //------------------------------------------------------------------------------------------------------
         //正常保养
@@ -422,6 +437,11 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         mTv_FaultDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (_EquipmentData == null) {
+                    ToastUtils.showToast(MaintenReportActivity.this, "请先确定设备");
+                    return;
+                }
+
                 final List<String> list = new ArrayList<String>();
                 if (_FaultDescArr != null && _FaultDescArr.length > 0) {
                     for (String item : _FaultDescArr) {
@@ -452,6 +472,23 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                             mEt_materialsum.setText("0");
                             lL_material.setVisibility(View.GONE);
                         }
+                        ShowDialog(MaintenReportActivity.this, "提示", "是否按计划执行?",
+                                //是
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        mTv_jh.performClick();
+                                    }
+                                },
+                                //否
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        mLv_Show_plan.setAdapter(null);
+                                        mLv_Show_plan.setVisibility(View.GONE);
+                                        mLl_Plan.setVisibility(View.GONE);
+                                    }
+                                });
                     }
                 }, list);
 
@@ -951,18 +988,20 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
 
                     _CheckPlanIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
                     _CheckPlanEntityList = (List<MaintenancePlanEntity>)data.getSerializableExtra("_CheckMaintenPlanList");
-                    if(_CheckPlanEntityList.size()==0){
+                    if(_CheckPlanEntityList==null || _CheckPlanEntityList.size()==0){
                         mLv_Show_plan.setVisibility(View.GONE);
+                        mLl_Plan.setVisibility(View.GONE);
                         mLv_Show_plan.setAdapter(null);
                     }else {
                         mLv_Show_plan.setAdapter(null);
                         adapter_Plan= new MaintenancePlanViewDataListAdapter(this, _CheckPlanEntityList);
                         mLv_Show_plan.setSelection(adapter_Plan.getCount());
 
-
                         mLv_Show_plan.setAdapter(adapter_Plan);
                         adapter_Plan.notifyDataSetChanged();
+                        mLl_Plan.setVisibility(View.VISIBLE);
                         mLv_Show_plan.setVisibility(View.VISIBLE);
+
                         setListViewHeightBasedOnChildren(mLv_Show_plan);
                     }
 

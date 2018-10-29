@@ -218,28 +218,36 @@ public class MaintenPlanCheckActivity extends ActivityBase implements IActivityB
                 _CheckEntityList.clear();
                 _CheckIDList.clear();
                 MaintenancePlanEntity rpEntity=null;
-                for (int i = 0; i < adapter_Plan.getCount(); i++) {
+                if(adapter_Plan!=null && adapter_Plan.getCount()>0){
+                    for (int i = 0; i < adapter_Plan.getCount(); i++) {
 
-                         rpEntity = (MaintenancePlanEntity) mLv_DataList.getAdapter().getItem(i);
+                        rpEntity = (MaintenancePlanEntity) mLv_DataList.getAdapter().getItem(i);
                         if (rpEntity!=null) {
-                           if( rpEntity.getIsCheck()){
-                               _CheckEntityList.add(rpEntity);
-                               _CheckIDList.add(rpEntity.getID());
-                           }
+                            if( rpEntity.getIsCheck()){
+                                _CheckEntityList.add(rpEntity);
+                                _CheckIDList.add(rpEntity.getID());
+                            }
 
                         }
                     }
 
 
-                //把返回数据存入Intent
-                intent.putStringArrayListExtra("_CheckPlanIDList", _CheckIDList);
-                intent.putExtra("_CheckMaintenPlanList", _CheckEntityList);
+                    //把返回数据存入Intent
+                    intent.putStringArrayListExtra("_CheckPlanIDList", _CheckIDList);
+                    intent.putExtra("_CheckMaintenPlanList", _CheckEntityList);
+
+                    //设置返回数据
+                    MaintenPlanCheckActivity.this.setResult(RESULT_OK, intent);
+                    //关闭Activity
+                    MaintenPlanCheckActivity.this.finish();
+                }
+                else {
+                    //关闭Activity
+                    MaintenPlanCheckActivity.this.finish();
+                }
 
 
-                //设置返回数据
-                MaintenPlanCheckActivity.this.setResult(RESULT_OK, intent);
-                //关闭Activity
-                MaintenPlanCheckActivity.this.finish();
+
 
             }
         });
