@@ -425,7 +425,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             }
         };
         SoapUtils.getTextDictoryAsync(RepairmentReportActivity.this, Consts.EnumTextDictonay.FaultClass, callbackFailureReportingDesc);
-        //故障级别
+        //维修级别
         SoapListener callbackFailureReportingLevel = new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
