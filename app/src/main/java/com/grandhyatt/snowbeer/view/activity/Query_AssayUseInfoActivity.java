@@ -209,6 +209,10 @@ public class Query_AssayUseInfoActivity extends ActivityBase implements IActivit
                     mAdapter = new Query_Assay_UseInfo_Adapter(Query_AssayUseInfoActivity.this, data);
                     mLv_DataList.setAdapter(mAdapter);
                     mRefreshLayout.finishRefresh(true); //设置SmartRefreshLayout刷新完成标志
+
+                    if(data.size() == 0){
+                        ToastUtils.showToast(Query_AssayUseInfoActivity.this,"没有获取到记录！");
+                    }
                 }
             }
 

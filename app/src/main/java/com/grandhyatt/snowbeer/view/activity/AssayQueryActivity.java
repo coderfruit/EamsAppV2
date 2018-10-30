@@ -443,6 +443,7 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
                     mAdapter = new EquipmentEntity_DataListAdapter(AssayQueryActivity.this, data);
                     mLv_DataList.setAdapter(mAdapter);
                     mRefreshLayout.finishRefresh(true); //设置SmartRefreshLayout刷新完成标志
+
                 }
 
             }
