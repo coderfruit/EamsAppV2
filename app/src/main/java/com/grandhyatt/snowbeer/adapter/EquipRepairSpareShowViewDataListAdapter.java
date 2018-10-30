@@ -53,9 +53,9 @@ public class EquipRepairSpareShowViewDataListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_item_repairment_spare_check_activity, null);
 
             mViewHolder.mTv_SpareName = convertView.findViewById(R.id.mTv_SpareName);
-
             mViewHolder.mTv_Unit = convertView.findViewById(R.id.mTv_Unit);
             mViewHolder.mNEdt_Check = convertView.findViewById(R.id.mNEdt_Check);
+            mViewHolder.mTv_SumCountxTitle= convertView.findViewById(R.id.mTv_SumCountxTitle);
             mViewHolder.mTv_SumCountx= convertView.findViewById(R.id.mTv_SumCountx);
             mViewHolder.mTv_SpareID=convertView.findViewById(R.id.mTv_SpareID);
             convertView.setTag(mViewHolder);
@@ -66,12 +66,23 @@ public class EquipRepairSpareShowViewDataListAdapter extends BaseAdapter {
 
         SpareInEquipmentEntity dataModel = mDataList.get(position);
         if (dataModel != null) {
-
-            mViewHolder.mTv_SpareName.setText(dataModel.getSpareName() );
+            String stander = "";
+            if(dataModel.getSpareStander() != null && dataModel.getSpareStander().length() > 0){
+                stander += "/" + dataModel.getSpareStander();
+            }
+            if(dataModel.getSparePartNO() != null && dataModel.getSparePartNO().length() > 0){
+                stander += "/" + dataModel.getSparePartNO();
+            }
+            mViewHolder.mTv_SpareName.setText(dataModel.getSpareName() + stander);
             mViewHolder.mTv_Unit.setText(dataModel.getSpareUnit());
             int inputCnt = Integer.parseInt(dataModel.getReplaceCount());
             mViewHolder.mNEdt_Check.setData(inputCnt);
-            mViewHolder.mTv_SumCountx.setText(dataModel.getAllowCount());
+            if(dataModel.getAllowCount().equals("0")){
+                mViewHolder.mTv_SumCountxTitle.setVisibility(View.GONE);
+                mViewHolder.mTv_SumCountx.setVisibility(View.GONE);
+            }else{
+                mViewHolder.mTv_SumCountx.setText(dataModel.getAllowCount());
+            }
             mViewHolder.mTv_SpareID.setText(dataModel.getSpareID());
         }
         return convertView;
@@ -87,6 +98,7 @@ public class EquipRepairSpareShowViewDataListAdapter extends BaseAdapter {
         private TextView mTv_SpareName;
         private NumberEditText mNEdt_Check;
         private TextView mTv_Unit;
+        private TextView mTv_SumCountxTitle;
         private TextView mTv_SumCountx;
         private  TextView mTv_SpareID;
 

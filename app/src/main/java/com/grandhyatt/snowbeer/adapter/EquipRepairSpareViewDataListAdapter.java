@@ -65,10 +65,20 @@ public class EquipRepairSpareViewDataListAdapter extends BaseAdapter {
 
         EquipmentUseSpareEntity dataModel = mDataList.get(position);
         if (dataModel != null) {
-
-            mViewHolder.mTv_SpareName.setText(dataModel.getSpareName());
+            String stander = "";
+            if(dataModel.getSpareStander() != null && dataModel.getSpareStander().length() > 0){
+                stander += "/" + dataModel.getSpareStander();
+            }
+            mViewHolder.mTv_SpareName.setText(dataModel.getSpareName() + stander);
             mViewHolder.mTv_Unit.setText(dataModel.getSpareUnit());
-            mViewHolder.mNEdt_Check.setData(1);
+
+            if(dataModel.getUserInputCount() != null && dataModel.getUserInputCount().length() > 0){
+                double inputCount = Double.parseDouble(dataModel.getUserInputCount());
+                mViewHolder.mNEdt_Check.setData(inputCount);
+            }else{
+                mViewHolder.mNEdt_Check.setData(1);
+            }
+
             if(dataModel.getCount() != null && dataModel.getCount().length() > 0) {
                 double limit = Double.parseDouble(dataModel.getCount());
                 mViewHolder.mNEdt_Check.SetNumberLimit(limit);

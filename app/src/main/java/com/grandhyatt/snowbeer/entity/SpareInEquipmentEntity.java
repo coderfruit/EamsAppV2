@@ -34,6 +34,8 @@ public class SpareInEquipmentEntity implements Serializable {
     private String REMARK;
     private String AllowCount;
     private String CurrentCount;
+    private String SparePartNO;
+    private String SpareStander;
     private String SpareUnit;
 
     public SpareInEquipmentEntity() {
@@ -260,5 +262,21 @@ public class SpareInEquipmentEntity implements Serializable {
 
     public void setDeptName(String deptName) {
         DeptName = deptName;
+    }
+
+    public String getSparePartNO() {
+        return SparePartNO;
+    }
+
+    public void setSparePartNO(String sparePartNO) {
+        SparePartNO = sparePartNO;
+    }
+
+    public String getSpareStander() {
+        return SpareStander;
+    }
+
+    public void setSpareStander(String spareStander) {
+        SpareStander = spareStander;
     }
 }

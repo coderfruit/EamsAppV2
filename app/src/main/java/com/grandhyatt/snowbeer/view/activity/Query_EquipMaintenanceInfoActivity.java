@@ -170,6 +170,10 @@ public class Query_EquipMaintenanceInfoActivity extends ActivityBase implements 
                     mAdapter = new Query_Equip_Mainten_Adapter(Query_EquipMaintenanceInfoActivity.this, data);
                     mLv_DataList.setAdapter(mAdapter);
                     mRefreshLayout.finishRefresh(true); //设置SmartRefreshLayout刷新完成标志
+
+                    if(data.size() == 0){
+                        ToastUtils.showToast(Query_EquipMaintenanceInfoActivity.this,"没有获取到记录！");
+                    }
                 }
             }
 

@@ -112,6 +112,7 @@ public class WarningInfo_EquipRepairActivity extends ActivityBase implements IAc
                             case 0:
                                 Intent intent1 = new Intent(WarningInfo_EquipRepairActivity.this, Query_EquipRepairInfoActivity.class);
                                 intent1.putExtra("corpID", _CorpID);
+                                intent1.putExtra("equipID", _EquipID);
                                 startActivity(intent1);
                                 break;
                             default:

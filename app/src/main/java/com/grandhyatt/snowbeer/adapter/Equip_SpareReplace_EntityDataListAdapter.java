@@ -83,7 +83,7 @@ public class Equip_SpareReplace_EntityDataListAdapter extends BaseAdapter {
             mViewHolder.mTv_SpareID.setText(dataModel.getSpareID());
             mViewHolder.mTv_Interval.setText("每" + dataModel.getReplaceCycles() + "天执行一次");
             mViewHolder.mTv_EquipName.setText(dataModel.getEquipmentName());
-            mViewHolder.mTv_SpareName.setText(dataModel.getSpareName());
+            mViewHolder.mTv_SpareName.setText(dataModel.getSpareName() + " x " + dataModel.getReplaceCount() + dataModel.getSpareUnit());
             mViewHolder.mTv_LastRunningDate.setText(dataModel.getLastReplaceDate());
             mViewHolder.mTv_NextRunningDate.setText(dataModel.getNextReplaceDate());
             mViewHolder.mTv_Desc.setText(dataModel.getREMARK());

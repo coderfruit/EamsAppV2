@@ -61,6 +61,8 @@ public class WarningInfo_EquipRepairExActivity extends ActivityBase implements I
     private Equip_RepairEx_EntityDataListAdapter mAdapter;
 
     String _EquipID;//传入的设备ID
+    String _CorpID; //传入的组织机构ID
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +74,7 @@ public class WarningInfo_EquipRepairExActivity extends ActivityBase implements I
 
         Intent intent = getIntent();
         _EquipID = intent.getStringExtra("equipID");
+        _CorpID = intent.getStringExtra("corpID");
 
         if (_EquipID != null) {  //根据设备ID 获取预警信息
             requestNetworkDataByEquip(_EquipID);
@@ -88,6 +91,35 @@ public class WarningInfo_EquipRepairExActivity extends ActivityBase implements I
     @Override
     public void initView() {
         mToolBar.setTitle("外委维修提醒");
+
+        mToolBar.setMenuText("...");
+        mToolBar.showMenuButton();
+        mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<String> list = new ArrayList<String>();
+                list.add("检验记录");
+                final PopupWindowUtil popupWindow = new PopupWindowUtil(WarningInfo_EquipRepairExActivity.this, list);
+                popupWindow.setItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        popupWindow.dismiss();
+                        switch (position){
+                            case 0:
+                                Intent intent1 = new Intent(WarningInfo_EquipRepairExActivity.this, Query_EquipRepairExInfoActivity.class);
+                                intent1.putExtra("corpID", _CorpID);
+                                intent1.putExtra("equipID", _EquipID);
+                                startActivity(intent1);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+                //根据后面的数字 手动调节窗口的宽度
+                popupWindow.show(v, 3);
+            }
+        });
     }
 
     @Override

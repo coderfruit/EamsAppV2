@@ -167,6 +167,10 @@ public class Query_EquipInspectionInfoActivity extends ActivityBase implements I
                     mAdapter = new Query_Equip_Inspect_Adapter(Query_EquipInspectionInfoActivity.this, data);
                     mLv_DataList.setAdapter(mAdapter);
                     mRefreshLayout.finishRefresh(true); //设置SmartRefreshLayout刷新完成标志
+
+                    if(data.size() == 0){
+                        ToastUtils.showToast(Query_EquipInspectionInfoActivity.this,"没有获取到记录！");
+                    }
                 }
             }
 

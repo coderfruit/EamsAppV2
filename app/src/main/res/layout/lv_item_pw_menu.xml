@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:gravity="center_vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
-    android:layout_marginBottom="8dp"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@color/blue_title_bar">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:gravity="center"
-        android:drawablePadding="3dp"
-        android:padding="7dp"
-        android:text="测试数据"
-        android:id="@+id/tv_item_pw_menu"
-        android:textSize="16sp"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black" />
+        android:layout_height="45dp"
+        android:orientation="horizontal">
 
-</RelativeLayout>
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_search_02" />
+
+        <TextView
+            android:id="@+id/tv_item_pw_menu"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="60"
+            android:gravity="center"
+            android:text="菜单"
+            android:textColor="#FFF"
+            android:textSize="14sp" />
+    </LinearLayout>
+</LinearLayout>

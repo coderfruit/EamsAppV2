@@ -102,7 +102,6 @@ public class EquipMgrRepairExSpareCheckActivity extends ActivityBase implements 
     ArrayList<SpareInEquipmentEntity> _CheckEntityList = new ArrayList<>();//用户选择的数据行对象
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +125,7 @@ public class EquipMgrRepairExSpareCheckActivity extends ActivityBase implements 
 
     @Override
     public void initView() {
-        mToolBar.setTitle("设备外委维修用备件选择");
+        mToolBar.setTitle("设备外委维修-备件选择");
         getEquipmentInfo(_EquipID);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         _SpareCond = mEt_SpareCond.getText().toString();
@@ -229,9 +228,8 @@ public class EquipMgrRepairExSpareCheckActivity extends ActivityBase implements 
             @Override
             public void onClick(View v) {
 
-                if(_CheckIDList == null || _CheckIDList.size() == 0)
-                {
-                    ToastUtils.showLongToast(EquipMgrRepairExSpareCheckActivity.this,"请选择使用的备件（单选或多选）");
+                if (_CheckIDList == null || _CheckIDList.size() == 0) {
+                    ToastUtils.showLongToast(EquipMgrRepairExSpareCheckActivity.this, "请选择使用的备件（单选或多选）");
                     return;
                 }
 
@@ -246,9 +244,8 @@ public class EquipMgrRepairExSpareCheckActivity extends ActivityBase implements 
 //                        isChk = true;
 //                    }
 //                }
-                if (isChk)
-                {
-                    ToastUtils.showLongToast(EquipMgrRepairExSpareCheckActivity.this,"不允许备件与设备跨大部门使用!");
+                if (isChk) {
+                    ToastUtils.showLongToast(EquipMgrRepairExSpareCheckActivity.this, "不允许备件与设备跨大部门使用!");
                     return;
                 }
 
@@ -333,12 +330,12 @@ public class EquipMgrRepairExSpareCheckActivity extends ActivityBase implements 
                     mTv_SpareDept.setText(data.getDepartmentName().toString());
 
                     //获取设备对应部门信息
-                //    getDepartmentInfo(String.valueOf(data.getCorporationID()));
+                    //    getDepartmentInfo(String.valueOf(data.getCorporationID()));
 
                     showLogingDialog();
 
                     _SelectedDept = new DepartmentEntity();
-                    _SelectedDept.setID( data.getDepartmentID());
+                    _SelectedDept.setID(data.getDepartmentID());
 
                     //获取设备可用的备件库存信息
                     getSparesInfo(data.getID(), _SelectedDept, "");
@@ -424,15 +421,13 @@ public class EquipMgrRepairExSpareCheckActivity extends ActivityBase implements 
      */
     private void getSparesInfo(String equipID, DepartmentEntity dept, String spareContent) {
         String deptID = "";
-        if(dept != null)
-        {
+        if (dept != null) {
             deptID = dept.getID();
         }
-        if(spareContent == null)
-        {
+        if (spareContent == null) {
             spareContent = "";
         }
-//获取设备关联备件信息
+        //获取设备关联备件信息
         SoapUtils.getEquipmentSparesDeptAsync(EquipMgrRepairExSpareCheckActivity.this, equipID, deptID, spareContent, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
@@ -496,6 +491,7 @@ public class EquipMgrRepairExSpareCheckActivity extends ActivityBase implements 
 
     /**
      * 部门下拉列表数据源赋值
+     *
      * @param dptList
      */
     private void bindDepart(List<DepartmentEntity> dptList) {

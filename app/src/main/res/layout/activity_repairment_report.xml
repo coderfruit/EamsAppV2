@@ -359,7 +359,8 @@
                             android:layout_centerVertical="true"
                             android:gravity="center_vertical"
                             android:text="维修人："
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+                            android:layout_marginLeft="10dp"/>
 
                         <EditText
                             android:id="@+id/mEt_User"
@@ -381,8 +382,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-
-                            android:layout_marginEnd="30dp"
+                            android:layout_marginRight="10dp"
                             android:hint="(元)"
                             android:textColor="@color/gray5"
                             android:textSize="14sp" />
@@ -391,12 +391,11 @@
                             android:id="@+id/mEt_money"
                             android:layout_width="70dp"
                             android:layout_height="wrap_content"
-                            android:gravity="right"
+                            android:gravity="center"
                             android:hint="外委费用"
                             android:inputType="numberDecimal"
                             android:textColor="@color/gray5"
                             android:textSize="13sp"
-
                             android:layout_alignParentTop="true"
                             android:layout_toLeftOf="@+id/mTv_t3"
                             android:layout_toStartOf="@+id/mTv_t3"

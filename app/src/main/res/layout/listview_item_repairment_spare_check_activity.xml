@@ -34,6 +34,7 @@
             android:gravity="left"
             android:layout_marginLeft="5dp">
             <TextView
+                android:id="@+id/mTv_SumCountxTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="可用量:"

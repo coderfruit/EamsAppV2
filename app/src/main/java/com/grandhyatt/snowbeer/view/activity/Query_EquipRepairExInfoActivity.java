@@ -169,6 +169,10 @@ public class Query_EquipRepairExInfoActivity extends ActivityBase implements IAc
                     mAdapter = new Query_Equip_Repair_Ex_Adapter(Query_EquipRepairExInfoActivity.this, data);
                     mLv_DataList.setAdapter(mAdapter);
                     mRefreshLayout.finishRefresh(true); //设置SmartRefreshLayout刷新完成标志
+
+                    if(data.size() == 0){
+                        ToastUtils.showToast(Query_EquipRepairExInfoActivity.this,"没有获取到记录！");
+                    }
                 }
             }
 

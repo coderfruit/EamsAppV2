@@ -314,6 +314,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             useSpare.setSpareName(spInEpEntity.getSpareName());
             useSpare.setSpareUnit(spInEpEntity.getSpareUnit());
             useSpare.setUserInputCount(spInEpEntity.getReplaceCount());
+
             _CheckSpareUseList.add(useSpare);
             adapter_SpareView = new EquipRepairSpareViewDataListAdapter(RepairmentReportActivity.this, _CheckSpareUseList);
             mLv_DataList_Spare.setAdapter(adapter_SpareView);
@@ -597,65 +598,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         mTv_RepairLevel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (_EquipmentData == null) {
-                    ToastUtils.showToast(RepairmentReportActivity.this, "请先确定设备");
-                    return;
-                }
-                final List<String> list = new ArrayList<String>();
-                if (_FaultLevelArr != null && _FaultLevelArr.length > 0) {
-                    for (String item : _FaultLevelArr) {
-                        list.add(item);
-                    }
-                } else {
-                    list.add("大修");
-                    list.add("定修");
-                    list.add("日常维修");
-                }
-                showSelectDialog(new SelectDialog.SelectDialogListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        //界面赋值
-                        mTv_RepairLevel.setText(list.get(position).toString());
-
-                        //大修
-                        if (list.get(position).toString().equals("大修")) {
-                            mLl_Plan.setVisibility(View.VISIBLE);
-                            mBtn_ChoicePlan.performClick();
-
-                            if (_CheckSpareEntityList != null && _CheckSpareEntityList.size() > 0) {
-                                _CheckSpareEntityList.clear();
-                                mLv_Show_plan.setVisibility(View.GONE);
-                                mLv_Show_plan.setAdapter(null);
-                            }
-                        }
-                        //定修、日常维修
-                        else {
-                            ShowDialog(RepairmentReportActivity.this, "提示", "是否按计划执行?",
-                                    //是
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            mBtn_ChoicePlan.performClick();
-                                            mLl_Plan.setVisibility(View.VISIBLE);
-                                        }
-                                    },
-                                    //否
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            mLl_Plan.setVisibility(View.GONE);
-                                        }
-                                    });
-
-                            if (_CheckPlanEntityList != null && _CheckPlanEntityList.size() > 0) {
-                                _CheckPlanEntityList.clear();
-                                _CheckPlanIDList.clear();
-                                mLv_Show_plan.setVisibility(View.GONE);
-                                mLv_Show_plan.setAdapter(null);
-                            }
-                        }
-                    }
-                }, list);
+                repairLevelSelect();
             }
         });
         //故障类别
@@ -1110,6 +1053,71 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 ToastUtils.showToast(RepairmentReportActivity.this, getString(R.string.submit_soap_result_err4, fault));
             }
         });
+    }
+
+    /**
+     * 维修级别选择处理
+     */
+    private void repairLevelSelect() {
+        if (_EquipmentData == null) {
+            ToastUtils.showToast(RepairmentReportActivity.this, "请先确定设备");
+            return;
+        }
+        final List<String> list = new ArrayList<String>();
+        if (_FaultLevelArr != null && _FaultLevelArr.length > 0) {
+            for (String item : _FaultLevelArr) {
+                list.add(item);
+            }
+        } else {
+            list.add("大修");
+            list.add("定修");
+            list.add("日常维修");
+        }
+        showSelectDialog(new SelectDialog.SelectDialogListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //界面赋值
+                mTv_RepairLevel.setText(list.get(position).toString());
+
+                //大修
+                if (list.get(position).toString().equals("大修")) {
+                    mLl_Plan.setVisibility(View.VISIBLE);
+                    mBtn_ChoicePlan.performClick();
+
+                    if (_CheckSpareEntityList != null && _CheckSpareEntityList.size() > 0) {
+                        _CheckSpareEntityList.clear();
+                        mLv_Show_plan.setVisibility(View.GONE);
+                        mLv_Show_plan.setAdapter(null);
+                    }
+                }
+                //定修、日常维修
+                else {
+                    ShowDialog(RepairmentReportActivity.this, "提示", "是否按计划执行?",
+                            //是
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mBtn_ChoicePlan.performClick();
+                                    mLl_Plan.setVisibility(View.VISIBLE);
+                                }
+                            },
+                            //否
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mLl_Plan.setVisibility(View.GONE);
+                                }
+                            });
+
+                    if (_CheckPlanEntityList != null && _CheckPlanEntityList.size() > 0) {
+                        _CheckPlanEntityList.clear();
+                        _CheckPlanIDList.clear();
+                        mLv_Show_plan.setVisibility(View.GONE);
+                        mLv_Show_plan.setAdapter(null);
+                    }
+                }
+            }
+        }, list);
     }
 
     /**

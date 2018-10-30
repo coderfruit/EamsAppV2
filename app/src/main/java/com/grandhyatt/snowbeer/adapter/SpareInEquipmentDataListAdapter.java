@@ -81,7 +81,7 @@ public class SpareInEquipmentDataListAdapter extends BaseAdapter {
             mViewHolder.mTv_LastRunningDate.setText(dataModel.getLastReplaceDate());
             mViewHolder.mTv_NextRunningDate.setText(dataModel.getNextReplaceDate());
             mViewHolder.mTv_PlanDescTitle.setText("备件信息：");
-            mViewHolder.mTv_PlanDesc.setText("(" + dataModel.getSpareCode() + ")" + dataModel.getSpareName());
+            mViewHolder.mTv_PlanDesc.setText("(" + dataModel.getSpareCode() + ")" + dataModel.getSpareName() + " x " + dataModel.getReplaceCount() + dataModel.getSpareUnit());
             mViewHolder.mTv_ID.setText(dataModel.getID());
             mViewHolder.mCkb_ID.setChecked(dataModel.getIsCheck());
         }

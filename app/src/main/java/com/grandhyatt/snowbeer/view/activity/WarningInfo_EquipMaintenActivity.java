@@ -109,6 +109,7 @@ public class WarningInfo_EquipMaintenActivity extends ActivityBase implements IA
                             case 0:
                                 Intent intent1 = new Intent(WarningInfo_EquipMaintenActivity.this, Query_EquipMaintenanceInfoActivity.class);
                                 intent1.putExtra("corpID", _CorpID);
+                                intent1.putExtra("equipID", _EquipID);
                                 startActivity(intent1);
                                 break;
                             default:

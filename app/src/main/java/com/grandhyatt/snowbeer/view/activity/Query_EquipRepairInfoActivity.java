@@ -191,6 +191,10 @@ public class Query_EquipRepairInfoActivity extends ActivityBase implements IActi
                     mAdapter = new Query_Equip_Repair_Adapter(Query_EquipRepairInfoActivity.this, data);
                     mLv_DataList.setAdapter(mAdapter);
                     mRefreshLayout.finishRefresh(true); //设置SmartRefreshLayout刷新完成标志
+
+                    if(data.size() == 0){
+                        ToastUtils.showToast(Query_EquipRepairInfoActivity.this,"没有获取到记录！");
+                    }
                 }
             }
 
@@ -244,6 +248,9 @@ public class Query_EquipRepairInfoActivity extends ActivityBase implements IActi
                 }
                 List<RepairmentBillItemEntity> data = result.getData();
                 ShowPopWindow(data, view);
+                if(data.size() == 0){
+                    ToastUtils.showToast(Query_EquipRepairInfoActivity.this,"没有获取到记录！");
+                }
             }
 
             @Override

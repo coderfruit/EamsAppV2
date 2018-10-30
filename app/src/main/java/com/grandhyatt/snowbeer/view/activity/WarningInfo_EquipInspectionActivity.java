@@ -108,6 +108,7 @@ public class WarningInfo_EquipInspectionActivity extends ActivityBase implements
                             case 0:
                                 Intent intent1 = new Intent(WarningInfo_EquipInspectionActivity.this, Query_EquipInspectionInfoActivity.class);
                                 intent1.putExtra("corpID", _CorpID);
+                                intent1.putExtra("equipID", _EquipID);
                                 startActivity(intent1);
                                 break;
                             default:

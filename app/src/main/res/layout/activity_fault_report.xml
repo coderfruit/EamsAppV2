@@ -419,6 +419,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:background="@drawable/selector_linear_layout_item_white"
+                android:layout_marginTop="10dp"
                 android:visibility="gone">
                 <!-- 维修、保养-->
                 <LinearLayout

@@ -183,7 +183,7 @@ public class NumberEditText extends RelativeLayout {
         }
     }
 
-    public void setData(int data){
+    public void setData(double data){
         try {
             mEdt_Data.setText(String.valueOf(data));
         }catch (Exception ex){

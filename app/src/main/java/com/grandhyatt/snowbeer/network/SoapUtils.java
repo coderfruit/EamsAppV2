@@ -1224,7 +1224,7 @@ public class SoapUtils {
 		//获取http请求身份验证参数
 		final SoapParams params  = getAuthHttpRequestHeader(context);
 		params.put("equipID",equipID);
-
+		params.put("spareInfo",spareContent);
 
 		SoapUtils.getInstance(context).call(methodName,params,callback);
 	}

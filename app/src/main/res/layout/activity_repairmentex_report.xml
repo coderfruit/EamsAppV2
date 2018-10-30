@@ -322,7 +322,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_weight="1"
-                    android:gravity="right"
+                    android:gravity="center"
                     android:hint="0"
                     android:inputType="number"
                     android:textColor="@color/gray5"
@@ -486,7 +486,6 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/selector_listview_item"
                 android:divider="@null"
-
                 android:dividerHeight="0dp"
                 android:transcriptMode="alwaysScroll" />
 

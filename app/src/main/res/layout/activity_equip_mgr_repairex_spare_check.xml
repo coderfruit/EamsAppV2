@@ -158,7 +158,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="horizontal"
-                android:layout_weight="5">
+                android:layout_weight="5"
+                android:visibility="gone" >
 
                 <TextView
                     android:id="@+id/mTv_SpareDeptID"
@@ -173,14 +174,16 @@
                     android:layout_marginLeft="10dp"
                     android:text="备件领用部门"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    />
 
                 <ImageView
                     android:id="@+id/mIv_SpareDept"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
-                    android:src="@drawable/item_signature_iv_menu_defaul" />
+                    android:src="@drawable/item_signature_iv_menu_defaul"
+                   />
             </LinearLayout>
 
             <EditText
@@ -191,7 +194,7 @@
                 android:src="@drawable/item_signature_iv_menu_defaul"
                 android:textSize="12dp"
                 android:gravity="center"
-                android:layout_weight="3"/>
+                android:layout_weight="7"/>
 
             <Button
                 android:id="@+id/mBt_Search"
@@ -202,9 +205,10 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
-                android:layout_weight="2"/>
+                android:layout_weight="3"/>
 
         </LinearLayout>
+
         <!-- 设备维护计划/设备备件信息 end -->
         <ListView
             android:id="@+id/mLv_DataList"
