@@ -11,6 +11,7 @@ import android.util.Log;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -111,5 +112,85 @@ public class CommonUtils {
 
     }
 
+    /**
+     * 比较两个日期的分钟差
+     * @param data1
+     * @param data2
+     * @return
+     */
+    public static int compareDateMinutes(String data1,String data2)
+    {
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+        long from = 0;
+        try {
+            from = simpleFormat.parse(data1).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long to = 0;
+        try {
+            to = simpleFormat.parse(data2).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        int minutes = (int) ((to - from)/(1000 * 60));
+
+        return minutes;
+    }
+
+    /**
+     * 比较两个日期的天数差
+     * @param data1
+     * @param data2
+     * @return
+     */
+    public static int compareDateDays(String data1,String data2)
+    {
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+        long from = 0;
+        try {
+            from = simpleFormat.parse(data1).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long to = 0;
+        try {
+            to = simpleFormat.parse(data2).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        int days = (int) ((to - from)/(1000 * 60 * 60 * 24));
+
+        return days;
+    }
+
+    /**
+     * 比较两个日期的小时差
+     * @param data1
+     * @param data2
+     * @return
+     */
+    public static int compareDateHours(String data1,String data2)
+    {
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+        long from = 0;
+        try {
+            from = simpleFormat.parse(data1).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long to = 0;
+        try {
+            to = simpleFormat.parse(data2).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        int hours = (int) ((to - from)/(1000 * 60 * 60));
+
+        return hours;
+    }
 
 }

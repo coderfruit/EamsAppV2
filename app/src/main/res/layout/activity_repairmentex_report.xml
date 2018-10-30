@@ -16,7 +16,7 @@
         android:id="@+id/mSearchBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="3dp"/>
+        android:layout_marginBottom="3dp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                 android:layout_height="23dp"
                 android:background="@drawable/selector_linear_layout_item_gray"
                 android:gravity="center_vertical"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <View
                     android:layout_width="3dp"
@@ -52,6 +52,7 @@
                     android:textSize="12sp" />
 
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
@@ -190,13 +191,14 @@
                 android:layout_marginTop="1dp"
                 android:background="@color/white6" />
 
+            <!--开始日期\结束日期-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/selector_linear_layout_item_white"
                 android:orientation="horizontal">
-
+                <!--开始日期\结束日期-->
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -252,30 +254,52 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
-                <!--故障类别-->
+                <!--维修级别、委托形式-->
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/mTv_FaultDesc"
+                        android:id="@+id/mTv_RepairmentLevel"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:hint="委托形式"
+                        android:hint="维修级别"
                         android:textColor="@color/gray5"
                         android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/mIv_RepairmentLevel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@+id/mTv_RepairmentLevel"
+                        android:src="@drawable/item_signature_iv_menu_defaul" />
 
                     <ImageView
                         android:id="@+id/mIv_FaultDesc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_toRightOf="@id/mTv_FaultDesc"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
                         android:src="@drawable/item_signature_iv_menu_defaul" />
+
+                    <TextView
+                        android:id="@+id/mTv_FaultDesc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/mIv_FaultDesc"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:hint="委托形式"
+                        android:textColor="@color/gray5"
+                        android:textSize="14sp" />
+
 
 
                 </RelativeLayout>
@@ -348,14 +372,14 @@
                 android:layout_marginRight="1dp"
                 android:background="@color/white6" />
 
-
+            <!--计划信息-->
             <LinearLayout
                 android:id="@+id/mLl_Plan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <!--保养计划标题-->
+                <!--计划信息标题-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="23dp"
@@ -424,77 +448,78 @@
 
 
             <!--备件信息-->
-        <LinearLayout
-            android:id="@+id/mLl_Spare"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="23dp"
-                android:background="@drawable/selector_linear_layout_item_gray"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <View
-                        android:layout_width="3dp"
-                        android:layout_height="10dp"
-                        android:layout_marginLeft="20dp"
-                        android:background="@color/colorPrimary" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="20dp"
-                        android:text="备件信息"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/mBtn_marAdd"
-                        android:layout_width="80dp"
-                        android:layout_height="20dp"
-                        android:layout_centerInParent="true"
-                        android:layout_marginRight="10dp"
-                        android:background="@drawable/ic_login_button_true"
-                        android:text="添加备件"
-                        android:textAlignment="center"
-                        android:textSize="12dp" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <ListView
-                android:id="@+id/mLv_DataList_Spare"
+                android:id="@+id/mLl_Spare"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/selector_listview_item"
-                android:divider="@null"
-                android:dividerHeight="0dp"
-                android:transcriptMode="alwaysScroll" />
+                android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginRight="1dp"
-                android:background="@color/white6" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="23dp"
+                    android:background="@drawable/selector_linear_layout_item_gray"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <View
+                            android:layout_width="3dp"
+                            android:layout_height="10dp"
+                            android:layout_marginLeft="20dp"
+                            android:background="@color/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:layout_marginRight="20dp"
+                            android:text="备件信息"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/mBtn_marAdd"
+                            android:layout_width="80dp"
+                            android:layout_height="20dp"
+                            android:layout_centerInParent="true"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/ic_login_button_true"
+                            android:text="添加备件"
+                            android:textAlignment="center"
+                            android:textSize="12dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <ListView
+                    android:id="@+id/mLv_DataList_Spare"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/selector_listview_item"
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
+                    android:transcriptMode="alwaysScroll" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_marginRight="1dp"
+                    android:background="@color/white6" />
             </LinearLayout>
             <!-- 提交重置按钮 -->
 

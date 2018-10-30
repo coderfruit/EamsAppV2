@@ -37,6 +37,7 @@ import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
+import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.EquipRepairSpareShowViewDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.EquipRepairSpareViewDataListAdapter;
@@ -50,12 +51,14 @@ import com.grandhyatt.snowbeer.entity.RepairmentBillEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentExPlanEntity;
 import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
+import com.grandhyatt.snowbeer.entity.TextDictionaryEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.request.RepairmentReportingRequest;
 import com.grandhyatt.snowbeer.network.result.EquipmentResult;
 import com.grandhyatt.snowbeer.network.result.RepairmentEquipmentResult;
 import com.grandhyatt.snowbeer.network.result.RepairmentResult;
 import com.grandhyatt.snowbeer.network.result.StringResult;
+import com.grandhyatt.snowbeer.network.result.TextDictoryResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.utils.CommonUtils;
@@ -129,6 +132,9 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
     LinearLayout mLl_Plan;//计划容器
     @BindView(R.id.mLl_Spare)
     LinearLayout mLl_Spare;//计划容器
+    @BindView(R.id.mTv_RepairmentLevel)
+    TextView mTv_RepairmentLevel;//维修级别
+
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
     public static final int CHECK_SPARE_OK = 112;//选择维修用备件
     ArrayList<String> _CheckPlanIDList; //用户选中的维护计划ID
@@ -284,6 +290,51 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
         //初始化用户
         mEt_User.setText(SPUtils.getLastLoginUserName(RepairmentExReportActivity.this));
 
+        //维修级别
+        SoapListener callbackFailureReportingLevel = new SoapListener() {
+            @Override
+            public void onSuccess(int statusCode, SoapObject object) {
+                if (object == null) {
+                    ToastUtils.showLongToast(RepairmentExReportActivity.this, "1获取故障级别" + statusCode);
+                    return;
+                }
+                //判断接口连接是否成功
+                if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                    ToastUtils.showLongToast(RepairmentExReportActivity.this, "2获取故障级别数据失败" + statusCode);
+                    return;
+                }
+                //接口返回信息正常
+                String strData = object.getPropertyAsString(0);
+                TextDictoryResult result = new Gson().fromJson(strData, TextDictoryResult.class);
+
+                //校验接口返回代码
+                if (result == null) {
+                    ToastUtils.showLongToast(RepairmentExReportActivity.this, "3获取故障级别数据失败" + statusCode);
+                    return;
+                } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                    ToastUtils.showLongToast(RepairmentExReportActivity.this, "4获取故障级别数据失败" + statusCode + result.msg);
+                    return;
+                }
+                TextDictionaryEntity data = result.getData();
+                if (data != null) {
+                    String value = data.getValue();
+                    if (value != null && value.length() > 0) {
+                        _FaultLevelArr = value.split("\\|");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, String content, Throwable error) {
+                ToastUtils.showLongToast(RepairmentExReportActivity.this, "0获取故障级别数据失败：" + error.getMessage());
+            }
+
+            @Override
+            public void onFailure(int statusCode, SoapFault fault) {
+                ToastUtils.showLongToast(RepairmentExReportActivity.this, "0获取故障级别数据失败：" + fault.toString());
+            }
+        };
+        SoapUtils.getTextDictoryAsync(RepairmentExReportActivity.this, Consts.EnumTextDictonay.RepairmentLevel, callbackFailureReportingLevel);
     }
 
     @Override
@@ -457,6 +508,14 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
             }
         });
 
+        //维修级别
+        mTv_RepairmentLevel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                repairLevelSelect();
+            }
+        });
+
         //委托形式选择
         mTv_FaultDesc.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -584,25 +643,6 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                     }
                 } else {
                 }
-
-                ShowDialog(RepairmentExReportActivity.this, "提示", "是否按计划执行?",
-                        //是
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mTv_jh.performClick();
-                            }
-                        },
-                        //否
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mLv_Show_plan.setAdapter(null);
-                                mLv_Show_plan.setVisibility(View.GONE);
-                                mLl_Plan.setVisibility(View.GONE);
-                            }
-                        });
-
                 break;
             default:
                 break;
@@ -1078,6 +1118,52 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
     }
 
     /**
+     * 维修级别选择处理
+     */
+    private void repairLevelSelect() {
+        if (_EquipmentData == null) {
+            ToastUtils.showToast(RepairmentExReportActivity.this, "请先确定设备");
+            return;
+        }
+        final List<String> list = new ArrayList<String>();
+        if (_FaultLevelArr != null && _FaultLevelArr.length > 0) {
+            for (String item : _FaultLevelArr) {
+                list.add(item);
+            }
+        } else {
+            list.add("大修");
+            list.add("定修");
+            list.add("日常维修");
+        }
+        showSelectDialog(new SelectDialog.SelectDialogListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //界面赋值
+                mTv_RepairmentLevel.setText(list.get(position).toString());
+
+                ShowDialog(RepairmentExReportActivity.this, "提示", "是否按计划执行?",
+                        //是
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mTv_jh.performClick();
+                            }
+                        },
+                        //否
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mLv_Show_plan.setAdapter(null);
+                                mLv_Show_plan.setVisibility(View.GONE);
+                                mLl_Plan.setVisibility(View.GONE);
+                            }
+                        });
+
+            }
+        }, list);
+    }
+
+    /**
      * 提交外委维修单
      */
     private void submitBill() {
@@ -1087,6 +1173,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
         String faultDesc = mTv_FaultDesc.getText().toString().trim();
         String user = mEt_User.getText().toString().trim();
         String phone = mEt_money.getText().toString().trim();
+        String repairmentLevel = mTv_RepairmentLevel.getText().toString().trim();//维修级别
 
         //验证提交数据
         if (_EquipmentData == null) {
@@ -1103,6 +1190,10 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
         }
         if (faultDesc == null || faultDesc.length() == 0) {
             ToastUtils.showLongToast(RepairmentExReportActivity.this, "请选择故障类型！");
+            return;
+        }
+        if (repairmentLevel == null || repairmentLevel.length() == 0) {
+            ToastUtils.showLongToast(RepairmentExReportActivity.this, "请选择维修级别！");
             return;
         }
         if (user == null || user.length() == 0) {
@@ -1128,18 +1219,21 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
         }
         showLogingDialog();
 
+        int iMin = CommonUtils.compareDateMinutes(faultDate,faultDate1);
         //提交数据
         RepairmentEquipmentResult request = new RepairmentEquipmentResult();
-        RepairmentBillEntity rpen = new RepairmentBillEntity();
-        rpen.setEquipmentID(_EquipmentData.getID());
-        rpen.setCorporationID(_EquipmentData.getCorporationID());
-        rpen.setRepairUser(user);
-        rpen.setTotalMoney(phone);
-        rpen.setFaultClass(faultDesc);
-        rpen.setStartTime(faultDate);
-        rpen.setFinishTime(faultDate1);
-        rpen.setShutDownMinutes("0");
-        request.setRepairmentBillData(rpen);
+        RepairmentBillEntity bill = new RepairmentBillEntity();
+        bill.setEquipmentID(_EquipmentData.getID());
+        bill.setCorporationID(_EquipmentData.getCorporationID());
+        bill.setRepairUser(user);
+        bill.setTotalMoney(phone);
+        bill.setFaultClass(faultDesc);
+        bill.setStartTime(faultDate);
+        bill.setFinishTime(faultDate1);
+        bill.setRepairmentLevel(repairmentLevel);
+        bill.setShutDownMinutes(String.valueOf(iMin));
+
+        request.setRepairmentBillData(bill);
         View vw = null;
         TextView tvid = null;
         NumberEditText mNEdt_Check = null;
