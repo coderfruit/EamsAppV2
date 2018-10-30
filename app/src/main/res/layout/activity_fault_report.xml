@@ -446,7 +446,8 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:background="@drawable/ic_login_button_true"
-                        android:text="保养" />
+                        android:text="保养"
+                        android:textSize="12sp"/>
                 </LinearLayout>
                 <!--  检验、外委维修-->
                 <LinearLayout
@@ -463,7 +464,8 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:background="@drawable/ic_login_button_true"
-                        android:text="检验" />
+                        android:text="检验"
+                        android:textSize="12sp"/>
 
                     <Button
                         android:id="@+id/mBtn_RepairEx"
@@ -473,7 +475,8 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:background="@drawable/ic_login_button_true"
-                        android:text="外委维修" />
+                        android:text="外委维修"
+                        android:textSize="12sp"/>
                 </LinearLayout>
                 <!--关闭报修-->
                 <LinearLayout
@@ -490,7 +493,8 @@
                         android:layout_marginRight="60dp"
                         android:layout_weight="1"
                         android:background="@drawable/ic_login_button_true"
-                        android:text="关闭报修" />
+                        android:text="关闭报修"
+                        android:textSize="12sp"/>
                 </LinearLayout>
 
             </LinearLayout>

@@ -88,70 +88,69 @@ public class RepairmentExPlanCheckActivity extends ActivityBase implements IActi
         bindEvent();
 
         //设备、维修级别不为空
-        if (StringUtils.isNotEmpty(_EquipmentID) ) {
+        if (StringUtils.isNotEmpty(_EquipmentID)) {
 
+            //获取设备维护计划
+            SoapUtils.getEquipmentExPlanAsync(RepairmentExPlanCheckActivity.this, _EquipmentID, new SoapListener() {
+                @Override
+                public void onSuccess(int statusCode, SoapObject object) {
 
-                //获取设备维护计划
-                SoapUtils.getEquipmentExPlanAsync(RepairmentExPlanCheckActivity.this, _EquipmentID, new SoapListener() {
-                    @Override
-                    public void onSuccess(int statusCode, SoapObject object) {
+                    dismissLoadingDialog();
 
-                        dismissLoadingDialog();
+                    if (object == null) {
+                        ToastUtils.showLongToast(RepairmentExPlanCheckActivity.this, getString(R.string.submit_soap_result_err1));
+                        return;
+                    }
+                    //判断接口连接是否成功
+                    if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                        ToastUtils.showLongToast(RepairmentExPlanCheckActivity.this, getString(R.string.submit_soap_result_err2));
+                        return;
+                    }
+                    //接口返回信息正常
+                    String strData = object.getPropertyAsString(0);
+                    RepairmentExPlanResult result = new Gson().fromJson(strData, RepairmentExPlanResult.class);
+                    //校验接口返回代码
+                    if (result == null) {
+                        ToastUtils.showLongToast(RepairmentExPlanCheckActivity.this, getString(R.string.submit_soap_result_err3));
+                        return;
+                    } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                        ToastUtils.showLongToast(RepairmentExPlanCheckActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
+                        return;
+                    }
+                    List<RepairmentExPlanEntity> data = result.getData();
+                    //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
+                    if (data == null || data.size() == 0) {
+                        ToastUtils.showToast(RepairmentExPlanCheckActivity.this, "该设备没有维护计划");
+                        return;
+                    } else {
+                        mTv_AllCnt.setText("共" + data.size() + "条/");
+                        adapter_Plan = new RepairmentExPlanCheckDataListAdapter(RepairmentExPlanCheckActivity.this, data);
+                        mLv_DataList.setAdapter(adapter_Plan);
 
-                        if (object == null) {
-                            ToastUtils.showLongToast(RepairmentExPlanCheckActivity.this, getString(R.string.submit_soap_result_err1));
-                            return;
+                        RepairmentExPlanEntity entity = data.get(0);
+                        if (entity != null) {
+                            String equipmentCode = entity.getEquipmentCode();
+                            String equipmentName = entity.getEquipmentName();
+
+                            mTv_EquipCode.setText(equipmentCode);
+                            mTv_EquipName.setText(equipmentName);
                         }
-                        //判断接口连接是否成功
-                        if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
-                            ToastUtils.showLongToast(RepairmentExPlanCheckActivity.this, getString(R.string.submit_soap_result_err2));
-                            return;
-                        }
-                        //接口返回信息正常
-                        String strData = object.getPropertyAsString(0);
-                        RepairmentExPlanResult result = new Gson().fromJson(strData, RepairmentExPlanResult.class);
-                        //校验接口返回代码
-                        if (result == null) {
-                            ToastUtils.showLongToast(RepairmentExPlanCheckActivity.this, getString(R.string.submit_soap_result_err3));
-                            return;
-                        } else if (result.code != Result.RESULT_CODE_SUCCSED) {
-                            ToastUtils.showLongToast(RepairmentExPlanCheckActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
-                            return;
-                        }
-                        List<RepairmentExPlanEntity> data = result.getData();
-                        //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
-                        if (data == null || data.size() == 0) {
-                            ToastUtils.showToast(RepairmentExPlanCheckActivity.this, "该设备没有维护计划");
-                            return;
-                        } else {
-                            mTv_AllCnt.setText("共" + data.size() + "条/");
-                            adapter_Plan = new RepairmentExPlanCheckDataListAdapter(RepairmentExPlanCheckActivity.this, data);
-                            mLv_DataList.setAdapter(adapter_Plan);
-
-                            RepairmentExPlanEntity entity = data.get(0);
-                            if (entity != null) {
-                                String equipmentCode = entity.getEquipmentCode();
-                                String equipmentName = entity.getEquipmentName();
-
-                                mTv_EquipCode.setText(equipmentCode);
-                                mTv_EquipName.setText(equipmentName);
-                            }
-                        }
-
                     }
 
-                    @Override
-                    public void onFailure(int statusCode, String content, Throwable error) {
-                        dismissLoadingDialog();
-                        ToastUtils.showToast(RepairmentExPlanCheckActivity.this, getString(R.string.submit_soap_result_err5, error));
-                    }
+                }
 
-                    @Override
-                    public void onFailure(int statusCode, SoapFault fault) {
-                        dismissLoadingDialog();
-                        ToastUtils.showToast(RepairmentExPlanCheckActivity.this, getString(R.string.submit_soap_result_err4, fault));
-                    }
-                });
+                @Override
+                public void onFailure(int statusCode, String content, Throwable error) {
+                    dismissLoadingDialog();
+                    ToastUtils.showToast(RepairmentExPlanCheckActivity.this, getString(R.string.submit_soap_result_err5, error));
+                }
+
+                @Override
+                public void onFailure(int statusCode, SoapFault fault) {
+                    dismissLoadingDialog();
+                    ToastUtils.showToast(RepairmentExPlanCheckActivity.this, getString(R.string.submit_soap_result_err4, fault));
+                }
+            });
 
         } else {
             dismissLoadingDialog();
@@ -186,35 +185,30 @@ public class RepairmentExPlanCheckActivity extends ActivityBase implements IActi
                 String checkedID = mTv_ID.getText().toString();
 
                 boolean ckbValue = ckb.isChecked();
-                if (!ckbValue)
-                {//取消选中
+                if (!ckbValue) {//取消选中
 
-                    if (_CheckCnt != -1)
-                    {
-                        if(_CheckCnt==position){
+                    if (_CheckCnt != -1) {
+                        if (_CheckCnt == position) {
                             planEty1 = (RepairmentExPlanEntity) adapter_Plan.getItem(position);
                             planEty1.setIsCheck(true);
-                        }
-                        else {
+                        } else {
                             planEty = (RepairmentExPlanEntity) adapter_Plan.getItem(_CheckCnt);
                             planEty.setIsCheck(false);
                             planEty1 = (RepairmentExPlanEntity) adapter_Plan.getItem(position);
                             planEty1.setIsCheck(true);
 
                         }
-                    }
-                    else {
+                    } else {
                         planEty1 = (RepairmentExPlanEntity) adapter_Plan.getItem(position);
                         planEty1.setIsCheck(true);
 
                     }
-                    _CheckCnt=position;
+                    _CheckCnt = position;
 
-                }
-                else {
+                } else {
                     planEty1 = (RepairmentExPlanEntity) adapter_Plan.getItem(position);
                     planEty1.setIsCheck(false);
-                    _CheckCnt=-1;
+                    _CheckCnt = -1;
 
                 }
                 adapter_Plan.notifyDataSetChanged();
@@ -230,18 +224,17 @@ public class RepairmentExPlanCheckActivity extends ActivityBase implements IActi
                 Intent intent = new Intent();
                 _CheckEntityList.clear();
                 _CheckIDList.clear();
-                if(adapter_Plan==null){
+                if (adapter_Plan == null) {
                     //关闭Activity
                     RepairmentExPlanCheckActivity.this.finish();
-                }
-                else {
-                    RepairmentExPlanEntity rpEntity=null;
-                    if(adapter_Plan!=null || adapter_Plan.getCount()!=0){
+                } else {
+                    RepairmentExPlanEntity rpEntity = null;
+                    if (adapter_Plan != null || adapter_Plan.getCount() != 0) {
                         for (int i = 0; i < adapter_Plan.getCount(); i++) {
 
                             rpEntity = (RepairmentExPlanEntity) adapter_Plan.getItem(i);
-                            if (rpEntity!=null) {
-                                if( rpEntity.getIsCheck()){
+                            if (rpEntity != null) {
+                                if (rpEntity.getIsCheck()) {
                                     _CheckEntityList.add(rpEntity);
                                     _CheckIDList.add(rpEntity.getID());
                                 }
@@ -249,7 +242,6 @@ public class RepairmentExPlanCheckActivity extends ActivityBase implements IActi
                             }
                         }
                     }
-
 
 
                     //把返回数据存入Intent
