@@ -55,12 +55,6 @@ import butterknife.ButterKnife;
  * 登录窗体
  * 杨春苗
  * 20180907
- * 20180916 yangcm111222 1111111
- * aaaaaaaaaaaaaaaaa aaaaaaaaaaaaaa
- *
- * fsadfasdfasdfasdfasdf
- * yangcm bbbbbbbbbbbbb
- * tzq ccccccccccccccccccccc
  */
 public class LoginActivity extends ActivityBase implements IActivityBase,View.OnClickListener, TextView.OnEditorActionListener{
 
