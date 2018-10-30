@@ -98,7 +98,7 @@ public class WarningInfo_EquipRepairExActivity extends ActivityBase implements I
             @Override
             public void onClick(View v) {
                 List<String> list = new ArrayList<String>();
-                list.add("检验记录");
+                list.add("外委维修记录");
                 final PopupWindowUtil popupWindow = new PopupWindowUtil(WarningInfo_EquipRepairExActivity.this, list);
                 popupWindow.setItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override

@@ -321,7 +321,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginTop="5dp">
 
                         <Button
                             android:id="@+id/mBt_NoOperate"
@@ -334,9 +335,9 @@
 
                         <Button
                             android:id="@+id/mBt_Operate"
-                            android:layout_width="130dp"
+                            android:layout_width="170dp"
                             android:layout_height="30dp"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="15dp"
                             android:layout_marginBottom="5dp"
                             android:background="@drawable/ic_login_button_false"
                             android:text="运转异常" />

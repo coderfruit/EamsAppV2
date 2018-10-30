@@ -275,7 +275,7 @@ public class Query_EquipRepairInfoActivity extends ActivityBase implements IActi
     private void ShowPopWindow(List<RepairmentBillItemEntity> data, View view) {
         List<String> list = new ArrayList<>();
         for (RepairmentBillItemEntity item : data) {
-            list.add(item.getSpareName() + "(" + item.getSpareCode() + ")  " + item.getCount() + item.getSpareUnit());
+            list.add(item.getSpareName() + "(" + item.getSpareStander() + ")"  + " x " + item.getCount() + item.getSpareUnit());
         }
         showListPopupWindow(Query_EquipRepairInfoActivity.this, view, list, null);
 

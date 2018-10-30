@@ -248,6 +248,7 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
             requestNetworkData();
         } else {                                                //添加报修
             mToolBar.setTitle("我要报修");
+            mToolBar.hideMenuButton();
             initView();
             bindEventPart();
             bindEvent();
@@ -390,10 +391,7 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 
     @Override
     public void initView() {
-        //fillEquipInfo(_EquipmentData);
 
-        mToolBar.setTitle("故障报修");
-        mToolBar.hideMenuButton();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         //初始化用户及手机号

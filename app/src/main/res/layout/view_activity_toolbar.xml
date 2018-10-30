@@ -4,7 +4,7 @@
     android:id="@+id/mRL_ToolBar"
     android:layout_width="match_parent"
     android:layout_height="46dp"
-    android:background="@color/blue_title_bar"
+    android:background="@color/black"
     >
 
     <RelativeLayout

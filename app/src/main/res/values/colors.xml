@@ -41,5 +41,6 @@
     <color name="gray39">#626262</color>
 
     <color name="blue_title_bar">#4183D7</color>
+    <color name="black_title_bar">#4183D7</color>
     <color name="green_01">#be69be91</color>
 </resources>
