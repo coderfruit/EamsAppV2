@@ -274,6 +274,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             //将计划填充至计划列表
             _CheckPlanEntityList.add(planEntity);
             adapter_Plan = new RepairmentPlanCheckDataListAdapter(RepairmentReportActivity.this, _CheckPlanEntityList);
+            _CheckPlanIDList.add(planEntity.getID());
             mLv_Show_plan.setAdapter(adapter_Plan);
             mLv_Show_plan.setVisibility(View.VISIBLE);
             setListViewHeightBasedOnChildren(mLv_Show_plan);

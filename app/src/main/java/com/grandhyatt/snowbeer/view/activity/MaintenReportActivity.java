@@ -205,6 +205,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             initView();
             bindEvent();
             mTv_FaultDesc.setEnabled(false);
+            lL_material.setVisibility(View.GONE);
 
             //保养计划
             Repair_RepairmentPlan(mTv_EquipID, entity);

@@ -13,8 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="2dp"
         android:layout_marginTop="1dp"
-        android:background="@drawable/title_function_bg"
-        android:orientation="vertical">
+        android:background="@drawable/title_function_bg">
 
         <ListView
             android:id="@+id/lv_pop_list"
