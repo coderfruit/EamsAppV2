@@ -1184,18 +1184,8 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                     for (SpareInEquipmentEntity e : _CheckSpareEquiList) {
                         if (e.getSpareID() == tvid.getText().toString().trim()) {
                             mNEdt_Check = (NumberEditText) vw.findViewById(R.id.mNEdt_Check);
-                            mSumCount = (TextView) vw.findViewById(R.id.mTv_SumCountx);
                             edtcount = mNEdt_Check.getData();
-                            sumcount = Integer.parseInt(mSumCount.getText().toString().trim());
-                            if (edtcount > sumcount) {
-                                mBtn_Submit.setEnabled(true);
-                                dismissLoadingDialog();
-                                ToastUtils.showLongToast(RepairmentExReportActivity.this, "备件:" + e.getSpareName() + " 数量超出库存数量！");
-                                return;
-                            } else {
                                 e.setReplaceCount(Double.toString(edtcount));
-
-                            }
                         }
                     }
                 }
