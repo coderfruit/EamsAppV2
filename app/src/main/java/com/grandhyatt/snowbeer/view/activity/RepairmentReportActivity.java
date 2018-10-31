@@ -78,6 +78,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.grandhyatt.snowbeer.Consts.CAMERA_BARCODE_SCAN;
+import static com.grandhyatt.snowbeer.utils.CommonUtils.compareDateMinutes;
 
 
 /**
@@ -145,7 +146,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
     public static final int CHECK_SPARE_OK = 112;//选择维修用备件
 
-    ArrayList<String> _CheckPlanIDList; //用户选中的维护计划ID
+    ArrayList<String> _CheckPlanIDList = new ArrayList<>();; //用户选中的维护计划ID
     List<RepairmentPlanEntity> _CheckPlanEntityList = new ArrayList<>();//用户选择的数据行对象
     List<SpareInEquipmentEntity> _CheckSpareEntityList = new ArrayList<>();//用户选择的数据行对象
     List<EquipmentUseSpareEntity> _CheckSpareUseList = new ArrayList<>();// 页面选择备品配件返回数据
@@ -1269,6 +1270,11 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择结束维修日期！");
             return;
         }
+        if(compareDateMinutes(faultDate,faultDate1)<=0){
+            ToastUtils.showLongToast(RepairmentReportActivity.this, "开始时间不应大于或等于结束时间！");
+            return;
+        }
+
         if (faultLevel == null || faultLevel.length() == 0) {
             ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择维修级别！");
             return;

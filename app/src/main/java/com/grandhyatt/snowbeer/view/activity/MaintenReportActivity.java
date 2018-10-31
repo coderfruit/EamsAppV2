@@ -76,6 +76,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.grandhyatt.snowbeer.Consts.CAMERA_BARCODE_SCAN;
+import static com.grandhyatt.snowbeer.utils.CommonUtils.compareDateMinutes;
 
 /**
  * 设备保养操作界面
@@ -601,28 +602,38 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 //验证提交数据
 
                 if (_EquipmentData == null) {
+                    dismissLoadingDialog();
                     ToastUtils.showLongToast(MaintenReportActivity.this, "请首先确定要保养的设备！");
                     return;
                 }
                 if (faultDate == null || faultDate.length() == 0) {
+                    dismissLoadingDialog();
                     ToastUtils.showLongToast(MaintenReportActivity.this, "请选择开始保养日期！");
                     return;
                 }
                 if (faultDate1 == null || faultDate1.length() == 0) {
+                    dismissLoadingDialog();
                     ToastUtils.showLongToast(MaintenReportActivity.this, "请选择结束保养日期！");
                     return;
                 }
-
+                if(compareDateMinutes(faultDate,faultDate1)<=0){
+                    dismissLoadingDialog();
+                    ToastUtils.showLongToast(MaintenReportActivity.this, "开始时间不应大于或等于结束时间！");
+                    return;
+                }
                 if (faultDesc == null || faultDesc.length() == 0) {
+                    dismissLoadingDialog();
                     ToastUtils.showLongToast(MaintenReportActivity.this, "请选择保养类型！");
                     return;
                 }
 
                 if (user == null || user.length() == 0) {
+                    dismissLoadingDialog();
                     ToastUtils.showLongToast(MaintenReportActivity.this, "请填写联系人！");
                     return;
                 }
                 if (phone == null || phone.length() == 0) {
+                    dismissLoadingDialog();
                     ToastUtils.showLongToast(MaintenReportActivity.this, "填写费用金额不能为空！");
                     return;
                 } else {
@@ -631,21 +642,25 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 if (faultDesc.equals("润滑")) {
 
                     if (useCout == null || useCout.length() == 0) {
+                        dismissLoadingDialog();
                         ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的数量！");
                         return;
                     } else {
                         if (!isNumeric(useCout)) {
+                            dismissLoadingDialog();
                             ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的数量为数字！");
                             return;
                         } else {
 
                             if (Integer.parseInt(useCout) <= 0) {
+                                dismissLoadingDialog();
                                 ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的数量大于0！");
                                 return;
                             }
                         }
                     }
                     if (mprice == null || mprice.length() == 0) {
+                        dismissLoadingDialog();
                         ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的单价！");
                         return;
                     }
@@ -730,7 +745,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                             MaintenReportActivity.this.setResult(RESULT_OK, intent);
                         }
                         mBtn_Submit.setEnabled(false);
-                        ToastUtils.showLongToast(MaintenReportActivity.this, getString(R.string.activity_maintenance_submit_ok));
+                        ToastUtils.showLongToast(MaintenReportActivity.this,getString(R.string.activity_maintenance_submit_ok) );
                         finish();
 
                     }
