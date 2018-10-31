@@ -209,7 +209,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
             initView();
             bindEvent();
             mLl_Plan.setVisibility(View.VISIBLE);
-            mLl_Spare.setVisibility(View.GONE);
+            mLl_Spare.setVisibility(View.VISIBLE);
 
             //维修-维修计划
             Repair_RepairmentPlan(mTv_EquipID, entity);
@@ -1034,6 +1034,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
             //根据备件ID获取备件更换计划
             RepairmentExPlanEntity planEntity = (RepairmentExPlanEntity) entity;
             planEntity.setIsCheck(true);
+            //维修级别
 
             //将计划填充至计划列表
             _CheckPlanEntityList.add(planEntity);
@@ -1142,24 +1143,26 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //界面赋值
                 mTv_RepairmentLevel.setText(list.get(position).toString());
+                 if(!_Type.equals("2")){
+                     ShowDialog(RepairmentExReportActivity.this, "提示", "是否按计划执行?",
+                             //是
+                             new DialogInterface.OnClickListener() {
+                                 @Override
+                                 public void onClick(DialogInterface dialog, int which) {
+                                     mTv_jh.performClick();
+                                 }
+                             },
+                             //否
+                             new DialogInterface.OnClickListener() {
+                                 @Override
+                                 public void onClick(DialogInterface dialog, int which) {
+                                     mLv_Show_plan.setAdapter(null);
+                                     mLv_Show_plan.setVisibility(View.GONE);
+                                     mLl_Plan.setVisibility(View.GONE);
+                                 }
+                             });
+                 }
 
-                ShowDialog(RepairmentExReportActivity.this, "提示", "是否按计划执行?",
-                        //是
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mTv_jh.performClick();
-                            }
-                        },
-                        //否
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mLv_Show_plan.setAdapter(null);
-                                mLv_Show_plan.setVisibility(View.GONE);
-                                mLl_Plan.setVisibility(View.GONE);
-                            }
-                        });
 
             }
         }, list);
