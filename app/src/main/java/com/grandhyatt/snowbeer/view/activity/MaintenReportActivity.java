@@ -686,7 +686,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 rpen.setMaintenanceLevel(faultDesc);
 
                 if( adapter_Plan != null &&adapter_Plan.getCount() > 0){
-                    MaintenanceItemEntity checkEntity = (MaintenanceItemEntity)adapter_Plan.getItem(0);
+                    MaintenancePlanEntity checkEntity = (MaintenancePlanEntity)adapter_Plan.getItem(0);
                     String strPlanID = checkEntity.getID();
                     rpen.setMaintenancePlanID(strPlanID);
                 }
