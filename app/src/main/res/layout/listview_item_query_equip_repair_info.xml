@@ -74,7 +74,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:layout_weight="1.32"
+                android:layout_weight="1.38"
                 android:text="WX201809090001"
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
@@ -85,7 +85,8 @@
                 android:layout_marginLeft="4dp"
                 android:text="更换备件种类："
                 android:textColor="@color/gray5"
-                android:textSize="10sp" />
+                android:textSize="10sp"
+                android:layout_weight="0.07" />
 
             <TextView
                 android:id="@+id/mTv_SpareCount"
@@ -120,12 +121,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:layout_weight="0.89"
+                android:layout_weight="0.87"
                 android:text="制单人"
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
 
             <TextView
+                android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
