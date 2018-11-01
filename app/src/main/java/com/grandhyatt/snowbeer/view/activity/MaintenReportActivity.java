@@ -206,7 +206,8 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             initView();
             bindEvent();
             mTv_FaultDesc.setEnabled(false);
-            lL_material.setVisibility(View.GONE);
+
+
 
             //保养计划
             Repair_RepairmentPlan(mTv_EquipID, entity);
@@ -643,6 +644,11 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 }
                 if (faultDesc.equals("润滑")) {
 
+                    if (mTv_materialName.getText().toString().trim() == "" || mTv_materialName.getText().toString().trim().length() == 0) {
+                        dismissLoadingDialog();
+                        ToastUtils.showLongToast(MaintenReportActivity.this, "请选择设备保养的机物料！");
+                        return;
+                    }
                     if (useCout == null || useCout.length() == 0) {
                         dismissLoadingDialog();
                         ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的数量！");
@@ -1170,7 +1176,12 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             planEntity.setIsCheck(true);
             //维修级别
             mTv_FaultDesc.setText(planEntity.getMaintenanceLevel());
-
+             if(planEntity.getMaintenanceLevel().equals("润滑")){
+                 lL_material.setVisibility(View.VISIBLE);
+             }
+             else {
+                 lL_material.setVisibility(View.GONE);
+             }
             //将计划填充至计划列表
             _CheckPlanEntityList.add(planEntity);
             adapter_Plan = new MaintenancePlanCheckDataListAdapter(MaintenReportActivity.this, _CheckPlanEntityList);
