@@ -83,7 +83,7 @@
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="更换件数："
+                android:text="更换备件种类："
                 android:textColor="@color/gray5"
                 android:textSize="10sp" />
 
