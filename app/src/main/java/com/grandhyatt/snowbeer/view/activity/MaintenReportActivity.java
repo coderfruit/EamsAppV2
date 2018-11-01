@@ -525,7 +525,9 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                                     new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
+                                            _CheckPlanEntityList.clear();
                                             mLv_Show_plan.setAdapter(null);
+
                                             mLv_Show_plan.setVisibility(View.GONE);
                                             mLl_Plan.setVisibility(View.GONE);
                                         }
