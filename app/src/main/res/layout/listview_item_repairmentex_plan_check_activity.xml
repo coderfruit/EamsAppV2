@@ -15,14 +15,14 @@
             android:layout_width="40dp"
             android:layout_height="match_parent"
             android:orientation="vertical" >
-
             <CheckBox
                 android:id="@+id/mCkb_ID"
                 android:layout_marginLeft="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:checked="false"
-                android:focusable="false"/>
+                android:focusable="false"
+                android:enabled="false" />
             <TextView
                 android:id="@+id/mTv_ID"
                 android:layout_width="wrap_content"

@@ -1226,6 +1226,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                 return;
             }
         }
+        mBtn_Submit.setEnabled(false);
         showLogingDialog();
 
         int iMin = CommonUtils.compareDateMinutes(faultDate,faultDate1);
@@ -1302,13 +1303,15 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
             public void onSuccess(int statusCode, SoapObject object) {
 
                 dismissLoadingDialog();
-                mBtn_Submit.setEnabled(true);
+
                 if (object == null) {
+                    mBtn_Submit.setEnabled(true);
                     ToastUtils.showLongToast(RepairmentExReportActivity.this, getString(R.string.submit_soap_result_err1));
                     return;
                 }
                 //判断接口连接是否成功
                 if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                    mBtn_Submit.setEnabled(true);
                     ToastUtils.showLongToast(RepairmentExReportActivity.this, getString(R.string.submit_soap_result_err2));
                     return;
                 }
@@ -1317,9 +1320,11 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                 StringResult result = new Gson().fromJson(strData, StringResult.class);
                 //校验接口返回代码
                 if (result == null) {
+                    mBtn_Submit.setEnabled(true);
                     ToastUtils.showLongToast(RepairmentExReportActivity.this, getString(R.string.submit_soap_result_err3));
                     return;
                 } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                    mBtn_Submit.setEnabled(true);
                     ToastUtils.showLongToast(RepairmentExReportActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
                     return;
                 }

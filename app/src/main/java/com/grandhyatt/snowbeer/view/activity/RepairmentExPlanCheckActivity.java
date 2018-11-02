@@ -191,16 +191,19 @@ public class RepairmentExPlanCheckActivity extends ActivityBase implements IActi
                         if (_CheckCnt == position) {
                             planEty1 = (RepairmentExPlanEntity) adapter_Plan.getItem(position);
                             planEty1.setIsCheck(true);
+                            mTv_CheckCnt.setText("选中" + 1 + "条");
                         } else {
                             planEty = (RepairmentExPlanEntity) adapter_Plan.getItem(_CheckCnt);
                             planEty.setIsCheck(false);
                             planEty1 = (RepairmentExPlanEntity) adapter_Plan.getItem(position);
                             planEty1.setIsCheck(true);
+                            mTv_CheckCnt.setText("选中" + 1 + "条");
 
                         }
                     } else {
                         planEty1 = (RepairmentExPlanEntity) adapter_Plan.getItem(position);
                         planEty1.setIsCheck(true);
+                        mTv_CheckCnt.setText("选中" + 1 + "条");
 
                     }
                     _CheckCnt = position;
@@ -208,6 +211,7 @@ public class RepairmentExPlanCheckActivity extends ActivityBase implements IActi
                 } else {
                     planEty1 = (RepairmentExPlanEntity) adapter_Plan.getItem(position);
                     planEty1.setIsCheck(false);
+                    mTv_CheckCnt.setText("选中" + 0 + "条");
                     _CheckCnt = -1;
 
                 }
