@@ -41,6 +41,7 @@ import com.grandhyatt.snowbeer.adapter.EquipMgrRepairSpareDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.EquipRepairSpareViewDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.RepairmentPlanCheckDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.SpareInEquipmentDataListAdapter;
+import com.grandhyatt.snowbeer.entity.CorporationEntity;
 import com.grandhyatt.snowbeer.entity.DepartmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentUseSpareEntity;
@@ -915,6 +916,19 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     private void fillEquipInfo(EquipmentEntity data) {
         _EquipmentData = data;//全局变量赋值
         if (data != null) {//获取到设备信息
+            if(!data.getAssetTypeID().equals(Consts.AssetType_sc)){
+                _EquipmentData = null;
+                ToastUtils.showLongToast(RepairmentReportActivity.this, data.getEquipmentName() + " 不是生产设备");
+                return;
+            }
+            CorporationEntity corp = SPUtils.getLastLoginUserCorporation(RepairmentReportActivity.this);
+            if(corp != null){
+                if(!corp.getID().equals(data.getCorporationID())){
+                    ToastUtils.showLongToast(RepairmentReportActivity.this, data.getEquipmentName() + " 不属于用户当前归属[" + corp.getCorporationName() + "]");
+                    return;
+                }
+            }
+
             mTv_EquipCode.setText(data.getEquipmentCode());
             mTv_EquipName.setText(data.getEquipmentName());
             mTv_EquipCorp.setText(data.getCorporationName());
