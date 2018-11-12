@@ -54,11 +54,6 @@ public class Equip_SpareReplace_EntityDataListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_item_equip_sapre_replace_activity, null);
 
             mViewHolder.mTv_Status = convertView.findViewById(R.id.mTv_Status);
-            if(mViewHolder.mTv_Status.getText().toString().contains("超期")){
-                mViewHolder.mTv_Status.setTextColor(Color.RED);
-            }else{
-                mViewHolder.mTv_Status.setTextColor(Color.BLACK);
-            }
             mViewHolder.mTv_ID = convertView.findViewById(R.id.mTv_ID);
             mViewHolder.mTv_EquipID = convertView.findViewById(R.id.mTv_EquipID);
             mViewHolder.mTv_SpareID = convertView.findViewById(R.id.mTv_SpareID);
@@ -78,6 +73,11 @@ public class Equip_SpareReplace_EntityDataListAdapter extends BaseAdapter {
         SpareInEquipmentEntity dataModel = mDataList.get(position);
         if (dataModel != null) {
             mViewHolder.mTv_Status.setText(dataModel.getStatus());
+            if(mViewHolder.mTv_Status.getText().toString().contains("超期")){
+                mViewHolder.mTv_Status.setTextColor(Color.RED);
+            }else{
+                mViewHolder.mTv_Status.setTextColor(Color.BLACK);
+            }
             mViewHolder.mTv_ID.setText(dataModel.getID());
             mViewHolder.mTv_EquipID.setText(dataModel.getEquipmentID());
             mViewHolder.mTv_SpareID.setText(dataModel.getSpareID());

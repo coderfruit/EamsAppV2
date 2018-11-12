@@ -619,7 +619,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     ToastUtils.showLongToast(MaintenReportActivity.this, "请选择结束保养日期！");
                     return;
                 }
-                if(compareDateMinutes(faultDate,faultDate1)<=0){
+                if(compareDateMinutes(faultDate,faultDate1) <= 0){
                     dismissLoadingDialog();
                     ToastUtils.showLongToast(MaintenReportActivity.this, "开始时间不应大于或等于结束时间！");
                     return;
@@ -636,9 +636,10 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     return;
                 }
                 if (phone == null || phone.length() == 0) {
-                    dismissLoadingDialog();
-                    ToastUtils.showLongToast(MaintenReportActivity.this, "填写费用金额不能为空！");
-                    return;
+                    phone = "0";
+//                    dismissLoadingDialog();
+//                    ToastUtils.showLongToast(MaintenReportActivity.this, "填写费用金额不能为空！");
+//                    return;
                 } else {
 
                 }
@@ -1102,23 +1103,25 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     mEt_materialsum.setText("");
                 }
 
-                ShowDialog(MaintenReportActivity.this, "提示", "是否按计划执行?",
-                        //是
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mTv_jh.performClick();
-                            }
-                        },
-                        //否
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                mLv_Show_plan.setAdapter(null);
-                                mLv_Show_plan.setVisibility(View.GONE);
-                                mLl_Plan.setVisibility(View.GONE);
-                            }
-                        });
+                if (!_Type.equals("2")) {
+                    ShowDialog(MaintenReportActivity.this, "提示", "是否按计划执行?",
+                            //是
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mTv_jh.performClick();
+                                }
+                            },
+                            //否
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mLv_Show_plan.setAdapter(null);
+                                    mLv_Show_plan.setVisibility(View.GONE);
+                                    mLl_Plan.setVisibility(View.GONE);
+                                }
+                            });
+                }
 
 
         }

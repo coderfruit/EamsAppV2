@@ -137,7 +137,7 @@ public class WarningInfo_EquipSpareReplaceActivity extends ActivityBase implemen
                 bundle.putSerializable("entity", entity);
                 intent.putExtras(bundle);
 
-                startActivityForResult(intent, Consts.REPAIR_OPERATE_AFTER);
+                startActivityForResult(intent, Consts.REPLACE_OPERATE_AFTER);
             }
         });
         //下拉刷新

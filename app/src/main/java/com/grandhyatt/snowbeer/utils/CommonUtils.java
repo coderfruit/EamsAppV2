@@ -28,7 +28,7 @@ public class CommonUtils {
      * @return返回字符串格式 yyyy-MM-dd HH:mm:ss
      */
     public static String getStringDate(Date currentTime) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String dateString = formatter.format(currentTime);
         return dateString;
     }
@@ -120,7 +120,7 @@ public class CommonUtils {
      */
     public static int compareDateMinutes(String data1,String data2)
     {
-        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 
         long from = 0;
         try {
@@ -147,7 +147,7 @@ public class CommonUtils {
      */
     public static int compareDateDays(String data1,String data2)
     {
-        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 
         long from = 0;
         try {
@@ -174,7 +174,7 @@ public class CommonUtils {
      */
     public static int compareDateHours(String data1,String data2)
     {
-        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat simpleFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 
         long from = 0;
         try {

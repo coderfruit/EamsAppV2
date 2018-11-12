@@ -427,14 +427,45 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
             public void onFailure(int statusCode, String content, Throwable error) {
                 dismissLoadingDialog();
                 mBtn_Login.setEnabled(true);
-                ToastUtils.showLongToast(LoginActivity.this,getString(R.string.activity_login_toast_login_fail_error,error.getMessage()));
+                if (statusCode == SoapHttpStatus.CONNECT_FAILURE_CODE) { /** 连接失败的HTTP返回码. */
+                    ToastUtils.showLongToast(LoginActivity.this,"登录异常,无法连接服务器!");
+                } else if (statusCode == SoapHttpStatus.CONNECT_TIMEOUT_CODE) {  /** 连接超时的HTTP返回. */
+                    ToastUtils.showLongToast(LoginActivity.this,"登录异常,连接服务器超时!");
+                }
+                else if (statusCode == SoapHttpStatus.RESPONSE_TIMEOUT_CODE) {  /** 响应失败的HTTP返回. */
+                    ToastUtils.showLongToast(LoginActivity.this,"登录异常,连接服务器失败，请重试!");
+                }
+                else if (statusCode == SoapHttpStatus.UNTREATED_CODE) {    /** 未处理的HTTP返回. */
+                    ToastUtils.showLongToast(LoginActivity.this,"登录异常,连接服务器失败，请重试!");
+                }
+                else if (statusCode == SoapHttpStatus.SERVER_FAILURE_CODE) {  /** 服务出错的HTTP返回. */
+                    ToastUtils.showLongToast(LoginActivity.this,"登录异常,服务器出错，请重试!");
+                } else {
+                    ToastUtils.showLongToast(LoginActivity.this,"登录异常，请重试!");
+                }
+
             }
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
                 dismissLoadingDialog();
                 mBtn_Login.setEnabled(true);
-                ToastUtils.showLongToast(LoginActivity.this,getString(R.string.activity_login_toast_login_fail_error,fault.toString()));
+                if (statusCode == SoapHttpStatus.CONNECT_FAILURE_CODE) { /** 连接失败的HTTP返回码. */
+                    ToastUtils.showLongToast(LoginActivity.this,"登录失败,无法连接服务器!");
+                } else if (statusCode == SoapHttpStatus.CONNECT_TIMEOUT_CODE) {  /** 连接超时的HTTP返回. */
+                    ToastUtils.showLongToast(LoginActivity.this,"登录失败,连接服务器超时!");
+                }
+                else if (statusCode == SoapHttpStatus.RESPONSE_TIMEOUT_CODE) {  /** 响应失败的HTTP返回. */
+                    ToastUtils.showLongToast(LoginActivity.this,"登录失败,连接服务器失败，请重试!");
+                }
+                else if (statusCode == SoapHttpStatus.UNTREATED_CODE) {    /** 未处理的HTTP返回. */
+                    ToastUtils.showLongToast(LoginActivity.this,"登录失败,连接服务器失败，请重试!");
+                }
+                else if (statusCode == SoapHttpStatus.SERVER_FAILURE_CODE) {  /** 服务出错的HTTP返回. */
+                    ToastUtils.showLongToast(LoginActivity.this,"登录失败,服务器出错，请重试!");
+                } else {
+                    ToastUtils.showLongToast(LoginActivity.this,"登录失败，请重试!");
+                }
             }
         });
 

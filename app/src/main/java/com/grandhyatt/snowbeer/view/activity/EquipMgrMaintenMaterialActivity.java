@@ -44,7 +44,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by ycm on 2018/9/20.
- * 设备维修备件选择
+ * 设备保养机物料选择
  */
 
 public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IActivityBase, View.OnClickListener {
@@ -232,7 +232,7 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
                 }
                 if(_CheckEntityList == null || _CheckEntityList.size() == 0)
                 {
-                    ToastUtils.showLongToast(EquipMgrMaintenMaterialActivity.this,"请选择使用的备件（单选或多选）");
+                    ToastUtils.showLongToast(EquipMgrMaintenMaterialActivity.this,"请选择使用的物资（单选或多选）");
                     return;
                 }
                 //数据是使用Intent返回
@@ -435,7 +435,7 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
                 List<EquipmentMaterialEntity> data = result.getData();
                 //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
                 if (data == null || data.size() == 0) {
-                    ToastUtils.showToast(EquipMgrMaintenMaterialActivity.this, "没有获取到该设备可用的备件信息");
+                    ToastUtils.showToast(EquipMgrMaintenMaterialActivity.this, "没有获取到该设备可用的物料信息");
                     mLv_DataList.setAdapter(null);
                     return;
                 } else {

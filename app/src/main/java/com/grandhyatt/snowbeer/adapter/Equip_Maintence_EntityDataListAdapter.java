@@ -54,11 +54,6 @@ public class Equip_Maintence_EntityDataListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_item_equip_maintence_activity, null);
 
             mViewHolder.mTv_Status = convertView.findViewById(R.id.mTv_Status);
-            if(mViewHolder.mTv_Status.getText().toString().contains("超期")){
-                mViewHolder.mTv_Status.setTextColor(Color.RED);
-            }else{
-                mViewHolder.mTv_Status.setTextColor(Color.BLACK);
-            }
             mViewHolder.mTv_ID = convertView.findViewById(R.id.mTv_ID);
             mViewHolder.mTv_EquipID = convertView.findViewById(R.id.mTv_EquipID);
             mViewHolder.mTv_MaintenLevel = convertView.findViewById(R.id.mTv_MaintenLevel);
@@ -78,6 +73,12 @@ public class Equip_Maintence_EntityDataListAdapter extends BaseAdapter {
         MaintenancePlanEntity dataModel = mDataList.get(position);
         if (dataModel != null) {
             mViewHolder.mTv_Status.setText(dataModel.getStatus());
+            String status = mViewHolder.mTv_Status.getText().toString();
+            if(status.contains("超期")){
+                mViewHolder.mTv_Status.setTextColor(Color.RED);
+            }else{
+                mViewHolder.mTv_Status.setTextColor(Color.BLACK);
+            }
             mViewHolder.mTv_ID.setText(dataModel.getID());
             mViewHolder.mTv_EquipID.setText(dataModel.getEquipmentID());
             mViewHolder.mTv_MaintenLevel.setText(dataModel.getMaintenanceLevel());
