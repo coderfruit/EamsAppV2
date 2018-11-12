@@ -36,28 +36,23 @@ public class ObjectBoxHelper {
     }
 
     /**
-     * 获取所有用户信息列表
+     * 获取所有服务器地址信息
      */
     public static List<APIHostInfoEntity> getAPIHostInfoList() {
         return App.getBoxStoreInstance().boxFor(APIHostInfoEntity.class).getAll();
     }
 
-//    /**
-//     * 获取所有用户信息列表
-//     *
-//     */
-//    public static List<LoginUserInfoEntity> getUserInfoList(){
-//        return App.getBoxStoreInstance().boxFor(LoginUserInfoEntity.class).getAll();
-//    }
-//
-//    /**
-//     * 使用用户ID查询用户信息
-//     *
-//     */
-//    public static List<LoginUserInfoEntity> queryUserInfo(long userId){
-//        return App.getBoxStoreInstance().boxFor(LoginUserInfoEntity.class).query().equal(LoginUserInfo_.user_id,userId).build().find();
-//    }
-//
+    /**
+     * 修改服务器地址
+     * @param apiHostInfo_pre
+     * @param apiHostInfo_new
+     */
+    public static void modifyAPIHostInfo(APIHostInfoEntity apiHostInfo_pre,APIHostInfoEntity apiHostInfo_new)
+    {
+        App.getBoxStoreInstance().boxFor(APIHostInfoEntity.class).remove(apiHostInfo_pre);
+        App.getBoxStoreInstance().boxFor(APIHostInfoEntity.class).put(apiHostInfo_new);
+    }
+
     /**
      * 保存用户信息
      *

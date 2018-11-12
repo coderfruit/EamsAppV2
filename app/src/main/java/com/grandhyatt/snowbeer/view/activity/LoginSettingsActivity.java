@@ -29,6 +29,8 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,15 +56,10 @@ public class LoginSettingsActivity extends ActivityBase implements IActivityBase
     /** 数据列表 */
     @BindView(R.id.mLv_DataList)
     ListView mLv_DataList;
-    /** 组织机构 */
-//    @BindView(R.id.mTv_Organization)
-//    TextView mTv_Organization;
-
-    @BindView(R.id.mRefreshLayout)
-    SmartRefreshLayout mRefreshLayout;
+    @BindView(R.id.mTv_Url)
+    TextView mTv_Url;
 
     private List<APIHostInfoEntity> mDataList;
-    private List<String> mOrganizationDataList = new ArrayList<>();
 
     private LoginSettingsListViewAdapter mAdapter;
 
@@ -85,13 +82,7 @@ public class LoginSettingsActivity extends ActivityBase implements IActivityBase
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.mTv_Organization:
-//                if(mOrganizationDataList == null | mOrganizationDataList.size() <= 0){
-//                    requestNetworkData();
-//                }else {
-//                    showOrganizationListMenu();
-//                }
-//                break;
+
             default:
                 break;
         }
@@ -99,19 +90,16 @@ public class LoginSettingsActivity extends ActivityBase implements IActivityBase
 
     @Override
     public void initView() {
+        APIHostInfoEntity apiHostInfo = SPUtils.getAPIHostInfo(LoginSettingsActivity.this);
+        if(apiHostInfo != null){
+            mTv_Url.setText(apiHostInfo.getHost_url() + ":" + apiHostInfo.getPort());
+        }
 
     }
 
     @Override
     public void bindEvent() {
-//        mTv_Organization.setOnClickListener(this);
 
-        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(@NonNull RefreshLayout refreshLayout) {
-                //requestNetworkData();
-            }
-        });
 
     }
 
@@ -119,10 +107,6 @@ public class LoginSettingsActivity extends ActivityBase implements IActivityBase
     public void refreshUI() {
         
         mToolBar.setTitle("登录设置");
-
-//        if (!TextUtils.isEmpty(SPUtils.getOrganization(LoginSettingsActivity.this))){
-//            mTv_Organization.setText(SPUtils.getOrganization(LoginSettingsActivity.this));
-//        }
 
         mToolBar.setMenuText("添加");
         mToolBar.showMenuButton();
@@ -143,31 +127,7 @@ public class LoginSettingsActivity extends ActivityBase implements IActivityBase
      */
     @Override
     public void requestNetworkData() {
-//        //获取组织机构信息
-//        NetWorkRequestUtils.getOrganizationListAsync(LoginSettingsActivity.this, new GetOrganizationListCallBack() {
-//            @Override
-//            public void onError(Call call, Exception e, int id) {
-//                ToastUtils.showToast(LoginSettingsActivity.this,e.getMessage());
-//                mRefreshLayout.finishRefresh();
-//            }
-//
-//            @Override
-//            public void onResponse(GetOrganizationListResult response, int id) {
-//                mRefreshLayout.finishRefresh();
-//
-//                if (response == null || response.data == null || response.data.size() <= 0){
-//                    return;
-//                }
-//
-//                List<OrganizationEntity> dataList = response.data;
-//
-//                mOrganizationDataList.clear();
-//                for (int i = 0;i< dataList.size();i++){
-//                    mOrganizationDataList.add(dataList.get(i).getOrg_name());
-//                }
-//
-//            }
-//        });
+
 
     }
 
@@ -200,11 +160,11 @@ public class LoginSettingsActivity extends ActivityBase implements IActivityBase
             mAdapter.setSelected(mDataList.get(position));
             mAdapter.notifyDataSetChanged();
 
-//            if(mOrganizationDataList != null && mOrganizationDataList.size() > position) {
-//                mTv_Organization.setText(mOrganizationDataList.get(position));
-//            }
             //保存用户选择的服务器地址
             SPUtils.setAPIHostInfo(LoginSettingsActivity.this, apiHostInfo);
+            if(apiHostInfo != null){
+                mTv_Url.setText(apiHostInfo.getHost_url() + ":" + apiHostInfo.getPort());
+            }
         }
     }
 
@@ -269,20 +229,6 @@ public class LoginSettingsActivity extends ActivityBase implements IActivityBase
 
     }
 
-    /**
-     * 显示组织机构列表菜单
-     */
-    private void showOrganizationListMenu() {
-//        showSelectDialog(new SelectDialog.SelectDialogListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                mTv_Organization.setText(mOrganizationDataList.get(position));
-//                //保存用户选择的组织机构信息
-//                SPUtils.setOrganization(LoginSettingsActivity.this,mOrganizationDataList.get(position));
-//            }
-//        }, mOrganizationDataList);
-    }
 
 
 }

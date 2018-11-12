@@ -2,6 +2,8 @@ package com.grandhyatt.snowbeer.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -192,5 +194,8 @@ public class CommonUtils {
 
         return hours;
     }
+
+
+
 
 }

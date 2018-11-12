@@ -5,7 +5,7 @@ apply plugin: 'com.jfrog.bintray'
 version = "1.0.6"
 
 android {
-    resourcePrefix "zz_" //随意填写
+    //resourcePrefix "zz_" //随意填写
 
     compileSdkVersion 27
     buildToolsVersion "27.0.3"

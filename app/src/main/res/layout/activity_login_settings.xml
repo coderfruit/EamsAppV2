@@ -11,19 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/mRefreshLayout"
-        app:srlAccentColor="@android:color/white"
-        app:srlEnableLoadMore="false"
-        app:srlHeaderMaxDragRate="2.5"
-        app:srlPrimaryColor="@color/blue_title_bar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white">
-
-        <com.scwang.smartrefresh.header.WaterDropHeader
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,6 +32,16 @@
                     android:textColor="@color/gray5"
                     android:textSize="16sp" />
 
+                <TextView
+                    android:id="@+id/mTv_Url"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:layout_marginRight="10sp"/>
+
             </RelativeLayout>
 
             <ListView
@@ -56,5 +53,5 @@
                 android:dividerHeight="0dp" />
 
         </LinearLayout>
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
 </LinearLayout>

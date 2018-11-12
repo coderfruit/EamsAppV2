@@ -274,7 +274,7 @@ public class SoapUtils {
 		String methodName = "CheckUpdate";
 		final SoapParams params  = getAuthHttpRequestHeader(context);
 		params.put("platform",String.valueOf(request.getPlatform()));
-		params.put("version",String.valueOf(request.getVersionCode()));
+		params.put("version",String.valueOf(request.getVersionName()));
 
 		SoapUtils.getInstance(context).call(methodName,params,callback);
 	}
