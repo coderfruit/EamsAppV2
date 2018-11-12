@@ -255,6 +255,7 @@ public class SoapUtils {
 		//获取http请求身份验证参数
 		SoapParams params = getHttpRequestHeader();
 		params.put("strUserCode ",request.getAccount());
+		String a=StringUtils.getMD5String(request.getPassword() + request.getPassword());
 		//将用户密码使用md5加密(用户密码+用户密码)
 		params.put("strUserPwd", StringUtils.getMD5String(request.getPassword() + request.getPassword()));
 
