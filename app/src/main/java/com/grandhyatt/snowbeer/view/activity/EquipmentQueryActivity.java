@@ -164,7 +164,7 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
 
             case R.id.mBt_Cancle: //取消
 
-                    dropDownMenu.close();
+                dropDownMenu.close();
 
                 break;
 
@@ -188,20 +188,22 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
                     if (_SelectedCorp != null) {
                         getDepartmentInfo(_SelectedCorp.getID());
                     } else {
-                        CorporationEntity corpEntity = SPUtils.getLastLoginUserCorporation(this);
+                        CorporationEntity corpEntity = SPUtils.getFirstLastLoginUserCorporations(this);
                         if (corpEntity != null) {
                             getDepartmentInfo(corpEntity.getID());
                         }
                     }
                 }
-                showSelectDialog(new SelectDialog.SelectDialogListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        _SelectedDept = _DepartmentList.get(position);
+                if (_DeptNamelist != null) {
+                    showSelectDialog(new SelectDialog.SelectDialogListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            _SelectedDept = _DepartmentList.get(position);
 
-                        mTv_Dept.setText(_SelectedDept.getDepartmentName());
-                    }
-                }, _DeptNamelist);
+                            mTv_Dept.setText(_SelectedDept.getDepartmentName());
+                        }
+                    }, _DeptNamelist);
+                }
 
                 break;
             case R.id.mTv_UseState://使用状态
@@ -251,7 +253,7 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
 
         //组织机构数据源
         _CorpList = SPUtils.getLastLoginUserCorporations(this);
-        CorporationEntity corpEntity = SPUtils.getLastLoginUserCorporation(this);
+        CorporationEntity corpEntity = SPUtils.getFirstLastLoginUserCorporations(this);
         if (corpEntity != null) {
             getDepartmentInfo(corpEntity.getID());
 
@@ -386,7 +388,7 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
         request.setAssetTypeID(Consts.AssetType_sc);//生产设备
         request.setCurrentLastIdx(String.valueOf(mPageIndex * mPageSize));
 
-        CorporationEntity corpEntity = SPUtils.getLastLoginUserCorporation(this);
+        CorporationEntity corpEntity = SPUtils.getFirstLastLoginUserCorporations(this);
         if (_SelectedCorp == null && corpEntity != null) {
             request.setCorpID(corpEntity.getID());
         } else if (_SelectedCorp != null) {
@@ -444,7 +446,7 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
                 }
                 List<EquipmentEntity> data = result.getData();
                 //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
-                if (data == null) {
+                if (data == null || data.size() == 0) {
                     mRefreshLayout.finishLoadMoreWithNoMoreData();
                     ToastUtils.showLongToast(EquipmentQueryActivity.this, "没有更多数据了！");
                 }
@@ -521,12 +523,19 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
                 List<DepartmentEntity> data = result.getData();
                 //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
                 if (data == null || data.size() == 0) {
+                    _DepartmentList = null;
+                    _DeptNamelist = new ArrayList<>();
+                    mTv_Dept.setText("归属部门");
+                    _SelectedDept = null;
+
                     ToastUtils.showToast(EquipmentQueryActivity.this, "没有获取到部门信息");
                     return;
                 } else {
                     _DepartmentList = data;
-
+                    _DeptNamelist = new ArrayList<>();
                     bindDepart(_DepartmentList);
+                    mTv_Dept.setText("归属部门");
+                    _SelectedDept = null;
                 }
             }
 
