@@ -204,7 +204,7 @@ public class FaultReport_MyActivity extends ActivityBase implements IActivityBas
         }else {
             request.setStatus(mTv_Status.getText().toString());
         }
-        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(this);
+        CorporationEntity corp = SPUtils.getFirstLastLoginUserCorporations(this);
         if(corp != null){
             request.setCorpID(corp.getID());
         }

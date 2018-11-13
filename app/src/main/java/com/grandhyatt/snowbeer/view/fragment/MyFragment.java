@@ -164,7 +164,7 @@ public class MyFragment extends FragmentBase implements IFragmentBase, View.OnCl
     public void initView() {
         mTv_Version.setText(UpdateUtils.getVersionName(this.getContext()));
 
-        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(this.getContext());
+        CorporationEntity corp = SPUtils.getFirstLastLoginUserCorporations(this.getContext());
         if(corp != null)
         {
             mTv_UserCorp.setText("归属工厂:" + corp.getCorporationName());
@@ -253,7 +253,7 @@ public class MyFragment extends FragmentBase implements IFragmentBase, View.OnCl
                     CorporationEntity corp = corpList.get(position);
 
                     mTv_UserCorp.setText("归属工厂:" + corp.getCorporationName());
-                    SPUtils.setLastLoginUserCorporation(getContext(), corp);
+                    //SPUtils.setLastLoginUserCorporation(getContext(), corp);
                 }
             },corpName);
         }

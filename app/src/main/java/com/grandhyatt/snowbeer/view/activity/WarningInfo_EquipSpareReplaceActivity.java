@@ -179,7 +179,7 @@ public class WarningInfo_EquipSpareReplaceActivity extends ActivityBase implemen
     public void requestNetworkData() {
         showLogingDialog();
 
-        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(this);
+        CorporationEntity corp = SPUtils.getFirstLastLoginUserCorporations(this);
         if(corp != null){
             String currentLastIdx = String.valueOf(mPageIndex * mPageSize);
             SoapUtils.getSpareReplaceInfo(this, corp.getID(), currentLastIdx, new SoapListener() {

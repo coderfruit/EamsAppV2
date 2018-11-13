@@ -9,8 +9,8 @@ public class EquipmentEntity {
     private String ID;
 
     private String CorporationID;
-
     private String CorporationName;
+    private String CorporationLevelCode;
 
     private String DepartmentID;
 
@@ -63,6 +63,14 @@ public class EquipmentEntity {
     private String EquipImg;
 
     public EquipmentEntity() {
+    }
+
+    public String getCorporationLevelCode() {
+        return CorporationLevelCode;
+    }
+
+    public void setCorporationLevelCode(String corporationLevelCode) {
+        CorporationLevelCode = corporationLevelCode;
     }
 
     public String getDepartmentCode() {

@@ -109,7 +109,7 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
             if(corps.size() == 1){
                 mRL_UserCorp.setVisibility(View.GONE);
             }else{
-                CorporationEntity corp = SPUtils.getLastLoginUserCorporation(this);
+                CorporationEntity corp = SPUtils.getFirstLastLoginUserCorporations(this);
                 if(corp != null)
                 {
                     mTv_UserCorp.setText(corp.getCorporationName());
@@ -141,7 +141,7 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
         if(userCorp.length() > 0) {
             corp = SPUtils.getLastLoginUserCorporations(WarningInfo_EquipActivity.this, userCorp);
         }else{
-            corp = SPUtils.getLastLoginUserCorporation(WarningInfo_EquipActivity.this);
+            corp = SPUtils.getFirstLastLoginUserCorporations(WarningInfo_EquipActivity.this);
         }
         final CorporationEntity finalCorp = corp;
 
@@ -267,7 +267,7 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
         if(userCorp.length() > 0) {
             corp = SPUtils.getLastLoginUserCorporations(WarningInfo_EquipActivity.this, userCorp);
         }else{
-            corp = SPUtils.getLastLoginUserCorporation(WarningInfo_EquipActivity.this);
+            corp = SPUtils.getFirstLastLoginUserCorporations(WarningInfo_EquipActivity.this);
         }
 
         showLogingDialog();
@@ -374,7 +374,7 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
         if(userCorp.length() > 0) {
             corp = SPUtils.getLastLoginUserCorporations(WarningInfo_EquipActivity.this, userCorp);
         }else{
-            corp = SPUtils.getLastLoginUserCorporation(WarningInfo_EquipActivity.this);
+            corp = SPUtils.getFirstLastLoginUserCorporations(WarningInfo_EquipActivity.this);
         }
         return corp;
     }

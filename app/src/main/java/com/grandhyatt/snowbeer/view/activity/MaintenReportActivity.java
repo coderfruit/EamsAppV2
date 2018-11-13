@@ -856,12 +856,11 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 ToastUtils.showLongToast(MaintenReportActivity.this, data.getEquipmentName() + " 不是生产设备");
                 return;
             }
-            CorporationEntity corp = SPUtils.getLastLoginUserCorporation(MaintenReportActivity.this);
-            if(corp != null){
-                if(!corp.getID().equals(data.getCorporationID())){
-                    ToastUtils.showLongToast(MaintenReportActivity.this, data.getEquipmentName() + " 不属于用户当前归属[" + corp.getCorporationName() + "]");
-                    return;
-                }
+            boolean ckRlt = CommonUtils.checkCorpIsInList(MaintenReportActivity.this, data.getCorporationLevelCode());
+            if (!ckRlt) {
+                _EquipmentData = null;
+                ToastUtils.showLongToast(MaintenReportActivity.this, data.getEquipmentName() + "属于" + data.getCorporationName() + ",不属于用户当前归属组织机构");
+                return;
             }
 
             mTv_EquipCode.setText(data.getEquipmentCode());
@@ -1117,7 +1116,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     mEt_materialsum.setText("");
                 }
 
-                if (!_Type.equals("2")) {
+                if (!_Type.equals("2") && (_CheckPlanEntityList == null || _CheckPlanEntityList.size() == 0) ){
                     ShowDialog(MaintenReportActivity.this, "提示", "是否按计划执行?",
                             //是
                             new DialogInterface.OnClickListener() {

@@ -367,12 +367,11 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
                 ToastUtils.showLongToast(AssayUseActivity.this, data.getEquipmentName() + " 不是化学仪器");
                 return;
             }
-            CorporationEntity corp = SPUtils.getLastLoginUserCorporation(AssayUseActivity.this);
-            if(corp != null){
-                if(!corp.getID().equals(data.getCorporationID())){
-                    ToastUtils.showLongToast(AssayUseActivity.this, data.getEquipmentName() + " 不属于用户当前归属[" + corp.getCorporationName() + "]");
-                    return;
-                }
+            boolean ckRlt = CommonUtils.checkCorpIsInList(AssayUseActivity.this, data.getCorporationLevelCode());
+            if (!ckRlt) {
+                _EquipmentData = null;
+                ToastUtils.showLongToast(AssayUseActivity.this, data.getEquipmentName() + "属于" + data.getCorporationName() + ",不属于用户当前归属组织机构");
+                return;
             }
 
             mTv_EquipCode.setText(data.getEquipmentCode());

@@ -10,12 +10,15 @@ import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
 
+import com.grandhyatt.snowbeer.entity.CorporationEntity;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -67,7 +70,6 @@ public class CommonUtils {
     /**
      * 将base64字符保存文本文件
      *
-     * @param base64Code
      * @param targetPath
      * @throws Exception
      */
@@ -193,6 +195,23 @@ public class CommonUtils {
         int hours = (int) ((to - from)/(1000 * 60 * 60));
 
         return hours;
+    }
+
+    /**
+     * 检查组织机构ID在当前用户归属组织机构列表中是否存在
+     * 存在返回true，不存在返回false
+     * @return
+     */
+    public static boolean checkCorpIsInList(Context context, String corpLevelCode){
+        boolean result = false;
+        List<CorporationEntity> corps = SPUtils.getLastLoginUserCorporations(context);
+        for(CorporationEntity item : corps){
+            if(corpLevelCode.startsWith(item.getLevelCode())){
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 
 
