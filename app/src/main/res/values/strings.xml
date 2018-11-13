@@ -15,7 +15,7 @@
     <string name="next">下一个</string>
     <string name="register">注册</string>
 
-    <string name="login_settings_ip_address">IP 地址</string>
+    <string name="login_settings_ip_address">IP/域名</string>
     <string name="login_settings_port">端口</string>
     <string name="dialog_ok">确定</string>
     <string name="dialog_cancel">取消</string>
