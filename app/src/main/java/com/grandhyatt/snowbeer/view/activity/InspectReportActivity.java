@@ -360,7 +360,8 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
                     return;
                 }
                 TextDictionaryEntity data = result.getData();
-                if (data != null) {
+                if (data != null)
+                {
                     String value = data.getValue();
                     if (value != null && value.length() > 0) {
                         _InspModeArr = value.split("\\|");
@@ -1114,7 +1115,10 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
 //            ToastUtils.showLongToast(InspectReportActivity.this, "填写费用金额不能为空！");
             return;
         } else {
-
+            if(!isNumeric(money)){
+                ToastUtils.showLongToast(InspectReportActivity.this, "填写费用金额格式不正确！");
+                return;
+            }
         }
 
         mBtn_Submit.setEnabled(false);
