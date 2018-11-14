@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -26,6 +28,12 @@ public class Equip_Repair_EntityDataListAdapter extends BaseAdapter {
 
     public Equip_Repair_EntityDataListAdapter(Context context, List<RepairmentPlanEntity> dataList) {
         mContext = context;
+//        Collections.sort(dataList, new Comparator<RepairmentPlanEntity>() {
+//            @Override
+//            public int compare(RepairmentPlanEntity o1, RepairmentPlanEntity o2) {
+//                return o2.getStatus().compareTo(o1.getStatus());
+//            }
+//        });
         mDataList = dataList;
     }
 
@@ -107,6 +115,13 @@ public class Equip_Repair_EntityDataListAdapter extends BaseAdapter {
 
     public void loadMore(List<RepairmentPlanEntity> data) {
         mDataList.addAll(data);
+
+//        Collections.sort(mDataList, new Comparator<RepairmentPlanEntity>() {
+//            @Override
+//            public int compare(RepairmentPlanEntity o1, RepairmentPlanEntity o2) {
+//                return o2.getStatus().compareTo(o1.getStatus());
+//            }
+//        });
         notifyDataSetChanged();
     }
 }

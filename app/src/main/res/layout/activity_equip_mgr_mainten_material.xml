@@ -162,7 +162,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="horizontal"
-                android:layout_weight="4">
+                android:layout_weight="4"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/mTv_SpareDeptID"
@@ -186,7 +187,7 @@
                 android:id="@+id/mEt_SpareCond"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="物资编码/名称"
+                android:hint="机物料编码/名称"
                 android:src="@drawable/item_signature_iv_menu_defaul"
                 android:textSize="12dp"
                 android:gravity="center"

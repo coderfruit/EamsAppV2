@@ -44,7 +44,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by ycm on 2018/9/20.
- * 设备保养机物料选择
+ * 设备保养用机物料选择
  */
 
 public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IActivityBase, View.OnClickListener {
@@ -125,7 +125,7 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
 
     @Override
     public void initView() {
-        mToolBar.setTitle("设备保养物资选择");
+        mToolBar.setTitle("选择保养用机物料");
         getEquipmentInfo(_EquipID);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
@@ -435,7 +435,7 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
                 List<EquipmentMaterialEntity> data = result.getData();
                 //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
                 if (data == null || data.size() == 0) {
-                    ToastUtils.showToast(EquipMgrMaintenMaterialActivity.this, "没有获取到该设备可用的物料信息");
+                    ToastUtils.showToast(EquipMgrMaintenMaterialActivity.this, "没有为该设备设置保养用机物料信息");
                     mLv_DataList.setAdapter(null);
                     return;
                 } else {

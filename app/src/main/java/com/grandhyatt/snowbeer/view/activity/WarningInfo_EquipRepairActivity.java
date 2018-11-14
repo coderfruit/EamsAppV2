@@ -34,6 +34,8 @@ import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -216,7 +218,7 @@ public class WarningInfo_EquipRepairActivity extends ActivityBase implements IAc
                     }
                     List<RepairmentPlanEntity> data = result.getData();
                     //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
-                    if (data == null) {
+                    if (data == null || data.size() == 0) {
                         mRefreshLayout.finishLoadMoreWithNoMoreData();
                     }
                     //判断是否是加载更多
