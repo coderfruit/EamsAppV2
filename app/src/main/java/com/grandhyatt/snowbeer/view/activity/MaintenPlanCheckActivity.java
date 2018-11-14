@@ -242,8 +242,9 @@ public class MaintenPlanCheckActivity extends ActivityBase implements IActivityB
                     MaintenPlanCheckActivity.this.finish();
                 }
                 else {
-                    //关闭Activity
-                    MaintenPlanCheckActivity.this.finish();
+
+                    ToastUtils.showLongToast(MaintenPlanCheckActivity.this, "当前设备无任何保养计划，请返回！");
+                    return;
                 }
 
 

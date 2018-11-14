@@ -235,7 +235,8 @@ public class InspectPlanCheckActivity extends ActivityBase implements IActivityB
                     InspectPlanCheckActivity.this.finish();
                 }
                 else {
-                    InspectPlanCheckActivity.this.finish();
+                    ToastUtils.showLongToast(InspectPlanCheckActivity.this, "当前设备无任何检验计划，请返回！");
+                    return;
                 }
 
 
