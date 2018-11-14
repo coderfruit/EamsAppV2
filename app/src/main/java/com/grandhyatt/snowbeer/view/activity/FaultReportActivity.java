@@ -614,7 +614,7 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 
                 DatePickDialog dialog = new DatePickDialog(v.getContext());
                 //设置上下年分限制
-                dialog.setYearLimt(5);
+                dialog.setYearLimt(20);
                 //设置标题
                 dialog.setTitle("选择时间");
                 //设置类型
