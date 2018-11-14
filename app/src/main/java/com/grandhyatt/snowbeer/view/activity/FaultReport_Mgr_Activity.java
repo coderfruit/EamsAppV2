@@ -1,5 +1,6 @@
 package com.grandhyatt.snowbeer.view.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -339,17 +340,14 @@ public class FaultReport_Mgr_Activity extends ActivityBase implements IActivityB
                 corpName.add(item.getCorporationName());
             }
 
-            showSelectDialog(new SelectDialog.SelectDialogListener() {
+            showSelectDialog("组织机构列表", corpName, new DialogInterface.OnClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    CorporationEntity corp = corpList.get(position);
-
+                public void onClick(DialogInterface dialog, int which) {
+                    CorporationEntity corp = corpList.get(which);
                     mTv_UserCorp.setText(corp.getCorporationName());
-                    //SPUtils.setLastLoginUserCorporation(FaultReport_Mgr_Activity.this, corp);
-
                     requestNetworkData();
                 }
-            },corpName);
+            });
         }
 
     }

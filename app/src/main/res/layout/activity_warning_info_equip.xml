@@ -14,7 +14,7 @@
     <RelativeLayout
         android:id="@+id/mRL_UserCorp"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="30dp"
         android:background="@drawable/selector_linear_layout_item_white">
 
         <ImageView
@@ -44,6 +44,13 @@
             android:layout_marginRight="16dp"
             android:src="@drawable/item_signature_iv_menu_defaul" />
     </RelativeLayout>
+
+    <View
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/white6"
+        />
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

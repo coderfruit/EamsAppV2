@@ -1,11 +1,13 @@
 package com.grandhyatt.snowbeer.view.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -61,6 +63,12 @@ public class FaultReport_MyActivity extends ActivityBase implements IActivityBas
 
     @BindView(R.id.mTv_Status)
     TextView mTv_Status;
+
+
+    @BindView(R.id.mTv_UserCorp)
+    TextView mTv_UserCorp;
+    @BindView(R.id.mRL_UserCorp)
+    RelativeLayout mRL_UserCorp;
 
     //当前页码
     private int mPageIndex = 0;
@@ -125,10 +133,39 @@ public class FaultReport_MyActivity extends ActivityBase implements IActivityBas
         mToolBar.showMenuButton();
         mToolBar.setMenuText("我要报修");
 
+        List<CorporationEntity> corps = SPUtils.getLastLoginUserCorporations(this);
+        if(corps != null){
+            if(corps.size() == 1){
+                mRL_UserCorp.setVisibility(View.GONE);
+            }else{
+                CorporationEntity corp = SPUtils.getFirstLastLoginUserCorporations(this);
+                if(corp != null)
+                {
+                    mTv_UserCorp.setText(corp.getCorporationName());
+                }
+                mRL_UserCorp.setVisibility(View.VISIBLE);
+            }
+        }
+
+
     }
 
     @Override
     public void bindEvent() {
+
+        mRL_UserCorp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showUserCorp();
+            }
+        });
+
+        mTv_UserCorp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showUserCorp();
+            }
+        });
 
         //我要报修
         mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
@@ -204,10 +241,19 @@ public class FaultReport_MyActivity extends ActivityBase implements IActivityBas
         }else {
             request.setStatus(mTv_Status.getText().toString());
         }
-        CorporationEntity corp = SPUtils.getFirstLastLoginUserCorporations(this);
-        if(corp != null){
-            request.setCorpID(corp.getID());
+//        CorporationEntity corp = SPUtils.getFirstLastLoginUserCorporations(this);
+//        if(corp != null){
+//            request.setCorpID(corp.getID());
+//        }
+
+        CorporationEntity corp = null;
+        String userCorp = mTv_UserCorp.getText().toString();
+        if(userCorp.length() > 0) {
+            corp = SPUtils.getLastLoginUserCorporations(FaultReport_MyActivity.this, userCorp);
+        }else{
+            corp = SPUtils.getFirstLastLoginUserCorporations(FaultReport_MyActivity.this);
         }
+        request.setCorpID(corp.getID());
 
         String userName = SPUtils.getLastLoginUserName(this);
         request.setReportUser(userName);
@@ -374,4 +420,28 @@ public class FaultReport_MyActivity extends ActivityBase implements IActivityBas
 
     }
 
+    /**
+     * 显示用户归属组织机构
+     */
+    private void showUserCorp()
+    {
+        List<String> corpName = new ArrayList<>();
+        final List<CorporationEntity> corpList = SPUtils.getLastLoginUserCorporations(this);
+        if(corpList != null && corpList.size() > 1){
+
+            for (CorporationEntity item : corpList) {
+                corpName.add(item.getCorporationName());
+            }
+
+            showSelectDialog("组织机构列表", corpName, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    CorporationEntity corp = corpList.get(which);
+                    mTv_UserCorp.setText(corp.getCorporationName());
+                    requestNetworkData();
+                }
+            });
+        }
+
+    }
 }

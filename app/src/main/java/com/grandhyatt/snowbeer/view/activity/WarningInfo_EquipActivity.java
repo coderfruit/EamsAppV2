@@ -1,5 +1,6 @@
 package com.grandhyatt.snowbeer.view.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -353,17 +354,26 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
                 corpName.add(item.getCorporationName());
             }
 
-            showSelectDialog(new SelectDialog.SelectDialogListener() {
+//            showSelectDialog(new SelectDialog.SelectDialogListener() {
+//                @Override
+//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    CorporationEntity corp = corpList.get(position);
+//
+//                    mTv_UserCorp.setText(corp.getCorporationName());
+//                    //SPUtils.setLastLoginUserCorporation(WarningInfo_EquipActivity.this, corp);
+//
+//                    requestNetworkData();
+//                }
+//            },corpName);
+
+            showSelectDialog("组织机构列表", corpName, new DialogInterface.OnClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    CorporationEntity corp = corpList.get(position);
-
+                public void onClick(DialogInterface dialog, int which) {
+                    CorporationEntity corp = corpList.get(which);
                     mTv_UserCorp.setText(corp.getCorporationName());
-                    //SPUtils.setLastLoginUserCorporation(WarningInfo_EquipActivity.this, corp);
-
                     requestNetworkData();
                 }
-            },corpName);
+            });
         }
 
     }

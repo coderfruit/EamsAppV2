@@ -1,5 +1,6 @@
 package com.grandhyatt.snowbeer.view.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -170,17 +171,24 @@ public class EquipmentQueryActivity extends ActivityBase implements IActivityBas
 
 
             case R.id.mTv_Corp://组织机构
-
-                showSelectDialog(new SelectDialog.SelectDialogListener() {
+//                showSelectDialog(new SelectDialog.SelectDialogListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                        _SelectedCorp = _CorpList.get(position);
+//
+//                        getDepartmentInfo(_SelectedCorp.getID());
+//
+//                        mTv_Corp.setText(_SelectedCorp.getCorporationName());
+//                    }
+//                }, _CorpNameList);
+                showSelectDialog("组织机构列表", _CorpNameList, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        _SelectedCorp = _CorpList.get(position);
-
+                    public void onClick(DialogInterface dialog, int which) {
+                        _SelectedCorp = _CorpList.get(which);
                         getDepartmentInfo(_SelectedCorp.getID());
-
                         mTv_Corp.setText(_SelectedCorp.getCorporationName());
                     }
-                }, _CorpNameList);
+                });
 
                 break;
             case R.id.mTv_Dept://部门

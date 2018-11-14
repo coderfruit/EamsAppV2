@@ -234,7 +234,7 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
                         }
                     }
                     if (_CheckEntityList == null || _CheckEntityList.size() == 0) {
-                        ToastUtils.showLongToast(EquipMgrMaintenMaterialActivity.this, "请选择使用的物资（单选或多选）");
+                        ToastUtils.showLongToast(EquipMgrMaintenMaterialActivity.this, "请选择要使用的机物料（单选）");
                         return;
                     }
                     //数据是使用Intent返回
