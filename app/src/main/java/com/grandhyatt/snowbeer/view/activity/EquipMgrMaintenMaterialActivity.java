@@ -44,7 +44,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by ycm on 2018/9/20.
- * 设备保养机物料选择
+ * 设备保养用机物料选择
  */
 
 public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IActivityBase, View.OnClickListener {
@@ -125,7 +125,7 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
 
     @Override
     public void initView() {
-        mToolBar.setTitle("设备保养物资选择");
+        mToolBar.setTitle("选择保养用机物料");
         getEquipmentInfo(_EquipID);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
@@ -219,34 +219,41 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
                 _CheckEntityList.clear();
 
                 EquipmentMaterialEntity rpEntity=null;
-                for (int i = 0; i < adapter_Spare.getCount(); i++) {
+                if(adapter_Spare!=null && adapter_Spare.getCount()>0) {
 
-                    rpEntity = (EquipmentMaterialEntity) mLv_DataList.getAdapter().getItem(i);
-                    if (rpEntity!=null) {
-                        if( rpEntity.getIsCheck()){
-                            _CheckEntityList.add(rpEntity);
+
+                    for (int i = 0; i < adapter_Spare.getCount(); i++) {
+
+                        rpEntity = (EquipmentMaterialEntity) mLv_DataList.getAdapter().getItem(i);
+                        if (rpEntity != null) {
+                            if (rpEntity.getIsCheck()) {
+                                _CheckEntityList.add(rpEntity);
+
+                            }
 
                         }
-
                     }
+                    if (_CheckEntityList == null || _CheckEntityList.size() == 0) {
+                        ToastUtils.showLongToast(EquipMgrMaintenMaterialActivity.this, "请选择使用的物资（单选或多选）");
+                        return;
+                    }
+                    //数据是使用Intent返回
+                    Intent intent = new Intent();
+
+                    //把返回数据存入Intent
+
+                    intent.putExtra("_CheckEntityList", _CheckEntityList);
+
+
+                    //设置返回数据
+                    EquipMgrMaintenMaterialActivity.this.setResult(RESULT_OK, intent);
+                    //关闭Activity
+                    EquipMgrMaintenMaterialActivity.this.finish();
                 }
-                if(_CheckEntityList == null || _CheckEntityList.size() == 0)
-                {
-                    ToastUtils.showLongToast(EquipMgrMaintenMaterialActivity.this,"请选择使用的物资（单选或多选）");
+                else {
+                    ToastUtils.showLongToast(EquipMgrMaintenMaterialActivity.this, "当前保养设备下无备品备件，请返回！");
                     return;
                 }
-                //数据是使用Intent返回
-                Intent intent = new Intent();
-
-                //把返回数据存入Intent
-
-                intent.putExtra("_CheckEntityList", _CheckEntityList);
-
-
-                //设置返回数据
-                EquipMgrMaintenMaterialActivity.this.setResult(RESULT_OK, intent);
-                //关闭Activity
-                EquipMgrMaintenMaterialActivity.this.finish();
 
             }
         });
@@ -435,7 +442,7 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
                 List<EquipmentMaterialEntity> data = result.getData();
                 //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
                 if (data == null || data.size() == 0) {
-                    ToastUtils.showToast(EquipMgrMaintenMaterialActivity.this, "没有获取到该设备可用的物料信息");
+                    ToastUtils.showToast(EquipMgrMaintenMaterialActivity.this, "没有为该设备设置保养用机物料信息");
                     mLv_DataList.setAdapter(null);
                     return;
                 } else {

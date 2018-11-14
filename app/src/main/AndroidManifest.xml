@@ -142,6 +142,8 @@
         <activity android:name=".view.activity.EquipMgrRepairExSpareCheckActivity" />
         <!-- 化学仪器使用记录查询 -->
         <activity android:name=".view.activity.Query_AssayUseInfoActivity" />
+        <!-- 设备保养用机物料添加页面 -->
+        <activity android:name=".view.activity.EquipMgrMaintenMaterial_AddActivity" />
 
 
         <!-- **************************************  **************************************  ************************************** -->

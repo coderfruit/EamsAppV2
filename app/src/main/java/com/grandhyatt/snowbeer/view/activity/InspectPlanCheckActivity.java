@@ -212,28 +212,34 @@ public class InspectPlanCheckActivity extends ActivityBase implements IActivityB
                 _CheckEntityList.clear();
                 _CheckIDList.clear();
                 InspectionPlanEntity rpEntity=null;
-                for (int i = 0; i < adapter_Plan.getCount(); i++) {
+                if(adapter_Plan!=null && adapter_Plan.getCount()>0) {
+                    for (int i = 0; i < adapter_Plan.getCount(); i++) {
 
-                         rpEntity = (InspectionPlanEntity) mLv_DataList.getAdapter().getItem(i);
-                        if (rpEntity!=null) {
-                           if( rpEntity.getIsCheck()){
-                               _CheckEntityList.add(rpEntity);
-                               _CheckIDList.add(rpEntity.getID());
-                           }
+                        rpEntity = (InspectionPlanEntity) mLv_DataList.getAdapter().getItem(i);
+                        if (rpEntity != null) {
+                            if (rpEntity.getIsCheck()) {
+                                _CheckEntityList.add(rpEntity);
+                                _CheckIDList.add(rpEntity.getID());
+                            }
 
                         }
                     }
+                    //把返回数据存入Intent
+                    //   intent.putStringArrayListExtra("_CheckPlanIDList", _CheckIDList);
+                    intent.putExtra("_CheckInspectPlanList", _CheckEntityList);
 
 
-                //把返回数据存入Intent
-                intent.putStringArrayListExtra("_CheckPlanIDList", _CheckIDList);
-                intent.putExtra("_CheckInspectPlanList", _CheckEntityList);
+                    //设置返回数据
+                    InspectPlanCheckActivity.this.setResult(RESULT_OK, intent);
+                    //关闭Activity
+                    InspectPlanCheckActivity.this.finish();
+                }
+                else {
+                    ToastUtils.showLongToast(InspectPlanCheckActivity.this, "当前设备无任何检验计划，请返回！");
+                    return;
+                }
 
 
-                //设置返回数据
-                InspectPlanCheckActivity.this.setResult(RESULT_OK, intent);
-                //关闭Activity
-                InspectPlanCheckActivity.this.finish();
 
             }
         });

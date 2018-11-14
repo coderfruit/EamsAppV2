@@ -54,7 +54,8 @@ import com.grandhyatt.snowbeer.utils.PopupWindowUtil;
 import com.grandhyatt.snowbeer.utils.SPUtils;
 import com.grandhyatt.snowbeer.view.SearchBarLayout;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 
@@ -448,7 +449,7 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
 
                 DatePickDialog dialog = new DatePickDialog(v.getContext());
                 //设置上下年分限制
-                dialog.setYearLimt(5);
+                dialog.setYearLimt(20);
                 //设置标题
                 dialog.setTitle("选择时间");
                 //设置类型
@@ -672,13 +673,13 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
                 dismissLoadingDialog();
                 if (object == null) {
                     fillEquipInfo(null);
-                    ToastUtils.showLongToast(InspectReportActivity.this, "1获取保养信息数据失败" + statusCode);
+                    ToastUtils.showLongToast(InspectReportActivity.this, "1获取检验信息数据失败" + statusCode);
                     return;
                 }
                 //判断接口连接是否成功
                 if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
                     fillEquipInfo(null);
-                    ToastUtils.showLongToast(InspectReportActivity.this, "2获取保养信息数据失败" + statusCode);
+                    ToastUtils.showLongToast(InspectReportActivity.this, "2获取检验信息数据失败" + statusCode);
                     return;
                 }
                 //接口返回信息正常
@@ -688,11 +689,11 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
                 //校验接口返回代码
                 if (result == null) {
                     fillEquipInfo(null);
-                    ToastUtils.showLongToast(InspectReportActivity.this, "3获取保养信息数据失败" + statusCode);
+                    ToastUtils.showLongToast(InspectReportActivity.this, "3获取检验信息数据失败" + statusCode);
                     return;
                 } else if (result.code != Result.RESULT_CODE_SUCCSED) {
                     fillEquipInfo(null);
-                    ToastUtils.showLongToast(InspectReportActivity.this, "4获取保养信息数据失败" + statusCode + result.msg);
+                    ToastUtils.showLongToast(InspectReportActivity.this, "4获取检验信息数据失败" + statusCode + result.msg);
                     return;
                 }
                 EquipmentEntity data = result.getData();
@@ -703,13 +704,13 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
             @Override
             public void onFailure(int statusCode, String content, Throwable error) {
                 dismissLoadingDialog();
-                ToastUtils.showLongToast(InspectReportActivity.this, "获取保养信息异常:" + error.getMessage());
+                ToastUtils.showLongToast(InspectReportActivity.this, "获取检验信息异常:" + error.getMessage());
             }
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
                 dismissLoadingDialog();
-                ToastUtils.showLongToast(InspectReportActivity.this, "获取保养信息失败:" + fault);
+                ToastUtils.showLongToast(InspectReportActivity.this, "获取检验信息失败:" + fault);
             }
         });
     }
@@ -898,7 +899,7 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
 
                 //_CheckPlanIDList = data.getExtras().getStringArrayList("_CheckPlanIDList");//得到新Activity 关闭后返回的数据
                 _CheckPlanEntityList = (List<InspectionPlanEntity>) data.getSerializableExtra("_CheckInspectPlanList");
-                if (_CheckPlanEntityList.size() == 0) {
+                if (_CheckPlanEntityList==null || _CheckPlanEntityList.size() == 0) {
                     mLv_Show_plan.setVisibility(View.GONE);
                     mLv_Show_plan.setAdapter(null);
                 } else {
@@ -959,20 +960,7 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
         listView.setLayoutParams(params);
     }
 
-    /**
-     * 利用正则表达式判断字符串是否是数字
-     *
-     * @param str
-     * @return
-     */
-    public boolean isNumeric(String str) {
-        Pattern pattern = Pattern.compile("[0-9]*");
-        Matcher isNum = pattern.matcher(str);
-        if (!isNum.matches()) {
-            return false;
-        }
-        return true;
-    }
+
 
     /***
      * 绑定检验单到页面
@@ -1073,7 +1061,7 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
      * 提交检验信息
      */
     private void submit_InspectBill() {
-        showLogingDialog();
+
 
         String faultDate = mTv_InspTime.getText().toString().trim();
         String inspItem = mTv_inspItem.getText().toString().trim();
@@ -1114,12 +1102,12 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
 //            ToastUtils.showLongToast(InspectReportActivity.this, "填写费用金额不能为空！");
             return;
         } else {
-            if(!isNumeric(money)){
+            if(!CommonUtils.isNumericOrDecimal(money)){
                 ToastUtils.showLongToast(InspectReportActivity.this, "填写费用金额格式不正确！");
                 return;
             }
         }
-
+        showLogingDialog();
         mBtn_Submit.setEnabled(false);
         //提交数据
         InspectBillResult result = new InspectBillResult();
