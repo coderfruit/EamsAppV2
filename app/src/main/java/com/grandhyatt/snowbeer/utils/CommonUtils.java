@@ -16,6 +16,8 @@ import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -195,7 +197,43 @@ public class CommonUtils {
         return hours;
     }
 
+    /**
+     * 利用正则表达式判断字符串是否是数字
+     *
+     * @param str
+     * @return
+     */
+    public static boolean isNumeric(String str) {
+        Pattern pattern = Pattern.compile("[0-9]*");
+        Matcher isNum = pattern.matcher(str);
+        if (!isNum.matches()) {
+            return false;
+        }
+        return true;
+    }
+    public static  boolean isMatch(String regex, String orginal){
+        if (orginal == null || orginal.trim().equals("")) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile(regex);
+        Matcher isNum = pattern.matcher(orginal);
+        return isNum.matches();
+    }
+    public static  boolean isPositiveDecimal(String orginal){
+        return isMatch("\\+{0,1}[0]\\.[1-9]*|\\+{0,1}[1-9]\\d*\\.\\d*", orginal);
+    }
 
+    public static  boolean isNegativeDecimal(String orginal){
+        return isMatch("^-[0]\\.[1-9]*|^-[1-9]\\d*\\.\\d*", orginal);
+    }
+
+    public static  boolean isDecimal(String orginal){
+        return isMatch("[-+]{0,1}\\d+\\.\\d*|[-+]{0,1}\\d*\\.\\d+", orginal);
+    }
+
+    public static boolean isNumericOrDecimal(String str) {
+        return  ( isDecimal(str) || isNumeric(str));
+    }
 
 
 }
