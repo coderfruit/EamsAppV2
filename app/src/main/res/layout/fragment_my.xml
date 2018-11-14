@@ -215,7 +215,8 @@
                         android:id="@+id/mRL_UserCorp"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:background="@drawable/selector_linear_layout_item_white">
+                        android:background="@drawable/selector_linear_layout_item_white"
+                        android:visibility="gone">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -249,7 +250,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
                         android:layout_marginLeft="0dp"
-                        android:background="@color/white5" />
+                        android:background="@color/white5"
+                        android:visibility="gone"/>
 
                 </LinearLayout>
 

@@ -197,13 +197,13 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                        if(_EquipmentData == null){
+                        if (_EquipmentData == null) {
                             ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
                             return;
                         }
 
                         popupWindow.dismiss();
-                        switch (position){
+                        switch (position) {
                             case 0:
                                 Intent intent1 = new Intent(EquipRoutingInspectionActivity.this, Query_EquipRepairInfoActivity.class);
                                 intent1.putExtra("equipID", _EquipmentData.getID());
@@ -243,10 +243,10 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
         mBt_NoOperate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(_EquipmentData != null){
+                if (_EquipmentData != null) {
                     String userID = SPUtils.getLastLoginUserID(getApplicationContext());
-                    newEquipmentRoutingInspect(_EquipmentData.getID(),userID,"运转正常","","","");
-                }else{
+                    newEquipmentRoutingInspect(_EquipmentData.getID(), userID, "运转正常", "", "", "");
+                } else {
                     ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
                 }
 
@@ -257,11 +257,11 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
         mBt_Operate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(_EquipmentData != null){
+                if (_EquipmentData != null) {
                     mBt_NoOperate.setVisibility(View.GONE);
                     mBt_Operate.setVisibility(View.GONE);
                     mLl_Operate.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
                 }
             }
@@ -279,14 +279,14 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
         mBt_Repair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(_EquipmentData != null){
+                if (_EquipmentData != null) {
 
                     Intent intent = new Intent(EquipRoutingInspectionActivity.this, RepairmentReportActivity.class);
-                    intent.putExtra("type","0");
+                    intent.putExtra("type", "0");
                     intent.putExtra("mTv_EquipID", _EquipmentData.getID());
                     startActivityForResult(intent, REPAIR_OPERATE_AFTER);
 
-                }else{
+                } else {
                     ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
                 }
             }
@@ -295,12 +295,12 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
         mBt_Mainten.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(_EquipmentData != null){
+                if (_EquipmentData != null) {
                     Intent intent1 = new Intent(EquipRoutingInspectionActivity.this, MaintenReportActivity.class);
-                    intent1.putExtra("type","0");
+                    intent1.putExtra("type", "0");
                     intent1.putExtra("mTv_EquipID", _EquipmentData.getID());
-                    startActivityForResult(intent1,MAINTEN_OPERATE_AFTER);
-                }else{
+                    startActivityForResult(intent1, MAINTEN_OPERATE_AFTER);
+                } else {
                     ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
                 }
             }
@@ -310,12 +310,12 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
         mBt_Inspect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(_EquipmentData != null){
+                if (_EquipmentData != null) {
                     Intent intent2 = new Intent(EquipRoutingInspectionActivity.this, InspectReportActivity.class);
-                    intent2.putExtra("type","0");
+                    intent2.putExtra("type", "0");
                     intent2.putExtra("mTv_EquipID", _EquipmentData.getID());
-                    startActivityForResult(intent2,INSPECT_OPERATE_AFTER);
-                }else{
+                    startActivityForResult(intent2, INSPECT_OPERATE_AFTER);
+                } else {
                     ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
                 }
             }
@@ -325,12 +325,12 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
         mBt_RepairEx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(_EquipmentData != null){
+                if (_EquipmentData != null) {
                     Intent intent3 = new Intent(EquipRoutingInspectionActivity.this, RepairmentExReportActivity.class);
-                    intent3.putExtra("type","0");
+                    intent3.putExtra("type", "0");
                     intent3.putExtra("mTv_EquipID", _EquipmentData.getID());
-                    startActivityForResult(intent3,INSPECT_OPERATE_AFTER);
-                }else{
+                    startActivityForResult(intent3, INSPECT_OPERATE_AFTER);
+                } else {
                     ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
                 }
             }
@@ -343,7 +343,7 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
                 if (_EquipmentData != null) {
                     Intent intent = new Intent(EquipRoutingInspectionActivity.this, FaultReportActivity.class);
                     intent.putExtra("mTv_EquipID", _EquipmentData.getID());
-                    startActivityForResult(intent,GO_FAULT_REPORT_OPERATE_AFTER);
+                    startActivityForResult(intent, GO_FAULT_REPORT_OPERATE_AFTER);
                 } else {
                     ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "请先确定设备");
                 }
@@ -548,17 +548,24 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
         _EquipmentData = data;//全局变量赋值
         if (data != null) {//获取到设备信息
 
-            if(!data.getAssetTypeID().equals(Consts.AssetType_sc)){
+            if (!data.getAssetTypeID().equals(Consts.AssetType_sc)) {
                 ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, data.getEquipmentName() + " 不是生产设备");
                 return;
             }
-            CorporationEntity corp = SPUtils.getLastLoginUserCorporation(EquipRoutingInspectionActivity.this);
-            if(corp != null){
-                if(_EquipID == null && !corp.getID().equals(data.getCorporationID())){
-                    ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, data.getEquipmentName() + " 不属于用户当前归属[" + corp.getCorporationName() + "]");
-                    return;
-                }
+
+            boolean ckRlt = CommonUtils.checkCorpIsInList(EquipRoutingInspectionActivity.this, data.getCorporationLevelCode());
+            if (!ckRlt) {
+                _EquipmentData = null;
+                ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, data.getEquipmentName() + "属于" + data.getCorporationName() + ",不属于用户当前归属组织机构");
+                return;
             }
+            //CorporationEntity corp = SPUtils.getLastLoginUserCorporation(EquipRoutingInspectionActivity.this);
+//            if(corp != null){
+//                if(_EquipID == null && !corp.getID().equals(data.getCorporationID())){
+//                    ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, data.getEquipmentName() + " 不属于用户当前归属[" + corp.getCorporationName() + "]");
+//                    return;
+//                }
+//            }
 
             mTv_EquipCode.setText(data.getEquipmentCode());
             mTv_EquipName.setText(data.getEquipmentName());
@@ -765,7 +772,7 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
      * 添加设备巡检记录
      */
     private void newEquipmentRoutingInspect(String equipID, String routingUserID, String routingStatus, String operateType,
-                                            String operateID,String operateBillNO) {
+                                            String operateID, String operateBillNO) {
         showLogingDialog();
 
         SoapUtils.newEquipmentRoutingInspect(EquipRoutingInspectionActivity.this, equipID, routingUserID, routingStatus, operateType, operateID, operateBillNO,
@@ -786,17 +793,15 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
                         String strData = object.getPropertyAsString(0);
                         Result result = new Gson().fromJson(strData, Result.class);
                         //校验接口返回代码
-                        if(result == null)
-                        {
+                        if (result == null) {
                             ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, "提交巡检信息异常");
                             return;
-                        }
-                        else if(result.code != Result.RESULT_CODE_SUCCSED){
+                        } else if (result.code != Result.RESULT_CODE_SUCCSED) {
                             ToastUtils.showLongToast(EquipRoutingInspectionActivity.this, result.msg);
                             return;
                         }
                         CommonUtils.playMusic(EquipRoutingInspectionActivity.this);
-                        ToastUtils.showToast(EquipRoutingInspectionActivity.this,"提交巡检信息成功！");
+                        ToastUtils.showToast(EquipRoutingInspectionActivity.this, "提交巡检信息成功！");
                     }
 
                     @Override

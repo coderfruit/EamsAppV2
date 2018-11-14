@@ -182,21 +182,22 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
                     if (_SelectedCorp != null) {
                         getDepartmentInfo(_SelectedCorp.getID());
                     } else {
-                        CorporationEntity corpEntity = SPUtils.getLastLoginUserCorporation(this);
+                        CorporationEntity corpEntity = SPUtils.getFirstLastLoginUserCorporations(this);
                         if (corpEntity != null) {
                             getDepartmentInfo(corpEntity.getID());
                         }
                     }
                 }
-                showSelectDialog(new SelectDialog.SelectDialogListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        _SelectedDept = _DepartmentList.get(position);
+                if (_DeptNamelist != null) {
+                    showSelectDialog(new SelectDialog.SelectDialogListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            _SelectedDept = _DepartmentList.get(position);
 
-                        mTv_Dept.setText(_SelectedDept.getDepartmentName());
-                    }
-                }, _DeptNamelist);
-
+                            mTv_Dept.setText(_SelectedDept.getDepartmentName());
+                        }
+                    }, _DeptNamelist);
+                }
                 break;
             case R.id.mTv_UseState://使用状态
                 final List<String> list = new ArrayList<String>();
@@ -245,7 +246,7 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
 
         //组织机构数据源
         _CorpList = SPUtils.getLastLoginUserCorporations(this);
-        CorporationEntity corpEntity = SPUtils.getLastLoginUserCorporation(this);
+        CorporationEntity corpEntity = SPUtils.getFirstLastLoginUserCorporations(this);
         if (corpEntity != null) {
             getDepartmentInfo(corpEntity.getID());
 
@@ -351,7 +352,7 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
 
                 Intent intent = new Intent(AssayQueryActivity.this, AssayUseActivity.class);
                 intent.putExtra("mTv_ID", mTv_ID.getText().toString());
-                startActivityForResult(intent,RESULT_REPORT_COMPLETE_ACTIVITY);
+                startActivityForResult(intent, RESULT_REPORT_COMPLETE_ACTIVITY);
             }
         });
 
@@ -371,7 +372,7 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
         request.setAssetTypeID(Consts.AssetType_Chemical);//化学仪器
         request.setCurrentLastIdx(String.valueOf(mPageIndex * mPageSize));
 
-        CorporationEntity corpEntity = SPUtils.getLastLoginUserCorporation(this);
+        CorporationEntity corpEntity = SPUtils.getFirstLastLoginUserCorporations(this);
         if (_SelectedCorp == null && corpEntity != null) {
             request.setCorpID(corpEntity.getID());
         } else if (_SelectedCorp != null) {
@@ -429,7 +430,7 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
                 }
                 List<EquipmentEntity> data = result.getData();
                 //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
-                if (data == null) {
+                if (data == null || data.size() == 0) {
                     mRefreshLayout.finishLoadMoreWithNoMoreData();
                     ToastUtils.showLongToast(AssayQueryActivity.this, "没有更多数据了！");
                 }
@@ -506,12 +507,20 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
                 List<DepartmentEntity> data = result.getData();
                 //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
                 if (data == null || data.size() == 0) {
+
+                    _DepartmentList = null;
+                    _DeptNamelist = new ArrayList<>();
+                    mTv_Dept.setText("归属部门");
+                    _SelectedDept = null;
+
                     ToastUtils.showToast(AssayQueryActivity.this, "没有获取到部门信息");
                     return;
                 } else {
                     _DepartmentList = data;
-
+                    _DeptNamelist = new ArrayList<>();
                     bindDepart(_DepartmentList);
+                    mTv_Dept.setText("归属部门");
+                    _SelectedDept = null;
                 }
             }
 
@@ -523,7 +532,7 @@ public class AssayQueryActivity extends ActivityBase implements IActivityBase, V
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
-               // dismissLoadingDialog();
+                // dismissLoadingDialog();
                 ToastUtils.showToast(AssayQueryActivity.this, getString(R.string.submit_soap_result_err4, fault));
             }
         });

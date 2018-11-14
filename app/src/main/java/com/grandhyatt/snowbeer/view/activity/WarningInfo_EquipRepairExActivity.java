@@ -186,7 +186,7 @@ public class WarningInfo_EquipRepairExActivity extends ActivityBase implements I
     public void requestNetworkData() {
         showLogingDialog();
 
-        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(this);
+        CorporationEntity corp = SPUtils.getFirstLastLoginUserCorporations(this);
         if(corp != null){
             String currentLastIdx = String.valueOf(mPageIndex * mPageSize);
             SoapUtils.getRepairmentPlanEx(this, corp.getID(), currentLastIdx, new SoapListener() {

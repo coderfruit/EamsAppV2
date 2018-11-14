@@ -382,43 +382,35 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
                     ToastUtils.showLongToast(LoginActivity.this, getString(R.string.activity_login_toast_login_fail_error, "没有为用户设置归属工厂，请联系管理员！"));
                     return;
                 }
-                else if(data.getCorporations().size() > 1) {//用户配置的组织机构是多个, 需登录用户指定
-                    corpList = data.getCorporations();
-
-                    final CorporationEntity[] finalUserCorp = {null};
-                    List<String> listCorpName = new ArrayList<String>();
-                    for(CorporationEntity item : corpList)
-                    {
-                        listCorpName.add(item.getCorporationName());
-                    }
-
-                    ToastUtils.showLongToast(LoginActivity.this,"请选择用户归属工厂");
-
-                    final List<CorporationEntity> corpListTmp = corpList;
-//                    showSelectDialog(new SelectDialog.SelectDialogListener() {
-//                        @Override
-//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                else if(data.getCorporations().size() > 1) {//用户配置的组织机构是多个, 需登录用户指定
+//                    corpList = data.getCorporations();
 //
-//                            finalUserCorp[0] = corpListTmp.get(position);
+//                    final CorporationEntity[] finalUserCorp = {null};
+//                    List<String> listCorpName = new ArrayList<String>();
+//                    for(CorporationEntity item : corpList)
+//                    {
+//                        listCorpName.add(item.getCorporationName());
+//                    }
+//
+//                    ToastUtils.showLongToast(LoginActivity.this,"请选择用户归属工厂");
+//
+//                    final List<CorporationEntity> corpListTmp = corpList;
+//
+//                    showSelectDialog("选择归属工厂\r\n在“我的-归属工厂”可更改", listCorpName, new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            finalUserCorp[0] = corpListTmp.get(which);
 //                            loginSuccess(result, data, finalUserCorp[0], corpListTmp, userCode, password);
 //                        }
-//                    }, listCorpName);
-
-                    showSelectDialog("选择归属工厂\r\n在“我的-归属工厂”可更改", listCorpName, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finalUserCorp[0] = corpListTmp.get(which);
-                            loginSuccess(result, data, finalUserCorp[0], corpListTmp, userCode, password);
-                        }
-                    });
-
-                }
+//                    });
+//
+//                }
                 else{ //用户配置的组织机构只有1个
-                    userCorp = data.getCorporations().get(0);
+                    //userCorp = data.getCorporations().get(0);
 
                     corpList = data.getCorporations();
 
-                    loginSuccess(result, data, userCorp, corpList, userCode, password);
+                    loginSuccess(result, data, corpList, userCode, password);
                 }
 
             }
@@ -473,7 +465,7 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
 
     }
 
-    private void loginSuccess(LoginResult result, LoginUserInfoEntity data, CorporationEntity userCorp, List<CorporationEntity> corpList, String userCode, String password) {
+    private void loginSuccess(LoginResult result, LoginUserInfoEntity data, List<CorporationEntity> corpList, String userCode, String password) {
         //用户权限校验
         String powers = "";
         List<ResourceEntity> resList = data.getResources();
@@ -492,7 +484,7 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
         SPUtils.setLastLoginUserCode(LoginActivity.this, userCode);          //用户编码
         SPUtils.setLastLoginUserName(LoginActivity.this, data.getUserName());//用户名
         SPUtils.setLastLoginUserPassword(LoginActivity.this, password);     //密码
-        SPUtils.setLastLoginUserCorporation(LoginActivity.this, userCorp);  //用户组织机构
+        //SPUtils.setLastLoginUserCorporation(LoginActivity.this, userCorp);  //用户组织机构
         SPUtils.setLastLoginUserPower(LoginActivity.this,powers);           //权限
         SPUtils.setLastLoginUserPhone(LoginActivity.this,data.getPhone());  //电话
         SPUtils.setToken(LoginActivity.this,result.getToken());

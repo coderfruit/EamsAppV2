@@ -290,7 +290,7 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
      * 初始化预警信息
      */
     private void initWarningInfo() {
-        CorporationEntity corp = SPUtils.getLastLoginUserCorporation(getContext());
+        CorporationEntity corp = SPUtils.getFirstLastLoginUserCorporations(getContext());
         if(corp != null){
             getWarinigInfo(corp.getID());
         }

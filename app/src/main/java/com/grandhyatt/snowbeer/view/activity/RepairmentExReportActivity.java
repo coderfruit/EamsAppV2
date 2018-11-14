@@ -743,12 +743,11 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
                 ToastUtils.showLongToast(RepairmentExReportActivity.this, data.getEquipmentName() + " 不是生产设备");
                 return;
             }
-            CorporationEntity corp = SPUtils.getLastLoginUserCorporation(RepairmentExReportActivity.this);
-            if(corp != null){
-                if(!corp.getID().equals(data.getCorporationID())){
-                    ToastUtils.showLongToast(RepairmentExReportActivity.this, data.getEquipmentName() + " 不属于用户当前归属[" + corp.getCorporationName() + "]");
-                    return;
-                }
+            boolean ckRlt = CommonUtils.checkCorpIsInList(RepairmentExReportActivity.this, data.getCorporationLevelCode());
+            if (!ckRlt) {
+                _EquipmentData = null;
+                ToastUtils.showLongToast(RepairmentExReportActivity.this, data.getEquipmentName() + "属于" + data.getCorporationName() + ",不属于用户当前归属组织机构");
+                return;
             }
             mTv_EquipCode.setText(data.getEquipmentCode());
             mTv_EquipName.setText(data.getEquipmentName());

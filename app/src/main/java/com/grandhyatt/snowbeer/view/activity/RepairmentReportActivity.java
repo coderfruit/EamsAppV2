@@ -921,12 +921,11 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 ToastUtils.showLongToast(RepairmentReportActivity.this, data.getEquipmentName() + " 不是生产设备");
                 return;
             }
-            CorporationEntity corp = SPUtils.getLastLoginUserCorporation(RepairmentReportActivity.this);
-            if(corp != null){
-                if(!corp.getID().equals(data.getCorporationID())){
-                    ToastUtils.showLongToast(RepairmentReportActivity.this, data.getEquipmentName() + " 不属于用户当前归属[" + corp.getCorporationName() + "]");
-                    return;
-                }
+            boolean ckRlt = CommonUtils.checkCorpIsInList(RepairmentReportActivity.this, data.getCorporationLevelCode());
+            if (!ckRlt) {
+                _EquipmentData = null;
+                ToastUtils.showLongToast(RepairmentReportActivity.this, data.getEquipmentName() + "属于" + data.getCorporationName() + ",不属于用户当前归属组织机构");
+                return;
             }
 
             mTv_EquipCode.setText(data.getEquipmentCode());

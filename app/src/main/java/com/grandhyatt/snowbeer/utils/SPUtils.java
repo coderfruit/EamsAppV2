@@ -190,7 +190,7 @@ public class SPUtils extends com.grandhyatt.commonlib.utils.SPUtils {
      * 获取上一次登录用户UID
      */
     public static String getLastLoginUserPhone(Context context) {
-        return String.valueOf(get(context, "LAST_LGOIN_USER_PHONE", "-1"));
+        return String.valueOf(get(context, "LAST_LGOIN_USER_PHONE", ""));
     }
 
     /**
@@ -264,11 +264,16 @@ public class SPUtils extends com.grandhyatt.commonlib.utils.SPUtils {
         put(context, "LAST_LGOIN_USER_CORPORATION", corpBase64);
     }
 
-    public static CorporationEntity getLastLoginUserCorporation(Context context) {
-        String base64Str = (String) get(context, "LAST_LGOIN_USER_CORPORATION", "");
-        CorporationEntity corp = Base64StrToCorp(base64Str);
-        return corp;
-    }
+    /**
+     * 获取用户选中的组织机构
+     * @param context
+     * @return
+     */
+//    public static CorporationEntity getLastLoginUserCorporation(Context context) {
+//        String base64Str = (String) get(context, "LAST_LGOIN_USER_CORPORATION", "");
+//        CorporationEntity corp = Base64StrToCorp(base64Str);
+//        return corp;
+//    }
 
     public static void setLastLoginUserCorporations(Context context, List<CorporationEntity> corporations) {
 
@@ -281,6 +286,23 @@ public class SPUtils extends com.grandhyatt.commonlib.utils.SPUtils {
         String base64Str = (String) get(context, "LAST_LGOIN_USER_CORPORATIONS", "");
         List<CorporationEntity> corpList = Base64StrToCorpList(base64Str);
         return corpList;
+    }
+
+    /**
+     * 获取用户归属机构列表中第一个组织机构
+     * @param context
+     * @return
+     */
+    public static CorporationEntity getFirstLastLoginUserCorporations(Context context) {
+
+        String base64Str = (String) get(context, "LAST_LGOIN_USER_CORPORATIONS", "");
+        List<CorporationEntity> corpList = Base64StrToCorpList(base64Str);
+        if(corpList != null && corpList.size() > 0){
+            return corpList.get(0);
+        }
+        else{
+            return null;
+        }
     }
 
     /**

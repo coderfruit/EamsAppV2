@@ -395,8 +395,10 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         //初始化用户及手机号
-        mEt_User.setText(SPUtils.getLastLoginUserName(FaultReportActivity.this));
-        mEt_Phone.setText(SPUtils.getLastLoginUserPhone(FaultReportActivity.this));
+        String userName = SPUtils.getLastLoginUserName(FaultReportActivity.this);
+        mEt_User.setText(userName);
+        String phone = SPUtils.getLastLoginUserPhone(FaultReportActivity.this);
+        mEt_Phone.setText(phone);
 
         //故障描述
         SoapListener callbackFailureReportingDesc = new SoapListener() {
@@ -1163,6 +1165,14 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
     private void fillEquipInfo(EquipmentEntity data) {
         _EquipmentData = data;//全局变量赋值
         if (data != null) {//获取到设备信息
+
+            boolean ckRlt = CommonUtils.checkCorpIsInList(FaultReportActivity.this, data.getCorporationLevelCode());
+            if (!ckRlt) {
+                _EquipmentData = null;
+                ToastUtils.showLongToast(FaultReportActivity.this, data.getEquipmentName() + "属于" + data.getCorporationName() + ",不属于用户当前归属组织机构");
+                return;
+            }
+
             mTv_EquipCode.setText(data.getEquipmentCode());
             mTv_EquipName.setText(data.getEquipmentName());
             mTv_EquipCorp.setText(data.getCorporationName());
