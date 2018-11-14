@@ -22,7 +22,8 @@
             android:layout_height="23dp"
             android:background="@drawable/selector_linear_layout_item_gray"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <View
                 android:layout_width="3dp"
@@ -46,7 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:layout_marginLeft="1dp"
-            android:background="@color/white6" />
+            android:background="@color/white6"
+            android:visibility="gone"/>
         <!-- 设备信息标题 end -->
 
         <LinearLayout
@@ -54,7 +56,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
             <!-- 设备名称 编码 -->
             <TextView
                 android:id="@+id/mTv_EquipName"

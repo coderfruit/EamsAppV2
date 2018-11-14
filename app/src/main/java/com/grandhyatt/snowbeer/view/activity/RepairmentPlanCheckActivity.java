@@ -330,10 +330,7 @@ public class RepairmentPlanCheckActivity extends ActivityBase implements IActivi
                 _CheckIDList.clear();
                 if(adapter_Plan==null && adapter_Spare == null) {
                     //关闭Activity
-
-                        ToastUtils.showLongToast(RepairmentPlanCheckActivity.this, "当前设备无任何维护计划，请返回！");
-                        return;
-
+                    RepairmentPlanCheckActivity.this.finish();
                 }
                 else {
                     if (_ReapirLevel.equals("大修")) {

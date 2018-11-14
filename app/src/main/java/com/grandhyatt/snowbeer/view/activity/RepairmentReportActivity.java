@@ -147,7 +147,8 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
     public static final int CHECK_SPARE_OK = 112;//选择维修用备件
 
-    ArrayList<String> _CheckPlanIDList = new ArrayList<>();; //用户选中的维护计划ID
+    ArrayList<String> _CheckPlanIDList = new ArrayList<>();
+    ; //用户选中的维护计划ID
     List<RepairmentPlanEntity> _CheckPlanEntityList = new ArrayList<>();//用户选择的数据行对象
     List<SpareInEquipmentEntity> _CheckSpareEntityList = new ArrayList<>();//用户选择的数据行对象
     List<EquipmentUseSpareEntity> _CheckSpareUseList = new ArrayList<>();// 页面选择备品配件返回数据
@@ -916,7 +917,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     private void fillEquipInfo(EquipmentEntity data) {
         _EquipmentData = data;//全局变量赋值
         if (data != null) {//获取到设备信息
-            if(!data.getAssetTypeID().equals(Consts.AssetType_sc)){
+            if (!data.getAssetTypeID().equals(Consts.AssetType_sc)) {
                 _EquipmentData = null;
                 ToastUtils.showLongToast(RepairmentReportActivity.this, data.getEquipmentName() + " 不是生产设备");
                 return;
@@ -1262,12 +1263,12 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
      * 提交维修单
      */
     private void submitRepairmentBill() {
-        String faultDate = mTv_StartDate.getText().toString().trim();
-        String faultDate1 = mTv_FinishDate.getText().toString().trim();
-        String faultLevel = mTv_RepairLevel.getText().toString().trim();
-        String faultDesc = mTv_FaultClass.getText().toString().trim();
-        String RepairmentDesc = mTv_RepairDesc.getText().toString().trim();
-        String user = mEt_User.getText().toString().trim();
+        final String faultDate = mTv_StartDate.getText().toString().trim();
+        final String faultDate1 = mTv_FinishDate.getText().toString().trim();
+        final String faultLevel = mTv_RepairLevel.getText().toString().trim();
+        final String faultDesc = mTv_FaultClass.getText().toString().trim();
+        final String RepairmentDesc = mTv_RepairDesc.getText().toString().trim();
+        final String user = mEt_User.getText().toString().trim();
         String money = mEt_money.getText().toString().trim();
 
         //验证提交数据
@@ -1283,7 +1284,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择结束维修日期！");
             return;
         }
-        if(compareDateMinutes(faultDate,faultDate1)<=0){
+        if (compareDateMinutes(faultDate, faultDate1) <= 0) {
             ToastUtils.showLongToast(RepairmentReportActivity.this, "开始时间不应大于或等于结束时间！");
             return;
         }
@@ -1305,14 +1306,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 //            ToastUtils.showLongToast(RepairmentReportActivity.this, "填写费用金额不能为空！");
 //            return;
         }
-        if (_CheckSpareUseList == null || _CheckSpareUseList.size() == 0) {
-            ToastUtils.showLongToast(RepairmentReportActivity.this, "请添加备品备件信息！");
-            return;
-        }
-        mBtn_Submit.setEnabled(false);
 
-        //提交数据
-        RepairmentEquipmentResult request = new RepairmentEquipmentResult();
         if (faultLevel.equals("大修")) {
             if (_CheckPlanIDList == null || _CheckPlanIDList.size() == 0) {
                 ToastUtils.showLongToast(RepairmentReportActivity.this, "未找到【大修】的维修计划，请选择！");
@@ -1323,10 +1317,57 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 _CheckPlanIDList.clear();
             }
         }
+
+        if ((_CheckSpareUseList == null || _CheckSpareUseList.size() == 0) && (_Type.equals("1") || _Type.equals("2"))) {//传入备件更换计划、设备维修计划，必须选择备件信息
+            ToastUtils.showLongToast(RepairmentReportActivity.this, "请添加备件信息！");
+            return;
+        }else if ((_CheckSpareUseList == null || _CheckSpareUseList.size() == 0) && !_Type.equals("1") && !_Type.equals("2")){//不是传入备件更换计划、设备维修计划，没有备件信息时提示
+            //有计划必须选择备件
+            if(_CheckPlanIDList != null && _CheckPlanIDList.size() > 0) {
+                ToastUtils.showLongToast(RepairmentReportActivity.this, "请添加备件信息！");
+                return;
+            }
+
+            final String finalMoney = money;
+            ShowDialog(RepairmentReportActivity.this, "提示", "确定不添加备件信息吗？",
+                    //是
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            saveBill(faultDate, faultDate1, faultLevel, faultDesc, RepairmentDesc, user, finalMoney);
+                        }
+                    },
+                    //否
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            return;
+                        }
+                    });
+        } else{//有备件信息时
+            saveBill(faultDate, faultDate1, faultLevel, faultDesc, RepairmentDesc, user, money);
+        }
+
+    }
+
+    /**
+     * 保存维修单信息
+     * @param faultDate
+     * @param faultDate1
+     * @param faultLevel
+     * @param faultDesc
+     * @param repairmentDesc
+     * @param user
+     * @param money
+     */
+    private void saveBill(String faultDate, String faultDate1, String faultLevel, String faultDesc, String repairmentDesc, String user, String money) {
+        mBtn_Submit.setEnabled(false);
+        //提交数据
+        RepairmentEquipmentResult request = new RepairmentEquipmentResult();
         RepairmentBillEntity rpen = new RepairmentBillEntity();
         rpen.setEquipmentID(_EquipmentData.getID());
         rpen.setCorporationID(_EquipmentData.getCorporationID());
-        rpen.setDescription(RepairmentDesc);
+        rpen.setDescription(repairmentDesc);
         rpen.setRepairUser(user);
         rpen.setTotalMoney(money);
         rpen.setRepairmentLevel(faultLevel);
@@ -1339,11 +1380,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
         TextView tvid = null;
         NumberEditText mNEdt_Check = null;
         TextView mSumCount = null;
-        if (_CheckSpareUseList == null || _CheckSpareUseList.size() == 0) {
-            mBtn_Submit.setEnabled(true);
-            ToastUtils.showLongToast(RepairmentReportActivity.this, "请选择维修所需备件！");
-            return;
-        }
+
         for (int i = 0; i < mLv_DataList_Spare.getChildCount(); i++) {
             View vw = mLv_DataList_Spare.getChildAt(i);
             tvid = (TextView) vw.findViewById(R.id.mTv_SpareID);
