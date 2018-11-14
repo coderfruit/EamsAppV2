@@ -81,7 +81,7 @@ public class ActivityBase extends com.grandhyatt.commonlib.view.activity.Activit
         // 第二个参数是状态栏色值:4183d7
         // 第三个参数是兼容5.0到6.0之间的状态栏颜色字体只能是白色，如果沉浸的颜色与状态栏颜色冲突, 设置一层浅色对比能显示出状态栏字体（可以找ui给一个合适颜色值）
         // 如果您的项目是6.0以上机型或者某些界面不适用沉浸, 推荐使用两个参数的setUseStatusBarColor
-        StatusUtil.setUseStatusBarColor(this, Color.parseColor("#4183d7"), Color.parseColor("#33000000"));
+        StatusUtil.setUseStatusBarColor(this, Color.parseColor("#000000"), Color.parseColor("#33000000"));
         // 第二个参数是是否沉浸,第三个参数是状态栏字体是否为黑色
         StatusUtil.setSystemStatus(this, false, false);
 
