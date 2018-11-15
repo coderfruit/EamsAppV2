@@ -376,16 +376,29 @@
                 android:visibility="gone" />
 
             <!-- 语音播放按钮 -->
+        <LinearLayout
+            android:id="@+id/mLl_Voice"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:visibility="gone">
             <ImageButton
                 android:id="@+id/mIbtn_Voice"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/ic_login_button_false"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:background="@color/gray3"
                 android:src="@drawable/voice3"
-                android:visibility="gone" />
+                 />
+            <TextView
+                android:id="@+id/mTv_VoiceLength"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="时长"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"/>
+            </LinearLayout>
 
             <!-- 提交、录音按钮 -->
             <LinearLayout

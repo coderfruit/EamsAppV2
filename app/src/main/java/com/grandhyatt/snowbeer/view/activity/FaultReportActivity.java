@@ -3,18 +3,24 @@ package com.grandhyatt.snowbeer.view.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -27,9 +33,9 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,6 +74,7 @@ import com.grandhyatt.snowbeer.view.ToolBarLayout;
 
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -75,6 +82,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -153,6 +162,10 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
     Button mBtn_RepairEx;
     @BindView(R.id.mBtn_Close)
     Button mBtn_Close;
+    @BindView(R.id.mTv_VoiceLength)
+    TextView mTv_VoiceLength;
+    @BindView(R.id.mLl_Voice)
+    LinearLayout mLl_Voice;
 
     /**
      * 使用照相机拍照获取图片
@@ -189,6 +202,14 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
     List<FailureReportingAttachmentEntity> _ReportFileEntitys;
 
     MediaPlayer player;
+
+    //语音动画控制器
+    Timer mTimer = null;
+    //语音动画控制任务
+    TimerTask mTimerTask = null;
+    //记录语音动画图片
+    int index = 1;
+    AudioAnimationHandler audioAnimationHandler = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -231,15 +252,15 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
             mGv_Show_Imgs.setVisibility(View.VISIBLE);
 
             if (isMgr != null && isMgr.length() > 0) {
-                if(mTv_Status.equals("待处理")){
+                if (mTv_Status.equals("待处理")) {
                     mLl_Mgr.setVisibility(View.VISIBLE);
                     mToolBar.setTitle("处理报修");
-                }else{
+                } else {
                     mLl_Mgr.setVisibility(View.GONE);
                     mToolBar.setTitle("查看报修");
                 }
             }
-        } else if (mTv_ReportID == null && mTv_EquipID != null){// 设备巡检报修
+        } else if (mTv_ReportID == null && mTv_EquipID != null) {// 设备巡检报修
             mToolBar.setTitle("我要报修");
             mSearchBar.setVisibility(View.GONE);
             getEquipmentInfoByID(mTv_EquipID);
@@ -260,7 +281,6 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         }
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -269,12 +289,17 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         mFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
         // 注册广播来获取扫描结果
         this.registerReceiver(mReceiver, mFilter);
+
     }
 
     @Override
     protected void onPause() {
         // 注销获取扫描结果的广播
         this.unregisterReceiver(mReceiver);
+
+        if (player != null) {
+            player.pause();
+        }
         super.onPause();
     }
 
@@ -282,6 +307,11 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
     protected void onDestroy() {
         mReceiver = null;
         mFilter = null;
+
+        if (player != null) {
+            player.stop();
+        }
+
         super.onDestroy();
     }
 
@@ -292,14 +322,14 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
             case R.id.mBtn_Repair://维修
                 if (_ReportEntity == null) {
                     return;
-                }else{
-                    if(_EquipmentData == null){
+                } else {
+                    if (_EquipmentData == null) {
                         ToastUtils.showLongToast(FaultReportActivity.this, "加载设备信息失败，请后退并重新进入该界面！");
                         return;
                     }
                 }
                 Intent intent = new Intent(FaultReportActivity.this, RepairmentReportActivity.class);
-                intent.putExtra("type","0");
+                intent.putExtra("type", "0");
                 intent.putExtra("mTv_EquipID", _EquipmentData.getID());
                 startActivityForResult(intent, REPAIR_OPERATE_AFTER);
 
@@ -307,43 +337,43 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
             case R.id.mBtn_Mainten://保养
                 if (_ReportEntity == null) {
                     return;
-                }else{
-                    if(_EquipmentData == null){
+                } else {
+                    if (_EquipmentData == null) {
                         ToastUtils.showLongToast(FaultReportActivity.this, "加载设备信息失败，请后退并重新进入该界面！");
                         return;
                     }
                 }
                 Intent intent1 = new Intent(FaultReportActivity.this, MaintenReportActivity.class);
-                intent1.putExtra("type","0");
+                intent1.putExtra("type", "0");
                 intent1.putExtra("mTv_EquipID", _EquipmentData.getID());
-                startActivityForResult(intent1,MAINTEN_OPERATE_AFTER);
+                startActivityForResult(intent1, MAINTEN_OPERATE_AFTER);
 
                 break;
             case R.id.mBtn_Inspect://检验
                 if (_ReportEntity == null) {
                     return;
-                }else{
-                    if(_EquipmentData == null){
+                } else {
+                    if (_EquipmentData == null) {
                         ToastUtils.showLongToast(FaultReportActivity.this, "加载设备信息失败，请后退并重新进入该界面！");
                         return;
                     }
                 }
                 Intent intent2 = new Intent(FaultReportActivity.this, InspectReportActivity.class);
-                intent2.putExtra("type","0");
+                intent2.putExtra("type", "0");
                 intent2.putExtra("mTv_EquipID", _EquipmentData.getID());
-                startActivityForResult(intent2,INSPECT_OPERATE_AFTER);
+                startActivityForResult(intent2, INSPECT_OPERATE_AFTER);
                 break;
             case R.id.mBtn_RepairEx://外委维修
                 if (_ReportEntity == null) {
                     return;
-                }else{
-                    if(_EquipmentData == null){
+                } else {
+                    if (_EquipmentData == null) {
                         ToastUtils.showLongToast(FaultReportActivity.this, "加载设备信息失败，请后退并重新进入该界面！");
                         return;
                     }
                 }
                 Intent intent3 = new Intent(FaultReportActivity.this, RepairmentExReportActivity.class);
-                intent3.putExtra("type","0");
+                intent3.putExtra("type", "0");
                 intent3.putExtra("mTv_EquipID", _EquipmentData.getID());
                 startActivityForResult(intent3, REPAIR_OPERATE_AFTER);
                 break;
@@ -364,13 +394,13 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
-                                final String strComment  = inputContrl.getText().toString();
-                                if(strComment == null || strComment.trim().length() == 0){
-                                    ToastUtils.showLongToast(FaultReportActivity.this,"请输入关闭理由");
+                                final String strComment = inputContrl.getText().toString();
+                                if (strComment == null || strComment.trim().length() == 0) {
+                                    ToastUtils.showLongToast(FaultReportActivity.this, "请输入关闭理由");
                                     return;
                                 }
                                 String failureReportID = String.valueOf(_ReportEntity.getID());
-                                String status =  Consts.EnumFailureStatus.已关闭.toString();//处理状态
+                                String status = Consts.EnumFailureStatus.已关闭.toString();//处理状态
                                 String OperateResult = Consts.EnumFailureResult.已关闭.toString();//处理结果
                                 String OperateID = null;//操作单据ID
                                 String OperateDesc = "报修被关闭";//操作描述
@@ -383,16 +413,19 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                 builder.show();
 
 
-
-
                 break;
             default:
                 break;
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void initView() {
+        // android 7.0系统解决拍照的问题
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        builder.detectFileUriExposure();
 
         mToolBar.showMenuButton();
         mToolBar.setMenuText("我的报修");
@@ -600,11 +633,15 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 
             @Override
             public void onImageClick(int position, String filePath, ImageView iv) {
-                //通过Intent调用系统的图片查看器
-                Uri mUri = CommonUtils.getPathUri(filePath);
-                Intent it = new Intent(Intent.ACTION_VIEW);
-                it.setDataAndType(mUri, "image/*");
-                startActivity(it);
+                try {
+                    //通过Intent调用系统的图片查看器
+                    Uri mUri = CommonUtils.getPathUri(filePath);
+                    Intent it = new Intent(Intent.ACTION_VIEW);
+                    it.setDataAndType(mUri, "image/*");
+                    startActivity(it);
+                } catch (Exception ex) {
+                    ToastUtils.showToast(getApplicationContext(), "打开图片失败(" + ex.getMessage() + ")");
+                }
             }
 
             @Override
@@ -711,10 +748,8 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                         SimpleDateFormat timeStampFormat = new SimpleDateFormat("yyyyMMddHHmmss");
                         //录音文件名格式：Eams_Voice_yangcm_20180101090802.amr
                         String tmpName = "Eams_Voice_" + userCode + "_" + timeStampFormat.format(new Date()) + ".amr";
-                        String storageDir = Environment.getExternalStorageDirectory().toString();
                         String publicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString();
                         _mVoiceFilePath = publicDir + "/" + userCode + "/" + tmpName;
-                        //mBtn_Voice.setBackgroundColor(Color.YELLOW);
                         mBtn_Voice.setBackgroundResource(R.drawable.ic_login_button_false);
                         startVoice(_mVoiceFilePath);
                         break;
@@ -733,6 +768,10 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         mBtn_Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                mBtn_Submit.setEnabled(false);
+                showLogingDialog();
+
                 String faultDate = mTv_FaultDate.getText().toString();
                 String faultLevel = mTv_FaultLevel.getText().toString();
                 String faultDesc = mTv_FaultDesc.getText().toString();
@@ -740,14 +779,20 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                 String phone = mEt_Phone.getText().toString();
                 //验证提交数据
                 if (_EquipmentData == null) {
+                    dismissLoadingDialog();
+                    mBtn_Submit.setEnabled(true);
                     ToastUtils.showLongToast(FaultReportActivity.this, "请首先确定要报修的设备！");
                     return;
                 }
                 if (faultDate == null || faultDate.length() == 0) {
+                    dismissLoadingDialog();
+                    mBtn_Submit.setEnabled(true);
                     ToastUtils.showLongToast(FaultReportActivity.this, "请选择报修日期！");
                     return;
                 }
                 if (faultLevel == null || faultLevel.length() == 0) {
+                    dismissLoadingDialog();
+                    mBtn_Submit.setEnabled(true);
                     ToastUtils.showLongToast(FaultReportActivity.this, "请选择故障级别！");
                     return;
                 }
@@ -756,27 +801,19 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                     return;
                 }
                 if (user == null || user.length() == 0) {
+                    dismissLoadingDialog();
+                    mBtn_Submit.setEnabled(true);
                     ToastUtils.showLongToast(FaultReportActivity.this, "请填写联系人！");
                     return;
                 }
-
                 if (phone == null || phone.length() == 0) {
+                    dismissLoadingDialog();
+                    mBtn_Submit.setEnabled(true);
                     ToastUtils.showLongToast(FaultReportActivity.this, "请填写联系人电话！");
                     return;
                 }
 
-                mBtn_Submit.setEnabled(false);
-                showLogingDialog();
-
                 int imgSize = zz_image_box_add_mode.getAllImages().size();
-
-//                if (imgSize == 0) {
-//                    boolean diagValue = ShowDialog(FaultReportActivity.this, "系统提示", "没有添加故障图片是否继续？");
-//                    if (diagValue) {
-//                        return;
-//                    }
-//                }
-
                 //获取base64格式的图片数据
                 List<String> imgBase64 = new ArrayList<String>();
                 List<String> imgUrls = zz_image_box_add_mode.getAllImages();
@@ -863,18 +900,6 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         });
 
 
-    }
-
-    private void playVoice(String voicePath) {
-        try {
-            player = new MediaPlayer();
-            player.setDataSource(voicePath);
-            player.prepare();
-            player.start();
-        } catch (IOException e) {
-            Toast.makeText(getApplicationContext(), "播放失败" + e.getMessage(),
-                    Toast.LENGTH_SHORT).show();
-        }
     }
 
     /**
@@ -966,7 +991,7 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                 //得到维修Activity 关闭后返回的数据
                 String OperateID = data.getExtras().getString("BillID");//操作单据ID
                 String OperateDesc = data.getExtras().getString("BillNO");//操作单据号
-                if(OperateID != null && OperateDesc != null) {
+                if (OperateID != null && OperateDesc != null) {
                     String failureReportID = String.valueOf(_ReportEntity.getID());
                     String status = Consts.EnumFailureStatus.已处理.toString();//处理状态
                     String OperateResult = Consts.EnumFailureResult.已维修.toString();//处理结果
@@ -979,7 +1004,7 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                 //得到维修Activity 关闭后返回的数据
                 OperateID = data.getExtras().getString("BillID");//操作单据ID
                 OperateDesc = data.getExtras().getString("BillNO");//操作单据号
-                if(OperateID != null && OperateDesc != null) {
+                if (OperateID != null && OperateDesc != null) {
                     String failureReportID = String.valueOf(_ReportEntity.getID());
                     String status = Consts.EnumFailureStatus.已处理.toString();//处理状态
                     String OperateResult = Consts.EnumFailureResult.已保养.toString();//处理结果
@@ -991,7 +1016,7 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                 //得到维修Activity 关闭后返回的数据
                 OperateID = data.getExtras().getString("BillID");//操作单据ID
                 OperateDesc = data.getExtras().getString("BillNO");//操作单据号
-                if(OperateID != null && OperateDesc != null) {
+                if (OperateID != null && OperateDesc != null) {
                     String failureReportID = String.valueOf(_ReportEntity.getID());
                     String status = Consts.EnumFailureStatus.已处理.toString();//处理状态
                     String OperateResult = Consts.EnumFailureResult.已检验.toString();//处理结果
@@ -1003,7 +1028,7 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                 //得到维修Activity 关闭后返回的数据
                 OperateID = data.getExtras().getString("BillID");//操作单据ID
                 OperateDesc = data.getExtras().getString("BillNO");//操作单据号
-                if(OperateID != null && OperateDesc != null) {
+                if (OperateID != null && OperateDesc != null) {
                     String failureReportID = String.valueOf(_ReportEntity.getID());
                     String status = Consts.EnumFailureStatus.已处理.toString();//处理状态
                     String OperateResult = Consts.EnumFailureResult.已外委维修.toString();//处理结果
@@ -1067,33 +1092,56 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         super.onActivityResult(requestCode, resultCode, data);
 
     }
-
+//-------------------------------------------------------
+//语音相关
+//-------------------------------------------------------
     /**
      * 开始录音
      *
      * @param mFileName
      */
     private void startVoice(String mFileName) {
-        // 设置录音保存路径
-        String state = Environment.getExternalStorageState();
-
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            File directory = new File(mFileName).getParentFile();
-            if (!directory.exists() && !directory.mkdirs()) {
-                Log.i("startVoice", "Path to file could not be created");
-            }
-            mRecorder = new MediaRecorder();
-            mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-            mRecorder.setOutputFile(mFileName);
-            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-            try {
+        try {
+            // 设置录音保存路径
+            String state = Environment.getExternalStorageState();
+            if (state.equals(Environment.MEDIA_MOUNTED)) {
+                File directory = new File(mFileName).getParentFile();
+                if (!directory.exists() && !directory.mkdirs()) {
+                    Log.i("startVoice", "Path to file could not be created");
+                }
+                mRecorder = new MediaRecorder();
+                mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                mRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+                mRecorder.setOutputFile(mFileName);
+                mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
                 mRecorder.prepare();
-            } catch (IOException e) {
-                Toast.makeText(getApplicationContext(), "打开录音失败" + e.getMessage(),
-                        Toast.LENGTH_SHORT).show();
+                mRecorder.start();
             }
-            mRecorder.start();
+        } catch (Exception e) {
+            Log.i("startVoice", e.getMessage());
+            ToastUtils.showToast(getApplicationContext(), "打开系统录音失败，请检查是否已打开麦克风权限(" + e.getMessage() + ")");
+        }
+    }
+
+    /**
+     * 播放录音
+     * @param voicePath
+     */
+    private void playVoice(String voicePath) {
+        try {
+            if(player != null && player.isPlaying()){
+                player.stop();
+            }else {
+                player = new MediaPlayer();
+                player.setDataSource(voicePath);
+                player.prepare();
+                player.start();
+
+                playAudioAnimation(mIbtn_Voice);
+            }
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "播放失败" + e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1109,11 +1157,38 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         mRecorder = null;
         Toast.makeText(getApplicationContext(), "保存录音" + mFileName, Toast.LENGTH_SHORT).show();
 
-        mIbtn_Voice.setVisibility(View.VISIBLE);
-
-        mBtn_Voice.setBackgroundResource(R.drawable.ic_login_button_true);
+//        mIbtn_Voice.setVisibility(View.VISIBLE);
+        mLl_Voice.setVisibility(View.VISIBLE);
+        long voiceLength = getVoiceLength(mFileName);
+        if(voiceLength != 0) {
+            mTv_VoiceLength.setText(String.valueOf(voiceLength) + "'");
+        }else {
+            mTv_VoiceLength.setText("");
+        }
+        mBtn_Voice.setBackgroundResource(R.drawable.btn_bg);
     }
+    /**
+     * 获取语音时长
+     * @param path
+     * @return
+     */
+    private long getVoiceLength(String path){
+        long lduration = 0;
+        try {
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(path); //在获取前，设置文件路径（应该只能是本地路径）
+            String duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+            retriever.release(); //释放
+            if (!TextUtils.isEmpty(duration)) {
+                lduration = Long.parseLong(duration) / 1000;
+            }
+        }
+        catch (Exception ex){
 
+        }
+        return lduration;
+    }
+//-------------------------------------------------------
     /**
      * 根据设备条码获取设备信息
      *
@@ -1396,7 +1471,15 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                         try {
                             CommonUtils.encodeBase64ToFile(btFile, filePath);
                             _mVoiceFilePath = filePath;
-                            mIbtn_Voice.setVisibility(View.VISIBLE);
+//                            mIbtn_Voice.setVisibility(View.VISIBLE);
+                            mLl_Voice.setVisibility(View.VISIBLE);
+                            long voiceLength = getVoiceLength(filePath);
+                            if(voiceLength != 0) {
+                                mTv_VoiceLength.setText(String.valueOf(voiceLength) + "'");
+                            }else{
+                                mTv_VoiceLength.setText("");
+                            }
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -1448,12 +1531,13 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 
     /**
      * 修改报修信息
+     *
      * @param failureReportID 故障ID
-     * @param status 处理状态(待审核，待处理，已处理)
-     * @param operateResult 处理结果(已关闭、已维修、已保养、已检验)
-     * @param operateID 操作单据ID可为空(维修主表ID、保养主表ID、检验主表ID)
-     * @param operateDesc 操作描述，或记录处理的单号（维修主表BillNO、保养主表BillNO、检验主表BillNO）
-     * @param remark 记录关闭理由或其他
+     * @param status          处理状态(待审核，待处理，已处理)
+     * @param operateResult   处理结果(已关闭、已维修、已保养、已检验)
+     * @param operateID       操作单据ID可为空(维修主表ID、保养主表ID、检验主表ID)
+     * @param operateDesc     操作描述，或记录处理的单号（维修主表BillNO、保养主表BillNO、检验主表BillNO）
+     * @param remark          记录关闭理由或其他
      */
     private void ModifyFaultReport(String failureReportID, String status, String operateResult, String operateID, String operateDesc, String remark) {
         SoapUtils.modifyFailureReportingAsync(FaultReportActivity.this, failureReportID, status, operateResult, operateID, operateDesc, remark, new SoapListener() {
@@ -1504,5 +1588,99 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
             }
         });
     }
+
+    /**
+     * 播放语音图标动画
+     */
+    private void playAudioAnimation(final ImageButton imageButton) {
+        //定时器检查播放状态
+        stopTimer();
+        mTimer = new Timer();
+        //将要关闭的语音图片归位
+        if (audioAnimationHandler != null) {
+            Message msg = new Message();
+            msg.what = 3;
+            audioAnimationHandler.sendMessage(msg);
+        }
+
+        audioAnimationHandler = new AudioAnimationHandler(imageButton);
+        mTimerTask = new TimerTask() {
+            public boolean hasPlayed = false;
+
+            @Override
+            public void run() {
+                if (player.isPlaying()) {
+                    hasPlayed = true;
+                    index = (index + 1) % 3;
+                    Message msg = new Message();
+                    msg.what = index;
+                    audioAnimationHandler.sendMessage(msg);
+                } else {
+                    //当播放完时
+                    Message msg = new Message();
+                    msg.what = 3;
+                    audioAnimationHandler.sendMessage(msg);
+                    //播放完毕时需要关闭Timer等
+                    if (hasPlayed) {
+                        stopTimer();
+                    }
+                }
+            }
+        };
+        //调用频率为500毫秒一次
+        mTimer.schedule(mTimerTask, 0, 500);
+    }
+
+    /**
+     * 停止
+     */
+    private void stopTimer() {
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+
+        if (mTimerTask != null) {
+            mTimerTask.cancel();
+            mTimerTask = null;
+        }
+
+    }
+
+    class AudioAnimationHandler extends Handler {
+        ImageButton imageButton;
+        //判断是左对话框还是右对话框
+        boolean isleft;
+
+        public AudioAnimationHandler(ImageButton imageButton) {
+            this.imageButton = imageButton;
+            //判断是左对话框还是右对话框 我这里是在前面设置ScaleType来表示的
+            isleft = imageButton.getScaleType() == ImageView.ScaleType.FIT_START ? true : false;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            //根据msg.what来替换图片，达到动画效果
+            switch (msg.what) {
+                case 0:
+                    imageButton.setImageResource(isleft ? R.drawable.voice1 : R.drawable.voicegreen1);
+                    break;
+                case 1:
+                    imageButton.setImageResource(isleft ? R.drawable.voice2 : R.drawable.voicegreen2);
+                    break;
+                case 2:
+                    imageButton.setImageResource(isleft ? R.drawable.voice3 : R.drawable.voicegreen3);
+                    break;
+                default:
+                    imageButton.setImageResource(isleft ? R.drawable.voice3 : R.drawable.voicegreen3);
+                    break;
+            }
+        }
+
+    }
+
+
+
 
 }

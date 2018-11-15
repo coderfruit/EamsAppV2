@@ -816,7 +816,6 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
         });
     }
 
-
     private void getReport(String rptID) {
 
         showLogingDialog();
@@ -936,7 +935,6 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
 
     }
 
-
     public void setListViewHeightBasedOnChildren(ListView listView) {
         // 获取ListView对应的Adapter
         ListAdapter listAdapter = listView.getAdapter();
@@ -959,8 +957,6 @@ public class InspectReportActivity extends ActivityBase implements IActivityBase
         // params.height最后得到整个ListView完整显示需要的高度
         listView.setLayoutParams(params);
     }
-
-
 
     /***
      * 绑定检验单到页面

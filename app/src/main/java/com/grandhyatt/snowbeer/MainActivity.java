@@ -37,26 +37,34 @@ import crossoverone.statuslib.StatusUtil;
 /***
  * 杨春苗 20180907
  */
-public class MainActivity extends MainActivityBase implements View.OnClickListener, BottomNavigationBar.OnTabSelectedListener  {
+public class MainActivity extends MainActivityBase implements View.OnClickListener, BottomNavigationBar.OnTabSelectedListener {
 
     private ArrayList<Fragment> mFragmentList;
 
     private static final int INTENT_PERMISSIONS_REQUEST_CODE = 0x01;
     private static final int STORAGE_PERMISSIONS_REQUEST_CODE = 0x02;
 
-    /**标题栏*/
+    /**
+     * 标题栏
+     */
     @BindView(R.id.mToolBar)
     ToolBarLayout mToolBar;
 
-    /**Fragment容器*/
+    /**
+     * Fragment容器
+     */
     @BindView(R.id.fragment_container)
     FrameLayout mFragment_Container;
 
-    /**底部Tab栏*/
+    /**
+     * 底部Tab栏
+     */
     @BindView(R.id.mBottomNavigationBar)
     BottomNavigationBar mBottomNavigationBar;
 
-    /**保存用户按返回键的时间*/
+    /**
+     * 保存用户按返回键的时间
+     */
     private long mExitTime = 0;
 
     @Override
@@ -87,20 +95,23 @@ public class MainActivity extends MainActivityBase implements View.OnClickListen
     /**
      * 动态申请权限
      */
-    private void autoObtainPermissin(){
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED
+    private void autoObtainPermissin() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this,Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
+                ) {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
                 ToastUtils.showToast(this, "您已经拒绝过一次");
             }
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.INTERNET,
+                    Manifest.permission.RECORD_AUDIO,
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE}, INTENT_PERMISSIONS_REQUEST_CODE);
-        }else{
-            UpdateUtils.checkUpdate_SelectDialog(MainActivity.this,false);
+        } else {
+            UpdateUtils.checkUpdate_SelectDialog(MainActivity.this, false);
         }
     }
 
@@ -112,7 +123,7 @@ public class MainActivity extends MainActivityBase implements View.OnClickListen
             //调用系统相册申请Sdcard权限回调
             case INTENT_PERMISSIONS_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    UpdateUtils.checkUpdate_SelectDialog(MainActivity.this,false);
+                    UpdateUtils.checkUpdate_SelectDialog(MainActivity.this, false);
                 } else {
                     ToastUtils.showToast(this, "请允许获取访问网络和存储设备权限!");
                 }
@@ -124,9 +135,8 @@ public class MainActivity extends MainActivityBase implements View.OnClickListen
 
     /**
      * 初始化视图
-     *
-     * */
-    private void initView(){
+     */
+    private void initView() {
         //隐藏标题栏返回按钮
         mToolBar.hideBackButton();
 
@@ -161,7 +171,7 @@ public class MainActivity extends MainActivityBase implements View.OnClickListen
 
     /**
      * 获取Fragment列表
-     * */
+     */
     private ArrayList<Fragment> getFragments() {
         ArrayList<Fragment> fragments = new ArrayList<>();
         //主界面
@@ -176,11 +186,11 @@ public class MainActivity extends MainActivityBase implements View.OnClickListen
 
     /**
      * 按Back键延迟处理
-     * */
+     */
     @Override
     public void onBackPressed() {
         if ((System.currentTimeMillis() - mExitTime) > 2000) {
-            ToastUtils.showLongToast(MainActivity.this,getString(R.string.common_toast_exit));
+            ToastUtils.showLongToast(MainActivity.this, getString(R.string.common_toast_exit));
             mExitTime = System.currentTimeMillis();
         } else {
             MainActivity.this.finish();
@@ -190,7 +200,7 @@ public class MainActivity extends MainActivityBase implements View.OnClickListen
 
     /**
      * Tab Selected 监听
-     * */
+     */
     @Override
     public void onTabSelected(int position) {
         if (mFragmentList != null) {
@@ -231,7 +241,7 @@ public class MainActivity extends MainActivityBase implements View.OnClickListen
 
     /**
      * 点击事件
-     * */
+     */
     @Override
     public void onClick(View v) {
 

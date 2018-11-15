@@ -56,6 +56,7 @@ public class Equip_SpareReplace_EntityDataListAdapter extends BaseAdapter {
             mViewHolder.mTv_Status = convertView.findViewById(R.id.mTv_Status);
             mViewHolder.mTv_ID = convertView.findViewById(R.id.mTv_ID);
             mViewHolder.mTv_EquipID = convertView.findViewById(R.id.mTv_EquipID);
+            mViewHolder.mTv_EquipCorp = convertView.findViewById(R.id.mTv_EquipCorp);
             mViewHolder.mTv_SpareID = convertView.findViewById(R.id.mTv_SpareID);
             mViewHolder.mTv_Interval = convertView.findViewById(R.id.mTv_Interval);
             mViewHolder.mTv_EquipName = convertView.findViewById(R.id.mTv_EquipName);
@@ -80,9 +81,10 @@ public class Equip_SpareReplace_EntityDataListAdapter extends BaseAdapter {
             }
             mViewHolder.mTv_ID.setText(dataModel.getID());
             mViewHolder.mTv_EquipID.setText(dataModel.getEquipmentID());
+            mViewHolder.mTv_EquipCorp.setText(dataModel.getCorporationName());
             mViewHolder.mTv_SpareID.setText(dataModel.getSpareID());
             mViewHolder.mTv_Interval.setText("每" + dataModel.getReplaceCycles() + "天执行一次");
-            mViewHolder.mTv_EquipName.setText(dataModel.getEquipmentName());
+            mViewHolder.mTv_EquipName.setText(dataModel.getEquipmentName() + "/" + dataModel.getEquipmentCode());
             mViewHolder.mTv_SpareName.setText(dataModel.getSpareName() + " x " + dataModel.getReplaceCount() + dataModel.getSpareUnit());
             mViewHolder.mTv_LastRunningDate.setText(dataModel.getLastReplaceDate());
             mViewHolder.mTv_NextRunningDate.setText(dataModel.getNextReplaceDate());
@@ -96,6 +98,7 @@ public class Equip_SpareReplace_EntityDataListAdapter extends BaseAdapter {
         private TextView mTv_Status;
         private TextView mTv_ID;
         private TextView mTv_EquipID;
+        private TextView mTv_EquipCorp;
         private TextView mTv_SpareID;
         private TextView mTv_Interval;
         private TextView mTv_EquipName;

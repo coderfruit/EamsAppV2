@@ -26,6 +26,10 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/white6" />
             <!-- 设备信息标题 begin-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,16 +59,10 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="1dp"
                 android:background="@color/white6" />
             <!-- 设备信息标题 end -->
 
             <!-- 设备信息、设备图片 -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="1dp"
-                android:background="@color/white6" />
 
             <LinearLayout
                 android:id="@+id/mRL_DefectRate"
@@ -160,8 +158,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginTop="1dp"
                 android:background="@color/white6" />
 
             <LinearLayout
@@ -191,8 +187,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginTop="1dp"
                 android:background="@color/white6" />
 
             <!--检验时间\检验项目-->
@@ -470,8 +464,6 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginTop="1dp"
                     android:background="@color/white6" />
                 <!--检验计划列表-->
                 <RelativeLayout

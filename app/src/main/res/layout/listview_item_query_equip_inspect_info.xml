@@ -93,7 +93,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:layout_weight="1"
-                android:gravity="right"
                 android:text="内检"
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
@@ -139,7 +138,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:layout_weight="1"
-                android:gravity="right"
                 android:text="合格"
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
@@ -185,7 +183,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:layout_weight="1"
-                android:gravity="right"
                 android:text="2019-12-01"
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
@@ -231,7 +228,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:layout_weight="1"
-                android:gravity="right"
                 android:text="2019-12-01"
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
@@ -276,7 +272,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:layout_weight="1"
-                android:gravity="right"
                 android:text="0"
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />

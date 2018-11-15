@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -183,7 +184,27 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
 
     @Override
     public void bindEvent() {
+        //设备图片点击事件
+        mIv_EquipImg.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
 
+                mIv_EquipImg.setDrawingCacheEnabled(true);
+                Bitmap bitmap = Bitmap.createBitmap(mIv_EquipImg.getDrawingCache());
+                mIv_EquipImg.setDrawingCacheEnabled(false);
+                String equipName = mTv_EquipName.getText().toString();
+
+                if (bitmap != null && equipName != null) {
+                    Intent intent = new Intent(EquipRoutingInspectionActivity.this, ImageViewerActivity.class);
+                    intent.putExtra("bitmap", bitmap);
+                    intent.putExtra("title", equipName);
+                    startActivity(intent);
+                } else {
+                    ToastUtils.showToast(EquipRoutingInspectionActivity.this, "无图片需显示");
+                }
+                return false;
+            }
+        });
         //显示检索菜单
         mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
             @Override

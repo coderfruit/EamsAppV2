@@ -1210,7 +1210,7 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
             return;
         }
         if (faultDesc == null || faultDesc.length() == 0) {
-            ToastUtils.showLongToast(RepairmentExReportActivity.this, "请选择故障类型！");
+            ToastUtils.showLongToast(RepairmentExReportActivity.this, "请选择委托形式！");
             return;
         }
         if (repairmentLevel == null || repairmentLevel.length() == 0) {

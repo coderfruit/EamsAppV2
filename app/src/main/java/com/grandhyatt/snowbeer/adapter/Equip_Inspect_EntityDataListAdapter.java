@@ -55,6 +55,7 @@ public class Equip_Inspect_EntityDataListAdapter extends BaseAdapter {
 
             mViewHolder.mTv_Status = convertView.findViewById(R.id.mTv_Status);
             mViewHolder.mTv_ID = convertView.findViewById(R.id.mTv_ID);
+            mViewHolder.mTv_EquipCorp = convertView.findViewById(R.id.mTv_EquipCorp);
             mViewHolder.mTv_EquipID = convertView.findViewById(R.id.mTv_EquipID);
             mViewHolder.mTv_InspectItem = convertView.findViewById(R.id.mTv_InspectItem);
             mViewHolder.mTv_Interval = convertView.findViewById(R.id.mTv_Interval);
@@ -79,6 +80,7 @@ public class Equip_Inspect_EntityDataListAdapter extends BaseAdapter {
                 mViewHolder.mTv_Status.setTextColor(Color.BLACK);
             }
             mViewHolder.mTv_ID.setText(dataModel.getID());
+            mViewHolder.mTv_EquipCorp.setText(dataModel.getCorporationName());
             mViewHolder.mTv_EquipID.setText(dataModel.getEquipmentID());
             mViewHolder.mTv_InspectItem.setText(dataModel.getInspectionItem());
             mViewHolder.mTv_Interval.setText("每" + dataModel.getInterval() + dataModel.getIntervalUnit() + "执行一次");
@@ -94,6 +96,7 @@ public class Equip_Inspect_EntityDataListAdapter extends BaseAdapter {
     public static class ViewHolder {
         private TextView mTv_Status;
         private TextView mTv_ID;
+        private TextView mTv_EquipCorp;
         private TextView mTv_EquipID;
         private TextView mTv_InspectItem;
         private TextView mTv_Interval;

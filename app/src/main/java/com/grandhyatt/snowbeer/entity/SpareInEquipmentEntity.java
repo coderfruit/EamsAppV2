@@ -12,6 +12,7 @@ public class SpareInEquipmentEntity implements Serializable {
     private String ID;
     private String Status;
     private String RepairmentLevel;
+    private String CorporationName;
     private String EquipmentID;
     private String EquipmentCode;
     private String EquipmentName;
@@ -40,6 +41,15 @@ public class SpareInEquipmentEntity implements Serializable {
 
     public SpareInEquipmentEntity() {
     }
+
+    public String getCorporationName() {
+        return CorporationName;
+    }
+
+    public void setCorporationName(String corporationName) {
+        CorporationName = corporationName;
+    }
+
     public String getSpareUnit() {
         return SpareUnit;
     }

@@ -26,6 +26,10 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/white6" />
             <!-- 设备信息标题 begin-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,16 +59,9 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="1dp"
                 android:background="@color/white6" />
             <!-- 设备信息标题 end -->
             <!-- 设备信息、设备图片 -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginTop="1dp"
-                android:background="@color/white6" />
 
             <LinearLayout
                 android:id="@+id/mRL_DefectRate"
@@ -191,8 +188,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:layout_marginLeft="1dp"
-                android:layout_marginTop="1dp"
                 android:background="@color/white6" />
 
             <!--开始日期\结束日期-->
@@ -355,6 +350,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/white6" />
                 <!--保养计划标题-->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -397,8 +396,6 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginTop="1dp"
                     android:background="@color/white6" />
                 <!--保养计划列表-->
                 <RelativeLayout
@@ -436,8 +433,6 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginTop="1dp"
                     android:background="@color/white6" />
 
                 <LinearLayout
@@ -487,8 +482,6 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_marginLeft="1dp"
-                    android:layout_marginTop="1dp"
                     android:background="@color/white6" />
 
                 <!--机物料-->

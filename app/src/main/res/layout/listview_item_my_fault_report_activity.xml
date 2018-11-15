@@ -133,7 +133,6 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="12dp"
             android:layout_weight="4"
-            android:gravity="right"
             android:text="老吴"
             android:textColor="@color/gray5"
             android:textSize="12sp" />
@@ -176,7 +175,6 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="12dp"
             android:layout_weight="4"
-            android:gravity="right"
             android:text="老吴"
             android:textColor="@color/gray5"
             android:textSize="12sp" />
