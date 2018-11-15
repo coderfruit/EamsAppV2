@@ -519,19 +519,20 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             }
         });
 
-        mEt_User.setOnFocusChangeListener(new android.view.View.
-                OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    // 此处为得到焦点时的处理内容
-                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                } else {
-                    // 此处为失去焦点时的处理内容
-                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-                }
-            }
-        });
+//        经测试不好用 20181115 0853
+//        mEt_User.setOnFocusChangeListener(new android.view.View.
+//                OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (hasFocus) {
+//                    // 此处为得到焦点时的处理内容
+//                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+//                } else {
+//                    // 此处为失去焦点时的处理内容
+//                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//                }
+//            }
+//        });
         //检索事件
         mSearchBar.setSearchButtonOnClickListener(new View.OnClickListener() {
             @Override

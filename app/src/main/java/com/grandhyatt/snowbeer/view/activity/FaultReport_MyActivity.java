@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -129,9 +130,13 @@ public class FaultReport_MyActivity extends ActivityBase implements IActivityBas
 
     @Override
     public void initView() {
+        //去除状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         mToolBar.setTitle("我的报修");
-        mToolBar.showMenuButton();
-        mToolBar.setMenuText("我要报修");
 
         List<CorporationEntity> corps = SPUtils.getLastLoginUserCorporations(this);
         if(corps != null){
@@ -164,14 +169,6 @@ public class FaultReport_MyActivity extends ActivityBase implements IActivityBas
             @Override
             public void onClick(View v) {
                 showUserCorp();
-            }
-        });
-
-        //我要报修
-        mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                IntentUtil.newIntentForResult(FaultReport_MyActivity.this, FaultReportActivity.class, RESULT_REPORT_COMPLETE_ACTIVITY);
             }
         });
 

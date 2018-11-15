@@ -3,6 +3,7 @@ package com.grandhyatt.snowbeer.view.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -49,6 +50,7 @@ public class EquipMgrMaintenMaterial_AddActivity extends ActivityBase implements
         setContentView(R.layout.activity_equip_mgr_mainten_material_add);
 
         ButterKnife.bind(this);
+        initView();
 
         Intent intent = getIntent();
         _EquipID = intent.getStringExtra("equipID");
@@ -59,6 +61,7 @@ public class EquipMgrMaintenMaterial_AddActivity extends ActivityBase implements
         if (_CorpID != null) {  //根据设备ID 获取预警信息
 
         }
+
     }
 
     @Override
@@ -68,7 +71,11 @@ public class EquipMgrMaintenMaterial_AddActivity extends ActivityBase implements
 
     @Override
     public void initView() {
+        //去除状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override

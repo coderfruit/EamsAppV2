@@ -34,6 +34,7 @@ import com.grandhyatt.snowbeer.view.activity.AssayQueryActivity;
 import com.grandhyatt.snowbeer.view.activity.AssayUseActivity;
 import com.grandhyatt.snowbeer.view.activity.EquipRoutingInspectionActivity;
 import com.grandhyatt.snowbeer.view.activity.EquipmentQueryActivity;
+import com.grandhyatt.snowbeer.view.activity.FaultReportActivity;
 import com.grandhyatt.snowbeer.view.activity.FaultReport_Mgr_Activity;
 import com.grandhyatt.snowbeer.view.activity.FaultReport_MyActivity;
 import com.grandhyatt.snowbeer.view.activity.InspectReportActivity;
@@ -136,7 +137,7 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
                 switch (position) {
                     case 0://故障报修
                         if(PowerUtils.isPowerShowToast(getContext(),PowerUtils.AppMenu故障报修)) {
-                            IntentUtil.newIntent(getActivity(), FaultReport_MyActivity.class);
+                            IntentUtil.newIntent(getActivity(), FaultReportActivity.class);
                         }
                         break;
                     case 1://报修处理

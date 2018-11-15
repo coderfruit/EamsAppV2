@@ -120,7 +120,11 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
 
     @Override
     public void onClick(View v) {
+        //去除状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override

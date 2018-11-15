@@ -40,6 +40,7 @@ import com.google.gson.Gson;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.grandhyatt.commonlib.Result;
+import com.grandhyatt.commonlib.utils.IntentUtil;
 import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
@@ -393,6 +394,9 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
     @Override
     public void initView() {
 
+        mToolBar.showMenuButton();
+        mToolBar.setMenuText("我的报修");
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         //初始化用户及手机号
@@ -564,7 +568,13 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 
     @Override
     public void bindEvent() {
-
+        //我要报修
+        mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IntentUtil.newIntent(FaultReportActivity.this, FaultReport_MyActivity.class);
+            }
+        });
         //检索事件
         mSearchBar.setSearchButtonOnClickListener(new View.OnClickListener() {
             @Override
@@ -1167,12 +1177,18 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         _EquipmentData = data;//全局变量赋值
         if (data != null) {//获取到设备信息
 
+            if (!data.getAssetTypeID().equals(Consts.AssetType_sc)) {
+                _EquipmentData = null;
+                ToastUtils.showLongToast(FaultReportActivity.this, data.getEquipmentName() + " 不是生产设备");
+                return;
+            }
             boolean ckRlt = CommonUtils.checkCorpIsInList(FaultReportActivity.this, data.getCorporationLevelCode());
             if (!ckRlt) {
                 _EquipmentData = null;
                 ToastUtils.showLongToast(FaultReportActivity.this, data.getEquipmentName() + "属于" + data.getCorporationName() + ",不属于用户当前归属组织机构");
                 return;
             }
+
 
             mTv_EquipCode.setText(data.getEquipmentCode());
             mTv_EquipName.setText(data.getEquipmentName());

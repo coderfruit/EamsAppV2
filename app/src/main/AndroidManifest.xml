@@ -159,7 +159,6 @@
         <!--WebView-->
         <activity android:name=".view.activity.WebViewActivity"></activity>
         <!--输入客户信息-->
-        <activity android:name=".view.activity.InputCustomerInfoActivity"></activity>
         <!--扫码竖屏-->
         <activity
             android:name=".view.activity.ScanActivity"

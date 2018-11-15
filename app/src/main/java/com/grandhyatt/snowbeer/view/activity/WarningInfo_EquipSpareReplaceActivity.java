@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -89,6 +90,12 @@ public class WarningInfo_EquipSpareReplaceActivity extends ActivityBase implemen
 
     @Override
     public void initView() {
+        //去除状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         mToolBar.setTitle("备件更换提醒");
     }
 
@@ -110,6 +117,7 @@ public class WarningInfo_EquipSpareReplaceActivity extends ActivityBase implemen
                             case 0:
                                 Intent intent1 = new Intent(WarningInfo_EquipSpareReplaceActivity.this, Query_EquipRepairInfoActivity.class);
                                 intent1.putExtra("corpID", _CorpID);
+                                intent1.putExtra("equipID", _EquipID);
                                 startActivity(intent1);
                                 break;
                             default:

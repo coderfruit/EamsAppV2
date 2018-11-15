@@ -13,8 +13,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
@@ -46,6 +49,7 @@ import butterknife.ButterKnife;
 import q.rorbin.badgeview.Badge;
 import q.rorbin.badgeview.QBadgeView;
 
+import static com.grandhyatt.snowbeer.Consts.CAMERA_BARCODE_SCAN;
 import static com.grandhyatt.snowbeer.Consts.FAULT_REPORT_OPERATE_AFTER;
 import static com.grandhyatt.snowbeer.Consts.INSPECT_OPERATE_AFTER;
 import static com.grandhyatt.snowbeer.Consts.MAINTEN_OPERATE_AFTER;
@@ -158,7 +162,6 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
 
         mToolBar.showMenuButton();
         mToolBar.setMenuText("...");
-
 
         //去除状态栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -681,30 +684,54 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (_EquipmentData == null)
-            return;
-
         switch (requestCode) {
 
+            case CAMERA_BARCODE_SCAN://相机扫码
+                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+                if (result != null) {
+                    if (result.getContents() == null) {
+                        Toast.makeText(this, "扫码异常请重试！", Toast.LENGTH_LONG).show();
+                    } else {
+                        String barcode = result.getContents();
+                        mSearchBar.setBarcode(barcode);
+                    }
+                } else {
+                    super.onActivityResult(requestCode, resultCode, data);
+                }
+                break;
             case REPAIR_OPERATE_AFTER://维修之后
+                if (_EquipmentData == null)
+                    return;
                 getEquipWarinigInfo(_EquipmentData.getID());
                 break;
             case MAINTEN_OPERATE_AFTER://保养之后
+                if (_EquipmentData == null)
+                    return;
                 getEquipWarinigInfo(_EquipmentData.getID());
                 break;
             case INSPECT_OPERATE_AFTER://检验之后
+                if (_EquipmentData == null)
+                    return;
                 getEquipWarinigInfo(_EquipmentData.getID());
                 break;
             case REPLACE_OPERATE_AFTER://更换之后
+                if (_EquipmentData == null)
+                    return;
                 getEquipWarinigInfo(_EquipmentData.getID());
                 break;
             case REPAIR_EX_OPERATE_AFTER://外委维修之后
+                if (_EquipmentData == null)
+                    return;
                 getEquipWarinigInfo(_EquipmentData.getID());
                 break;
             case FAULT_REPORT_OPERATE_AFTER://报修查看之后
+                if (_EquipmentData == null)
+                    return;
                 getEquipWarinigInfo(_EquipmentData.getID());
                 break;
             case GO_FAULT_REPORT_OPERATE_AFTER://去报修之后
+                if (_EquipmentData == null)
+                    return;
                 getEquipWarinigInfo(_EquipmentData.getID());
                 break;
             default:

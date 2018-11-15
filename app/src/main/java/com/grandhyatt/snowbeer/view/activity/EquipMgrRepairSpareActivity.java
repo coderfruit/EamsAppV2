@@ -128,6 +128,10 @@ public class EquipMgrRepairSpareActivity extends com.grandhyatt.snowbeer.view.ac
 
     @Override
     public void initView() {
+        //去除状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         mToolBar.setTitle("设备维修用备件选择");
         getEquipmentInfo(_EquipID);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);

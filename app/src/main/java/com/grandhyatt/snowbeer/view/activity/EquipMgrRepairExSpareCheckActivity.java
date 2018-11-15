@@ -125,9 +125,14 @@ public class EquipMgrRepairExSpareCheckActivity extends ActivityBase implements 
 
     @Override
     public void initView() {
+        //去除状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         mToolBar.setTitle("设备外委维修-备件选择");
         getEquipmentInfo(_EquipID);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         _SpareCond = mEt_SpareCond.getText().toString();
 
         getSparesInfo(_EquipID, _SelectedDept, _SpareCond);

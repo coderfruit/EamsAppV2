@@ -1,5 +1,6 @@
 package com.grandhyatt.snowbeer.view.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,8 +18,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
@@ -51,6 +56,8 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.grandhyatt.snowbeer.Consts.CAMERA_BARCODE_SCAN;
 
 /**
  * 化学仪器使用
@@ -618,4 +625,28 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            Log.e("TAG", "ActivityResult resultCode error");
+            return;
+        }
+        switch (requestCode) {
+            case CAMERA_BARCODE_SCAN://相机扫码
+                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+                if (result != null) {
+                    if (result.getContents() == null) {
+                        Toast.makeText(this, "扫码异常请重试！", Toast.LENGTH_LONG).show();
+                    } else {
+                        String barcode = result.getContents();
+                        mSearchBar.setBarcode(barcode);
+                    }
+                } else {
+                    super.onActivityResult(requestCode, resultCode, data);
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }
