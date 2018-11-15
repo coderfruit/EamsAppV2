@@ -422,10 +422,16 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void initView() {
-        // android 7.0系统解决拍照的问题
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
-        builder.detectFileUriExposure();
+        try {
+            if (Build.VERSION.SDK_INT == 24) {
+                // android 7.0系统解决拍照的问题
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+                builder.detectFileUriExposure();
+            }
+        }catch(Exception ex){
+
+        }
 
         mToolBar.showMenuButton();
         mToolBar.setMenuText("我的报修");

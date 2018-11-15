@@ -371,6 +371,9 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
 
             int iAll = iRpCnt + iMtnCnt + iIspCnt + iSpRpCnt + iRpExCnt;
             mAdapter.modifyItem(3,iAll);
+
+            int iRptCnt = data.getReportFaultCount();
+            mAdapter.modifyItem(1,iRptCnt);
         }
 //        mRefreshLayout.finishLoadMoreWithNoMoreData(); //设置SmartRefreshLayout 完成加载并标记没有更多数据
 //        mRefreshLayout.finishLoadMore(true);//设置SmartRefreshLayout加载更多的完成标志

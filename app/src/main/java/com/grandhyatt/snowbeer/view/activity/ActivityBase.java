@@ -167,6 +167,7 @@ public class ActivityBase extends com.grandhyatt.commonlib.view.activity.Activit
                 .setView(ctl)
                 .setNegativeButton("否", cancleCallBack);
         builder.setPositiveButton("是",okCallBack);
+        builder.setCancelable(true);
         builder.show();
     }
 
