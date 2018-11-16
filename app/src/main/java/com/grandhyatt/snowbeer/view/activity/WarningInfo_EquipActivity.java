@@ -185,11 +185,23 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
                     case 0:
                         Intent intent1 = new Intent(WarningInfo_EquipActivity.this, Query_EquipRepairInfoActivity.class);
                         intent1.putExtra("corpID", finalCorp.getID());
+                        if(_SelectedDept != null) {
+                            intent1.putExtra("deptID", _SelectedDept.getID());
+                        }
+                        if(_SelectedEquipmentType != null) {
+                            intent1.putExtra("typeID", _SelectedEquipmentType.getID());
+                        }
                         startActivity(intent1);
                         break;
                     case 1:
                         Intent intent2 = new Intent(WarningInfo_EquipActivity.this, Query_EquipMaintenanceInfoActivity.class);
                         intent2.putExtra("corpID", finalCorp.getID());
+                        if(_SelectedDept != null) {
+                            intent2.putExtra("deptID", _SelectedDept.getID());
+                        }
+                        if(_SelectedEquipmentType != null) {
+                            intent2.putExtra("typeID", _SelectedEquipmentType.getID());
+                        }
                         startActivity(intent2);
                         break;
                     case 2:
@@ -200,6 +212,12 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
                     case 3:
                         Intent intent4 = new Intent(WarningInfo_EquipActivity.this, Query_EquipRepairExInfoActivity.class);
                         intent4.putExtra("corpID", finalCorp.getID());
+                        if(_SelectedDept != null) {
+                            intent4.putExtra("deptID", _SelectedDept.getID());
+                        }
+                        if(_SelectedEquipmentType != null) {
+                            intent4.putExtra("typeID", _SelectedEquipmentType.getID());
+                        }
                         startActivity(intent4);
                         break;
                     default:
