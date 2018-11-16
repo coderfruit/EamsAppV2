@@ -55,8 +55,8 @@
                 android:id="@+id/mTv_Corp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:text="设备名称"
+                android:layout_marginLeft="4dp"
+                android:text="组织机构"
                 android:textColor="@android:color/black"
                 android:textSize="12sp" />
 
