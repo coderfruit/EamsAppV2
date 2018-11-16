@@ -211,6 +211,7 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
     int index = 1;
     AudioAnimationHandler audioAnimationHandler = null;
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -220,6 +221,17 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        try {
+            if (Build.VERSION.SDK_INT == 24) {
+                // android 7.0系统解决拍照的问题
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+                builder.detectFileUriExposure();
+            }
+        } catch (Exception ex) {
+
+        }
 
         setContentView(R.layout.activity_fault_report);
         ButterKnife.bind(this);
@@ -422,16 +434,6 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void initView() {
-        try {
-            if (Build.VERSION.SDK_INT == 24) {
-                // android 7.0系统解决拍照的问题
-                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-                StrictMode.setVmPolicy(builder.build());
-                builder.detectFileUriExposure();
-            }
-        }catch(Exception ex){
-
-        }
 
         mToolBar.showMenuButton();
         mToolBar.setMenuText("我的报修");
@@ -588,13 +590,15 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 //                intent.putExtra("imgPath", filePath);
 //                intent.putExtra("title", "报修图片" + position);
 //                startActivity(intent);
-
-                //调用系统图片浏览器显示
-                Uri mUri = (Uri) mGv_Show_Imgs.getAdapter().getItem(position);
-
-                Intent it = new Intent(Intent.ACTION_VIEW);
-                it.setDataAndType(mUri, "image/*");
-                startActivity(it);
+                try {
+                    //调用系统图片浏览器显示
+                    Uri mUri = (Uri) mGv_Show_Imgs.getAdapter().getItem(position);
+                    Intent it = new Intent(Intent.ACTION_VIEW);
+                    it.setDataAndType(mUri, "image/*");
+                    startActivity(it);
+                } catch (Exception ex) {
+                    ToastUtils.showToast(getApplicationContext(), "打开图片失败(" + ex.getMessage() + ")");
+                }
             }
         });
 
@@ -1101,6 +1105,7 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 //-------------------------------------------------------
 //语音相关
 //-------------------------------------------------------
+
     /**
      * 开始录音
      *
@@ -1131,13 +1136,14 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 
     /**
      * 播放录音
+     *
      * @param voicePath
      */
     private void playVoice(String voicePath) {
         try {
-            if(player != null && player.isPlaying()){
+            if (player != null && player.isPlaying()) {
                 player.stop();
-            }else {
+            } else {
                 player = new MediaPlayer();
                 player.setDataSource(voicePath);
                 player.prepare();
@@ -1166,19 +1172,21 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 //        mIbtn_Voice.setVisibility(View.VISIBLE);
         mLl_Voice.setVisibility(View.VISIBLE);
         long voiceLength = getVoiceLength(mFileName);
-        if(voiceLength != 0) {
+        if (voiceLength != 0) {
             mTv_VoiceLength.setText(String.valueOf(voiceLength) + "'");
-        }else {
+        } else {
             mTv_VoiceLength.setText("");
         }
         mBtn_Voice.setBackgroundResource(R.drawable.btn_bg);
     }
+
     /**
      * 获取语音时长
+     *
      * @param path
      * @return
      */
-    private long getVoiceLength(String path){
+    private long getVoiceLength(String path) {
         long lduration = 0;
         try {
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
@@ -1188,13 +1196,13 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
             if (!TextUtils.isEmpty(duration)) {
                 lduration = Long.parseLong(duration) / 1000;
             }
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
 
         }
         return lduration;
     }
 //-------------------------------------------------------
+
     /**
      * 根据设备条码获取设备信息
      *
@@ -1480,9 +1488,9 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 //                            mIbtn_Voice.setVisibility(View.VISIBLE);
                             mLl_Voice.setVisibility(View.VISIBLE);
                             long voiceLength = getVoiceLength(filePath);
-                            if(voiceLength != 0) {
+                            if (voiceLength != 0) {
                                 mTv_VoiceLength.setText(String.valueOf(voiceLength) + "'");
-                            }else{
+                            } else {
                                 mTv_VoiceLength.setText("");
                             }
 
@@ -1685,8 +1693,6 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         }
 
     }
-
-
 
 
 }
