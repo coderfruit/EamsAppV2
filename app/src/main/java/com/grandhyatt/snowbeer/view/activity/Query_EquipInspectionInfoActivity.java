@@ -59,6 +59,8 @@ public class Query_EquipInspectionInfoActivity extends ActivityBase implements I
 
     String _EquipID;//传入的设备id
     String _CorpID; //传入的组织机构ID
+    String _DeptID; //传入的部门ID
+    String _TypeID;//传入的设备类型ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +74,10 @@ public class Query_EquipInspectionInfoActivity extends ActivityBase implements I
         Intent intent = getIntent();
         _EquipID = intent.getStringExtra("equipID");
         _CorpID = intent.getStringExtra("corpID");
+        _DeptID = intent.getStringExtra("deptID");
+        _TypeID = intent.getStringExtra("typeID");
 
-        requestNetworkDataByEquip(_CorpID, _EquipID);
+        requestNetworkDataByEquip(_CorpID, _EquipID,_DeptID,_TypeID);
 
     }
 
@@ -103,7 +107,7 @@ public class Query_EquipInspectionInfoActivity extends ActivityBase implements I
                 mIsLoadMore = false;
                 mRefreshLayout.setNoMoreData(false);
 
-                requestNetworkDataByEquip(_CorpID, _EquipID);
+                requestNetworkDataByEquip(_CorpID, _EquipID,_DeptID,_TypeID);
 
             }
         });
@@ -115,7 +119,7 @@ public class Query_EquipInspectionInfoActivity extends ActivityBase implements I
                 mPageIndex++;
                 mIsLoadMore = true;
 
-                requestNetworkDataByEquip(_CorpID, _EquipID);
+                requestNetworkDataByEquip(_CorpID, _EquipID,_DeptID,_TypeID);
 
             }
         });
@@ -131,11 +135,11 @@ public class Query_EquipInspectionInfoActivity extends ActivityBase implements I
 
     }
 
-    public void requestNetworkDataByEquip(String corpID, String equipID) {
+    public void requestNetworkDataByEquip(String corpID, String equipID, String deptID,String typeID) {
 
         showLogingDialog();
         String currentLastIdx = String.valueOf(mPageIndex * mPageSize);
-        SoapUtils.getEquipInspectionBills(Query_EquipInspectionInfoActivity.this, corpID, equipID, currentLastIdx, new SoapListener() {
+        SoapUtils.getEquipInspectionBills(Query_EquipInspectionInfoActivity.this, corpID, equipID,deptID, typeID,   currentLastIdx, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
                 dismissLoadingDialog();

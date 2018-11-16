@@ -293,7 +293,7 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
     private void initWarningInfo() {
         CorporationEntity corp = SPUtils.getFirstLastLoginUserCorporations(getContext());
         if(corp != null){
-            getWarinigInfo(corp.getID());
+            getWarinigInfo(corp.getID(),null,null);
         }
     }
 
@@ -302,8 +302,8 @@ public class HomeFunctionFragment extends FragmentBase implements IFragmentBase{
      *
      * @param corpID
      */
-    private void getWarinigInfo(String corpID) {
-        SoapUtils.getWarningInfoCount(this.getContext(),corpID,
+    private void getWarinigInfo(String corpID,String deptID,String typeID) {
+        SoapUtils.getWarningInfoCount(this.getContext(),corpID,deptID,typeID,
                 true,true,true,true,
                 true,false,false,false,
                 false,true,

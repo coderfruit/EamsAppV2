@@ -69,7 +69,8 @@ public class WarningInfo_EquipRepairActivity extends ActivityBase implements IAc
 
     String _EquipID;//传入的设备ID
     String _CorpID; //传入的组织机构ID
-
+    String _DeptID; //传入的部门ID
+    String _TypeID;//传入的设备类型ID
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +83,8 @@ public class WarningInfo_EquipRepairActivity extends ActivityBase implements IAc
         Intent intent = getIntent();
         _EquipID = intent.getStringExtra("equipID");
         _CorpID = intent.getStringExtra("corpID");
+        _DeptID = intent.getStringExtra("deptID");
+        _TypeID = intent.getStringExtra("typeID");
 
         if (_EquipID != null) {  //根据设备ID 获取预警信息
             requestNetworkDataByEquip(_EquipID);
@@ -122,6 +125,8 @@ public class WarningInfo_EquipRepairActivity extends ActivityBase implements IAc
                                 Intent intent1 = new Intent(WarningInfo_EquipRepairActivity.this, Query_EquipRepairInfoActivity.class);
                                 intent1.putExtra("corpID", _CorpID);
                                 intent1.putExtra("equipID", _EquipID);
+                                intent1.putExtra("deptID", _DeptID);
+                                intent1.putExtra("typeID", _TypeID);
                                 startActivity(intent1);
                                 break;
                             default:
@@ -198,8 +203,9 @@ public class WarningInfo_EquipRepairActivity extends ActivityBase implements IAc
         showLogingDialog();
 
         if(_CorpID != null){
+
             String currentLastIdx = String.valueOf(mPageIndex * mPageSize);
-            SoapUtils.getRepairmentPlan(this, _CorpID, currentLastIdx, new SoapListener() {
+            SoapUtils.getRepairmentPlan(this, _CorpID,_DeptID,_TypeID, currentLastIdx, new SoapListener() {
                 @Override
                 public void onSuccess(int statusCode, SoapObject object) {
                     dismissLoadingDialog();

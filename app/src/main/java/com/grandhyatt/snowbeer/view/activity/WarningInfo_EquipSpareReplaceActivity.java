@@ -62,6 +62,8 @@ public class WarningInfo_EquipSpareReplaceActivity extends ActivityBase implemen
 
     String _EquipID;//传入的设备ID
     String _CorpID; //传入的组织机构ID
+    String _DeptID; //传入的部门ID
+    String _TypeID;//传入的设备类型ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,8 @@ public class WarningInfo_EquipSpareReplaceActivity extends ActivityBase implemen
         Intent intent = getIntent();
         _EquipID = intent.getStringExtra("equipID");
         _CorpID = intent.getStringExtra("corpID");
+        _DeptID = intent.getStringExtra("deptID");
+        _TypeID = intent.getStringExtra("typeID");
 
         if (_EquipID != null) {  //根据设备ID 获取预警信息
             requestNetworkDataByEquip(_EquipID);
@@ -118,6 +122,8 @@ public class WarningInfo_EquipSpareReplaceActivity extends ActivityBase implemen
                                 Intent intent1 = new Intent(WarningInfo_EquipSpareReplaceActivity.this, Query_EquipRepairInfoActivity.class);
                                 intent1.putExtra("corpID", _CorpID);
                                 intent1.putExtra("equipID", _EquipID);
+                                intent1.putExtra("deptID", _DeptID);
+                                intent1.putExtra("typeID", _TypeID);
                                 startActivity(intent1);
                                 break;
                             default:
@@ -187,10 +193,9 @@ public class WarningInfo_EquipSpareReplaceActivity extends ActivityBase implemen
     public void requestNetworkData() {
         showLogingDialog();
 
-        CorporationEntity corp = SPUtils.getFirstLastLoginUserCorporations(this);
-        if(corp != null){
+        if(_CorpID != null){
             String currentLastIdx = String.valueOf(mPageIndex * mPageSize);
-            SoapUtils.getSpareReplaceInfo(this, corp.getID(), currentLastIdx, new SoapListener() {
+            SoapUtils.getSpareReplaceInfo(this, _CorpID,_DeptID,_TypeID, currentLastIdx, new SoapListener() {
                 @Override
                 public void onSuccess(int statusCode, SoapObject object) {
                     dismissLoadingDialog();

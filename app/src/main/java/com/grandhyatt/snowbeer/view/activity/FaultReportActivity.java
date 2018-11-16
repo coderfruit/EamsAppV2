@@ -1164,18 +1164,22 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
      */
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void stopVoice(String mFileName) {
-        mRecorder.stop();
-        mRecorder.release();
-        mRecorder = null;
-        Toast.makeText(getApplicationContext(), "保存录音" + mFileName, Toast.LENGTH_SHORT).show();
+        try {
+            mRecorder.stop();
+            mRecorder.release();
+            mRecorder = null;
+            Toast.makeText(getApplicationContext(), "保存录音" + mFileName, Toast.LENGTH_SHORT).show();
 
-//        mIbtn_Voice.setVisibility(View.VISIBLE);
-        mLl_Voice.setVisibility(View.VISIBLE);
-        long voiceLength = getVoiceLength(mFileName);
-        if (voiceLength != 0) {
-            mTv_VoiceLength.setText(String.valueOf(voiceLength) + "'");
-        } else {
-            mTv_VoiceLength.setText("");
+            mLl_Voice.setVisibility(View.VISIBLE);
+            long voiceLength = getVoiceLength(mFileName);
+            if (voiceLength != 0) {
+                mTv_VoiceLength.setText(String.valueOf(voiceLength) + "'");
+            } else {
+                mTv_VoiceLength.setText("");
+            }
+        }catch (Exception ex){
+            Log.i("stopVoice", ex.getMessage());
+            ToastUtils.showToast(getApplicationContext(), "保存录音失败，请重试！");
         }
         mBtn_Voice.setBackgroundResource(R.drawable.btn_bg);
     }

@@ -17,32 +17,85 @@
         android:layout_height="30dp"
         android:background="@drawable/selector_linear_layout_item_white">
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/factory_32" />
-
         <TextView
             android:id="@+id/mTv_UserCorp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="60dp"
-            android:hint="用户归属工厂"
+            android:layout_toLeftOf="@+id/mIv_UserCorp"
+            android:hint="归属工厂"
             android:textColor="@color/gray3"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:layout_marginRight="10dp"/>
 
         <ImageView
+            android:id="@+id/mIv_UserCorp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
+            android:layout_toLeftOf="@+id/mTv_Dept"
+            android:layout_marginRight="15dp"
             android:src="@drawable/item_signature_iv_menu_defaul" />
+
+        <TextView
+            android:id="@+id/mTv_Dept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/mIv_Dept"
+            android:hint="部门"
+            android:textColor="@color/gray3"
+            android:textSize="14sp"
+            android:layout_marginRight="10dp"/>
+
+        <ImageView
+            android:id="@+id/mIv_Dept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@+id/mTv_EquipType"
+            android:src="@drawable/item_signature_iv_menu_defaul" />
+
+        <TextView
+            android:id="@+id/mTv_EquipType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/mIv_Type"
+            android:hint="设备类型"
+            android:textColor="@color/gray3"
+            android:textSize="14sp"
+            android:layout_marginRight="10dp"/>
+
+        <ImageView
+            android:id="@+id/mIv_Type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@+id/mLl_reset"
+            android:src="@drawable/item_signature_iv_menu_defaul" />
+
+        <LinearLayout
+            android:id="@+id/mLl_reset"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+            <Button
+                android:id="@+id/mBtn_Reset"
+                android:layout_width="60dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="4dp"
+                android:background="@drawable/ic_login_button_true"
+                android:text="重置"
+                android:textAlignment="center"
+                android:textSize="12dp" />
+        </LinearLayout>
+
+
     </RelativeLayout>
 
     <View

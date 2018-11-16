@@ -63,6 +63,8 @@ public class WarningInfo_EquipInspectionActivity extends ActivityBase implements
 
     String _EquipID;//传入的设备id
     String _CorpID; //传入的组织机构ID
+    String _DeptID; //传入的部门ID
+    String _TypeID;//传入的设备类型ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,8 @@ public class WarningInfo_EquipInspectionActivity extends ActivityBase implements
         Intent intent = getIntent();
         _EquipID = intent.getStringExtra("equipID");
         _CorpID = intent.getStringExtra("corpID");
+        _DeptID = intent.getStringExtra("deptID");
+        _TypeID = intent.getStringExtra("typeID");
 
         if (_EquipID != null) {  //根据设备ID 获取预警信息
             requestNetworkDataByEquip(_EquipID);
@@ -116,6 +120,8 @@ public class WarningInfo_EquipInspectionActivity extends ActivityBase implements
                                 Intent intent1 = new Intent(WarningInfo_EquipInspectionActivity.this, Query_EquipInspectionInfoActivity.class);
                                 intent1.putExtra("corpID", _CorpID);
                                 intent1.putExtra("equipID", _EquipID);
+                                intent1.putExtra("deptID", _DeptID);
+                                intent1.putExtra("typeID", _TypeID);
                                 startActivity(intent1);
                                 break;
                             default:
@@ -195,7 +201,7 @@ public class WarningInfo_EquipInspectionActivity extends ActivityBase implements
 
         if(_CorpID != null){
             String currentLastIdx = String.valueOf(mPageIndex * mPageSize);
-            SoapUtils.getInspectionPlan(this, _CorpID, currentLastIdx, new SoapListener() {
+            SoapUtils.getInspectionPlan(this, _CorpID,_DeptID,_TypeID, currentLastIdx, new SoapListener() {
                 @Override
                 public void onSuccess(int statusCode, SoapObject object) {
                     dismissLoadingDialog();

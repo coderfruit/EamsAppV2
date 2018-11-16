@@ -11,37 +11,30 @@
         android:layout_height="wrap_content"
         />
 
+    <!--用户归属工厂-->
     <RelativeLayout
         android:id="@+id/mRL_UserCorp"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:background="@drawable/selector_linear_layout_item_white">
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/factory_32" />
-
         <TextView
             android:id="@+id/mTv_UserCorp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="60dp"
+            android:layout_marginLeft="40dp"
+            android:layout_alignParentLeft="true"
             android:hint="用户归属工厂"
             android:textColor="@color/gray3"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:layout_marginRight="10dp"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="16dp"
+            android:layout_toRightOf="@+id/mTv_UserCorp"
             android:src="@drawable/item_signature_iv_menu_defaul" />
 
         <View
@@ -50,7 +43,37 @@
             android:layout_height="0.5dp"
             android:background="@color/white6"
             />
+
+        <ImageView
+            android:id="@+id/mIv_Dept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="40dp"
+            android:src="@drawable/item_signature_iv_menu_defaul" />
+
+        <TextView
+            android:id="@+id/mTv_Dept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/mIv_Dept"
+            android:hint="部门"
+            android:textColor="@color/gray3"
+            android:textSize="14sp"
+            android:layout_marginRight="10dp"/>
+
+        <View
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/white6"
+            />
     </RelativeLayout>
+
+
+
     <View
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"

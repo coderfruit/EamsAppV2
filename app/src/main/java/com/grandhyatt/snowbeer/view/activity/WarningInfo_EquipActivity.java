@@ -19,9 +19,11 @@ import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.entity.CorporationEntity;
+import com.grandhyatt.snowbeer.entity.DepartmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
 import com.grandhyatt.snowbeer.entity.WarningInfoCountEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
+import com.grandhyatt.snowbeer.network.result.DepartmentResult;
 import com.grandhyatt.snowbeer.network.result.EquipmentResult;
 import com.grandhyatt.snowbeer.network.result.WarningInfoCountResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
@@ -76,6 +78,22 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
     Badge qBv_mBt_EquipSpareReplace;
     Badge qBv_mBt_EquipRepairEx;
 
+    List<DepartmentEntity> _DepartmentList;        //设备对应的部门信息
+    List<String> _DeptNamelist = new ArrayList<>();//部门名称列表
+    DepartmentEntity _SelectedDept = null;         //选中的部门对象
+    @BindView(R.id.mTv_Dept)
+    TextView mTv_Dept;
+
+    CorporationEntity _SelectedCorp;                //选中的组织机构
+
+    List<DepartmentEntity> _EquipmentTypeList;        //设备对应的设备类型
+    List<String> _EquipmentTypeNamelist = new ArrayList<>();//设备类型名称列表
+    DepartmentEntity _SelectedEquipmentType = null;         //选中的设备类型对象
+
+    @BindView(R.id.mTv_EquipType)
+    TextView mTv_EquipType;
+    @BindView(R.id.mBtn_Reset)
+    Button mBtn_Reset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +149,9 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
         qBv_mBt_EquipInspection = new QBadgeView(this).bindTarget(mBt_EquipInspection);
         qBv_mBt_EquipSpareReplace = new QBadgeView(this).bindTarget(mBt_EquipSpareReplace);
         qBv_mBt_EquipRepairEx = new QBadgeView(this).bindTarget(mBt_EquipRepairEx);
+
+        //设备类型
+        getEquipmentType();
     }
 
     /**
@@ -199,6 +220,12 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
                 CorporationEntity corp = getCheckedCorporationEntity();
                 Intent intent = new Intent(WarningInfo_EquipActivity.this, WarningInfo_EquipRepairActivity.class);
                 intent.putExtra("corpID", corp.getID());
+                if(_SelectedDept != null) {
+                    intent.putExtra("deptID", _SelectedDept.getID());
+                }
+                if(_SelectedEquipmentType != null) {
+                    intent.putExtra("typeID", _SelectedEquipmentType.getID());
+                }
                 startActivity(intent);
             }
         });
@@ -208,6 +235,12 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
                 CorporationEntity corp = getCheckedCorporationEntity();
                 Intent intent = new Intent(WarningInfo_EquipActivity.this, WarningInfo_EquipMaintenActivity.class);
                 intent.putExtra("corpID", corp.getID());
+                if(_SelectedDept != null) {
+                    intent.putExtra("deptID", _SelectedDept.getID());
+                }
+                if(_SelectedEquipmentType != null) {
+                    intent.putExtra("typeID", _SelectedEquipmentType.getID());
+                }
                 startActivity(intent);
             }
         });
@@ -217,6 +250,12 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
                 CorporationEntity corp = getCheckedCorporationEntity();
                 Intent intent = new Intent(WarningInfo_EquipActivity.this, WarningInfo_EquipInspectionActivity.class);
                 intent.putExtra("corpID", corp.getID());
+                if(_SelectedDept != null) {
+                    intent.putExtra("deptID", _SelectedDept.getID());
+                }
+                if(_SelectedEquipmentType != null) {
+                    intent.putExtra("typeID", _SelectedEquipmentType.getID());
+                }
                 startActivity(intent);
             }
         });
@@ -226,6 +265,12 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
                 CorporationEntity corp = getCheckedCorporationEntity();
                 Intent intent = new Intent(WarningInfo_EquipActivity.this, WarningInfo_EquipSpareReplaceActivity.class);
                 intent.putExtra("corpID", corp.getID());
+                if(_SelectedDept != null) {
+                    intent.putExtra("deptID", _SelectedDept.getID());
+                }
+                if(_SelectedEquipmentType != null) {
+                    intent.putExtra("typeID", _SelectedEquipmentType.getID());
+                }
                 startActivity(intent);
             }
         });
@@ -235,6 +280,12 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
                 CorporationEntity corp = getCheckedCorporationEntity();
                 Intent intent = new Intent(WarningInfo_EquipActivity.this, WarningInfo_EquipRepairExActivity.class);
                 intent.putExtra("corpID", corp.getID());
+                if(_SelectedDept != null) {
+                    intent.putExtra("deptID", _SelectedDept.getID());
+                }
+                if(_SelectedEquipmentType != null) {
+                    intent.putExtra("typeID", _SelectedEquipmentType.getID());
+                }
                 startActivity(intent);
             }
         });
@@ -246,10 +297,28 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
             }
         });
 
-        mRL_UserCorp.setOnClickListener(new View.OnClickListener() {
+        mTv_Dept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showUserCorp();
+                showDept();
+            }
+        });
+
+        mTv_EquipType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEquipmentType();
+            }
+        });
+
+        mBtn_Reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTv_Dept.setText("部门");
+                mTv_EquipType.setText("设备类型");
+                _SelectedDept = null;
+                _SelectedEquipmentType = null;
+                requestNetworkData();
             }
         });
 
@@ -277,10 +346,18 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
         }else{
             corp = SPUtils.getFirstLastLoginUserCorporations(WarningInfo_EquipActivity.this);
         }
+        String deptID = null;
+        if(_SelectedDept != null){
+            deptID = _SelectedDept.getID();
+        }
+        String equipTypeID = null;
+        if(_SelectedEquipmentType != null){
+            equipTypeID = _SelectedEquipmentType.getID();
+        }
 
         showLogingDialog();
 
-        SoapUtils.getWarningInfoCount(WarningInfo_EquipActivity.this, corp.getID(),
+        SoapUtils.getWarningInfoCount(WarningInfo_EquipActivity.this, corp.getID(),deptID,equipTypeID,
                 true, true, true, true, true, false, false, false, false,false, new SoapListener() {
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
@@ -376,8 +453,9 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
             showSelectDialog("组织机构列表", corpName, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    CorporationEntity corp = corpList.get(which);
-                    mTv_UserCorp.setText(corp.getCorporationName());
+                    _SelectedCorp = corpList.get(which);
+                    mTv_UserCorp.setText(_SelectedCorp.getCorporationName());
+                    getDepartmentInfo(_SelectedCorp.getID());
                     requestNetworkData();
                 }
             });
@@ -396,4 +474,181 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
         return corp;
     }
 
+    private void showDept(){
+
+        if (_DepartmentList == null || _DepartmentList.size() == 0) {
+            if (_SelectedCorp != null) {
+                getDepartmentInfo(_SelectedCorp.getID());
+            } else {
+                CorporationEntity corpEntity = SPUtils.getFirstLastLoginUserCorporations(this);
+                if (corpEntity != null) {
+                    getDepartmentInfo(corpEntity.getID());
+                }
+            }
+        }
+        if (_DeptNamelist != null && _DeptNamelist.size() > 0) {
+            showSelectDialog("部门列表",_DeptNamelist,new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    _SelectedDept = _DepartmentList.get(which);
+                    mTv_Dept.setText(_SelectedDept.getDepartmentName());
+                    requestNetworkData();
+                }
+            });
+        }else{
+            ToastUtils.showToast(getApplicationContext(),"没有获取到部门信息");
+        }
+    }
+
+    /**
+     * 获取组织机构下的部门信息
+     *
+     * @param corporationID
+     */
+    private void getDepartmentInfo(String corporationID) {
+        SoapUtils.getDepartment(WarningInfo_EquipActivity.this, corporationID, new SoapListener() {
+            @Override
+            public void onSuccess(int statusCode, SoapObject object) {
+                //dismissLoadingDialog();
+                if (object == null) {
+                    ToastUtils.showLongToast(WarningInfo_EquipActivity.this, getString(R.string.submit_soap_result_err1));
+                    return;
+                }
+                //判断接口连接是否成功
+                if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                    ToastUtils.showLongToast(WarningInfo_EquipActivity.this, getString(R.string.submit_soap_result_err2));
+                    return;
+                }
+                //接口返回信息正常
+                String strData = object.getPropertyAsString(0);
+                DepartmentResult result = new Gson().fromJson(strData, DepartmentResult.class);
+                //校验接口返回代码
+                if (result == null) {
+                    ToastUtils.showLongToast(WarningInfo_EquipActivity.this, getString(R.string.submit_soap_result_err3));
+                    return;
+                } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                    ToastUtils.showLongToast(WarningInfo_EquipActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
+                    return;
+                }
+                List<DepartmentEntity> data = result.getData();
+                //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
+                if (data == null || data.size() == 0) {
+
+                    _DepartmentList = null;
+                    _DeptNamelist = new ArrayList<>();
+                    mTv_Dept.setText("部门");
+                    _SelectedDept = null;
+
+                    ToastUtils.showToast(WarningInfo_EquipActivity.this, "没有获取到部门信息");
+                    return;
+                } else {
+                    _DepartmentList = data;
+                    _DeptNamelist = new ArrayList<>();
+                    bindDepart(_DepartmentList);
+                    mTv_Dept.setText("部门");
+                    _SelectedDept = null;
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, String content, Throwable error) {
+                //dismissLoadingDialog();
+                ToastUtils.showToast(WarningInfo_EquipActivity.this, getString(R.string.submit_soap_result_err5, error));
+            }
+
+            @Override
+            public void onFailure(int statusCode, SoapFault fault) {
+                // dismissLoadingDialog();
+                ToastUtils.showToast(WarningInfo_EquipActivity.this, getString(R.string.submit_soap_result_err4, fault));
+            }
+        });
+
+    }
+
+    /**
+     * 部门下拉列表数据源赋值
+     *
+     * @param dptList
+     */
+    private void bindDepart(List<DepartmentEntity> dptList) {
+
+        for (DepartmentEntity item : dptList) {
+            String value = item.getDepartmentName();
+            _DeptNamelist.add(value);
+        }
+    }
+
+    private void getEquipmentType() {
+        SoapUtils.getEquipmentType(WarningInfo_EquipActivity.this, new SoapListener() {
+            @Override
+            public void onSuccess(int statusCode, SoapObject object) {
+                //dismissLoadingDialog();
+                if (object == null) {
+                    ToastUtils.showLongToast(WarningInfo_EquipActivity.this, getString(R.string.submit_soap_result_err1));
+                    return;
+                }
+                //判断接口连接是否成功
+                if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                    ToastUtils.showLongToast(WarningInfo_EquipActivity.this, getString(R.string.submit_soap_result_err2));
+                    return;
+                }
+                //接口返回信息正常
+                String strData = object.getPropertyAsString(0);
+                DepartmentResult result = new Gson().fromJson(strData, DepartmentResult.class);
+                //校验接口返回代码
+                if (result == null) {
+                    ToastUtils.showLongToast(WarningInfo_EquipActivity.this, getString(R.string.submit_soap_result_err3));
+                    return;
+                } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                    ToastUtils.showLongToast(WarningInfo_EquipActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
+                    return;
+                }
+                List<DepartmentEntity> data = result.getData();
+                //当前页面索引大于或等于总页数时,设置SmartRefreshLayout 完成加载并标记没有更多数据
+                if (data == null || data.size() == 0) {
+                    ToastUtils.showToast(WarningInfo_EquipActivity.this, "没有获取到部门信息");
+                    return;
+                } else {
+                    _EquipmentTypeList = data;
+
+                    bindEquipmentType(_EquipmentTypeList);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, String content, Throwable error) {
+                //dismissLoadingDialog();
+                ToastUtils.showToast(WarningInfo_EquipActivity.this, getString(R.string.submit_soap_result_err5, error));
+            }
+
+            @Override
+            public void onFailure(int statusCode, SoapFault fault) {
+                //dismissLoadingDialog();
+                ToastUtils.showToast(WarningInfo_EquipActivity.this, getString(R.string.submit_soap_result_err4, fault));
+            }
+        });
+    }
+
+    private void bindEquipmentType(List<DepartmentEntity> equpmentTypeList) {
+
+        for (DepartmentEntity item : equpmentTypeList) {
+            String value = item.getDepartmentName();
+            _EquipmentTypeNamelist.add(value);
+        }
+    }
+
+    private void showEquipmentType() {
+        if(_EquipmentTypeNamelist != null && _EquipmentTypeNamelist.size() > 0) {
+            showSelectDialog("设备类型列表", _EquipmentTypeNamelist, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    _SelectedEquipmentType = _EquipmentTypeList.get(which);
+                    mTv_EquipType.setText(_SelectedEquipmentType.getDepartmentName());
+                    requestNetworkData();
+                }
+            });
+        }else{
+            ToastUtils.showToast(getApplicationContext(),"没有获取到设备类型信息");
+        }
+    }
 }

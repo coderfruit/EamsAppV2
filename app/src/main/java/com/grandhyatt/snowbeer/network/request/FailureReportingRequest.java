@@ -24,10 +24,18 @@ public class FailureReportingRequest {
     private String ReportUser;
     private String CorpID;      //报修信息所属工厂
     private String OperateUser;
+    private String DeptID;     //所属部门
 
     public FailureReportingRequest() {
     }
 
+    public String getDeptID() {
+        return DeptID;
+    }
+
+    public void setDeptID(String deptID) {
+        DeptID = deptID;
+    }
 
     public String getCorpID() {
         return CorpID;
