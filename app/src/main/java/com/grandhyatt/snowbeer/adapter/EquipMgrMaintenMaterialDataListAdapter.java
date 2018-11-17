@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.entity.EquipmentMaterialEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentUseSpareEntity;
+import com.grandhyatt.snowbeer.entity.InspectionPlanEntity;
 
 import java.util.List;
 
@@ -102,6 +103,11 @@ public class EquipMgrMaintenMaterialDataListAdapter extends BaseAdapter {
         private TextView mTv_Price;
 
 
+    }
+    public void loadMore(List<EquipmentMaterialEntity> data)
+    {
+        mDataList.addAll(data);
+        notifyDataSetChanged();
     }
 
 }

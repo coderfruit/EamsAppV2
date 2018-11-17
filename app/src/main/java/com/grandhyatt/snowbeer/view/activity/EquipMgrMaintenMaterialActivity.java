@@ -31,6 +31,7 @@ import com.grandhyatt.snowbeer.network.result.EquipmentResult;
 import com.grandhyatt.snowbeer.network.result.EquipmentUseSpareResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
+import com.grandhyatt.snowbeer.utils.PopupWindowUtil;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
 
 import org.ksoap2.SoapFault;
@@ -130,7 +131,44 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
     @Override
     public void initView() {
         mToolBar.setTitle("选择保养用机物料");
+
+
         getEquipmentInfo(_EquipID);
+        mToolBar.setMenuText("...");
+        mToolBar.showMenuButton();
+        mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<String> list = new ArrayList<String>();
+                list.add("添加物资");
+                final PopupWindowUtil popupWindow = new PopupWindowUtil(EquipMgrMaintenMaterialActivity.this, list);
+                popupWindow.setItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        popupWindow.dismiss();
+                        switch (position){
+                            case 0:
+//                                String _EquipID;//传入的设备ID
+//                                String _EquipCode;//传入的设备Cpde
+//                                String _EquipName;//传入的设备Name
+//                                String _CorpID; //传入的组织机构ID
+                                Intent intent1 = new Intent(EquipMgrMaintenMaterialActivity.this, EquipMgrMaintenMaterial_AddActivity.class);
+                                intent1.putExtra("equipID", _EquipID);
+                                intent1.putExtra("equipCode", _Equipment.getEquipmentCode());
+                                intent1.putExtra("equipName", _Equipment.getEquipmentName());
+                                intent1.putExtra("corpID", _Equipment.getCorporationID());
+                               intent1 .putExtra("corpName", _Equipment.getCorporationName());
+                                startActivity(intent1);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+                //根据后面的数字 手动调节窗口的宽度
+                popupWindow.show(v, 3);
+            }
+        });
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 

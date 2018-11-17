@@ -137,8 +137,8 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
     TextView mTv_materialUnit;
     @BindView(R.id.mEt_materialsum)
     EditText mEt_materialsum;
-    @BindView(R.id.mEt_materialprice)
-    EditText mEt_materialprice;
+//    @BindView(R.id.mEt_materialprice)
+//    EditText mEt_materialprice;
     @BindView(R.id.mLl_Plan)
     LinearLayout mLl_Plan;//保养计划容器
 
@@ -228,7 +228,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             mTv_materialName.setText("");
             mTv_materialstand.setText("");
             mTv_materialUnit.setText("");
-            mEt_materialprice.setText("0");
+          //  mEt_materialprice.setText("0");
             mEt_materialsum.setText("0");
             //根据设备id获取设备信息
             getEquipmentInfoByID(mTv_EquipID);
@@ -511,7 +511,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                             mTv_materialName.setText("");
                             mTv_materialstand.setText("");
                             mTv_materialUnit.setText("");
-                            mEt_materialprice.setText("0");
+                         //   mEt_materialprice.setText("0");
                             mEt_materialsum.setText("0");
                             lL_material.setVisibility(View.GONE);
 
@@ -840,7 +840,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                         mTv_materialName.setText(ma.getMaterialName());
                         mTv_materialstand.setText(ma.getStandard());
                         mTv_materialUnit.setText(ma.getUseUnit());
-                        mEt_materialprice.setText(ma.getUsePrice());
+                      //  mEt_materialprice.setText(ma.getUsePrice());
                         mEt_materialsum.setText(ma.getUseCount());
                     } else {
                         lL_material.setVisibility(View.GONE);
@@ -942,14 +942,14 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     mTv_materialName.setText(_CheckMaterialList.get(0).getMaterialName());
                     mTv_materialstand.setText(_CheckMaterialList.get(0).getStandard());
                     mTv_materialUnit.setText(_CheckMaterialList.get(0).getUnit());
-                    mEt_materialprice.setText(_CheckMaterialList.get(0).getPrice());
+                 //   mEt_materialprice.setText(_CheckMaterialList.get(0).getPrice());
                     mEt_materialsum.setText("");
 
                 } else {
                     mTv_materialName.setText("");
                     mTv_materialstand.setText("");
                     mTv_materialUnit.setText("");
-                    mEt_materialprice.setText("");
+                   // mEt_materialprice.setText("");
                     mEt_materialsum.setText("");
                 }
 
@@ -1098,7 +1098,7 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
         String user = mEt_User.getText().toString().trim();
         String phone = mEt_money.getText().toString().trim();
         String useCout = mEt_materialsum.getText().toString().trim();
-        String mprice = mEt_materialprice.getText().toString().trim();
+        String mprice ="0";
 
 
         //验证提交数据
@@ -1167,11 +1167,11 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                     }
                 }
             }
-            if (mprice == null || mprice.length() == 0) {
-                dismissLoadingDialog();
-                ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的单价！");
-                return;
-            }
+//            if (mprice == null || mprice.length() == 0) {
+//                dismissLoadingDialog();
+//                ToastUtils.showLongToast(MaintenReportActivity.this, "请确定要保养的设备选择物资的单价！");
+//                return;
+//            }
         }
         mBtn_Submit.setEnabled(false);
         //提交数据
