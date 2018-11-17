@@ -11,6 +11,7 @@ public class RepairmentBillEntity implements Serializable {
 
     private String ID;
     private String CorporationID;
+    private String CorporationName;
     private String EquipmentID;
     private String EquipmentCode;
     private String EquipmentName;
@@ -35,6 +36,14 @@ public class RepairmentBillEntity implements Serializable {
 
     public RepairmentBillEntity() {
 
+    }
+
+    public String getCorporationName() {
+        return CorporationName;
+    }
+
+    public void setCorporationName(String corporationName) {
+        CorporationName = corporationName;
     }
 
     public String getEquipmentCode() {

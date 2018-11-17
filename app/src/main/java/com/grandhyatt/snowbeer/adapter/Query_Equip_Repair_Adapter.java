@@ -52,6 +52,7 @@ public class Query_Equip_Repair_Adapter  extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_item_query_equip_repair_info, null);
 
             mViewHolder.mTv_ID = convertView.findViewById(R.id.mTv_ID);
+            mViewHolder.mTv_CorpName = convertView.findViewById(R.id.mTv_CorpName);
             mViewHolder.mTv_EquipName = convertView.findViewById(R.id.mTv_EquipName);
             mViewHolder.mTv_EquipCode = convertView.findViewById(R.id.mTv_EquipCode);
             mViewHolder.mTv_RepairmentLevel = convertView.findViewById(R.id.mTv_RepairmentLevel);
@@ -75,9 +76,9 @@ public class Query_Equip_Repair_Adapter  extends BaseAdapter {
         RepairmentBillEntity dataModel = mDataList.get(position);
         if (dataModel != null) {
             mViewHolder.mTv_ID.setText(dataModel.getID());
+            mViewHolder.mTv_CorpName.setText(dataModel.getCorporationName());
             mViewHolder.mTv_EquipName.setText(dataModel.getEquipmentName());
             mViewHolder.mTv_EquipCode.setText(dataModel.getEquipmentCode());
-
             mViewHolder.mTv_RepairmentLevel.setText(dataModel.getRepairmentLevel());
             mViewHolder.mTv_BillNo.setText(dataModel.getRepairmentBillNO());
             mViewHolder.mTv_SpareCount.setText(dataModel.getSpareCount());
@@ -95,6 +96,7 @@ public class Query_Equip_Repair_Adapter  extends BaseAdapter {
 
     public static class ViewHolder {
         private TextView mTv_ID;
+        private TextView mTv_CorpName;
         private TextView mTv_EquipName;
         private TextView mTv_EquipCode;
         private TextView mTv_RepairmentLevel;

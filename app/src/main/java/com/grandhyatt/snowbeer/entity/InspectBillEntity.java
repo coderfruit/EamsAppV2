@@ -12,6 +12,7 @@ public class InspectBillEntity implements Serializable {
 
     private String ID;
     private String CorporationID;
+    private String CorporationName;
     private String InspectionBillNO;
     private String InspectionDate;
     private String EquipmentID;
@@ -31,6 +32,14 @@ public class InspectBillEntity implements Serializable {
     private String NextInspectionDate;//下次检验日期
 
     public InspectBillEntity() {
+    }
+
+    public String getCorporationName() {
+        return CorporationName;
+    }
+
+    public void setCorporationName(String corporationName) {
+        CorporationName = corporationName;
     }
 
     public String getEquipmentCode() {

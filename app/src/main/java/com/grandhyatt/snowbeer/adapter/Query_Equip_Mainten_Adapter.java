@@ -52,6 +52,7 @@ public class Query_Equip_Mainten_Adapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.listview_item_query_equip_mainten_info, null);
 
             mViewHolder.mTv_ID = convertView.findViewById(R.id.mTv_ID);
+            mViewHolder.mTv_CorpName = convertView.findViewById(R.id.mTv_CorpName);
             mViewHolder.mTv_EquipName = convertView.findViewById(R.id.mTv_EquipName);
             mViewHolder.mTv_EquipCode = convertView.findViewById(R.id.mTv_EquipCode);
             mViewHolder.mTv_MaintenanceLevel = convertView.findViewById(R.id.mTv_MaintenanceLevel);
@@ -72,6 +73,7 @@ public class Query_Equip_Mainten_Adapter extends BaseAdapter {
         MaintenanceBillEntity dataModel = mDataList.get(position);
         if (dataModel != null) {
             mViewHolder.mTv_ID.setText(dataModel.getID());
+            mViewHolder.mTv_CorpName.setText(dataModel.getCorporationName());
             mViewHolder.mTv_EquipName.setText(dataModel.getEquipmentName());
             mViewHolder.mTv_EquipCode.setText(dataModel.getEquipmentCode());
             mViewHolder.mTv_MaintenanceLevel.setText(dataModel.getMaintenanceLevel());
@@ -88,6 +90,7 @@ public class Query_Equip_Mainten_Adapter extends BaseAdapter {
 
     public static class ViewHolder {
         private TextView mTv_ID;
+        private TextView mTv_CorpName;
         private TextView mTv_EquipName;
         private TextView mTv_EquipCode;
         private TextView mTv_MaintenanceLevel;
