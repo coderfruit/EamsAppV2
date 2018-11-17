@@ -1479,8 +1479,8 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                     if (file.getAttachmentType().equals("图片")) {
                         try {
                             //压缩图片
-                            Bitmap bmp = ImageUtils.Bytes2Bimap(btFile);
-                            bmp = ImageUtils.compressScale(bmp);
+                            Bitmap bmp = ImageUtils.compressSize(btFile);
+                            //bmp = ImageUtils.compressScale(bmp);
                             byte[] btFileNew = ImageUtils.Bitmap2Byte(bmp);
 
                             CommonUtils.encodeBase64ToFile(btFileNew, filePath);
