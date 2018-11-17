@@ -75,7 +75,7 @@ public class SearchBarLayout extends RelativeLayout {
                 setBarcode(scanResult);
 
                 //执行按钮点击事件
-                mBT_Search.performClick();
+                //mBT_Search.performClick();
             }
         };
     }

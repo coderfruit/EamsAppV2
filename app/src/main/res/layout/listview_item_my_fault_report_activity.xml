@@ -115,7 +115,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
-            android:layout_weight="6"
+            android:layout_weight="7"
             android:text="2018-12-01 12:00"
             android:textColor="@color/gray5"
             android:textSize="12sp" />
@@ -132,7 +132,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="12dp"
-            android:layout_weight="4"
+            android:layout_weight="3"
             android:text="老吴"
             android:textColor="@color/gray5"
             android:textSize="12sp" />
@@ -157,7 +157,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
-            android:layout_weight="6"
+            android:layout_weight="7"
             android:text="2018-12-01 12:00"
             android:textColor="@color/gray5"
             android:textSize="12sp" />
@@ -174,7 +174,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="12dp"
-            android:layout_weight="4"
+            android:layout_weight="3"
             android:text="老吴"
             android:textColor="@color/gray5"
             android:textSize="12sp" />

@@ -567,7 +567,6 @@ public class RepairmentExReportActivity extends ActivityBase implements IActivit
             showLogingDialog();
             //根据条码内容检索设备信息
             getEquipmentInfo(barcode);
-            dismissLoadingDialog();
         }
     }
 
