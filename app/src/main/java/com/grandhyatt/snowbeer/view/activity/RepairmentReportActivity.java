@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,6 +90,7 @@ import static com.grandhyatt.snowbeer.utils.CommonUtils.compareDateMinutes;
  */
 public class RepairmentReportActivity extends ActivityBase implements IActivityBase, View.OnClickListener {
 
+
     @BindView(R.id.mToolBar)
     ToolBarLayout mToolBar;
     @BindView(R.id.mSearchBar)
@@ -145,7 +147,8 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
     LinearLayout mLl_Plan;//维修计划信息容器
     @BindView(R.id.mLl_Spare)
     LinearLayout mLl_Spare;//备件信息容器
-
+    @BindView(R.id.rRL_bodyView)
+    RelativeLayout rRL_bodyView;
     public static final int CHECK_PLAN_OK = 111;//选择执行计划返回码
     public static final int CHECK_SPARE_OK = 112;//选择维修用备件
 
@@ -358,13 +361,7 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-//            case R.id.mBtn_Login:
-//
-//                break;
-            default:
-                break;
-        }
+
     }
 
     @Override
@@ -519,20 +516,14 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             }
         });
 
-//        经测试不好用 20181115 0853
-//        mEt_User.setOnFocusChangeListener(new android.view.View.
-//                OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if (hasFocus) {
-//                    // 此处为得到焦点时的处理内容
-//                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-//                } else {
-//                    // 此处为失去焦点时的处理内容
-//                    getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-//                }
-//            }
-//        });
+        rRL_bodyView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              bodyClick(v);
+
+            }
+        });
+
         //检索事件
         mSearchBar.setSearchButtonOnClickListener(new View.OnClickListener() {
             @Override
@@ -1487,5 +1478,15 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
                 mBtn_Submit.setEnabled(true);
             }
         });
+    }
+
+    /**
+     * 点击空白处关闭虚拟键盘
+     * @param v
+     */
+    private void bodyClick(View v) {
+        InputMethodManager imm = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 }

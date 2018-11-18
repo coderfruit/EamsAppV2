@@ -30,6 +30,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -115,7 +116,8 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
 
     BroadcastReceiver mReceiver;
     IntentFilter mFilter;
-
+    @BindView(R.id.rRL_bodyView)
+    LinearLayout rRL_bodyView;
     @BindView(R.id.mTv_EquipName)
     TextView mTv_EquipName;
     @BindView(R.id.mTv_EquipCorp)
@@ -637,7 +639,13 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
                 return false;
             }
         });
+        rRL_bodyView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bodyClick(v);
 
+            }
+        });
         //图片浏览器
         zz_image_box_add_mode.setOnImageClickListener(new ZzImageBox.OnImageClickListener() {
 
@@ -1664,7 +1672,15 @@ public class FaultReportActivity extends com.grandhyatt.snowbeer.view.activity.A
         }
 
     }
-
+    /**
+     * 点击空白处关闭虚拟键盘
+     * @param v
+     */
+    private void bodyClick(View v) {
+        InputMethodManager imm = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
     class AudioAnimationHandler extends Handler {
         ImageButton imageButton;
         //判断是左对话框还是右对话框

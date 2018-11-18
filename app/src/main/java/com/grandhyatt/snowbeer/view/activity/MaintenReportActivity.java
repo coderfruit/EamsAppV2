@@ -2,6 +2,7 @@ package com.grandhyatt.snowbeer.view.activity;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -13,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,7 +92,8 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
     ToolBarLayout mToolBar;
     @BindView(R.id.mSearchBar)
     SearchBarLayout mSearchBar;
-
+    @BindView(R.id.rRL_bodyView)
+    LinearLayout rRL_bodyView;
     @BindView(R.id.mTv_EquipName)
     TextView mTv_EquipName;
     @BindView(R.id.mTv_EquipCorp)
@@ -398,7 +402,13 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             }
         });
 
+        rRL_bodyView.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                bodyClick(v);
 
+                                            }
+                                        });
         //检索事件
         mSearchBar.setSearchButtonOnClickListener(new View.OnClickListener() {
             @Override
@@ -1272,5 +1282,14 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
                 mBtn_Submit.setEnabled(true);
             }
         });
+    }
+    /**
+     * 点击空白处关闭虚拟键盘
+     * @param v
+     */
+    private void bodyClick(View v) {
+        InputMethodManager imm = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 }

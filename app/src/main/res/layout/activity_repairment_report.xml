@@ -21,11 +21,21 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+      <RelativeLayout
+          android:id="@+id/rRL_bodyView"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:clickable="true"
+          >
+
 
         <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+
+            >
 
             <View
                 android:layout_width="match_parent"
@@ -591,7 +601,7 @@
 
 
         </LinearLayout>
-
+      </RelativeLayout>
     </ScrollView>
 
 
