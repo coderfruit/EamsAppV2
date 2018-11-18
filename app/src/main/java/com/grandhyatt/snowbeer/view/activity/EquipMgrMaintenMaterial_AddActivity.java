@@ -1,14 +1,17 @@
 package com.grandhyatt.snowbeer.view.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,11 +27,17 @@ import com.grandhyatt.snowbeer.entity.DepartmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentMaterialEntity;
 import com.grandhyatt.snowbeer.entity.InspectBillEntity;
 import com.grandhyatt.snowbeer.entity.InspectionPlanEntity;
+import com.grandhyatt.snowbeer.entity.MaintenanceBillEntity;
+import com.grandhyatt.snowbeer.entity.MaintenanceItemEntity;
+import com.grandhyatt.snowbeer.entity.MaintenancePlanEntity;
+import com.grandhyatt.snowbeer.entity.RepairmentPlanEntity;
 import com.grandhyatt.snowbeer.entity.SpareInEquipmentEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
 import com.grandhyatt.snowbeer.network.result.EquipmentMaterialResult;
 import com.grandhyatt.snowbeer.network.result.InspectBillsResult;
+import com.grandhyatt.snowbeer.network.result.MaintenanceBillResult;
 import com.grandhyatt.snowbeer.network.result.SpareInEquipmentResult;
+import com.grandhyatt.snowbeer.network.result.StringResult;
 import com.grandhyatt.snowbeer.soapNetWork.SoapHttpStatus;
 import com.grandhyatt.snowbeer.soapNetWork.SoapListener;
 import com.grandhyatt.snowbeer.view.ToolBarLayout;
@@ -46,6 +55,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.grandhyatt.snowbeer.utils.CommonUtils.compareDateMinutes;
+
 /**
  * 设备保养用机物料添加页面
  * Created by ycm on 2018/11/14.
@@ -60,7 +71,8 @@ public class EquipMgrMaintenMaterial_AddActivity extends ActivityBase implements
     @BindView(R.id.mRefreshLayout)
     SmartRefreshLayout mRefreshLayout;
 
-
+    @BindView(R.id.rRL_bodyView)
+    LinearLayout rRL_bodyView;
     @BindView(R.id.mTv_EquipCorp)
     TextView mTv_EquipCorp;
     @BindView(R.id.mTv_EquipName)
@@ -84,7 +96,7 @@ public class EquipMgrMaintenMaterial_AddActivity extends ActivityBase implements
     private int mPageSize = 10;
     //加载类型
     private boolean mIsLoadMore = false;
-    int _CheckCnt = -1;//用户选中的行数
+    int _CheckCnt = 0;//用户选中的行数
     int _checkCount = 0;//选择记录数
     String _EquipID;//传入的设备ID
     String _EquipCode;//传入的设备Cpde
@@ -124,14 +136,24 @@ public class EquipMgrMaintenMaterial_AddActivity extends ActivityBase implements
         //去除状态栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        mToolBar.setTitle("设备保养润滑-添加物资");
+        mToolBar.setTitle("设备保养润滑-添加机物料");
         _SpareCond = mEt_SpareCond.getText().toString().trim();
-        mLv_DataList.setVisibility(View.GONE);
+        mTv_EquipCorp.setText(_CorpName);
+        mTv_EquipCode.setText(_EquipCode);
+        mTv_EquipName.setText(_EquipName);
+        requestNetworkDataByMaterial(_CorpID,_SpareCond);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override
     public void bindEvent() {
+        rRL_bodyView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bodyClick(v);
+
+            }
+        });
         mBt_Search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,16 +172,8 @@ public class EquipMgrMaintenMaterial_AddActivity extends ActivityBase implements
                     return;
                 }
 
+                submitBill();
 
-                //数据是使用Intent返回
-                Intent intent = new Intent();
-
-                //把返回数据存入Intent
-                intent.putExtra("_IsOk", 1);
-                //设置返回数据
-                EquipMgrMaintenMaterial_AddActivity.this.setResult(RESULT_OK, intent);
-                //关闭Activity
-                EquipMgrMaintenMaterial_AddActivity.this.finish();
 
             }
         });
@@ -314,6 +328,100 @@ public class EquipMgrMaintenMaterial_AddActivity extends ActivityBase implements
                 ToastUtils.showToast(EquipMgrMaintenMaterial_AddActivity.this, getString(R.string.submit_soap_result_err4, fault));
             }
         });
+    }
+
+    private void submitBill() {
+
+
+        if(adapter_MM==null ) {
+            ToastUtils.showLongToast(EquipMgrMaintenMaterial_AddActivity.this, "当前未选择任何机物料，请返回！");
+            return;
+        }
+        else {
+            _CheckEntityList.clear();
+            EquipmentMaterialEntity rpEntity = null;
+            for (int i = 0; i < adapter_MM.getCount(); i++) {
+
+                rpEntity = (EquipmentMaterialEntity) mLv_DataList.getAdapter().getItem(i);
+                if (rpEntity != null) {
+                    if (rpEntity.getIsCheck()) {
+                        _CheckEntityList.add(rpEntity);
+                    }
+                }
+            }
+        }
+        if(_CheckEntityList==null || _CheckEntityList.size()==0){
+            ToastUtils.showLongToast(EquipMgrMaintenMaterial_AddActivity.this, "当前未选择任何机物料，请返回！");
+            return;
+        }
+        showLogingDialog();
+        mBtn_OK.setEnabled(false);
+        //提交数据
+        EquipmentMaterialResult request=new EquipmentMaterialResult();
+
+        request.setData(_CheckEntityList);
+
+        // 提交数据
+        SoapUtils.submitNewEquipMaterialRepairAsync(EquipMgrMaintenMaterial_AddActivity.this, request,_EquipID, new SoapListener() {
+            @Override
+            public void onSuccess(int statusCode, SoapObject object) {
+
+                dismissLoadingDialog();
+                mBtn_OK.setEnabled(false);
+                if (object == null) {
+                    ToastUtils.showLongToast(EquipMgrMaintenMaterial_AddActivity.this, getString(R.string.submit_soap_result_err1));
+                    return;
+                }
+                //判断接口连接是否成功
+                if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                    ToastUtils.showLongToast(EquipMgrMaintenMaterial_AddActivity.this, getString(R.string.submit_soap_result_err2));
+                    return;
+                }
+                //接口返回信息正常
+                String strData = object.getPropertyAsString(0);
+                StringResult result = new Gson().fromJson(strData, StringResult.class);
+                //校验接口返回代码
+                if (result == null) {
+                    ToastUtils.showLongToast(EquipMgrMaintenMaterial_AddActivity.this, getString(R.string.submit_soap_result_err3));
+                    return;
+                } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                    ToastUtils.showLongToast(EquipMgrMaintenMaterial_AddActivity.this, getString(R.string.submit_soap_result_err4, result.msg));
+                    return;
+                }
+
+                //设置返回数据
+                mBtn_OK.setEnabled(true);
+                ToastUtils.showLongToast(EquipMgrMaintenMaterial_AddActivity.this, getString(R.string.activity_maintenance_material_submit_ok));
+                finish();
+
+
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, String content, Throwable error) {
+                dismissLoadingDialog();
+                ToastUtils.showLongToast(EquipMgrMaintenMaterial_AddActivity.this, getString(R.string.activity_maintenance_material_submit_err, error.getMessage()));
+                mBtn_OK.setEnabled(true);
+            }
+
+            @Override
+            public void onFailure(int statusCode, SoapFault fault) {
+                dismissLoadingDialog();
+                ToastUtils.showLongToast(EquipMgrMaintenMaterial_AddActivity.this, getString(R.string.activity_maintenance_material_submit_fail, fault));
+                mBtn_OK.setEnabled(true);
+            }
+        });
+    }
+
+    /**
+     * 点击空白处关闭虚拟键盘
+     * @param v
+     */
+    private void bodyClick(View v) {
+        InputMethodManager imm = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 }
 

@@ -1,7 +1,10 @@
 package com.grandhyatt.snowbeer.view.activity;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -10,8 +13,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.grandhyatt.commonlib.Result;
 import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.SelectDialog;
@@ -19,6 +25,7 @@ import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.R;
 import com.grandhyatt.snowbeer.adapter.EquipMgrMaintenMaterialDataListAdapter;
 import com.grandhyatt.snowbeer.adapter.EquipMgrRepairSpareDataListAdapter;
+import com.grandhyatt.snowbeer.adapter.MaintenancePlanCheckDataListAdapter;
 import com.grandhyatt.snowbeer.entity.DepartmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentMaterialEntity;
@@ -42,6 +49,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.grandhyatt.snowbeer.Consts.CAMERA_BARCODE_SCAN;
 
 /**
  * Created by ycm on 2018/9/20.
@@ -82,7 +91,7 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
     Button mBtn_OK;
     @BindView(R.id.mBt_Search)
     Button mBt_Search;          //搜索
-
+    public static final int ADDMATERIAL = 1;
     //设备对应的部门信息
     List<DepartmentEntity> _DepartmentList;
     //部门名称列表
@@ -140,7 +149,7 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
             @Override
             public void onClick(View v) {
                 List<String> list = new ArrayList<String>();
-                list.add("添加物资");
+                list.add("添加机物料");
                 final PopupWindowUtil popupWindow = new PopupWindowUtil(EquipMgrMaintenMaterialActivity.this, list);
                 popupWindow.setItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -158,7 +167,7 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
                                 intent1.putExtra("equipName", _Equipment.getEquipmentName());
                                 intent1.putExtra("corpID", _Equipment.getCorporationID());
                                intent1 .putExtra("corpName", _Equipment.getCorporationName());
-                                startActivity(intent1);
+                                startActivityForResult(intent1,ADDMATERIAL);
                                 break;
                             default:
                                 break;
@@ -512,17 +521,20 @@ public class EquipMgrMaintenMaterialActivity extends ActivityBase implements IAc
         });
     }
 
-    /**
-     * 部门下拉列表数据源赋值
-     * @param dptList
-     */
-//    private void bindDepart(List<DepartmentEntity> dptList) {
-//
-//        for (DepartmentEntity item : dptList) {
-//            String value = item.getDepartmentName();// + "-" + item.getDepartmentCode();
-//            _DeptNamelist.add(value);
-//        }
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
 
+            case ADDMATERIAL:
+                _SpareCond = mEt_SpareCond.getText().toString();
+                getMaterialInfo(_EquipID,_SpareCond);
+
+                break;
+
+
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
 
 }

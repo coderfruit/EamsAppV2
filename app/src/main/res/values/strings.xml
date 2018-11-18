@@ -106,6 +106,10 @@
     <string name="activity_maintenance_submit_err">保养信息提交异常,%s</string>
     <string name="activity_maintenance_submit_fail">保养信息提交失败,%s</string>
 
+    <string name="activity_maintenance_material_submit_ok">保养机物料信息提交成功</string>
+    <string name="activity_maintenance_material_submit_err">保养机物料信息提交异常,%s</string>
+    <string name="activity_maintenance_material_submit_fail">保养机物料信息提交失败,%s</string>
+
     <string name="activity_inspect_submit_ok">检验信息提交成功</string>
     <string name="activity_inspect_submit_err">检验信息提交异常,%s</string>
     <string name="activity_inspect_submit_fail">检验信息提交失败,%s</string>

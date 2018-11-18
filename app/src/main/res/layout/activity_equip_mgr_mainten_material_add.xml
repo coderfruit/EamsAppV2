@@ -12,9 +12,11 @@
         android:layout_height="wrap_content" />
 
     <LinearLayout
+        android:id="@+id/rRL_bodyView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:clickable="true">
 
         <!-- 设备信息标题 begin-->
         <LinearLayout
@@ -63,11 +65,11 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
+                android:layout_weight="1"
                 android:gravity="left"
                 android:text="设备所属工厂"
                 android:textColor="@color/gray5"
-                android:textSize="14sp"
-                android:layout_weight="1"/>
+                android:textSize="14sp" />
 
             <!-- 设备名称 编码 -->
             <TextView
@@ -76,11 +78,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="设备名称"
                 android:textColor="@color/gray5"
-                android:textSize="14sp"
-                android:layout_weight="1"/>
+                android:textSize="14sp" />
 
 
             <TextView
@@ -89,11 +91,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="设备编码"
                 android:textColor="@color/gray5"
-                android:textSize="14sp"
-                android:layout_weight="1"/>
+                android:textSize="14sp" />
 
 
         </LinearLayout>
@@ -129,117 +131,126 @@
             android:layout_height="0.5dp"
             android:layout_marginLeft="1dp"
             android:background="@color/white6" />
+
+        <!-- 设备维护计划/设备备件信息 end -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:background="@drawable/selector_linear_layout_item_white"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/mEt_SpareCond"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:gravity="center"
-                android:hint="机物料编码/名称"
-                android:src="@drawable/item_signature_iv_menu_defaul"
-                android:textSize="12dp" />
-
-            <Button
-                android:id="@+id/mBt_Search"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="2dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="2dp"
-                android:layout_weight="2"
-                android:background="@drawable/ic_login_button_true"
-                android:text="检索" />
-
-        </LinearLayout>
-        <!-- 设备维护计划/设备备件信息 end -->
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/mRefreshLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="9"
             android:background="@android:color/white"
             app:srlAccentColor="@android:color/white"
             app:srlEnableLoadMore="true"
             app:srlHeaderMaxDragRate="2.5"
             app:srlPrimaryColor="@color/blue_title_bar">
 
+            <com.scwang.smartrefresh.header.WaterDropHeader
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <!--检索-->
-
-
-                <com.scwang.smartrefresh.header.WaterDropHeader
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="35dp"
+                    android:background="@drawable/selector_linear_layout_item_white"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/mEt_SpareCond"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4"
+                        android:gravity="center"
+                        android:hint="机物料编码/名称"
+                        android:src="@drawable/item_signature_iv_menu_defaul"
+                        android:textSize="12dp" />
+
+                    <Button
+                        android:id="@+id/mBt_Search"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_weight="2"
+                        android:background="@drawable/ic_login_button_true"
+                        android:text="检索" />
+
+                </LinearLayout>
+
 
                 <ListView
                     android:id="@+id/mLv_DataList"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:listSelector="@drawable/selector_listview_item"
                     android:choiceMode="multipleChoice"
                     android:divider="@null"
-                    android:dividerHeight="0dp" />
-                <com.scwang.smartrefresh.layout.footer.ClassicsFooter
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:srlClassicsSpinnerStyle="Translate" />
-                <!--确定按钮-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/selector_linear_layout_item_gray"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:dividerHeight="0dp"
+                    android:listSelector="@drawable/selector_listview_item" />
 
-                    <TextView
-                        android:id="@+id/mTv_AllCnt"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:gravity="right"
-                        android:text="共0条"
-                        android:textColor="@color/red3"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/mTv_CheckCnt"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.5"
-                        android:gravity="left"
-                        android:text=""
-                        android:textColor="@color/red3"
-                        android:textStyle="bold" />
-
-                    <Button
-                        android:id="@+id/mBtn_OK"
-                        android:layout_width="0dp"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:background="@drawable/ic_login_button_true"
-                        android:text="确定"
-                        android:textSize="16sp" />
-                </LinearLayout>
 
             </LinearLayout>
+
+            <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:srlClassicsSpinnerStyle="Translate" />
+
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
+        <!--确定按钮-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/selector_linear_layout_item_gray"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/mTv_AllCnt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:gravity="right"
+                android:text="共0条"
+                android:textColor="@color/red3"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/mTv_CheckCnt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:gravity="left"
+                android:text=""
+                android:textColor="@color/red3"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/mBtn_OK"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/ic_login_button_true"
+                android:text="确定"
+                android:textSize="16sp" />
+        </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
-
 
 
 </LinearLayout>

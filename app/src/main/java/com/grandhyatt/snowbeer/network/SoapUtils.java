@@ -8,6 +8,7 @@ import com.grandhyatt.commonlib.utils.StringUtils;
 import com.grandhyatt.snowbeer.App;
 import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.entity.APIHostInfoEntity;
+import com.grandhyatt.snowbeer.entity.EquipmentMaterialEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentUseSpareEntity;
 import com.grandhyatt.snowbeer.entity.InspectBillEntity;
 import com.grandhyatt.snowbeer.entity.MaintenanceBillEntity;
@@ -24,6 +25,7 @@ import com.grandhyatt.snowbeer.network.request.FailureReportingRequest;
 import com.grandhyatt.snowbeer.network.request.LoginRequest;
 import com.grandhyatt.snowbeer.network.request.MaintenReportingRequest;
 import com.grandhyatt.snowbeer.network.request.RepairmentReportingRequest;
+import com.grandhyatt.snowbeer.network.result.EquipmentMaterialResult;
 import com.grandhyatt.snowbeer.network.result.InspectBillResult;
 import com.grandhyatt.snowbeer.network.result.MaintenanceBillResult;
 import com.grandhyatt.snowbeer.network.result.RepairmentEquipmentResult;
@@ -740,6 +742,38 @@ public class SoapUtils {
 
 		String jsonrepaitem = gson1.toJson(rparbillitem);
 		params.put("maintenItem", jsonrepaitem);
+		SoapUtils.getInstance(context).call(methodName, params, callback);
+	}
+
+
+	/**
+	 * 提交保养机物料关联关系信息
+	 * @param context
+	 * @param request
+	 * @param callback
+	 */
+	public static void submitNewEquipMaterialRepairAsync(final Context context, EquipmentMaterialResult  request, String equiID, final SoapListener callback)
+	{
+		final String url = getHostUrl();
+		String methodName = "NewEquipMaterialRepair";
+
+		//String userID = SPUtils.getLastLoginUserID(context);
+		String userName = SPUtils.getLastLoginUserName(context);
+
+		//获取http请求身份验证参数
+		SoapParams params = getAuthHttpRequestHeader(context);
+
+		params.put("userName", userName);
+
+		Gson gson1 = new Gson();
+
+
+
+		List<EquipmentMaterialEntity> rparbillitem = request.getData();
+
+		String jsonrepaitem = gson1.toJson(rparbillitem);
+		params.put("mainten", jsonrepaitem);
+		params.put("equipID",equiID);
 		SoapUtils.getInstance(context).call(methodName, params, callback);
 	}
 
