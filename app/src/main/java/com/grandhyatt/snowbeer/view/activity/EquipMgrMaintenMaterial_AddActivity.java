@@ -110,6 +110,8 @@ public class EquipMgrMaintenMaterial_AddActivity extends ActivityBase implements
         _CorpID = intent.getStringExtra("corpID");
         _CorpName = intent.getStringExtra("corpName");
         initView();
+        bindEvent();
+        mEt_SpareCond.setClickable(false);
     }
 
     @Override
@@ -123,7 +125,8 @@ public class EquipMgrMaintenMaterial_AddActivity extends ActivityBase implements
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mToolBar.setTitle("设备保养润滑-添加物资");
-        _SpareCond = mEt_SpareCond.getText().toString();
+        _SpareCond = mEt_SpareCond.getText().toString().trim();
+        mLv_DataList.setVisibility(View.GONE);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
@@ -134,9 +137,8 @@ public class EquipMgrMaintenMaterial_AddActivity extends ActivityBase implements
             public void onClick(View v) {
                 showLogingDialog();
 
-                _SpareCond = mEt_SpareCond.getText().toString();
-
-//                getSparesInfo(_EquipID, _SelectedDept, _SpareCond);
+                _SpareCond = mEt_SpareCond.getText().toString().trim();
+                requestNetworkDataByMaterial(_CorpID,_SpareCond);
             }
         });
         mBtn_OK.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +171,6 @@ public class EquipMgrMaintenMaterial_AddActivity extends ActivityBase implements
                 mPageIndex = 0;
                 mIsLoadMore = false;
                 mRefreshLayout.setNoMoreData(false);
-
                 requestNetworkDataByMaterial(_CorpID,_SpareCond);
 
             }
@@ -181,7 +182,6 @@ public class EquipMgrMaintenMaterial_AddActivity extends ActivityBase implements
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
                 mPageIndex++;
                 mIsLoadMore = true;
-
                 requestNetworkDataByMaterial(_CorpID, _SpareCond);
 
             }
