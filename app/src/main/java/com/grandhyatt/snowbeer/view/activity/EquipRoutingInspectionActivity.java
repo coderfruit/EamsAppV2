@@ -157,6 +157,31 @@ public class EquipRoutingInspectionActivity extends com.grandhyatt.snowbeer.view
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mFilter = new IntentFilter("android.intent.action.SCAN_RESULT");
+        // 在用户自行获取数据时，将广播的优先级调到最高 1000，***此处必须***
+        mFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+        // 注册广播来获取扫描结果
+        this.registerReceiver(mReceiver, mFilter);
+
+    }
+
+    @Override
+    protected void onPause() {
+        // 注销获取扫描结果的广播
+        this.unregisterReceiver(mReceiver);
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mReceiver = null;
+        mFilter = null;
+        super.onDestroy();
+    }
+
+    @Override
     public void initView() {
 
         mToolBar.setTitle("设备巡检");

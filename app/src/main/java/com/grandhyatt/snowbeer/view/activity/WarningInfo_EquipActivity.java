@@ -207,6 +207,12 @@ public class WarningInfo_EquipActivity  extends ActivityBase implements IActivit
                     case 2:
                         Intent intent3 = new Intent(WarningInfo_EquipActivity.this, Query_EquipInspectionInfoActivity.class);
                         intent3.putExtra("corpID", finalCorp.getID());
+                        if(_SelectedDept != null) {
+                            intent3.putExtra("deptID", _SelectedDept.getID());
+                        }
+                        if(_SelectedEquipmentType != null) {
+                            intent3.putExtra("typeID", _SelectedEquipmentType.getID());
+                        }
                         startActivity(intent3);
                         break;
                     case 3:

@@ -185,7 +185,6 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
     EquipRepairSpareViewDataListAdapter adapter_SpareView = null; //添加配件适配器
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -333,7 +332,6 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
 
         }
     }
-
 
     @Override
     protected void onResume() {
@@ -770,7 +768,6 @@ public class RepairmentReportActivity extends ActivityBase implements IActivityB
             showLogingDialog();
             //根据条码内容检索设备信息
             getEquipmentInfo(barcode);
-            dismissLoadingDialog();
         }
     }
 

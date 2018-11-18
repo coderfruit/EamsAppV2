@@ -892,7 +892,6 @@ public class MaintenReportActivity extends ActivityBase implements IActivityBase
             showLogingDialog();
             //根据条码内容检索设备信息
             getEquipmentInfo(barcode);
-            dismissLoadingDialog();
         }
     }
 
