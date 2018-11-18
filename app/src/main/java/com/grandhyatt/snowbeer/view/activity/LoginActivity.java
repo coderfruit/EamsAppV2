@@ -27,6 +27,8 @@ import com.grandhyatt.commonlib.utils.IntentUtil;
 import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.SelectDialog;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
+import com.grandhyatt.snowbeer.db.ObjectBoxHelper;
+import com.grandhyatt.snowbeer.entity.APIHostInfoEntity;
 import com.grandhyatt.snowbeer.entity.CorporationEntity;
 import com.grandhyatt.snowbeer.entity.LoginUserInfoEntity;
 import com.grandhyatt.snowbeer.entity.ResourceEntity;
@@ -56,7 +58,19 @@ import butterknife.ButterKnife;
  * 杨春苗
  * 20180907
  */
-public class LoginActivity extends ActivityBase implements IActivityBase,View.OnClickListener, TextView.OnEditorActionListener{
+public class LoginActivity extends ActivityBase implements IActivityBase, View.OnClickListener, TextView.OnEditorActionListener {
+    //------------------------------------------------------
+    //-------------初始化服务器地址
+    //------------------------------------------------------
+    //辽宁测试环境
+    String _InitUrl = "pda.crbln.com";
+    String _InitPort = "9900";
+    //黑吉测试环境
+    //String _InitUrl = "172.16.30.25";
+    //String _InitPort = "9999";
+    //黑吉正式环境
+    //String _InitUrl = "172.16.30.25";
+    //String _InitPort = "9900";
 
     @BindView(R.id.mToolBar)
     ToolBarLayout mToolBar;
@@ -96,6 +110,8 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        initServerSetting(_InitUrl, _InitPort);//初始化服务器配置
+
         ButterKnife.bind(this);
 
         //禁止滑动退出
@@ -110,7 +126,7 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.mBtn_Login:
                 login();
                 break;
@@ -141,6 +157,7 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
 
     /**
      * 点击空白处关闭虚拟键盘
+     *
      * @param v
      */
     private void bodyClick(View v) {
@@ -151,7 +168,6 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
 
     /**
      * 密码文本框键盘事件监听
-     *
      */
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -177,7 +193,6 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
 
     /**
      * 初始化ui
-     *
      */
     @Override
     public void initView() {
@@ -188,8 +203,41 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
     }
 
     /**
+     * 初始化服务地址设置
+     */
+    public void initServerSetting(String url, String port) {
+
+        APIHostInfoEntity apiHostInfoChecked = SPUtils.getAPIHostInfo(LoginActivity.this);
+        if (apiHostInfoChecked == null) {
+            //获取配置列表
+            List<APIHostInfoEntity> mDataList = ObjectBoxHelper.getAPIHostInfoList();
+            if (mDataList == null || mDataList.size() == 0) {
+                //保存
+                APIHostInfoEntity apiHostInfo = new APIHostInfoEntity();
+                apiHostInfo.setHost_url(url);
+                apiHostInfo.setPort(port);
+                ObjectBoxHelper.saveAPIHostInfo(apiHostInfo);
+                //保存为用户选择的服务器地址
+                SPUtils.setAPIHostInfo(LoginActivity.this, apiHostInfo);
+            }
+//            else {
+//                for (APIHostInfoEntity item : mDataList) {
+//                    if (!item.getHost_url().equals(url) && !item.getPort().equals(port)) {
+//                        //保存
+//                        APIHostInfoEntity apiHostInfo = new APIHostInfoEntity();
+//                        apiHostInfo.setHost_url(url);
+//                        apiHostInfo.setPort(port);
+//                        ObjectBoxHelper.saveAPIHostInfo(apiHostInfo);
+//                        //保存为用户选择的服务器地址
+//                        SPUtils.setAPIHostInfo(LoginActivity.this, apiHostInfo);
+//                    }
+//                }
+//            }
+        }
+    }
+
+    /**
      * 绑定事件
-     *
      */
     @Override
     public void bindEvent() {
@@ -197,7 +245,7 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
         mToolBar.setMenuButtonOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IntentUtil.newIntent(LoginActivity.this,LoginSettingsActivity.class);
+                IntentUtil.newIntent(LoginActivity.this, LoginSettingsActivity.class);
             }
         });
 
@@ -294,11 +342,10 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
 
     /**
      * 刷新ui
-     *
      */
     @Override
     public void refreshUI() {
-        mTv_Version.setText(getString(R.string.login_activity_version,PackageUtils.getPackageVersionName(this)));
+        mTv_Version.setText(getString(R.string.login_activity_version, PackageUtils.getPackageVersionName(this)));
 
         mEdt_Account.setText(SPUtils.getLastLoginUserCode(LoginActivity.this));
         mEdt_Password.setText(SPUtils.getLastLoginUserPassword(LoginActivity.this));
@@ -316,14 +363,13 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
 
     /**
      * 登录
-     *
      */
     private void login() {
         final String username = mEdt_Account.getText().toString().trim();
         final String password = mEdt_Password.getText().toString().trim();
 
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
-            ToastUtils.showLongToast(LoginActivity.this,getString(R.string.activity_login_toast_please_input_not_empty));
+            ToastUtils.showLongToast(LoginActivity.this, getString(R.string.activity_login_toast_please_input_not_empty));
             return;
         }
 
@@ -333,9 +379,8 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
 
     /**
      * 登录
-     *
      */
-    private void login(final  String userCode, final String password) {
+    private void login(final String userCode, final String password) {
         showLogingDialog();
         LoginRequest request = new LoginRequest();
         request.setAccount(userCode);
@@ -363,12 +408,10 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
                 final LoginResult result = new Gson().fromJson(strData, LoginResult.class);
 
                 //校验接口返回代码
-                if(result == null)
-                {
+                if (result == null) {
                     ToastUtils.showLongToast(LoginActivity.this, getString(R.string.activity_login_toast_login_fail_error, "接口返回信息异常"));
                     return;
-                }
-                else if(result.code != Result.RESULT_CODE_SUCCSED){
+                } else if (result.code != Result.RESULT_CODE_SUCCSED) {
                     ToastUtils.showLongToast(LoginActivity.this, getString(R.string.activity_login_toast_login_fail_error, result.msg));
                     return;
                 }
@@ -405,7 +448,7 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
 //                    });
 //
 //                }
-                else{ //用户配置的组织机构只有1个
+                else { //用户配置的组织机构只有1个
                     //userCorp = data.getCorporations().get(0);
 
                     corpList = data.getCorporations();
@@ -420,20 +463,17 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
                 dismissLoadingDialog();
                 mBtn_Login.setEnabled(true);
                 if (statusCode == SoapHttpStatus.CONNECT_FAILURE_CODE) { /** 连接失败的HTTP返回码. */
-                    ToastUtils.showLongToast(LoginActivity.this,"登录异常,无法连接服务器!");
+                    ToastUtils.showLongToast(LoginActivity.this, "登录异常,无法连接服务器!");
                 } else if (statusCode == SoapHttpStatus.CONNECT_TIMEOUT_CODE) {  /** 连接超时的HTTP返回. */
-                    ToastUtils.showLongToast(LoginActivity.this,"登录异常,连接服务器超时!");
-                }
-                else if (statusCode == SoapHttpStatus.RESPONSE_TIMEOUT_CODE) {  /** 响应失败的HTTP返回. */
-                    ToastUtils.showLongToast(LoginActivity.this,"登录异常,连接服务器失败，请重试!");
-                }
-                else if (statusCode == SoapHttpStatus.UNTREATED_CODE) {    /** 未处理的HTTP返回. */
-                    ToastUtils.showLongToast(LoginActivity.this,"登录异常,连接服务器失败，请重试!");
-                }
-                else if (statusCode == SoapHttpStatus.SERVER_FAILURE_CODE) {  /** 服务出错的HTTP返回. */
-                    ToastUtils.showLongToast(LoginActivity.this,"登录异常,服务器出错，请重试!");
+                    ToastUtils.showLongToast(LoginActivity.this, "登录异常,连接服务器超时!");
+                } else if (statusCode == SoapHttpStatus.RESPONSE_TIMEOUT_CODE) {  /** 响应失败的HTTP返回. */
+                    ToastUtils.showLongToast(LoginActivity.this, "登录异常,连接服务器失败，请重试!");
+                } else if (statusCode == SoapHttpStatus.UNTREATED_CODE) {    /** 未处理的HTTP返回. */
+                    ToastUtils.showLongToast(LoginActivity.this, "登录异常,连接服务器失败，请重试!");
+                } else if (statusCode == SoapHttpStatus.SERVER_FAILURE_CODE) {  /** 服务出错的HTTP返回. */
+                    ToastUtils.showLongToast(LoginActivity.this, "登录异常,服务器出错，请重试!");
                 } else {
-                    ToastUtils.showLongToast(LoginActivity.this,"登录异常，请重试!");
+                    ToastUtils.showLongToast(LoginActivity.this, "登录异常，请重试!");
                 }
 
             }
@@ -443,24 +483,20 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
                 dismissLoadingDialog();
                 mBtn_Login.setEnabled(true);
                 if (statusCode == SoapHttpStatus.CONNECT_FAILURE_CODE) { /** 连接失败的HTTP返回码. */
-                    ToastUtils.showLongToast(LoginActivity.this,"登录失败,无法连接服务器!");
+                    ToastUtils.showLongToast(LoginActivity.this, "登录失败,无法连接服务器!");
                 } else if (statusCode == SoapHttpStatus.CONNECT_TIMEOUT_CODE) {  /** 连接超时的HTTP返回. */
-                    ToastUtils.showLongToast(LoginActivity.this,"登录失败,连接服务器超时!");
-                }
-                else if (statusCode == SoapHttpStatus.RESPONSE_TIMEOUT_CODE) {  /** 响应失败的HTTP返回. */
-                    ToastUtils.showLongToast(LoginActivity.this,"登录失败,连接服务器失败，请重试!");
-                }
-                else if (statusCode == SoapHttpStatus.UNTREATED_CODE) {    /** 未处理的HTTP返回. */
-                    ToastUtils.showLongToast(LoginActivity.this,"登录失败,连接服务器失败，请重试!");
-                }
-                else if (statusCode == SoapHttpStatus.SERVER_FAILURE_CODE) {  /** 服务出错的HTTP返回. */
-                    ToastUtils.showLongToast(LoginActivity.this,"登录失败,服务器出错，请重试!");
+                    ToastUtils.showLongToast(LoginActivity.this, "登录失败,连接服务器超时!");
+                } else if (statusCode == SoapHttpStatus.RESPONSE_TIMEOUT_CODE) {  /** 响应失败的HTTP返回. */
+                    ToastUtils.showLongToast(LoginActivity.this, "登录失败,连接服务器失败，请重试!");
+                } else if (statusCode == SoapHttpStatus.UNTREATED_CODE) {    /** 未处理的HTTP返回. */
+                    ToastUtils.showLongToast(LoginActivity.this, "登录失败,连接服务器失败，请重试!");
+                } else if (statusCode == SoapHttpStatus.SERVER_FAILURE_CODE) {  /** 服务出错的HTTP返回. */
+                    ToastUtils.showLongToast(LoginActivity.this, "登录失败,服务器出错，请重试!");
                 } else {
-                    ToastUtils.showLongToast(LoginActivity.this,"登录失败，请重试!");
+                    ToastUtils.showLongToast(LoginActivity.this, "登录失败，请重试!");
                 }
             }
         });
-
 
 
     }
@@ -469,12 +505,10 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
         //用户权限校验
         String powers = "";
         List<ResourceEntity> resList = data.getResources();
-        if(resList == null || resList.size() == 0)
-        {
+        if (resList == null || resList.size() == 0) {
             ToastUtils.showLongToast(LoginActivity.this, getString(R.string.activity_login_toast_login_fail_error, "没有为用户设置任何权限，请联系管理员！"));
             return;
-        }
-        else{
+        } else {
             for (ResourceEntity item : resList) {
                 powers += item.getResourceCode() + ",";
             }
@@ -485,9 +519,9 @@ public class LoginActivity extends ActivityBase implements IActivityBase,View.On
         SPUtils.setLastLoginUserName(LoginActivity.this, data.getUserName());//用户名
         SPUtils.setLastLoginUserPassword(LoginActivity.this, password);     //密码
         //SPUtils.setLastLoginUserCorporation(LoginActivity.this, userCorp);  //用户组织机构
-        SPUtils.setLastLoginUserPower(LoginActivity.this,powers);           //权限
-        SPUtils.setLastLoginUserPhone(LoginActivity.this,data.getPhone());  //电话
-        SPUtils.setToken(LoginActivity.this,result.getToken());
+        SPUtils.setLastLoginUserPower(LoginActivity.this, powers);           //权限
+        SPUtils.setLastLoginUserPhone(LoginActivity.this, data.getPhone());  //电话
+        SPUtils.setToken(LoginActivity.this, result.getToken());
         SPUtils.setLastLoginUserCorporations(LoginActivity.this, corpList);  //用户组织机构
 
         IntentUtil.newIntent(LoginActivity.this, MainActivity.class);
