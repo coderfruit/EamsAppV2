@@ -63,14 +63,14 @@ public class LoginActivity extends ActivityBase implements IActivityBase, View.O
     //-------------初始化服务器地址
     //------------------------------------------------------
     //辽宁测试环境
-//    String _InitUrl = "pda.crbln.com";
-//    String _InitPort = "9900";
+    String _InitUrl = "pda.crbln.com";
+    String _InitPort = "9900";
     //黑吉测试环境
 //    String _InitUrl = "172.16.30.25";
 //    String _InitPort = "9999";
     //黑吉正式环境
-    String _InitUrl = "172.16.30.25";
-    String _InitPort = "9900";
+//    String _InitUrl = "172.16.30.25";
+//    String _InitPort = "9900";
 
     @BindView(R.id.mToolBar)
     ToolBarLayout mToolBar;
