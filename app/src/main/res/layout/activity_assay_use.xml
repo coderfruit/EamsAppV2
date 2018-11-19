@@ -13,7 +13,7 @@
         android:id="@+id/mSearchBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="3dp"/>
+        android:layout_marginBottom="3dp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -22,8 +22,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@color/gray3">
+            android:background="@color/gray3"
+            android:orientation="vertical">
 
             <!-- 设备信息标题 -->
             <LinearLayout
@@ -145,6 +145,86 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <!-- 设备使用情况标题 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="23dp"
+                android:background="@drawable/selector_linear_layout_item_gray"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@color/colorPrimary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="20dp"
+                    android:text="设备使用次数"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="1dp"
+                android:background="@color/white6" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_linear_layout_item_white"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="近30天："
+                        android:layout_marginLeft="10dp"/>
+
+                    <TextView
+                        android:id="@+id/mTv_CurrentMonthCount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="近7天：" />
+
+                    <TextView
+                        android:id="@+id/mTv_CurrentWeekCount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="当天：" />
+
+                    <TextView
+                        android:id="@+id/mTv_CurrentDayCount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
+            </LinearLayout>
+
 
             <!-- 使用事由标题 -->
             <LinearLayout
@@ -170,7 +250,6 @@
                     android:textSize="12sp" />
 
 
-
             </LinearLayout>
 
             <com.grandhyatt.snowbeer.Ctrls.MyGridView
@@ -178,14 +257,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
+                android:background="@android:color/white"
                 android:columnWidth="120dp"
                 android:gravity="center"
                 android:horizontalSpacing="2dp"
                 android:numColumns="3"
                 android:stretchMode="columnWidth"
-                android:verticalSpacing="2dp"
-                android:background="@android:color/white"/>
-
+                android:verticalSpacing="2dp" />
 
 
         </LinearLayout>

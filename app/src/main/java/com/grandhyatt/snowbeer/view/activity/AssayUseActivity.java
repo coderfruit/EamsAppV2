@@ -28,11 +28,13 @@ import com.grandhyatt.commonlib.utils.ToastUtils;
 import com.grandhyatt.commonlib.view.activity.IActivityBase;
 import com.grandhyatt.snowbeer.Consts;
 import com.grandhyatt.snowbeer.R;
+import com.grandhyatt.snowbeer.entity.AssayUseCountEntity;
 import com.grandhyatt.snowbeer.entity.CorporationEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentEntity;
 import com.grandhyatt.snowbeer.entity.EquipmentUseReasonEntity;
 import com.grandhyatt.snowbeer.entity.WarningInfoCountEntity;
 import com.grandhyatt.snowbeer.network.SoapUtils;
+import com.grandhyatt.snowbeer.network.result.AssayUseCountResult;
 import com.grandhyatt.snowbeer.network.result.EquipmentResult;
 import com.grandhyatt.snowbeer.network.result.EquipmentUseReasonResult;
 import com.grandhyatt.snowbeer.network.result.WarningInfoCountResult;
@@ -92,6 +94,13 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
     ImageView mIv_EquipImg;
     @BindView(R.id.mGv_Datas)
     MyGridView mGv_Datas;
+
+    @BindView(R.id.mTv_CurrentMonthCount)
+    TextView mTv_CurrentMonthCount;
+    @BindView(R.id.mTv_CurrentWeekCount)
+    TextView mTv_CurrentWeekCount;
+    @BindView(R.id.mTv_CurrentDayCount)
+    TextView mTv_CurrentDayCount;
 
     /**
      * 设备信息
@@ -278,6 +287,7 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
                                                 }
                                             }
                                             if(!isHave){
+                                                mGv_Datas.setEnabled(false);
                                                 addAssayEquipUseRecord(_EquipmentData.getID(), strValue,true);
                                             }else{
                                                 ToastUtils.showToast(AssayUseActivity.this, "录入的使用事由已存在，请重新录入!");
@@ -292,6 +302,7 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
                         builder.show();
 
                     }else{//直接增加使用记录
+                        mGv_Datas.setEnabled(false);
                         addAssayEquipUseRecord(_EquipmentData.getID(), useReason,false);
                     }
 
@@ -404,6 +415,9 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
                 ToastUtils.showLongToast(AssayUseActivity.this, data.getEquipmentName() + "属于" + data.getCorporationName() + ",不属于用户当前归属组织机构");
                 return;
             }
+
+            //获取化学仪器使用次数
+            getAssayEquipUseCount(data.getID());
 
             mTv_EquipCode.setText(data.getEquipmentCode());
             mTv_EquipName.setText(data.getEquipmentName());
@@ -538,6 +552,7 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
             @Override
             public void onSuccess(int statusCode, SoapObject object) {
                 dismissLoadingDialog();
+                mGv_Datas.setEnabled(true);
 
                 if(null == object){
                     ToastUtils.showLongToast(AssayUseActivity.this,"接口连接失败");
@@ -570,17 +585,22 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
                     getAssayEquipUseReason(_EquipmentData.getID());
                 }
 
+                //获取化学仪器使用次数
+                getAssayEquipUseCount(_EquipmentData.getID());
+
             }
 
             @Override
             public void onFailure(int statusCode, String content, Throwable error) {
                 dismissLoadingDialog();
+                mGv_Datas.setEnabled(true);
                 ToastUtils.showLongToast(AssayUseActivity.this,"接口访问异常，请重试");
             }
 
             @Override
             public void onFailure(int statusCode, SoapFault fault) {
                 dismissLoadingDialog();
+                mGv_Datas.setEnabled(true);
                 if(fault != null) {
                     ToastUtils.showLongToast(AssayUseActivity.this,  fault.toString());
                 }
@@ -645,6 +665,57 @@ public class AssayUseActivity extends ActivityBase implements IActivityBase, Vie
             public void onFailure(int statusCode, SoapFault fault) {
                 dismissLoadingDialog();
                 ToastUtils.showLongToast(AssayUseActivity.this, "获取设备信息失败:" + fault);
+            }
+        });
+    }
+
+    /**
+     * 获取化学仪器设备使用次数
+     * @param equipID
+     */
+    private void getAssayEquipUseCount(String equipID){
+        SoapUtils.getAssayEquipUseCount(AssayUseActivity.this, equipID, new SoapListener() {
+            @Override
+            public void onSuccess(int statusCode, SoapObject object) {
+
+                if (object == null) {
+                    ToastUtils.showLongToast(AssayUseActivity.this, "获取使用次数失败" + statusCode);
+                    return;
+                }
+                //判断接口连接是否成功
+                if (statusCode != SoapHttpStatus.SUCCESS_CODE) {
+                    ToastUtils.showLongToast(AssayUseActivity.this, "获取使用次数失败" + statusCode);
+                    return;
+                }
+                //接口返回信息正常
+                String strData = object.getPropertyAsString(0);
+                AssayUseCountResult result = new Gson().fromJson(strData, AssayUseCountResult.class);
+
+                //校验接口返回代码
+                if (result == null) {
+                    ToastUtils.showLongToast(AssayUseActivity.this, "获取使用次数失败" + statusCode);
+                    return;
+                } else if (result.code != Result.RESULT_CODE_SUCCSED) {
+                    ToastUtils.showLongToast(AssayUseActivity.this, "获取使用次数失败" + statusCode + result.msg);
+                    return;
+                }
+                AssayUseCountEntity data = result.getData();
+                if(data != null){
+                    mTv_CurrentMonthCount.setText(data.getCurrentMonthCount());
+                    mTv_CurrentWeekCount.setText(data.getCurrentWeekCount());
+                    mTv_CurrentDayCount.setText(data.getCurrentDayCount());
+                }
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, String content, Throwable error) {
+                ToastUtils.showLongToast(AssayUseActivity.this, "获取使用次数异常:" + error.getMessage());
+            }
+
+            @Override
+            public void onFailure(int statusCode, SoapFault fault) {
+                ToastUtils.showLongToast(AssayUseActivity.this, "获取使用次数失败:" + fault);
             }
         });
     }
