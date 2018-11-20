@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -61,14 +63,32 @@ public class DownLoadDialog extends android.app.Dialog {
      * @return 
      */
     private static void installApk(Context c, String apkPath) {
-        File file = new File(apkPath);
-        if (!file.exists()) {
-            return;
-        }
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-        c.startActivity(intent);
+       try {
+           File file = new File(apkPath);
+           if (!file.exists()) {
+               return;
+           }
+
+           Intent intent = new Intent(Intent.ACTION_VIEW);
+           intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+           Uri uriFile;
+           // 判断版本大于等于7.0
+           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+               // "net.csdn.blog.ruancoder.fileprovider"即是在清单文件中配置的authorities
+               uriFile = FileProvider.getUriForFile(c, "com.grandhyatt.snowbeer.fileprovider", file);
+               // 给目标应用一个临时授权
+               intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+           } else {
+               uriFile = Uri.fromFile(file);
+           }
+
+           intent.setDataAndType(uriFile, "application/vnd.android.package-archive");
+           c.startActivity(intent);
+       }catch(Exception ex)
+       {
+            ToastUtils.showToast(c,ex.getMessage());
+       }
     }
 
     /**
