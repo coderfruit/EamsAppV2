@@ -61,7 +61,7 @@
                     android:background="@null"
                     android:hint="用户帐号"
                     android:inputType="text"
-                    android:maxLength="11"
+                    android:maxLength="26"
                     android:singleLine="true"
                     android:textColor="@color/black"
                     android:textColorHint="#c4c4c4"
