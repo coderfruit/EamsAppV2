@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">资产与设备管理系统</string>
+    <string name="app_name">易维助手</string>
 
     <string name="login_activity_settings">设置</string>
     <string name="login_activity_version">版本号:%s</string>
